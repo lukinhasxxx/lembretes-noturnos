@@ -3,7 +3,7 @@ import Banner from './componentes/Banner';
 import Formulario from './componentes/Formulario';
 import { useState } from 'react';
 import Time from './componentes/Time'
-import Colaborador from './componentes/Colaborador';
+
 
 
 function App() {
@@ -58,7 +58,6 @@ function App() {
       <Formulario times = {times.map(time => time.nome )} aoColaboradorCadastrado= {colaborador => aoNovoColaboradorAdicionado(colaborador)}/>
 
       {times.map(time =>  <Time   key = {time.nome}   nome={time.nome} corPrimaria = {time.corPrimaria} corSecundaria = {time.corSecundaria} /> )}\
-      <Colaborador textoColaborador = 'aqui o texto q passei pelas props' />
     </div>
   );
 }
