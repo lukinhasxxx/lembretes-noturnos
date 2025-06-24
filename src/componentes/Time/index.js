@@ -5,7 +5,7 @@ const Time = (props) => {
     const primaryColor = {borderColor: props.corPrimaria}
     
     return (
-       
+    //pra corrigir
         <section className='time' style={{ backgroundColor: props.corSecundaria}}>
 
             <h3 style={primaryColor} >{props.nome}</h3>
