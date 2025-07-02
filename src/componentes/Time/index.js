@@ -1,3 +1,5 @@
+import hexToRgba from 'hex-to-rgba';
+
 import './time.css'
 import Colaborador from '../Colaborador'
 
@@ -6,7 +8,7 @@ const Time = (props) => {
     
     return (
     //pra corrigir
-       (props.colaboradores.length > 0) ? <section className='time' style={{ backgroundColor: props.corSecundaria}}>
+       (props.colaboradores.length > 0) ? <section className='time' style={{ backgroundColor: hexToRgba(props.corSecundaria,'0.5')}}>
 
             <h3 style={primaryColor} >{props.nome}</h3>
             <div className='colaboradores'>
