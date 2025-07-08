@@ -61,9 +61,10 @@ function App() {
     setTimes(times.map( time =>
     {
       if(time.nome === nome) {
-        time.corPrimaria = cor
+          return { ...time, cor: cor }
       } 
       return time;}
+      
      ))
   }    
 
@@ -78,8 +79,8 @@ function App() {
           mudarCor = {mudarCorDoTime}
           key = {time.nome}
           nome={time.nome}
-          corPrimaria = {time.corPrimaria}
-          corSecundaria = {time.corSecundaria}
+          corPrimaria = {time.cor}
+          corSecundaria = {time.cor}
           colaboradores = {colaboradores.filter(colaborador=> colaborador.time 
           === time.nome)}
           aoDeletar = {deletarColaborador}
