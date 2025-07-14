@@ -3,6 +3,7 @@ import CampoTexto from '../CampoTexto'
 import ListaSuspesa from '../ListaSuspensa'
 import Botao from '../Botao'
 import { useState } from 'react'
+import BotaoUpload from '../BotaoUpload'
 
 const Formulario = (props) => {
 
@@ -56,6 +57,11 @@ const Formulario = (props) => {
                     valor={imagem}
                     aoAlterado = {valor => setImagem(valor)}
                 />
+
+
+                <BotaoUpload/>
+
+                
                 <ListaSuspesa
                     obrigatorio = {true}
                     label = "Time"

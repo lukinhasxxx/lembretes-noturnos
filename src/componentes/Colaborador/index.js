@@ -7,19 +7,6 @@ import './Colaborador.css'
 
 const Colaborador = ({nome,imagem,cargo, corDeFundo, aoDeletar}) => {
 
-    // function subirImagem () {
-
-    //     const [previa, setPrevia] = useState(null)
-
-    //     const lidarComMudancas = (evento) => {
-    //     const arquivo = evento.target.files[0]
-        
-    //     if (arquivo) {
-    //         setPrevia (URL.createObjectURL(file));
-    //         }
-    //     }
-    // }
-
 
 
     return (
