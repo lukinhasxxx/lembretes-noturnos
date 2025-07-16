@@ -1,5 +1,4 @@
 import hexToRgba from 'hex-to-rgba';
-
 import './time.css'
 import Colaborador from '../Colaborador'
 
@@ -15,8 +14,11 @@ const Time = (props) => {
             <input type='color' value = {props.corPrimaria} className='input-cor' onChange={ evento => props.mudarCor(evento.target.value, props.id,console.log(props.id)  )} ></input>
 
                 {props.colaboradores.map( colaborador => {
-                    return <Colaborador corDeFundo= {props.corPrimaria}
-                      key = {colaborador.nome} nome = {colaborador.nome} 
+                    return <Colaborador
+                      id = {colaborador.id}
+                      corDeFundo= {props.corPrimaria}
+                      key = {colaborador.nome} 
+                      nome = {colaborador.nome} 
                       cargo = {colaborador.cargo} 
                       imagem = {colaborador.imagem} 
                       aoDeletar = {props.aoDeletar}  />} )}

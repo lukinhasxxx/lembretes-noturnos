@@ -49,11 +49,13 @@ function App() {
   const [colaboradores, setColadoradores] = useState([])
 
   const aoNovoColaboradorAdicionado = (colaborador) => {
+    colaborador.id = uuidv4();
     setColadoradores([...colaboradores,colaborador])
   }
 
-    function deletarColaborador() {
-    console.log("deletando colaborador")
+    function deletarColaborador(id) {
+      setColadoradores(colaboradores.filter(colaborador => colaborador.id !== id))
+      
     }
 
   function mudarCorDoTime (cor, id) {
