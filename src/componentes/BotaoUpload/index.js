@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const BotaoUpload = () => {
+const BotaoUpload = (props) => {
     
         const [previa, setPrevia] = useState(null)
 
@@ -11,8 +11,6 @@ const BotaoUpload = () => {
             setPrevia (URL.createObjectURL(arquivo));
             }
         }
-    
-
 
     return (
         <div>
