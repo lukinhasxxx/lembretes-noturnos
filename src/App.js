@@ -70,11 +70,18 @@ function App() {
      ))
   }    
 
+  function cadastrarTime (novoTime){
+    setTimes([...times,{...novoTime, id:uuidv4()}])
+  }
+
 
   return (
     <div className="App">
       <Banner/>
-      <Formulario times = {times.map(time => time.nome )} aoColaboradorCadastrado= {colaborador => aoNovoColaboradorAdicionado(colaborador)}/>
+      <Formulario 
+      cadastrarTime= {cadastrarTime}
+      times = {times.map(time => time.nome )} 
+      aoColaboradorCadastrado= {colaborador => aoNovoColaboradorAdicionado(colaborador)}/>
 
       {times.map(time => 
         <Time  
@@ -84,8 +91,7 @@ function App() {
           nome={time.nome}
           corPrimaria = {time.cor}
           corSecundaria = {time.cor}
-          colaboradores = {colaboradores.filter(colaborador=> colaborador.time 
-          === time.nome)}
+          colaboradores = {colaboradores.filter(colaborador=> colaborador.time === time.nome)}
           aoDeletar = {deletarColaborador}
 
         />)
