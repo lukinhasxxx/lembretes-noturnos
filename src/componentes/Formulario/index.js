@@ -90,6 +90,7 @@ const Formulario = ({cadastrarTime, times, aoColaboradorCadastrado}) => {
                 />
 
                 <CampoTexto 
+                    type = 'color'
                     obrigatorio
                     label="Cor" 
                     placeholder="Digite a cor do time"
