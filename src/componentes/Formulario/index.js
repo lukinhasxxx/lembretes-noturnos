@@ -91,7 +91,7 @@ const Formulario = ({cadastrarTime, times, aoColaboradorCadastrado}) => {
 
                 <CampoTexto 
                     obrigatorio
-                    label="Cargo" 
+                    label="Cor" 
                     placeholder="Digite a cor do time"
                     valor = {corTime}
                     aoAlterado = {valor =>setCorTime(valor)}
