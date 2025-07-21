@@ -2,7 +2,7 @@ import hexToRgba from 'hex-to-rgba';
 import './time.css'
 import Colaborador from '../Colaborador'
 
-const Time = (props) => {
+const Time = (props ) => {
     const primaryColor = {borderColor: props.corPrimaria}
     
     return (
@@ -15,13 +15,17 @@ const Time = (props) => {
 
                 {props.colaboradores.map( colaborador => {
                     return <Colaborador
+                      colaborador = {colaborador}
                       id = {colaborador.id}
                       corDeFundo= {props.corPrimaria}
                       key = {colaborador.nome} 
                       nome = {colaborador.nome} 
                       cargo = {colaborador.cargo} 
                       imagem = {colaborador.imagem} 
-                      aoDeletar = {props.aoDeletar}  />} )}
+                      aoDeletar = {props.aoDeletar}  
+                      aoFavoritar={props.aoFavoritar}/>} )
+                      }
+
             </div>
         </section> : ''
 
