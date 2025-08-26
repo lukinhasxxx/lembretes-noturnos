@@ -41,4 +41,17 @@
     position:absolute;
     right: -10px;
     top: -10px;
+    cursor: pointer;
+}
+
+.favoritar {
+    margin-top: 20px;
+}
+
+.coracao1{
+    cursor: pointer;
+}
+
+.coracao2{
+    cursor: pointer;
 }

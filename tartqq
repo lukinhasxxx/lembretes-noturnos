@@ -1,0 +1,17 @@
+[33m1545174[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature-2[m[33m, [m[1;31morigin/feature-2[m[33m)[m feat: adiciona funcao de deletar cada colaborador individualmente
+[33m048d7a5[m feat:inicia implementacao de botao de upload de imagem
+[33m975da0f[m fix: corrige exibição dos textos do placeholder
+[33m6ee2f04[m chrore: adiciona UUID's e passa via PROPS para o componente Time
+[33mae1b04f[m style: corrige temporariamente color pick da cor dos times
+[33m7addf13[m style: adiciona opacidade no background do card
+[33m1c4ff32[m feat: componente agora pode mudar cor de fundo direto pelo navegador
+[33m6d761a9[m fix: corrige commit
+[33m34a9ac4[m feat: inicia criacao do botao de deletar
+[33m7545f38[m[33m ([m[1;31morigin/feature-1[m[33m, [m[1;32mfeature-1[m[33m)[m style: corrige lista para iniciar vazia
+[33m6ca48a7[m style: finaliza rodape desktop-only
+[33m2622d3a[m feat: inicia criacao do footer
+[33mffe5797[m fix: corrige commit
+[33m044b05c[m chore: add funcionalidade de salvar estado nos cards
+[33m3b65761[m chore: adiciona componente Colaborador
+[33m7265f68[m[33m ([m[1;32mdevelop[m[33m)[m initial commit
+[33mdfa85c5[m Initialize project using Create React App
