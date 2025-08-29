@@ -1,9 +1,11 @@
 .formulario {
 justify-content: center;
 display: flex;
-margin: 80px 50px;
+margin: 0 50px;
 gap: 30px;
 flex-wrap: wrap;
+opacity: 0.9;
+height: 100vh;
 }
 
 .formulario form {
@@ -12,4 +14,5 @@ background-color: #f2f2f2;
 border-radius: 20px;
 padding: 36px 64px;
 box-shadow:  8px 8px 16px rgba(0,0,0,0.15);
+align-self: center;
 }

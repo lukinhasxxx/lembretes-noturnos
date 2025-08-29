@@ -1,11 +1,11 @@
-import Banner from './componentes/Banner';
 import Formulario from './componentes/Formulario';
 import { useState } from 'react';
 import Time from './componentes/Time'
 import Footer from './componentes/Footer';
 import { v4 as uuidv4 } from 'uuid';
 
-
+// comentando funcoes que serao usadas la na frente
+ 
 function App() {
 
   const [times, setTimes] = useState([
@@ -86,14 +86,31 @@ function resolverFavorito(id) {
   }));
 }
 
+
+const [neon,setNeon] = useState(false)
+
+const alterarEstilo = () => {
+setNeon(!neon)
+}
+
+
+ 
+
+
+
   return (
     <div className="App">
-      <Banner/>
-      <Formulario 
+      <div>{neon}
+      <img src='/imagens/tabletPNG.png' alt='tablet' style ={{filter: neon ?  "drop-shadow(1px 1px 3px #00D7FF)" : "none"}}
+        onClick={alterarEstilo}
+      />
+</div>
+
+      {/* <Formulario 
       cadastrarTime= {cadastrarTime}
       times = {times.map(time => time.nome )} 
-      aoColaboradorCadastrado= {colaborador => aoNovoColaboradorAdicionado(colaborador)}/>
-
+      aoColaboradorCadastrado= {colaborador => aoNovoColaboradorAdicionado(colaborador)}/> */}
+{/* 
       {times.map(time => 
         <Time  
           aoFavoritar = {resolverFavorito}
@@ -107,8 +124,9 @@ function resolverFavorito(id) {
           aoDeletar = {deletarColaborador}
 
         />)
-      }
-        <Footer/>
+      } */}
+
+
     </div>
   );
 }
