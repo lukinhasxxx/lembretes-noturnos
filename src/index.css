@@ -12,5 +12,17 @@ code {
     monospace;
 }
 .App {
-  background-color: lightblue;
+
+  background-image: url('/public/imagens/testeCyber.png');
+  height: 100vh;
+}
+
+
+
+
+.App div img {
+  height: 50px;
+  margin-top: 870px;
+  margin-left: 1175px;
+
 }
