@@ -8,43 +8,6 @@ import { v4 as uuidv4 } from 'uuid';
  
 function App() {
 
-  const [times, setTimes] = useState([
-    {  
-      id:uuidv4(),
-      nome:'Programacao',
-      cor:'#D9F7E9'
-    },
-    {  
-      id:uuidv4(),
-      nome:'Front-End',
-      cor:'#E8F8FF'
-    },
-    {  
-      id:uuidv4(),
-      nome:'Data Science',
-      cor:'#F0F8E2'
-    },
-    {  
-      id:uuidv4(),
-      nome:'Devops',
-      cor:'#FDE7E8'
-    },
-    {  
-      id:uuidv4(),
-      nome:'UX e Design',
-      cor:'#FAE9F5'
-    },
-    {  
-      id:uuidv4(),
-      nome:'Mobile',
-      cor:'#FFF5D9'
-    },
-    {  
-      id:uuidv4(),
-      nome:'Inovacao e Gestao',
-      cor:'#FFEEDF'
-    }
-  ])
 
 
   const [colaboradores, setColaboradores] = useState([])
@@ -61,21 +24,8 @@ function App() {
       
     }
 
-  function mudarCorDoTime (cor, id) {
-    setTimes(times.map( time =>
-    {
-      if(time.id === id) {
-          time.cor=cor;
-          console.log(id)
-      } 
-      return time;}
-      
-     ))
-  }    
 
-  function cadastrarTime (novoTime){
-    setTimes([...times,{...novoTime, id:uuidv4()}])
-  }
+
 
 function resolverFavorito(id) {
   setColaboradores(colaboradores.map(colaborador => {
@@ -84,47 +34,36 @@ function resolverFavorito(id) {
     }
     return colaborador;
   }));
+
+
+
+
+
+
 }
 
 
-const [neon,setNeon] = useState(false)
+const [ligarTablet,setLigarTablet] = useState(false)
 
-const alterarEstilo = () => {
-setNeon(!neon)
+
+
+const [modalAberto,setModalAberto] = useState(false)
+
+const gerenciarTablet = () => {
+
+setModalAberto(ligado=> !ligado);
+setLigarTablet(ligado =>!ligado);
 }
-
-
- 
-
 
 
   return (
+    
     <div className="App">
-      <div>{neon}
-      <img src='/imagens/tabletPNG.png' alt='tablet' style ={{filter: neon ?  "drop-shadow(1px 1px 3px #00D7FF)" : "none"}}
-        onClick={alterarEstilo}
-      />
-</div>
-
-      {/* <Formulario 
-      cadastrarTime= {cadastrarTime}
-      times = {times.map(time => time.nome )} 
-      aoColaboradorCadastrado= {colaborador => aoNovoColaboradorAdicionado(colaborador)}/> */}
-{/* 
-      {times.map(time => 
-        <Time  
-          aoFavoritar = {resolverFavorito}
-          id={time.id} 
-          mudarCor = {mudarCorDoTime}
-          key = {time.nome}
-          nome={time.nome}
-          corPrimaria = {time.cor}
-          corSecundaria = {time.cor}
-          colaboradores = {colaboradores.filter(colaborador=> colaborador.time === time.nome)}
-          aoDeletar = {deletarColaborador}
-
-        />)
-      } */}
+      {modalAberto && <Formulario/>}
+        <div className='zona-interacao-tablet' onClick={gerenciarTablet}>{ligarTablet}
+          <img src='/imagens/tabletPNG.png' alt='tablet' style ={{filter: ligarTablet ?  "drop-shadow(1px 1px 3px #00D7FF)" : "none"}}
+          onClick={gerenciarTablet}/>
+      </div>
 
 
     </div>

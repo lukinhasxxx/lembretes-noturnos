@@ -59,14 +59,14 @@ const Formulario = ({cadastrarTime, times, aoColaboradorCadastrado}) => {
                     valor={imagem}
                     aoAlterado = {valor => setImagem(valor)}
                 />
-                <BotaoUpload/>
+                {/* <BotaoUpload/>
                 <ListaSuspesa
                     obrigatorio = {true}
                     label = "Time"
                     itens = {times}
                     valor = {time}
                     aoAlterado = {valor =>setTime(valor)}
-                 />
+                 /> */}
                 <Botao>Criar card </Botao>
             </form>
 
