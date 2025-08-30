@@ -12,12 +12,19 @@ function App() {
 
   const [colaboradores, setColaboradores] = useState([])
 
-  const aoNovoColaboradorAdicionado = (colaborador) => {
-    colaborador.id = uuidv4();
-    colaborador.favorito = false;
-    console.log(colaborador.favorito)
-    setColaboradores([...colaboradores,colaborador])
+  const adicionarLembrete = (textoDaNota) => {
+    const novoLembrete = {
+      id:uuidv4(),
+      texto:textoDaNota,
+      favorito:false
+    };
+
+  
+   setColaboradores([...colaboradores,novoLembrete])
+  // setModalAberto(ligado=> !ligado);
+  // setLigarTablet(ligado =>!ligado);
   }
+
 
     function deletarColaborador(id) {
       setColaboradores(colaboradores.filter(colaborador => colaborador.id !== id))
@@ -59,7 +66,11 @@ setLigarTablet(ligado =>!ligado);
   return (
     
     <div className="App">
-      {modalAberto && <Formulario/>}
+      {modalAberto && 
+        <Formulario
+          aoSubmeter={adicionarLembrete}
+        />
+       }
         <div className='zona-interacao-tablet' onClick={gerenciarTablet}>{ligarTablet}
           <img src='/imagens/tabletPNG.png' alt='tablet' style ={{filter: ligarTablet ?  "drop-shadow(1px 1px 3px #00D7FF)" : "none"}}
           onClick={gerenciarTablet}/>
