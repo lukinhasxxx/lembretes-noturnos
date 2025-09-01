@@ -17,12 +17,23 @@ code {
   height: 100vh;
 }
 
+.zona-interacao-tablet{
+  position: relative;
+  top:870px;
+  left: 1175px;
+  height: 50px;
+  width: 110px;
+  cursor: pointer;
+  user-select: none;
+}
+
 
 
 
 .App div img {
+  position: absolute;
   height: 50px;
-  margin-top: 870px;
-  margin-left: 1175px;
-
+  width: 110px;
+  pointer-events: none;
 }
+

@@ -6,6 +6,7 @@ gap: 30px;
 flex-wrap: wrap;
 opacity: 0.9;
 height: 100vh;
+position: fixed;
 }
 
 .formulario form {
