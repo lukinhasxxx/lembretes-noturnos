@@ -3,22 +3,16 @@ import CampoTexto from '../CampoTexto'
 import ListaSuspesa from '../ListaSuspensa'
 import Botao from '../Botao'
 import { useState } from 'react'
-import BotaoUpload from '../BotaoUpload'
+
 
 const Formulario = ({aoSubmeter}) => {
-
-
     const [nome, setNome] = useState('')
-
-
-
     const aoSalvar = (evento) => {
         evento.preventDefault()
         aoSubmeter(nome)
         setNome('')
         console.log('submeteu')
 }
-
 
     return (
         <section className='formulario'>
@@ -41,7 +35,6 @@ const Formulario = ({aoSubmeter}) => {
                     >
                 </textarea>
 
-
                 {/* <BotaoUpload/>
                 <ListaSuspesa
                     obrigatorio = {true}
@@ -52,10 +45,6 @@ const Formulario = ({aoSubmeter}) => {
                  /> */}
                 <Botao>Enviar lembrete</Botao>
             </form>
-
-
-
-
 
         </section>
     )
