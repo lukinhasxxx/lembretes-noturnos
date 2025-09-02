@@ -49,19 +49,24 @@ setLigarTablet(ligado =>!ligado);
   return (
     
     <div className="App">
-      
-      {modalAberto && 
+          {modalAberto && 
         <Formulario
           aoSubmeter={adicionarLembrete}
+          validarLigadoDesligado = {ligarTablet}
         />
        }
+
         <div className='zona-interacao-tablet' 
         onClick={gerenciarTablet}>{ligarTablet}
-          <img src='/imagens/tabletPNG.png'
+          <img 
+          className='tablet-img'
+          src='/imagens/tabletPNG.png'
             alt='tablet'
             style ={{filter: ligarTablet ?  "drop-shadow(1px 1px 3px #00D7FF)" : "none"
-           }}
-          onClick={gerenciarTablet}/>
+            }}
+            onClick={gerenciarTablet}
+          />
+
       </div>
       <Time
         colaboradores={colaboradores} 

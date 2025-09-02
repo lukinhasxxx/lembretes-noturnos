@@ -5,7 +5,7 @@ import Botao from '../Botao'
 import { useState } from 'react'
 
 
-const Formulario = ({aoSubmeter}) => {
+const Formulario = ({aoSubmeter, validarLigadoDesligado}) => {
     const [nome, setNome] = useState('')
     const aoSalvar = (evento) => {
         evento.preventDefault()
@@ -16,8 +16,12 @@ const Formulario = ({aoSubmeter}) => {
 
     return (
         <section className='formulario'>
-            
+            <img className='tablet-modal' src='/imagens/tabletModal.png'
+            style={{display: validarLigadoDesligado ? "" : " none" }}
+            alt='Modal do tablet'
+          />
             <form onSubmit={aoSalvar}>
+                
                 <h2>Deixe seu lembrete para ser incluído no painel.</h2>
 
                 {/* <CampoTexto 

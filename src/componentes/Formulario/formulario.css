@@ -1,12 +1,11 @@
 .formulario {
 justify-content: center;
 display: flex;
-margin: 0 50px;
-gap: 30px;
 flex-wrap: wrap;
 opacity: 0.9;
 height: 100vh;
 position: fixed;
+width: 1212px;
 }
 
 .formulario form {
@@ -16,4 +15,23 @@ border-radius: 20px;
 padding: 36px 64px;
 box-shadow:  8px 8px 16px rgba(0,0,0,0.15);
 align-self: center;
+margin-left: 500px;
+height: 350px;
+}
+
+.tablet-img{
+  position: absolute;
+  height: 50px;
+  width: 110px;
+  pointer-events: none;
+}
+
+.formulario .tablet-modal
+{
+position: fixed;
+    left: 500px;
+    top: 290px;
+    height: 482px;
+    width: 760px;
+    pointer-events: none;
 }

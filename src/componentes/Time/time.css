@@ -1,29 +1,28 @@
-.time {
+.painel{
     text-align: center;
     padding: 32px;
     position: relative;
     background-blend-mode: multiply;
+    background-color: lightcoral;
+    width: 500px;
+    border-radius: 20px;
 }
 
-.time h3 {
+.painel h3 {
     font-size: 32px;
     border-bottom: 4px solid;
     display: inline-block;
     padding-bottom: 8px;
 }
 
-.time .colaboradores {
+.painel .colaboradores {
     display: flex;
     justify-content: space-around;
     margin-top: 32px;
     flex-wrap: wrap; 
-}
-
-.time .colaboradores {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 32px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    background-color: lightblue;
+    width: 400px;
 }
 
 .input-cor {
