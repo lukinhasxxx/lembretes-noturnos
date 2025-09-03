@@ -1,19 +1,76 @@
-.formulario {
-justify-content: center;
+.tablet-tela {
 display: flex;
-margin: 0 50px;
-gap: 30px;
 flex-wrap: wrap;
-opacity: 0.9;
-height: 100vh;
+opacity: 1;
+height: 1080px;
 position: fixed;
+width: 1920px;
 }
 
-.formulario form {
-flex: 1;
+.tablet-tela .area-de-trabalho {
+width: 665px;
+background-size: contain;
+margin-top: 330px;
+margin-left: 548px;
+}
+
+.tablet-tela .area-de-trabalho .icone-lembretes {
+margin: 50px;
+}
+
+.tablet-tela .area-de-trabalho .icone-lembretes span{
+display: block;
+pointer-events: none;
+color: white;
+margin-left: -33px;
+}
+
+.tablet-tela form {
 background-color: #f2f2f2;
 border-radius: 20px;
 padding: 36px 64px;
 box-shadow:  8px 8px 16px rgba(0,0,0,0.15);
 align-self: center;
+height: 310px;
+
+margin-bottom: 20px;
+}
+
+.tablet-img {
+  position: absolute;
+  height: 50px;
+  width: 110px;
+  pointer-events: none;
+}
+
+.formulario .tablet-modal {
+position: fixed;
+left: 500px;
+top: 290px;
+height: 482px;
+width: 760px;
+pointer-events: none;
+}
+
+.tablet-tela .barra-de-tarefas {
+ display: flex;
+ position: fixed;
+ background-color: #000000;
+ height: 50px;
+ width: 664px;
+ top: 675px;
+ margin-left: 549px;
+}
+
+.barra-de-tarefas .seta-voltar {
+display: flex;
+}
+
+
+.barra-de-tarefas img {
+    height: 45px;
+    width: 60px;
+    align-self: center;
+    margin-left: 85px;
+    cursor: pointer;
 }

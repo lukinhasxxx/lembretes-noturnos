@@ -15,6 +15,7 @@ code {
 
   background-image: url('/public/imagens/testeCyber.png');
   height: 100vh;
+  position: relative;
 }
 
 .zona-interacao-tablet{
@@ -25,15 +26,5 @@ code {
   width: 110px;
   cursor: pointer;
   user-select: none;
-}
-
-
-
-
-.App div img {
-  position: absolute;
-  height: 50px;
-  width: 110px;
-  pointer-events: none;
 }
 
