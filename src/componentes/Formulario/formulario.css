@@ -43,7 +43,7 @@ margin-bottom: 20px;
   pointer-events: none;
 }
 
-.formulario .tablet-modal {
+.secao-tablet-modal .tablet-modal {
 position: fixed;
 left: 500px;
 top: 290px;
@@ -55,7 +55,7 @@ pointer-events: none;
 .tablet-tela .barra-de-tarefas {
  display: flex;
  position: fixed;
- background-color: #000000;
+ background-color: rgb(0,0,0,0.9);
  height: 50px;
  width: 664px;
  top: 675px;

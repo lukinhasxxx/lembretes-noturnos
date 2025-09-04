@@ -1,10 +1,8 @@
 import Formulario from './componentes/Formulario';
 import { useState } from 'react';
 import Time from './componentes/Time'
-import Footer from './componentes/Footer';
 import { v4 as uuidv4 } from 'uuid';
 
-// comentando funcoes que serao usadas la na frente
  
 function App() {
 
@@ -18,8 +16,7 @@ function App() {
     };
 
    setColaboradores([...colaboradores,novoLembrete])
-  // setModalAberto(ligado=> !ligado);
-  // setLigarTablet(ligado =>!ligado);
+
   }
     function deletarColaborador(id) {
       setColaboradores(colaboradores.filter(colaborador => colaborador.id !== id))

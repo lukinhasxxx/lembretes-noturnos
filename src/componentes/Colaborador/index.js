@@ -1,5 +1,3 @@
-import { AiFillCloseCircle, AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import BotaoUpload from "../BotaoUpload";
 import './Colaborador.css'
 
 
