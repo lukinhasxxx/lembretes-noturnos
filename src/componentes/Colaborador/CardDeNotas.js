@@ -1,4 +1,4 @@
-import './Colaborador.css'
+import './CardDeNotas.css'
 
 
 const Colaborador = ({colaborador}) => {

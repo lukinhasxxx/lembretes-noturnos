@@ -1,4 +1,4 @@
-import './formulario.css'
+import './ModalTablet.css'
 import Botao from '../Botao'
 import { useState } from 'react'
 

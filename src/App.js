@@ -1,6 +1,6 @@
-import Formulario from './componentes/Formulario';
+import Formulario from './componentes/ModalTablet/ModalTablet';
 import { useState } from 'react';
-import Time from './componentes/Time'
+import Time from './componentes/Time/MuralDeNotas'
 import { v4 as uuidv4 } from 'uuid';
 
  

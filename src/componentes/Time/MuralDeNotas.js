@@ -1,8 +1,7 @@
-import './time.css'
-import Colaborador from '../Colaborador'
+import './MuralDeNotas.css'
+import Colaborador from '../Colaborador/CardDeNotas'
 
 const Time = (props) => {
-
     
     return (
     //esse componente vai ser o painel com as notas dentro, parte externa
@@ -18,7 +17,6 @@ const Time = (props) => {
                     />
                 })
             }
-
             </div>
         </section>
 
