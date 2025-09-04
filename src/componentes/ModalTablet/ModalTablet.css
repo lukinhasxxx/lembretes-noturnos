@@ -68,9 +68,9 @@ display: flex;
 
 
 .barra-de-tarefas img {
-    height: 45px;
-    width: 60px;
-    align-self: center;
-    margin-left: 85px;
-    cursor: pointer;
+height: 45px;
+width: 60px;
+align-self: center;
+margin-left: 85px;
+cursor: pointer;
 }

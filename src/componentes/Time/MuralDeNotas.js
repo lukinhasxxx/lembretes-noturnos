@@ -1,27 +1,25 @@
 import './MuralDeNotas.css'
-import Colaborador from '../Colaborador/CardDeNotas'
+import CardDeNotas from '../Colaborador/CardDeNotas'
 
-const Time = (props) => {
+const MuralDeNotas = ({lembretes, aoDeletar, aoFavoritar}) => {
     
     return (
-    //esse componente vai ser o painel com as notas dentro, parte externa
-       (props.colaboradores.length > 0) && <section className='painel'> painel aqui
 
-            <div className='colaboradores'>
-            {props.colaboradores.map(colaborador => {
-                    return <Colaborador
-                      colaborador = {colaborador}
-                      key = {colaborador.nome} 
-                      aoDeletar = {props.aoDeletar}  
-                      aoFavoritar={props.aoFavoritar}
+       (lembretes.length > 0) && <section className='painel'> painel aqui
+
+            <div className='zona-dos-cards'>
+            {lembretes.map(lembrete => {
+                    return <CardDeNotas
+                      lembretes = {lembrete}
+                      key = {lembrete.id} 
+                      aoDeletar = {aoDeletar}  
+                      aoFavoritar={aoFavoritar}
                     />
                 })
             }
             </div>
         </section>
-
     )
-
 }
 
-export default Time
+export default MuralDeNotas

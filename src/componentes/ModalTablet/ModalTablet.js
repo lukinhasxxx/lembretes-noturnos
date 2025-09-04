@@ -2,19 +2,15 @@ import './ModalTablet.css'
 import Botao from '../Botao'
 import { useState } from 'react'
 
-
-const Formulario = ({aoSubmeter, validarLigadoDesligado}) => {
+const ModalTablet = ({aoSubmeter, validarLigadoDesligado}) => {
     const [nome, setNome] = useState('')
     const [telaAtiva, setTelaAtiva] = useState('desktop')
-
 
     const aoSalvar = (evento) => {
         evento.preventDefault()
         aoSubmeter(nome)
         setNome('')
-        console.log('submeteu')
 }
-//renderizacao da tela do tablet - windows
     return (
     <div>
             <div className='tablet-tela'  > 
@@ -64,4 +60,4 @@ const Formulario = ({aoSubmeter, validarLigadoDesligado}) => {
     )
 }
 
-export default Formulario
+export default ModalTablet
