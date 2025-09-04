@@ -1,12 +1,12 @@
-import Formulario from './componentes/Formulario';
+import ModalTablet from './componentes/ModalTablet/ModalTablet';
 import { useState } from 'react';
-import Time from './componentes/Time'
+import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import { v4 as uuidv4 } from 'uuid';
 
  
 function App() {
 
-  const [colaboradores, setColaboradores] = useState([])
+  const [lembretes, setLembretes] = useState([])
 
   const adicionarLembrete = (textoDaNota) => {
     const novoLembrete = {
@@ -15,20 +15,20 @@ function App() {
       favorito:false
     };
 
-   setColaboradores([...colaboradores,novoLembrete])
+   setLembretes([...lembretes,novoLembrete])
 
   }
-    function deletarColaborador(id) {
-      setColaboradores(colaboradores.filter(colaborador => colaborador.id !== id))
+    function deletarLembrete(id) {
+      setLembretes(lembretes.filter(lembrete => lembrete.id !== id))
     }
 
-function resolverFavorito(id) {
-  setColaboradores(colaboradores.map(colaborador => {
-    if (colaborador.id === id) {
-      return { ...colaborador, favorito: !colaborador.favorito
+function fixarLembrete(id) {
+  setLembretes(lembretes.map(lembrete => {
+    if (lembrete.id === id) {
+      return { ...lembrete, favorito: !lembrete.favorito
       };
     }
-    return colaborador;
+    return lembrete;
   }));
 
 }
@@ -47,7 +47,7 @@ setLigarTablet(ligado =>!ligado);
     
     <div className="App">
           {modalAberto && 
-        <Formulario
+        <ModalTablet
           aoSubmeter={adicionarLembrete}
           validarLigadoDesligado = {ligarTablet}
         />
@@ -65,13 +65,12 @@ setLigarTablet(ligado =>!ligado);
           />
 
       </div>
-      <Time
-        colaboradores={colaboradores} 
-        aoDeletar={deletarColaborador}
-        aoFavoritar={resolverFavorito}
-
+      <MuralDeNotas
+        lembretes={lembretes} 
+        aoDeletar={deletarLembrete}
+        aoFavoritar={fixarLembrete}
       />
-
+      
     </div>
   );
 }
