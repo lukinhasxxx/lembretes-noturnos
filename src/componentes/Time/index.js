@@ -1,4 +1,3 @@
-import hexToRgba from 'hex-to-rgba';
 import './time.css'
 import Colaborador from '../Colaborador'
 

@@ -1,6 +1,4 @@
 import './formulario.css'
-import CampoTexto from '../CampoTexto'
-import ListaSuspesa from '../ListaSuspensa'
 import Botao from '../Botao'
 import { useState } from 'react'
 
@@ -55,7 +53,7 @@ const Formulario = ({aoSubmeter, validarLigadoDesligado}) => {
 
         </div>
 
-            <section className='formulario'>
+            <section className='secao-tablet-modal'>
                 <img className='tablet-modal' src='/imagens/tabletModal.png'
                 style={{display: validarLigadoDesligado ? "" : " none" }}
                 alt='Modal do tablet'
