@@ -14,9 +14,29 @@ margin-top: 330px;
 margin-left: 548px;
 }
 
+.tablet-tela .janela-lembretes {
+background: red;
+max-height: 37px;
+}
+.tablet-tela .janela-lembretes img {
+float: right;
+margin-right: -3px;
+    margin-top: -3px;
+}
+
 .tablet-tela .area-de-trabalho .icone-lembretes {
 margin: 50px;
+height: 35px;
+width: 35px;
 }
+
+.tablet-tela .area-de-trabalho .icone-led {
+margin: 50px;
+height: 35px;
+width: 35px;
+}
+
+
 
 .tablet-tela .area-de-trabalho .icone-lembretes span{
 display: block;
@@ -25,15 +45,30 @@ color: white;
 margin-left: -33px;
 }
 
+.tablet-tela .area-de-trabalho .icone-led span{
+display: block;
+pointer-events: none;
+color: white;
+margin-left: -33px;
+}
+
+
+
+
+
 .tablet-tela form {
 background-color: #f2f2f2;
-border-radius: 20px;
 padding: 36px 64px;
 box-shadow:  8px 8px 16px rgba(0,0,0,0.15);
 align-self: center;
-height: 310px;
+height: 278px;
+margin-top: 9px;
+}
 
-margin-bottom: 20px;
+.janela-configuracao-led {
+    height: 359px;
+    width: 664px;
+    background-color: rgb(215, 218, 243);
 }
 
 .tablet-img {
@@ -56,21 +91,56 @@ pointer-events: none;
  display: flex;
  position: fixed;
  background-color: rgb(0,0,0,0.9);
- height: 50px;
+ height: 36px;
  width: 664px;
- top: 675px;
+ top: 689px;
  margin-left: 549px;
 }
 
-.barra-de-tarefas .seta-voltar {
-display: flex;
+.barra-de-tarefas .menu-iniciar img {
+  height: 24px;
+  margin-left: 10px;
+  margin-top: 5px;
 }
 
-
-.barra-de-tarefas img {
-height: 45px;
-width: 60px;
-align-self: center;
-margin-left: 85px;
+.barra-de-tarefas .seta-voltar img{
+display: flex;
+height: 30px;
+margin-top: 3px;
+margin-left: 20px;
 cursor: pointer;
 }
+
+.barra-de-tarefas .icone-bateria img {
+  margin-left: 320px;
+  height: 12px;
+  margin-top: 10px;
+}
+
+.barra-de-tarefas .icone-wifi img {
+    height: 15px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.barra-de-tarefas .icone-som img {
+margin-left: 10px;
+}
+
+
+.idioma {
+  color: white;
+  font-size: 13px;
+}
+
+
+.barra-de-tarefas .icone-notificacoes img {
+margin-left: 20px;
+height: 20px;
+margin-top: 10px;
+}
+
+
+
+
+
