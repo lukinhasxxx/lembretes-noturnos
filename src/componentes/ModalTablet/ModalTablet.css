@@ -111,6 +111,10 @@ margin-left: 20px;
 cursor: pointer;
 }
 
+.icones-apps-abertos {
+  display: flex;
+}
+
 .barra-de-tarefas .icone-bateria img {
   margin-left: 320px;
   height: 12px;

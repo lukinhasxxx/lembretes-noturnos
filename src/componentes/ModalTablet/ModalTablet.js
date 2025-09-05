@@ -6,38 +6,47 @@ import Relogio from '../Relogio/Relogio'
 const ModalTablet = ({aoSubmeter, validarLigadoDesligado}) => {
     const [nome, setNome] = useState('')
     const [telaAtiva, setTelaAtiva] = useState('desktop')
+    const [appsAbertos,setAppsAbertos] = useState([])
 
     const aoSalvar = (evento) => {
         evento.preventDefault()
         aoSubmeter(nome)
         setNome('')
-}
+};
+
+    const abrirApp = (nomeDoApp) => {
+        setTelaAtiva(nomeDoApp);
+        if (!appsAbertos.includes(nomeDoApp)){
+            setAppsAbertos([...appsAbertos,nomeDoApp])
+        }
+    }
+
     return (
     <div>
             <div className='tablet-tela'  > 
             <div className='area-de-trabalho' style={{backgroundImage:"url('/imagens/windows/windowsWallpaper.jpg')",backgroundRepeat:"no-repeat"}}  >
-
+                {/* icone */}
                 {telaAtiva === 'desktop' && (<div className='icone-lembretes'
-                   onClick={() => setTelaAtiva('lembretes') }>
-                    <img src='/imagens/windows/iconeLembretes.png'
+                   onClick={() => abrirApp('lembretes.exe') }>
+                    <img src='/imagens/windows/lembretesIcone.png'
                     alt='abrir lembretes' />
                     <span>Lembretes.exe</span>
                 </div>)}
-
+                {/* icone */}
                 {telaAtiva === 'desktop' && (<div className='icone-led'
-                   onClick={() => setTelaAtiva('icone-led') }>
+                   onClick={() => abrirApp('config.exe') }>
                     <img src='/imagens/windows/ledIcone.png'
                     alt='abrir lembretes' />
                     <span>Config.exe</span>
                 </div>)}
-
-                {telaAtiva ==='icone-led' && (<div className='janela-configuracao-led' >
-
+                {/* app de fato */}
+                {telaAtiva ==='config.exe' && (<div className='janela-configuracao-led' >
+                        <img src="/imagens/windows/iconeFechar.png" alt="Icone de fechar" />
                         <span>Aqui vai ficar a configuracao teste</span>
                     </div>
                 )}
-
-                { telaAtiva === 'lembretes' && (
+                {/* APP de fato */}
+                { telaAtiva === 'lembretes.exe' && (
 
                 <div className='janela-lembretes' >
                     <img src="/imagens/windows/iconeFechar.png" alt="Icone de fechar" />
@@ -67,7 +76,20 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado}) => {
         <div className="seta-voltar" onClick={() => setTelaAtiva('desktop')}>
           <img src="/imagens/windows/setaVoltar.png" alt="Voltar para o Desktop" />
         </div>
-        
+
+    <div className='icones-apps-abertos' >
+    {
+        appsAbertos.map(app =>(
+            <div key={app} className='icone-na-barra' onClick={() => setTelaAtiva(app)} >
+                {app === 'lembretes.exe' && <img src= '/imagens/windows/lembretesIcone.png' alt='abrir lembretes' /> }
+                {app === 'config.exe' && <img src='/imagens/windows/ledIcone.png' alt='abrir config' /> }
+
+            </div>
+         )
+        )
+    }
+    </div>
+
        <div className='icone-bateria' >
             <img src="/imagens/windows/bateriaIcone.png" alt="Bateria carregando" />
         </div> 
