@@ -1,17 +1,18 @@
 .tablet-tela {
-display: flex;
-flex-wrap: wrap;
-opacity: 1;
-height: 1080px;
-position: fixed;
-width: 1920px;
+    display: flex;
+    flex-wrap: wrap;
+    opacity: 1;
+    height: 387px;
+    position: fixed;
+    width: 663px;
+    top: 319px;
+    left: 549px;
 }
 
 .tablet-tela .area-de-trabalho {
 width: 665px;
 background-size: contain;
-margin-top: 330px;
-margin-left: 548px;
+
 }
 
 .tablet-tela .janela-lembretes {
@@ -57,13 +58,14 @@ padding: 36px 64px;
 box-shadow:  8px 8px 16px rgba(0,0,0,0.15);
 align-self: center;
 height: 278px;
-margin-top: 9px;
+margin-top: 20px;
 }
 
 .janela-configuracao-led {
-    height: 359px;
+    height: 350px;
     width: 664px;
     background-color: rgb(215, 218, 243);
+    margin-top: 20px;
 }
 
 .tablet-img {
@@ -72,6 +74,8 @@ margin-top: 9px;
   width: 110px;
   pointer-events: none;
 }
+
+
 
 .secao-tablet-modal .tablet-modal {
 position: fixed;
@@ -89,7 +93,7 @@ pointer-events: none;
  height: 36px;
  width: 664px;
  top: 689px;
- margin-left: 549px;
+
 }
 
 .barra-de-tarefas .menu-iniciar img {
@@ -139,10 +143,6 @@ margin-left: 10px;
 margin-left: 20px;
 height: 20px;
 margin-top: 10px;
-}
-
-.icone-na-barra {
-
 }
 
 
