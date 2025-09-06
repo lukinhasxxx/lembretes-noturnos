@@ -36,8 +36,6 @@ height: 35px;
 width: 35px;
 }
 
-
-
 .tablet-tela .area-de-trabalho .icone-lembretes span{
 display: block;
 pointer-events: none;
@@ -51,9 +49,6 @@ pointer-events: none;
 color: white;
 margin-left: -33px;
 }
-
-
-
 
 
 .tablet-tela form {
@@ -112,11 +107,13 @@ cursor: pointer;
 }
 
 .icones-apps-abertos {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5,50px);
+  margin-left: 10px;
 }
 
 .barra-de-tarefas .icone-bateria img {
-  margin-left: 320px;
+  margin-left: 60px;
   height: 12px;
   margin-top: 10px;
 }
@@ -144,7 +141,8 @@ height: 20px;
 margin-top: 10px;
 }
 
+.icone-na-barra {
 
-
+}
 
 

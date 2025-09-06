@@ -21,6 +21,19 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado}) => {
         }
     }
 
+    const fecharApp = (nomeDoAppPraFechar) => {
+        const novosAppsAbertos = appsAbertos.filter(app => app !== nomeDoAppPraFechar);
+        setAppsAbertos(novosAppsAbertos);
+   
+
+    if (novosAppsAbertos.length > 0) {
+     setTelaAtiva(novosAppsAbertos[novosAppsAbertos.length -1])   
+    } else {
+        setTelaAtiva('desktop')
+
+    } 
+}
+
     return (
     <div>
             <div className='tablet-tela'  > 
@@ -41,7 +54,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado}) => {
                 </div>)}
                 {/* app de fato */}
                 {telaAtiva ==='config.exe' && (<div className='janela-configuracao-led' >
-                        <img src="/imagens/windows/iconeFechar.png" alt="Icone de fechar" />
+                        <img src="/imagens/windows/iconeFechar.png" alt="Icone de fechar" 
+                        onClick={() => fecharApp('config.exe')}/>
                         <span>Aqui vai ficar a configuracao teste</span>
                     </div>
                 )}
@@ -49,7 +63,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado}) => {
                 { telaAtiva === 'lembretes.exe' && (
 
                 <div className='janela-lembretes' >
-                    <img src="/imagens/windows/iconeFechar.png" alt="Icone de fechar" />
+                    <img src="/imagens/windows/iconeFechar.png" alt="Icone de fechar"
+                    onClick={() => fecharApp('lembretes.exe')} />
                     <form onSubmit={aoSalvar}>
                     <h2>Deixe seu lembrete para ser incluído no painel.</h2>
                     <textarea
