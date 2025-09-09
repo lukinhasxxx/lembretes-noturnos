@@ -5,7 +5,7 @@
     height: 387px;
     position: fixed;
     width: 663px;
-    top: 319px;
+    top: 338px;
     left: 549px;
 }
 
@@ -51,21 +51,19 @@ color: white;
 margin-left: -33px;
 }
 
-
 .tablet-tela form {
 background-color: #f2f2f2;
 padding: 36px 64px;
 box-shadow:  8px 8px 16px rgba(0,0,0,0.15);
 align-self: center;
 height: 278px;
-margin-top: 20px;
+
 }
 
 .janela-configuracao-led {
     height: 350px;
     width: 664px;
     background-color: rgb(215, 218, 243);
-    margin-top: 20px;
 }
 
 .tablet-img {
@@ -93,7 +91,6 @@ pointer-events: none;
  height: 36px;
  width: 664px;
  top: 689px;
-
 }
 
 .barra-de-tarefas .menu-iniciar img {
@@ -132,12 +129,10 @@ cursor: pointer;
 margin-left: 10px;
 }
 
-
 .idioma {
   color: white;
   font-size: 13px;
 }
-
 
 .barra-de-tarefas .icone-notificacoes img {
 margin-left: 20px;
