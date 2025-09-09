@@ -26,6 +26,50 @@
     margin-top: 210px;
     border-radius: 20px;
     animation: neonGlow 2.7s linear infinite;
+
+    transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+    transform-origin: 90% 25%; /* profundidade / inclnacao */
+    transition: transform 9.6s ease;
+}
+
+@keyframes ventoComOscilacao {
+
+    0% {
+        transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
+    }
+    15% {
+        transform: perspective(1000px) rotateY(-34deg) rotateX(0deg);
+    }
+    30% {
+        transform: perspective(1000px) rotateY(-36deg) rotateX(0deg);
+    }
+    45% {
+        transform: perspective(1000px) rotateY(-33deg) rotateX(1deg);
+    }
+    50% {
+        transform: perspective(1000px) rotateY(-33.5deg) rotateX(2deg);
+    }
+    55% {
+        transform: perspective(1000px) rotateY(-32.8deg) rotateX(3deg);
+    }
+    60% {
+        transform: perspective(1000px) rotateY(-33.2deg) rotateX(2deg);
+    }
+    75% {
+        transform: perspective(1000px) rotateY(-34deg) rotateX(0deg);
+    }
+
+    85% {
+        transform: perspective(1000px) rotateY(-36deg) rotateX(0deg);
+    }
+    100% {
+        transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
+    }
+}
+
+.painel:hover {
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
+    animation: ventoComOscilacao 14s ease-in-out 9s infinite , neonGlow 2.5s ease-in-out infinite;
 }
 
 .painel p{
