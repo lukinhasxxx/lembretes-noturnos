@@ -5,7 +5,8 @@ const MuralDeNotas = ({lembretes, aoDeletar, aoFavoritar}) => {
     
     return (
 
-       (lembretes.length > 0) && <section className='painel'> painel aqui
+       (lembretes.length > 0) && <section className='painel'> 
+       <p>Lembretes Noturnos</p>
 
             <div className='zona-dos-cards'>
             {lembretes.map(lembrete => {
