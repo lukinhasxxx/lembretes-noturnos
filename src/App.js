@@ -8,30 +8,37 @@ function App() {
 
   const [lembretes, setLembretes] = useState([])
 
-  const adicionarLembrete = (textoDaNota) => {
-    const novoLembrete = {
-      id:uuidv4(),
-      texto:textoDaNota,
-      favorito:false
-    };
+const adicionarLembrete = (textoDaNota) => {
 
-   setLembretes([...lembretes,novoLembrete])
+  const novoLembrete = {
+    id: uuidv4(),
+    texto: textoDaNota,
+    fixar: false
+  };
 
-  }
-    function deletarLembrete(id) {
-      setLembretes(lembretes.filter(lembrete => lembrete.id !== id))
-    }
+
+  const novaLista = [...lembretes, novoLembrete];
+
+  setLembretes(novaLista);
+};
+
 
 function fixarLembrete(id) {
   setLembretes(lembretes.map(lembrete => {
     if (lembrete.id === id) {
-      return { ...lembrete, favorito: !lembrete.favorito
+      return { ...lembrete, fixar: !lembrete.fixar
       };
     }
     return lembrete;
   }));
 
 }
+
+
+   function deletarLembrete(id) {
+      setLembretes(lembretes.filter(lembrete => lembrete.id !== id))
+    }
+
 
 const [ligarTablet,setLigarTablet] = useState(false)
 
@@ -68,7 +75,8 @@ setLigarTablet(ligado =>!ligado);
       <MuralDeNotas
         lembretes={lembretes} 
         aoDeletar={deletarLembrete}
-        aoFavoritar={fixarLembrete}
+        aoFixar={fixarLembrete}
+
       />
       
     </div>

@@ -73,6 +73,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado}) => {
                         value= {nome}
                         onChange={evento => setNome(evento.target.value)}
                         name='mensagem'
+                        maxLength={150}
+                        rows={5}
                         >
                     </textarea>
                 

@@ -6,7 +6,7 @@
     position: fixed;
     width: 663px;
     top: 338px;
-    left: 549px;
+    left: 386px;
 }
 
 .tablet-tela .area-de-trabalho {
@@ -22,7 +22,7 @@ max-height: 37px;
 .tablet-tela .janela-lembretes img {
 float: right;
 margin-right: -3px;
-    margin-top: -3px;
+margin-top: -3px;
 }
 
 .tablet-tela .area-de-trabalho .icone-lembretes {
@@ -73,11 +73,9 @@ height: 278px;
   pointer-events: none;
 }
 
-
-
 .secao-tablet-modal .tablet-modal {
 position: fixed;
-left: 500px;
+left: 337px;
 top: 290px;
 height: 482px;
 width: 760px;
@@ -139,5 +137,3 @@ margin-left: 20px;
 height: 20px;
 margin-top: 10px;
 }
-
-

@@ -13,7 +13,6 @@
   }
 }
 
-
 .painel{
     text-align: center;
     padding: 32px;
@@ -31,21 +30,25 @@
     transform-origin: 90% 25%; /* profundidade / inclnacao */
     transition: transform 9.6s ease;
 }
-
+/* comentarios gerados para facilitar a modificacao da animacao */
 @keyframes ventoComOscilacao {
-
+    /* Base inclinada */
     0% {
         transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
     }
+    /* Balanço leve para trás */
     15% {
         transform: perspective(1000px) rotateY(-34deg) rotateX(0deg);
     }
+    /* Volta um pouco */
     30% {
         transform: perspective(1000px) rotateY(-36deg) rotateX(0deg);
     }
+    /* Rajada forte para trás */
     45% {
         transform: perspective(1000px) rotateY(-33deg) rotateX(1deg);
     }
+    /* Oscilação no fim da rajada */
     50% {
         transform: perspective(1000px) rotateY(-33.5deg) rotateX(2deg);
     }
@@ -55,13 +58,15 @@
     60% {
         transform: perspective(1000px) rotateY(-33.2deg) rotateX(2deg);
     }
+    /* Começa a voltar */
     75% {
         transform: perspective(1000px) rotateY(-34deg) rotateX(0deg);
     }
-
+    /* Pequena oscilação antes de estabilizar */
     85% {
         transform: perspective(1000px) rotateY(-36deg) rotateX(0deg);
     }
+    /* Retorna à base */
     100% {
         transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
     }
@@ -78,9 +83,6 @@
     text-shadow: 4px 1px 0px #00806f;
     font-size: 20px;
 }
-
-
-
 
 ::-webkit-scrollbar {
   width: 10px;
@@ -141,6 +143,9 @@
     box-shadow: 1px 1px 8px rgb(0 255 170);
     position: relative;
     backdrop-filter: blur(1px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    
 }
 
 .painel .zona-dos-cards .card::before {

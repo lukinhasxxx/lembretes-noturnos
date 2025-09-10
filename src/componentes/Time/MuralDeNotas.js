@@ -1,7 +1,7 @@
 import './MuralDeNotas.css'
 import CardDeNotas from '../Colaborador/CardDeNotas'
 
-const MuralDeNotas = ({lembretes, aoDeletar, aoFavoritar}) => {
+const MuralDeNotas = ({lembretes, aoDeletar, aoFixar}) => {
     
     return (
 
@@ -12,9 +12,9 @@ const MuralDeNotas = ({lembretes, aoDeletar, aoFavoritar}) => {
             {lembretes.map(lembrete => {
                     return <CardDeNotas
                       lembretes = {lembrete}
-                      key = {lembrete.id} 
+                      key = {lembrete.id}
                       aoDeletar = {aoDeletar}  
-                      aoFavoritar={aoFavoritar}
+                      aoFixar={aoFixar}
                     />
                 })
             }
