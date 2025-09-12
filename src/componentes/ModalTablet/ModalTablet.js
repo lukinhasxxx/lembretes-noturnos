@@ -77,7 +77,9 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado}) => {
                         rows={5}
                         >
                     </textarea>
-                
+                <div>
+                    
+                </div>
                     <Botao>Enviar lembrete</Botao>
                 </form>
             </div>

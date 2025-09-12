@@ -9,7 +9,7 @@ const [fixarLembrete, setFixarLembrete] = useState(false)
 const validarFixado = () => {
     setFixarLembrete(fixarLembrete => !fixarLembrete)
     aoFixar(lembretes.id)
-    console.log('foi clicado e o statos do favoritar eh',lembretes.id)
+
 }
 
 const deletarItem = () => {

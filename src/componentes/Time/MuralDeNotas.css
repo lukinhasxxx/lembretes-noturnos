@@ -14,6 +14,7 @@
 }
 
 .painel{
+    /* primeira condicao, o painel so pode dar a opcao de esconder ou nao, depois da primeira aparicao, mesma condicao pro texto de adicionar notas, e nisso, display none */
     text-align: center;
     padding: 32px;
     position: relative;
@@ -81,7 +82,13 @@
     margin-top: 0px;
     color: violet;
     text-shadow: 4px 1px 0px #00806f;
-    font-size: 20px;
+    font-size: 26px;
+}
+
+.painel text {
+    font-size: 24px;
+    color: #fff509;
+    text-shadow: 5px 2px 0px #800000;
 }
 
 ::-webkit-scrollbar {
@@ -127,7 +134,7 @@
     box-shadow: 0px 0px 7px rgb(253, 255, 8 ,0.5);
     padding-right:5px ;
     width: 460px;
-    height: 412px;
+    height: 394px;
     border-radius: 10px;
     overflow-y: auto;
     overflow-x: hidden;
