@@ -1,14 +1,14 @@
 import './MuralDeNotas.css'
 import CardDeNotas from '../Colaborador/CardDeNotas'
 
-const MuralDeNotas = ({lembretes, aoDeletar, aoFixar}) => {
+const MuralDeNotas = ({lembretes, aoDeletar, aoFixar,painelLigadoPermanente}) => {
     
     return (
 
-       (lembretes.length > 0) && <section className='painel'> 
+    painelLigadoPermanente===true && <section className='painel'> 
        <p>Lembretes Noturnos</p>
 
-            <div className='zona-dos-cards'>
+        <div className='zona-dos-cards'>
             {lembretes.map(lembrete => {
                     return <CardDeNotas
                       lembretes = {lembrete}
@@ -18,6 +18,10 @@ const MuralDeNotas = ({lembretes, aoDeletar, aoFixar}) => {
                     />
                 })
             }
+        {lembretes.length <= 0 && <text
+        className='lembrete-vazio'>
+                Você ainda não possui lembretes no painel, por favor, vá até o tablet e adicione.
+            </text>}
             </div>
         </section>
     )

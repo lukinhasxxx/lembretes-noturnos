@@ -3,10 +3,11 @@ import { useState } from 'react';
 import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import { v4 as uuidv4 } from 'uuid';
 
- 
 function App() {
 
-  const [lembretes, setLembretes] = useState([])
+const [lembretes, setLembretes] = useState([])
+const [painelLigadoPermanente,setPainelLigadoPermanente] = useState(false)
+
 
 const adicionarLembrete = (textoDaNota) => {
 
@@ -16,29 +17,28 @@ const adicionarLembrete = (textoDaNota) => {
     fixar: false
   };
 
-
   const novaLista = [...lembretes, novoLembrete];
 
   setLembretes(novaLista);
+  setPainelLigadoPermanente(true)
+    
 };
-
 
 function fixarLembrete(id) {
   setLembretes(lembretes.map(lembrete => {
     if (lembrete.id === id) {
       return { ...lembrete, fixar: !lembrete.fixar
       };
+    } else{
+      return lembrete
     }
-    return lembrete;
-  }));
+  }).sort((a,b)=> b.fixar-a.fixar)
+);
 
 }
-
-
    function deletarLembrete(id) {
       setLembretes(lembretes.filter(lembrete => lembrete.id !== id))
     }
-
 
 const [ligarTablet,setLigarTablet] = useState(false)
 
@@ -76,7 +76,7 @@ setLigarTablet(ligado =>!ligado);
         lembretes={lembretes} 
         aoDeletar={deletarLembrete}
         aoFixar={fixarLembrete}
-
+        painelLigadoPermanente={painelLigadoPermanente}
       />
       
     </div>
