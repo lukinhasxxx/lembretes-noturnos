@@ -7,15 +7,17 @@
 
 .cards .card .pinOff,
 .cards .card .pinOn{
-height: auto;
-width: 24px;
-position: absolute;
-top: 0;
-left: 406px;
-cursor: pointer;
+    user-select: none;
+    height: auto;
+    width: 24px;
+    position: absolute;
+    top: 0;
+    left: 406px;
+    cursor: pointer;
 }
 
 .cards .card .lixeira {
+    user-select: none;
     height: 100%;
     width: 24px;
     position: absolute;

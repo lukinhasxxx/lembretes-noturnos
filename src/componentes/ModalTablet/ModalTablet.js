@@ -129,26 +129,26 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     }
     </div>
 
-       <div className='icone-bateria' >
-            <img src="/imagens/windows/bateriaIcone.png" alt="Bateria carregando" />
-        </div> 
-    
-       <div className='icone-wifi' >
-            <img src="/imagens/windows/wifiIcone.png" alt="\Icone wifi" />
-        </div> 
+        <div className='barra-tarefas-inferior-direito' >
+            <div className='icone-bateria' >
+                    <img src="/imagens/windows/bateriaIcone.png" alt="Bateria carregando" />
+                </div> 
+            
+            <div className='icone-wifi' >
+                    <img src="/imagens/windows/wifiIcone.png" alt="\Icone wifi" />
+                </div> 
 
-        <div className='icone-som' >
-            <img src="/imagens/windows/semSomIcone.png" alt="Icone sem som" />
-        </div> 
+                <div className='icone-som' >
+                    <img src="/imagens/windows/semSomIcone.png" alt="Icone sem som" />
+                </div> 
 
-        <div className='idioma'>
-            <span>POR</span>
-            <br></br>
-            <span>PTB2</span>
-        </div>
-
-        <Relogio/>
-
+                <div className='idioma'>
+                    <span>POR</span>
+                    <br></br>
+                    <span>PTB2</span>
+                </div>
+                <Relogio/>
+      </div>
         <div className='icone-notificacoes' >
         <img src="/imagens/windows/iconeNotificacoes.png" alt="Icone de notificacoes" />
         </div> 
