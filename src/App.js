@@ -1,4 +1,6 @@
 import ModalTablet from './componentes/ModalTablet/ModalTablet';
+import  VisibilidadePainel from './contexts/VisibilidadePainel';
+//aqui eh pra eu importar o provider, sem o contexto
 import { useState } from 'react';
 import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import { v4 as uuidv4 } from 'uuid';
@@ -51,12 +53,14 @@ setLigarTablet(ligado =>!ligado);
 }
 
   return (
+    <VisibilidadePainel>
     
     <div className="App">
           {modalAberto && 
         <ModalTablet
           aoSubmeter={adicionarLembrete}
           validarLigadoDesligado = {ligarTablet}
+          painelLigadoPermanente={painelLigadoPermanente}
         />
        }
 
@@ -72,14 +76,16 @@ setLigarTablet(ligado =>!ligado);
           />
 
       </div>
-      <MuralDeNotas
-        lembretes={lembretes} 
-        aoDeletar={deletarLembrete}
-        aoFixar={fixarLembrete}
-        painelLigadoPermanente={painelLigadoPermanente}
-      />
       
+        <MuralDeNotas
+          lembretes={lembretes} 
+          aoDeletar={deletarLembrete}
+          aoFixar={fixarLembrete}
+          painelLigadoPermanente={painelLigadoPermanente}
+      />
+     
     </div>
+  </VisibilidadePainel>
   );
 }
 

@@ -14,7 +14,6 @@
 }
 
 .painel{
-    /* primeira condicao, o painel so pode dar a opcao de esconder ou nao, depois da primeira aparicao, mesma condicao pro texto de adicionar notas, e nisso, display none */
     text-align: center;
     padding: 32px;
     position: relative;
