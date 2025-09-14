@@ -1,4 +1,4 @@
-.botao {
+form .botao-lembrete {
     background-color: #6278f7;
     border-radius: 10px;
     font-weight: 700;
@@ -10,6 +10,6 @@
     margin: 32px 0;
 }
 
-.botao:hover {
+form .botao-lembrete:hover {
     color:#95ffd4;
 }

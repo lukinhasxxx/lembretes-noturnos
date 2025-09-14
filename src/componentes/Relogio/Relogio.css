@@ -2,4 +2,13 @@
     color: white;
     font-size: 13px;
     margin-left: 10px;
+    user-select: none;
 }
+
+
+.relogio-tablet:hover {
+    background-color: rgba(46, 45, 45, 0.76);
+}
+
+
+

@@ -1,12 +1,19 @@
+import { VisibilidadePainelContext } from '../../contexts/VisibilidadePainel'
+import VisibilidadePainel from '../../contexts/VisibilidadePainel'
 import './ModalTablet.css'
 import Botao from '../Botao'
-import { useState } from 'react'
+import { useState,useContext } from 'react'
 import Relogio from '../Relogio/Relogio'
 
-const ModalTablet = ({aoSubmeter, validarLigadoDesligado}) => {
+const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente}) => {
+
+    //perto do fim do projeto ai componetiza, modulariza as coisas
+    const {setMostrarPainel} = useContext(VisibilidadePainelContext)   
     const [nome, setNome] = useState('')
     const [telaAtiva, setTelaAtiva] = useState('desktop')
     const [appsAbertos,setAppsAbertos] = useState([])
+    const [textoBotao,setTextoBotao] =useState('Esconder painel')
+
 
     const aoSalvar = (evento) => {
         evento.preventDefault()
@@ -30,11 +37,16 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado}) => {
      setTelaAtiva(novosAppsAbertos[novosAppsAbertos.length -1])   
     } else {
         setTelaAtiva('desktop')
-
     } 
 }
 
+    const alterarTexto = () => {
+        setMostrarPainel(valor => !valor)
+        setTextoBotao(texto => texto==='Mostrar painel'?'Esconder painel':'Mostrar painel' )
+    }
+
     return (
+
     <div>
             <div className='tablet-tela'  > 
             <div className='area-de-trabalho' style={{backgroundImage:"url('/imagens/windows/windowsWallpaper.jpg')",backgroundRepeat:"no-repeat"}}  >
@@ -67,20 +79,28 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado}) => {
                     onClick={() => fecharApp('lembretes.exe')} />
                     <form onSubmit={aoSalvar}>
                     <h2>Deixe seu lembrete para ser incluído no painel.</h2>
-                    <textarea
-                        required={true}
-                        placeholder='Digite sua mensagem'
-                        value= {nome}
-                        onChange={evento => setNome(evento.target.value)}
-                        name='mensagem'
-                        maxLength={150}
-                        rows={5}
-                        >
-                    </textarea>
-                <div>
-                    
-                </div>
-                    <Botao>Enviar lembrete</Botao>
+                    <div className='grupo-painel'>
+                        <textarea
+                            required={true}
+                            placeholder='Digite sua mensagem'
+                            value= {nome}
+                            onChange={evento => setNome(evento.target.value)}
+                            name='mensagem'
+                            maxLength={150}
+                            rows={5}
+                            >
+                        </textarea>
+                        
+                        { //aqui vai a funcao de estado
+                        painelLigadoPermanente === true && <div className='mostrar-e-esconder' onClick={()=>{alterarTexto()}} >
+                            <div className='botao-mostrar-esconder-painel' ><p>{textoBotao}</p></div>
+                    </div>
+                    }
+                        </div>
+
+
+
+                    <Botao className='botao-lembrete' >Enviar lembrete</Botao>
                 </form>
             </div>
                 )}
@@ -100,8 +120,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado}) => {
     {
         appsAbertos.map(app =>(
             <div key={app} className='icone-na-barra' onClick={() => setTelaAtiva(app)} >
-                {app === 'lembretes.exe' && <img src= '/imagens/windows/lembretesIcone.png' alt='abrir lembretes' /> }
-                {app === 'config.exe' && <img src='/imagens/windows/ledIcone.png' alt='abrir config' /> }
+                {app === 'lembretes.exe' && <img className='icone-na-barra-lembretes' src= '/imagens/windows/lembretesIcone.png' alt='abrir lembretes' /> }
+                {app === 'config.exe' && <img className='icone-na-barra-led'  src='/imagens/windows/ledIcone.png' alt='abrir config' /> }
 
             </div>
          )
@@ -144,6 +164,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado}) => {
             </section>
 
     </div>
+
+
     )
 }
 
