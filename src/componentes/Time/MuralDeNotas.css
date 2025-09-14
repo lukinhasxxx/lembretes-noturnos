@@ -82,6 +82,7 @@
     color: violet;
     text-shadow: 4px 1px 0px #00806f;
     font-size: 26px;
+    user-select: none;
 }
 
 .painel text {
@@ -108,6 +109,11 @@
   /* aqui eh a cor ao REDOR da barrinha */
   border: solid 4px #a0c3cb96;
   animation: neonPulse 1.5s ease-in-out infinite;
+}
+::-webkit-scrollbar-thumb:hover {
+
+  border: solid 4px #78d8eece;
+
 }
 
 

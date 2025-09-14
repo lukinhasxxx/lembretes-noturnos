@@ -120,8 +120,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     {
         appsAbertos.map(app =>(
             <div key={app} className='icone-na-barra' onClick={() => setTelaAtiva(app)} >
-                {app === 'lembretes.exe' && <img src= '/imagens/windows/lembretesIcone.png' alt='abrir lembretes' /> }
-                {app === 'config.exe' && <img src='/imagens/windows/ledIcone.png' alt='abrir config' /> }
+                {app === 'lembretes.exe' && <img className='icone-na-barra-lembretes' src= '/imagens/windows/lembretesIcone.png' alt='abrir lembretes' /> }
+                {app === 'config.exe' && <img className='icone-na-barra-led'  src='/imagens/windows/ledIcone.png' alt='abrir config' /> }
 
             </div>
          )

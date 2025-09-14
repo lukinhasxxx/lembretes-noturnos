@@ -23,12 +23,17 @@ max-height: 40px;
     margin-top: 4px;
     margin-left: 625px;
     padding-left: 4px;
+    cursor: pointer;
 }
 
 .tablet-tela .area-de-trabalho .icone-lembretes {
 margin: 50px;
 height: 35px;
 width: 35px;
+}
+
+.icones-apps-abertos .icone-na-barra .icone-na-barra-lembretes:hover{
+ background-color: rgba(46, 45, 45, 0.76);
 }
 
 .tablet-tela .area-de-trabalho .icone-led {
@@ -49,6 +54,10 @@ display: block;
 pointer-events: none;
 color: white;
 margin-left: -33px;
+}
+
+.icones-apps-abertos .icone-na-barra .icone-na-barra-led:hover{
+ background-color: rgba(46, 45, 45, 0.76);
 }
 
 .tablet-tela form {
@@ -119,6 +128,10 @@ pointer-events: none;
   margin-top: 5px;
 }
 
+.barra-de-tarefas .menu-iniciar:hover {
+  background-color: rgba(46, 45, 45, 0.76);
+}
+
 .barra-de-tarefas .seta-voltar img{
 display: flex;
 height: 30px;
@@ -138,27 +151,57 @@ cursor: pointer;
   height: 12px;
   margin-top: 10px;
 }
+.barra-de-tarefas .icone-bateria:hover {
+background-color: rgba(46, 45, 45, 0.76);
+}
 
 .barra-de-tarefas .icone-wifi img {
     height: 15px;
     margin-left: 10px;
     margin-top: 10px;
 }
+.barra-de-tarefas .icone-wifi:hover {
+background-color: rgba(46, 45, 45, 0.76);
+}
+
+
 
 .barra-de-tarefas .icone-som img {
 margin-left: 10px;
 }
 
+.barra-de-tarefas .icone-som:hover{
+background-color: rgba(46, 45, 45, 0.76);
+}
+
+
 .idioma {
   color: white;
   font-size: 13px;
+  user-select: none;
 }
 
+.idioma:hover {
+   background-color: rgba(46, 45, 45, 0.76);
+}
+
+.barra-de-tarefas .icone-notificacoes {
+margin-left: 15px;
+width: 25px;
+}
+
+
 .barra-de-tarefas .icone-notificacoes img {
-margin-left: 20px;
 height: 20px;
 margin-top: 10px;
 }
+
+ 
+.barra-de-tarefas .icone-notificacoes:hover {
+  background-color: rgba(46, 45, 45, 0.76);
+ 
+}
+
 
 .botao-mostrar-esconder-painel {
   width: 90px;
