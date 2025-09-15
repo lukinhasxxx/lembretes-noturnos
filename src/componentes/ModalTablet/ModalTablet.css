@@ -33,13 +33,28 @@ position: relative;
     border: rgb(0, 255, 213) solid 1px;
     border-radius: 5px;
     cursor: pointer;
-    background: rgb(95, 95, 252);
+    background-color: rgb(95, 95, 252);
+    box-shadow: 2px 2px 2px rgb(0 0 0);
+    opacity: 0.9;
+    transition: background-color 0.5s ease, transform 0.3s ease; 
+}
+
+.tablet-tela .area-de-trabalho .about .janela-about .janela-pro-lembrete:hover {
+  opacity: 0.7;
+  background-color: rgb(77 171 255);
+  box-shadow: 2px 2px 2px rgb(24, 59, 255)
+}
+
+.tablet-tela .area-de-trabalho .about .janela-about .janela-pro-lembrete:active {
+  transform: scale(0.90);
 }
 
 .tablet-tela .area-de-trabalho .about .janela-about .janela-pro-lembrete p {
     margin-top: 3px;
     margin-left: 5px;
     font-size: 15px;
+    color: #38fff7d1;
+    text-shadow: 2px 1px 2px #3325a3ad;
 }
 
 
@@ -111,6 +126,38 @@ background: linear-gradient(to right, #bcabff, #aaf7f4de);
 max-height: 40px;
 }
 
+.tablet-tela .janela-lembretes  .janela-pro-about {
+    margin-left: 5px;
+    margin-top: 5px;
+    height: 25px;
+    width: 90px;
+    position: absolute;
+    border: rgb(0, 255, 213) solid 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: rgb(95, 95, 252);
+    box-shadow: 2px 2px 2px rgb(0 0 0);
+    opacity: 0.9;
+    transition: background-color 0.5s ease, transform 0.3s ease;
+}
+.tablet-tela .janela-lembretes  .janela-pro-about:hover {
+  opacity: 0.7;
+  background-color: rgb(77 171 255);
+  box-shadow: 2px 2px 2px rgb(24, 59, 255)
+}
+
+.tablet-tela .janela-lembretes  .janela-pro-about:active{
+  transform: scale(0.90);
+}
+
+.tablet-tela .janela-lembretes  .janela-pro-about p {
+    margin-top: 3px;
+    margin-left: 5px;
+    font-size: 15px;
+    color: #38fff7d1;
+    text-shadow: 2px 1px 2px #3325a3ad;
+}
+
 .tablet-tela .janela-lembretes img {
     margin-top: 4px;
     margin-left: 625px;
@@ -143,7 +190,6 @@ max-height: 40px;
     background-color: #87d8dd1a;
     border-radius: 10px;
     border: 1px solid #7b74ff5e;
-
 }
 
 .tablet-tela .area-de-trabalho .icone-lembretes {
@@ -367,14 +413,12 @@ margin-left: 20px;
 width: 34px;
 }
 
-
 .barra-de-tarefas .icone-notificacoes img {
 height: 20px;
 margin-top: 10px;
 margin-left: 7px;
 }
 
- 
 .barra-de-tarefas .icone-notificacoes:hover {
   background-color: rgba(46, 45, 45, 0.76);
  
@@ -409,15 +453,12 @@ margin-left: 7px;
     background-color: rgb(229 220 206);
     color: rgb(20 40 41);
     text-shadow: 2px 1px 2px #ffffff;
-
 }
 
 
 .botao-mostrar-esconder-painel:active{
 transform: scale(0.95);
 }
-
-
 
 /* zona de interacao do tablet */
 .tablet-img {
@@ -433,5 +474,4 @@ transform: scale(0.95);
     height: 60px;
     width: 268px;
     padding: 11px 8px;
-    
 }
