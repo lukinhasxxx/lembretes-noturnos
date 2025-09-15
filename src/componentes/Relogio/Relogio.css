@@ -1,10 +1,16 @@
 .relogio-tablet {
+    width: 86px;
+    height: 36px;
     color: white;
     font-size: 13px;
     margin-left: 10px;
     user-select: none;
-}
 
+}
+.relogio-tablet span {
+    margin-left: 8px;
+    padding-top: 3px;
+}
 
 .relogio-tablet:hover {
     background-color: rgba(46, 45, 45, 0.76);

@@ -12,56 +12,229 @@
 .tablet-tela .area-de-trabalho {
 width: 665px;
 background-size: contain;
+}
+
+
+/* about */
+.tablet-tela .area-de-trabalho .about .janela-about{
+user-select: none;
+background: linear-gradient(to right, #bcabff, #aaf7f4de);
+max-height: 40px;
+position: relative;
+}
+
+
+.tablet-tela .area-de-trabalho .about .janela-about .janela-pro-lembrete {
+    margin-left: 5px;
+    margin-top: 5px;
+    height: 25px;
+    width: 90px;
+    position: absolute;
+    border: rgb(0, 255, 213) solid 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    background: rgb(95, 95, 252);
+}
+
+.tablet-tela .area-de-trabalho .about .janela-about .janela-pro-lembrete p {
+    margin-top: 3px;
+    margin-left: 5px;
+    font-size: 15px;
+}
+
+
+.tablet-tela .area-de-trabalho .about .janela-about img {
+    margin-top: 4px;
+    margin-left: 625px;
+    padding-left: 9px;
+    cursor: pointer;
+    transition: filter 0.4s ease;
+}
+
+.tablet-tela .area-de-trabalho .about .janela-about img:hover {
+  filter: brightness(1.6);
+  transform: scale(1.1);
+  transition: transform 0.4s ease;
+}
+
+.tablet-tela .area-de-trabalho .about .janela-about img:active {
+  transform: scale(0.9);
+}
+
+
+
+
+
+
+
+.tablet-tela .area-de-trabalho .about .janela-about {
+  height: 34px;
+  width: auto;
+
 
 }
+
+.tablet-tela .area-de-trabalho .about .tela-about {
+  background: linear-gradient(to right, #d0cbd5, #fff3c6);
+  padding: 36px 64px;
+  align-self: center;
+  height: 244px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.tablet-tela .area-de-trabalho .about .tela-about h2{
+  margin-top: 0px;
+  color: aliceblue;
+  text-shadow: 1px 1px 1px #ff00fc;
+}
+
+/* Se tiver algum botao la dentro, vai usar isso aqui
+
+  background-color: #6278f7;
+    border-radius: 44px;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 32px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    margin: 28px 40px;
+    transition: background-color 0.5s ease;
+    box-shadow: 7px 5px 8px rgb(82 86 197 / 30%); */
+
+/* lembretes */
 
 .tablet-tela .janela-lembretes {
-background: #00ffde57;
+user-select: none;
+background: linear-gradient(to right, #bcabff, #aaf7f4de);
 max-height: 40px;
 }
+
 .tablet-tela .janela-lembretes img {
     margin-top: 4px;
     margin-left: 625px;
-    padding-left: 4px;
+    padding-left: 9px;
     cursor: pointer;
+    transition: filter 0.4s ease;
+}
+
+.tablet-tela .janela-lembretes img:hover {
+  filter: brightness(1.6);
+  transform: scale(1.1);
+  transition: transform 0.4s ease;
+}
+
+.tablet-tela .janela-lembretes img:active {
+  transform: scale(0.9);
+}
+
+.tablet-tela .area-de-trabalho .icone-lembretes .selecionar-lembrete{
+    width: 150px;
+    height: 90px;
+    top: -21px;
+    left: -54px;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+}
+
+.tablet-tela .area-de-trabalho .icone-lembretes .selecionar-lembrete:hover{
+    background-color: #87d8dd1a;
+    border-radius: 10px;
+    border: 1px solid #7b74ff5e;
+
 }
 
 .tablet-tela .area-de-trabalho .icone-lembretes {
-margin: 50px;
-height: 35px;
-width: 35px;
+  position: relative;
+    user-select: none;
+    margin-left: 70px;
+    margin-top: 40px;
+    height: 35px;
+    width: 35px;
 }
-
-.icones-apps-abertos .icone-na-barra .icone-na-barra-lembretes:hover{
- background-color: rgba(46, 45, 45, 0.76);
-}
-
-.tablet-tela .area-de-trabalho .icone-led {
-margin: 50px;
-height: 35px;
-width: 35px;
+.tablet-tela .area-de-trabalho .icone-lembretes img {
+  height: 30px;
 }
 
 .tablet-tela .area-de-trabalho .icone-lembretes span{
+user-select: none;
 display: block;
 pointer-events: none;
 color: white;
 margin-left: -33px;
+}
+
+.icones-apps-abertos .icone-na-barra {
+width: 30px;
+}
+
+.icones-apps-abertos .icone-na-barra .icone-na-barra-lembretes {
+  margin-top: 5px ;
+  height: 22px;
+  user-select: none;
+}
+
+.icones-apps-abertos .icone-na-barra .icone-na-barra-lembretes:hover{
+ background-color: rgba(46, 45, 45, 0.76);
+ filter: brightness(1.1);
+}
+
+/* Icone led */
+.tablet-tela .area-de-trabalho .icone-led {
+position: relative;
+user-select: none;
+margin-top: 55px;
+margin-left: 70px;
+height: 35px;
+width: 35px;
 }
 
 .tablet-tela .area-de-trabalho .icone-led span{
 display: block;
 pointer-events: none;
 color: white;
-margin-left: -33px;
+margin-left: -29px;
+}
+
+.tablet-tela .area-de-trabalho .icone-led .selecionar-configuracao{
+    width: 150px;
+    height: 90px;
+    top: -16px;
+    left: -54px;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+}
+
+.tablet-tela .area-de-trabalho .icone-led .selecionar-configuracao:hover{
+    background-color: #87d8dd1a;
+    border-radius: 10px;
+    border: 1px solid #7b74ff5e;
+
+}
+
+.icones-apps-abertos .icone-na-barra .icone-na-barra-led {
+  user-select: none;
 }
 
 .icones-apps-abertos .icone-na-barra .icone-na-barra-led:hover{
  background-color: rgba(46, 45, 45, 0.76);
 }
 
+.janela-configuracao-led {
+    user-select: none;
+    height: 350px;
+    width: 664px;
+    background-color: rgb(215, 218, 243);
+}
+
+
+
+/* forms */
 .tablet-tela form {
-background-color: #f2f2f2;
+background: linear-gradient(to right, #d0cbd5, #fff3c6);
 padding: 36px 64px;
 box-shadow:  8px 8px 16px rgba(0,0,0,0.15);
 align-self: center;
@@ -70,41 +243,15 @@ overflow-y: auto;
 position: relative;
 }
 
-form .botao-lembrete {
-    background-color: #6278f7;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 18px;
-    padding: 32px;
-    border: none;
-    cursor: pointer;
-    color: white;
-    margin: 32px 0;
-}
-
-form .botao-lembrete:hover {
-    color:#95ffd4;
-}
-
 form h2 {
   margin-top: 0px;
+  color: aliceblue;
+  text-shadow: 1px 1px 1px #ff00fc;
 }
 
-
-.janela-configuracao-led {
-    height: 350px;
-    width: 664px;
-    background-color: rgb(215, 218, 243);
-}
-
-.tablet-img {
-  position: absolute;
-  height: 50px;
-  width: 110px;
-  pointer-events: none;
-}
-
+/* barra de tarefas */
 .secao-tablet-modal .tablet-modal {
+  user-select: none;
 position: fixed;
 left: 337px;
 top: 290px;
@@ -122,32 +269,50 @@ pointer-events: none;
  top: 689px;
 }
 
+.barra-de-tarefas .menu-iniciar{
+user-select: none;
+width: 40px;
+}
+
 .barra-de-tarefas .menu-iniciar img {
-  height: 24px;
-  margin-left: 10px;
-  margin-top: 5px;
+    margin-left: 11px;
+    margin-top: 7px;
+    height: auto;
+    width: 18px;
 }
 
 .barra-de-tarefas .menu-iniciar:hover {
   background-color: rgba(46, 45, 45, 0.76);
 }
 
+.barra-de-tarefas .seta-voltar{
+  user-select: none;
+  width: 45px;
+}
+
 .barra-de-tarefas .seta-voltar img{
 display: flex;
-height: 30px;
-margin-top: 3px;
-margin-left: 20px;
-cursor: pointer;
+height: 20px;
+width: auto;
+margin-top: 6px;
+margin-left: 11px;
+}
+.barra-de-tarefas .seta-voltar:hover {
+   background-color: rgba(46, 45, 45, 0.76);
 }
 
 .icones-apps-abertos {
   display: grid;
-  grid-template-columns: repeat(5,50px);
+  grid-template-columns: repeat(4,40px);
   margin-left: 10px;
 }
 
+.barra-de-tarefas .icone-bateria {
+  user-select: none;
+  width: 24px;
+}
 .barra-de-tarefas .icone-bateria img {
-  margin-left: 60px;
+  margin-left: 1px;
   height: 12px;
   margin-top: 10px;
 }
@@ -155,30 +320,41 @@ cursor: pointer;
 background-color: rgba(46, 45, 45, 0.76);
 }
 
+.barra-de-tarefas .icone-wifi  {
+  user-select: none;
+  width: 20px;
+}
+
 .barra-de-tarefas .icone-wifi img {
     height: 15px;
-    margin-left: 10px;
     margin-top: 10px;
+    margin-left: 2px;
 }
 .barra-de-tarefas .icone-wifi:hover {
 background-color: rgba(46, 45, 45, 0.76);
 }
 
-
-
 .barra-de-tarefas .icone-som img {
-margin-left: 10px;
+  user-select: none;
+    height: auto;
+    width: 26px;
+    margin-top: 4px;
 }
 
 .barra-de-tarefas .icone-som:hover{
 background-color: rgba(46, 45, 45, 0.76);
 }
 
-
 .idioma {
+  height: 36px;
   color: white;
   font-size: 13px;
   user-select: none;
+  width: 35px;
+}
+.idioma span {
+  padding-top: 2px;
+  margin-left: 4px;
 }
 
 .idioma:hover {
@@ -186,14 +362,16 @@ background-color: rgba(46, 45, 45, 0.76);
 }
 
 .barra-de-tarefas .icone-notificacoes {
-margin-left: 15px;
-width: 25px;
+  user-select: none;
+margin-left: 20px;
+width: 34px;
 }
 
 
 .barra-de-tarefas .icone-notificacoes img {
 height: 20px;
 margin-top: 10px;
+margin-left: 7px;
 }
 
  
@@ -202,17 +380,58 @@ margin-top: 10px;
  
 }
 
+.barra-tarefas-inferior-direito {
+  margin-left: 115px;
+  display: flex;
+  gap: 8px;
+}
 
 .botao-mostrar-esconder-painel {
-  width: 90px;
-  height: 70px;
-  margin-left: 470px;
-  background-color: rgb(60, 189, 163);
-  border: 1px solid blue;
-  border-radius: 7px;
-  cursor: pointer;
-  position: absolute;
+    width: 74px;
+    height: 55px;
+    margin-left: 470px;
+    background: linear-gradient(to right, rgb(255, 234, 202), #5a19ff17);
+    cursor: pointer;
+    position: absolute;
+    border-radius: 34px;
 }
+
+
 .botao-mostrar-esconder-painel p{
-  margin-left: 10px;
+  pointer-events: none;
+     margin-left: 10px;
+    padding-bottom: 10px;
+    font-size: 13px;
+
+}
+
+.botao-mostrar-esconder-painel:hover{
+    background-color: rgb(229 220 206);
+    color: rgb(20 40 41);
+    text-shadow: 2px 1px 2px #ffffff;
+
+}
+
+
+.botao-mostrar-esconder-painel:active{
+transform: scale(0.95);
+}
+
+
+
+/* zona de interacao do tablet */
+.tablet-img {
+  position: absolute;
+  height: 50px;
+  width: 110px;
+  pointer-events: none;
+}
+
+.area-texto{
+  border: 2px solid #0085ff;
+    border-radius: 28px;
+    height: 60px;
+    width: 268px;
+    padding: 11px 8px;
+    
 }

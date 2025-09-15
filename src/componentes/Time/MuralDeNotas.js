@@ -1,4 +1,3 @@
-import  VisibilidadePainel  from '../../contexts/VisibilidadePainel'
 import { VisibilidadePainelContext } from '../../contexts/VisibilidadePainel'
 import './MuralDeNotas.css'
 import CardDeNotas from '../Colaborador/CardDeNotas'
