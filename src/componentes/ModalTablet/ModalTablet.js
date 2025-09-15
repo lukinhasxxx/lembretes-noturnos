@@ -1,5 +1,4 @@
 import { VisibilidadePainelContext } from '../../contexts/VisibilidadePainel'
-import VisibilidadePainel from '../../contexts/VisibilidadePainel'
 import './ModalTablet.css'
 import Botao from '../Botao'
 import { useState,useContext } from 'react'
@@ -8,11 +7,11 @@ import Relogio from '../Relogio/Relogio'
 const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente}) => {
 
     //perto do fim do projeto ai componetiza, modulariza as coisas
-    const {setMostrarPainel} = useContext(VisibilidadePainelContext)   
+    const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)   
     const [nome, setNome] = useState('')
     const [telaAtiva, setTelaAtiva] = useState('desktop')
     const [appsAbertos,setAppsAbertos] = useState([])
-    const [textoBotao,setTextoBotao] =useState('Esconder painel')
+
 
 
     const aoSalvar = (evento) => {
@@ -40,11 +39,6 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     } 
 }
 
-    const alterarTexto = () => {
-        setMostrarPainel(valor => !valor)
-        setTextoBotao(texto => texto==='Mostrar painel'?'Esconder painel':'Mostrar painel' )
-    }
-
     return (
 
     <div>
@@ -53,7 +47,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 {/* icone */}
                 {telaAtiva === 'desktop' && (
                     <div className='icone-lembretes'
-                   onClick={() => abrirApp('lembretes.exe') }>
+                   onClick={() => abrirApp('about.exe') }>
                     
                     <img src='/imagens/windows/lembretesIcone.png'
                     alt='abrir lembretes' />
@@ -68,6 +62,9 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     <span>Config.exe</span>
                     <div className='selecionar-configuracao' ></div>
                 </div>)}
+
+
+
                 {/* app de fato */}
                 {telaAtiva ==='config.exe' && (<div className='janela-configuracao-led' >
                         <img src="/imagens/windows/iconeFechar.png" alt="Icone de fechar" 
@@ -75,6 +72,9 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                         <span>Pagina em manutenção.</span>
                     </div>
                 )}
+
+                
+                
                 {/* APP de fato */}
                 { telaAtiva === 'lembretes.exe' && (
 
@@ -83,7 +83,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     onClick={() => fecharApp('lembretes.exe')} />
                     <form onSubmit={aoSalvar}>
                     <h2>Deixe seu lembrete para ser incluído no painel.</h2>
-                    <div className='grupo-painel'>
+                <div className='grupo-painel'>
                         <textarea
                             className='area-texto'
                             required={true}
@@ -96,20 +96,43 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             >
                         </textarea>
                         
-                        { //aqui vai a funcao de estado
-                        painelLigadoPermanente === true && <div className='mostrar-e-esconder' onClick={()=>{alterarTexto()}} >
-                            <div className='botao-mostrar-esconder-painel' ><p>{textoBotao}</p></div>
-                    </div>
-                    }
+                    { //aqui vai a funcao de estado
+                        painelLigadoPermanente === true && (
+                        <div className='mostrar-e-esconder'
+                            onClick={()=>{alterarVisibilidadePainel()}
+                                    }>
+                            <div className='botao-mostrar-esconder-painel' ><p>{textoBotao}</p>
+                            </div>
                         </div>
-
-
+                        )
+                    }
+                </div>
 
                     <Botao className='botao-lembrete' >Enviar lembrete</Botao>
                 </form>
             </div>
+
                 )}
-            </div>
+
+                { telaAtiva ==='about.exe' && (
+                    <div className='about' >
+                        <div className='janela-about' >
+                            <div className='janela-pro-lembrete' onClick={ ()=> abrirApp('lembretes.exe')} >
+                                <p>Lembretes</p> 
+                            </div>
+                            <img src={ process.env.PUBLIC_URL+ "/imagens/windows/iconeFechar.png"} alt="Icone de fechar"
+                            onClick={() => fecharApp('about.exe')} />
+                        </div>
+                    
+                    <div className='tela-about'>
+                        <h2>Aqui vai ser o texto do bicho</h2>
+                    </div>
+   
+                    </div>
+                )}
+
+
+    </div>
 
     <div className="barra-de-tarefas">
     
@@ -125,7 +148,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     {
         appsAbertos.map(app =>(
             <div key={app} className='icone-na-barra' onClick={() => setTelaAtiva(app)} >
-                {app === 'lembretes.exe' && <img className='icone-na-barra-lembretes' src= '/imagens/windows/lembretesIcone.png' alt='abrir lembretes' /> }
+                {app === 'about.exe' && <img className='icone-na-barra-lembretes' src= '/imagens/windows/lembretesIcone.png' alt='abrir lembretes' /> }
                 {app === 'config.exe' && <img className='icone-na-barra-led'  src='/imagens/windows/ledIcone.png' alt='abrir config' /> }
 
             </div>

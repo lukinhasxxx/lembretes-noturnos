@@ -1,5 +1,5 @@
 import ModalTablet from './componentes/ModalTablet/ModalTablet';
-import  VisibilidadePainel from './contexts/VisibilidadePainel';
+import  VisibilidadePainelProvider from './contexts/VisibilidadePainel';
 //aqui eh pra eu importar o provider, sem o contexto
 import { useState } from 'react';
 import MuralDeNotas from './componentes/Time/MuralDeNotas'
@@ -53,7 +53,7 @@ setLigarTablet(ligado =>!ligado);
 }
 
   return (
-    <VisibilidadePainel>
+    <VisibilidadePainelProvider>
     
     <div className="App">
           {modalAberto && 
@@ -85,7 +85,7 @@ setLigarTablet(ligado =>!ligado);
       />
      
     </div>
-  </VisibilidadePainel>
+  </VisibilidadePainelProvider>
   );
 }
 

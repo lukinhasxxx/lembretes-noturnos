@@ -14,6 +14,95 @@ width: 665px;
 background-size: contain;
 }
 
+
+/* about */
+.tablet-tela .area-de-trabalho .about .janela-about{
+user-select: none;
+background: linear-gradient(to right, #bcabff, #aaf7f4de);
+max-height: 40px;
+position: relative;
+}
+
+
+.tablet-tela .area-de-trabalho .about .janela-about .janela-pro-lembrete {
+    margin-left: 5px;
+    margin-top: 5px;
+    height: 25px;
+    width: 90px;
+    position: absolute;
+    border: rgb(0, 255, 213) solid 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    background: rgb(95, 95, 252);
+}
+
+.tablet-tela .area-de-trabalho .about .janela-about .janela-pro-lembrete p {
+    margin-top: 3px;
+    margin-left: 5px;
+    font-size: 15px;
+}
+
+
+.tablet-tela .area-de-trabalho .about .janela-about img {
+    margin-top: 4px;
+    margin-left: 625px;
+    padding-left: 9px;
+    cursor: pointer;
+    transition: filter 0.4s ease;
+}
+
+.tablet-tela .area-de-trabalho .about .janela-about img:hover {
+  filter: brightness(1.6);
+  transform: scale(1.1);
+  transition: transform 0.4s ease;
+}
+
+.tablet-tela .area-de-trabalho .about .janela-about img:active {
+  transform: scale(0.9);
+}
+
+
+
+
+
+
+
+.tablet-tela .area-de-trabalho .about .janela-about {
+  height: 34px;
+  width: auto;
+
+
+}
+
+.tablet-tela .area-de-trabalho .about .tela-about {
+  background: linear-gradient(to right, #d0cbd5, #fff3c6);
+  padding: 36px 64px;
+  align-self: center;
+  height: 244px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.tablet-tela .area-de-trabalho .about .tela-about h2{
+  margin-top: 0px;
+  color: aliceblue;
+  text-shadow: 1px 1px 1px #ff00fc;
+}
+
+/* Se tiver algum botao la dentro, vai usar isso aqui
+
+  background-color: #6278f7;
+    border-radius: 44px;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 32px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    margin: 28px 40px;
+    transition: background-color 0.5s ease;
+    box-shadow: 7px 5px 8px rgb(82 86 197 / 30%); */
+
 /* lembretes */
 
 .tablet-tela .janela-lembretes {
@@ -25,15 +114,19 @@ max-height: 40px;
 .tablet-tela .janela-lembretes img {
     margin-top: 4px;
     margin-left: 625px;
-    padding-left: 4px;
+    padding-left: 9px;
     cursor: pointer;
-    transition: filter 0.5s ease;
+    transition: filter 0.4s ease;
 }
 
 .tablet-tela .janela-lembretes img:hover {
   filter: brightness(1.6);
   transform: scale(1.1);
-  transition: transform 0.5s ease;
+  transition: transform 0.4s ease;
+}
+
+.tablet-tela .janela-lembretes img:active {
+  transform: scale(0.9);
 }
 
 .tablet-tela .area-de-trabalho .icone-lembretes .selecionar-lembrete{
@@ -136,6 +229,8 @@ margin-left: -29px;
     width: 664px;
     background-color: rgb(215, 218, 243);
 }
+
+
 
 /* forms */
 .tablet-tela form {
