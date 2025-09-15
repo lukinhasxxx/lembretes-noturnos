@@ -51,36 +51,41 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
             <div className='tablet-tela'  > 
             <div className='area-de-trabalho' style={{backgroundImage:"url('/imagens/windows/windowsWallpaper.jpg')",backgroundRepeat:"no-repeat"}}  >
                 {/* icone */}
-                {telaAtiva === 'desktop' && (<div className='icone-lembretes'
+                {telaAtiva === 'desktop' && (
+                    <div className='icone-lembretes'
                    onClick={() => abrirApp('lembretes.exe') }>
+                    
                     <img src='/imagens/windows/lembretesIcone.png'
                     alt='abrir lembretes' />
                     <span>Lembretes.exe</span>
-                </div>)}
+                    <div className='selecionar-lembrete' ></div>
+                 </div>)}
                 {/* icone */}
                 {telaAtiva === 'desktop' && (<div className='icone-led'
                    onClick={() => abrirApp('config.exe') }>
                     <img src='/imagens/windows/ledIcone.png'
                     alt='abrir lembretes' />
                     <span>Config.exe</span>
+                    <div className='selecionar-configuracao' ></div>
                 </div>)}
                 {/* app de fato */}
                 {telaAtiva ==='config.exe' && (<div className='janela-configuracao-led' >
                         <img src="/imagens/windows/iconeFechar.png" alt="Icone de fechar" 
                         onClick={() => fecharApp('config.exe')}/>
-                        <span>Aqui vai ficar a configuracao teste</span>
+                        <span>Pagina em manutenção.</span>
                     </div>
                 )}
                 {/* APP de fato */}
                 { telaAtiva === 'lembretes.exe' && (
 
                 <div className='janela-lembretes' >
-                    <img src="/imagens/windows/iconeFechar.png" alt="Icone de fechar"
+                    <img src={ process.env.PUBLIC_URL+ "/imagens/windows/iconeFechar.png"} alt="Icone de fechar"
                     onClick={() => fecharApp('lembretes.exe')} />
                     <form onSubmit={aoSalvar}>
                     <h2>Deixe seu lembrete para ser incluído no painel.</h2>
                     <div className='grupo-painel'>
                         <textarea
+                            className='area-texto'
                             required={true}
                             placeholder='Digite sua mensagem'
                             value= {nome}

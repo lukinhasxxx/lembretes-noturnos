@@ -12,41 +12,57 @@
 .tablet-tela .area-de-trabalho {
 width: 665px;
 background-size: contain;
-
 }
+
+/* lembretes */
 
 .tablet-tela .janela-lembretes {
 user-select: none;
-background: #00ffde57;
+background: linear-gradient(to right, #bcabff, #aaf7f4de);
 max-height: 40px;
 }
+
 .tablet-tela .janela-lembretes img {
     margin-top: 4px;
     margin-left: 625px;
     padding-left: 4px;
     cursor: pointer;
+    transition: filter 0.5s ease;
+}
+
+.tablet-tela .janela-lembretes img:hover {
+  filter: brightness(1.6);
+  transform: scale(1.1);
+  transition: transform 0.5s ease;
+}
+
+.tablet-tela .area-de-trabalho .icone-lembretes .selecionar-lembrete{
+    width: 150px;
+    height: 90px;
+    top: -21px;
+    left: -54px;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+}
+
+.tablet-tela .area-de-trabalho .icone-lembretes .selecionar-lembrete:hover{
+    background-color: #87d8dd1a;
+    border-radius: 10px;
+    border: 1px solid #7b74ff5e;
+
 }
 
 .tablet-tela .area-de-trabalho .icone-lembretes {
-user-select: none;
-margin: 50px;
-height: 35px;
-width: 35px;
+  position: relative;
+    user-select: none;
+    margin-left: 70px;
+    margin-top: 40px;
+    height: 35px;
+    width: 35px;
 }
-
-.icones-apps-abertos .icone-na-barra .icone-na-barra-lembretes {
-  user-select: none;
-}
-
-.icones-apps-abertos .icone-na-barra .icone-na-barra-lembretes:hover{
- background-color: rgba(46, 45, 45, 0.76);
-}
-
-.tablet-tela .area-de-trabalho .icone-led {
-user-select: none;
-margin: 50px;
-height: 35px;
-width: 35px;
+.tablet-tela .area-de-trabalho .icone-lembretes img {
+  height: 30px;
 }
 
 .tablet-tela .area-de-trabalho .icone-lembretes span{
@@ -57,11 +73,53 @@ color: white;
 margin-left: -33px;
 }
 
+.icones-apps-abertos .icone-na-barra {
+width: 30px;
+}
+
+.icones-apps-abertos .icone-na-barra .icone-na-barra-lembretes {
+  margin-top: 5px ;
+  height: 22px;
+  user-select: none;
+}
+
+.icones-apps-abertos .icone-na-barra .icone-na-barra-lembretes:hover{
+ background-color: rgba(46, 45, 45, 0.76);
+ filter: brightness(1.1);
+}
+
+/* Icone led */
+.tablet-tela .area-de-trabalho .icone-led {
+position: relative;
+user-select: none;
+margin-top: 55px;
+margin-left: 70px;
+height: 35px;
+width: 35px;
+}
+
 .tablet-tela .area-de-trabalho .icone-led span{
 display: block;
 pointer-events: none;
 color: white;
-margin-left: -33px;
+margin-left: -29px;
+}
+
+.tablet-tela .area-de-trabalho .icone-led .selecionar-configuracao{
+    width: 150px;
+    height: 90px;
+    top: -16px;
+    left: -54px;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+}
+
+.tablet-tela .area-de-trabalho .icone-led .selecionar-configuracao:hover{
+    background-color: #87d8dd1a;
+    border-radius: 10px;
+    border: 1px solid #7b74ff5e;
+
 }
 
 .icones-apps-abertos .icone-na-barra .icone-na-barra-led {
@@ -72,8 +130,16 @@ margin-left: -33px;
  background-color: rgba(46, 45, 45, 0.76);
 }
 
+.janela-configuracao-led {
+    user-select: none;
+    height: 350px;
+    width: 664px;
+    background-color: rgb(215, 218, 243);
+}
+
+/* forms */
 .tablet-tela form {
-background-color: #f2f2f2;
+background: linear-gradient(to right, #d0cbd5, #fff3c6);
 padding: 36px 64px;
 box-shadow:  8px 8px 16px rgba(0,0,0,0.15);
 align-self: center;
@@ -82,41 +148,13 @@ overflow-y: auto;
 position: relative;
 }
 
-form .botao-lembrete {
-    background-color: #6278f7;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 18px;
-    padding: 32px;
-    border: none;
-    cursor: pointer;
-    color: white;
-    margin: 32px 0;
-}
-
-form .botao-lembrete:hover {
-    color:#95ffd4;
-}
-
 form h2 {
   margin-top: 0px;
+  color: aliceblue;
+  text-shadow: 1px 1px 1px #ff00fc;
 }
 
-
-.janela-configuracao-led {
-    user-select: none;
-    height: 350px;
-    width: 664px;
-    background-color: rgb(215, 218, 243);
-}
-
-.tablet-img {
-  position: absolute;
-  height: 50px;
-  width: 110px;
-  pointer-events: none;
-}
-
+/* barra de tarefas */
 .secao-tablet-modal .tablet-modal {
   user-select: none;
 position: fixed;
@@ -168,10 +206,9 @@ margin-left: 11px;
    background-color: rgba(46, 45, 45, 0.76);
 }
 
-
 .icones-apps-abertos {
   display: grid;
-  grid-template-columns: repeat(4,50px);
+  grid-template-columns: repeat(4,40px);
   margin-left: 10px;
 }
 
@@ -202,8 +239,6 @@ background-color: rgba(46, 45, 45, 0.76);
 background-color: rgba(46, 45, 45, 0.76);
 }
 
-
-
 .barra-de-tarefas .icone-som img {
   user-select: none;
     height: auto;
@@ -211,16 +246,9 @@ background-color: rgba(46, 45, 45, 0.76);
     margin-top: 4px;
 }
 
-
-
-
-
-
-
 .barra-de-tarefas .icone-som:hover{
 background-color: rgba(46, 45, 45, 0.76);
 }
-
 
 .idioma {
   height: 36px;
@@ -258,21 +286,57 @@ margin-left: 7px;
 }
 
 .barra-tarefas-inferior-direito {
-  margin-left: 75px;
+  margin-left: 115px;
   display: flex;
   gap: 8px;
 }
 
 .botao-mostrar-esconder-painel {
-  width: 90px;
-  height: 70px;
-  margin-left: 470px;
-  background-color: rgb(60, 189, 163);
-  border: 1px solid blue;
-  border-radius: 7px;
-  cursor: pointer;
-  position: absolute;
+    width: 74px;
+    height: 55px;
+    margin-left: 470px;
+    background: linear-gradient(to right, rgb(255, 234, 202), #5a19ff17);
+    cursor: pointer;
+    position: absolute;
+    border-radius: 34px;
 }
+
+
 .botao-mostrar-esconder-painel p{
-  margin-left: 10px;
+  pointer-events: none;
+     margin-left: 10px;
+    padding-bottom: 10px;
+    font-size: 13px;
+
+}
+
+.botao-mostrar-esconder-painel:hover{
+    background-color: rgb(229 220 206);
+    color: rgb(20 40 41);
+    text-shadow: 2px 1px 2px #ffffff;
+
+}
+
+
+.botao-mostrar-esconder-painel:active{
+transform: scale(0.95);
+}
+
+
+
+/* zona de interacao do tablet */
+.tablet-img {
+  position: absolute;
+  height: 50px;
+  width: 110px;
+  pointer-events: none;
+}
+
+.area-texto{
+  border: 2px solid #0085ff;
+    border-radius: 28px;
+    height: 60px;
+    width: 268px;
+    padding: 11px 8px;
+    
 }

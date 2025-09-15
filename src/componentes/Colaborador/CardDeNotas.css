@@ -18,10 +18,10 @@
 
 .cards .card .lixeira {
     user-select: none;
-    height: 100%;
+    height: 24px;
     width: 24px;
     position: absolute;
-    top: 0;
+    top: 45px;
     left: 406px;
     cursor: pointer;
 }
