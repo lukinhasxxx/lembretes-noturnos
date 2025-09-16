@@ -28,7 +28,7 @@ const MuralDeNotas = ({lembretes, aoDeletar, aoFixar,painelLigadoPermanente}) =>
                 </text>}
                 </div>
             </section>
-    
+
  
     )
 }
