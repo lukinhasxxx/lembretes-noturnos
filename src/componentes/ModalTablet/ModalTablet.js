@@ -33,15 +33,14 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     }
 
     const fecharApp = (idDoAppParaFechar) => {
-        const novosAppsAbertos = appsAbertos.filter(app => app !== idDoAppParaFechar);
-        setAppsAbertos(novosAppsAbertos);
-   
-
-    if (novosAppsAbertos.length > 0) {
-     setTelaAtiva(ultimaTela[novosAppsAbertos[novosAppsAbertos.length -1]])   
-    } else {
-        setTelaAtiva('desktop')
-    } 
+        setTimeout(() => {
+            const novosAppsAbertos = appsAbertos.filter(app => app !== idDoAppParaFechar);
+            setAppsAbertos(novosAppsAbertos);
+            if (novosAppsAbertos.length > 0) {
+                 setTelaAtiva(ultimaTela[novosAppsAbertos[novosAppsAbertos.length -1]])   
+            } else {
+                setTelaAtiva('desktop')} 
+            },300)
 }
 
     return (
@@ -142,35 +141,20 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                         </div>
                     
                     <div className='tela-about'>
+                        <p>
+                        Teste, aqui vai ser o about
+                                            
+                        </p>
 
+                    <div className='abrir-lembrete' onClick={                                 ()=> {
+                                                        const proximaTela = 'lembretes.exe';
+                                                        setTelaAtiva(proximaTela);
+                                                        setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
+                                                    }}>
 
+                        <p>→ Clique aqui para adicionar um novo registro ao painel</p> 
 
-
-
- <p>
-Aqui vai o sobre
-                     
-
-  </p>
-
-
-  <div className='abrir-lembrete' onClick={                                 ()=> {
-                                    const proximaTela = 'lembretes.exe';
-                                    setTelaAtiva(proximaTela);
-                                    setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
-                                 }}>
-
-      <p>→ Clique aqui para adicionar um novo registro de memória</p> 
-
-  </div>
-
-
-
-
-
-
-
-
+                    </div>
 
 
                     </div>

@@ -9,6 +9,10 @@ function App() {
 
 const [lembretes, setLembretes] = useState([])
 const [painelLigadoPermanente,setPainelLigadoPermanente] = useState(false)
+const [animacaoJaAtivada,setAnimacaoJaAtivada] = useState(false)
+const [primeiraMensagemPainel,setPrimeiraMensagemPainel] = useState(false)
+// const [tabletJaIniciou,setTabletJaIniciou] = useState(false);
+// const [animacaoTabletDeveRodar, setAnimacaoTabletDeveRodar] = useState(false)
 
 
 const adicionarLembrete = (textoDaNota) => {
@@ -19,12 +23,33 @@ const adicionarLembrete = (textoDaNota) => {
     fixar: false
   };
 
-  const novaLista = [...lembretes, novoLembrete];
+setTimeout(()=> {
 
-  setLembretes(novaLista);
-  setPainelLigadoPermanente(true)
-    
+if(!painelLigadoPermanente){
+    setPainelLigadoPermanente(true)
+    setAnimacaoJaAtivada(true);
+    setModalAberto(false);
+    setLigarTablet(false);
+
+
+    setTimeout(()=> {
+        setLembretes(lembretesAnteriores => [...lembretesAnteriores, novoLembrete])
+          setPrimeiraMensagemPainel(true);
+        
+        } ,5000) 
+      } else {
+          setLembretes( lembretesAnteriores => [...lembretesAnteriores, novoLembrete]);
+          if(!primeiraMensagemPainel){
+            setPrimeiraMensagemPainel(true)
+          }
+  }
+
+},200)
+  
+
 };
+
+
 
 function fixarLembrete(id) {
   setLembretes(lembretes.map(lembrete => {
@@ -41,9 +66,9 @@ function fixarLembrete(id) {
    function deletarLembrete(id) {
       setLembretes(lembretes.filter(lembrete => lembrete.id !== id))
     }
+    
 
 const [ligarTablet,setLigarTablet] = useState(false)
-
 const [modalAberto,setModalAberto] = useState(false)
 
 const gerenciarTablet = () => {
@@ -82,6 +107,8 @@ setLigarTablet(ligado =>!ligado);
           aoDeletar={deletarLembrete}
           aoFixar={fixarLembrete}
           painelLigadoPermanente={painelLigadoPermanente}
+          animacaoDeveRodar={animacaoJaAtivada}
+          conteudoVisivelPainel={primeiraMensagemPainel}
       />
      
     </div>
