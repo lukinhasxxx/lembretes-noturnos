@@ -1,3 +1,118 @@
+
+@keyframes inicializacao-falha {
+
+  /* O painel começa invisível E já na posição 3D */
+  0%, 20% {
+    opacity: 0;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
+    filter: none;
+  }
+
+  20.01%, 22.99% { opacity: 1; }
+  20.3% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  20.6% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  20.9% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-1px); }
+  21.2% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px);  }
+  21.5% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  21.8% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  22.1% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  22.4% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px);  }
+  22.7% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-1px); }
+
+  23%, 25% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); }
+
+  30.01%, 32.99% { opacity: 1; }
+  30.3% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-3px); }
+  30.6% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(3px);  }
+  30.9% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-1px); }
+  31.2% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px);  }
+  31.5% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  31.8% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  32.1% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  32.4% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  32.7% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+
+  33%, 40% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); }
+
+  40.01%, 42.99% { opacity: 1; }
+  40.3% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  40.6% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  40.9% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  41.2% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  41.5% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  41.8% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  42.1% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  42.4% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  42.7% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+
+  43%, 55% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); }
+
+  55.1% {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-27deg);
+    filter: brightness(2.5);
+  }
+  57% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
+  59% {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-67deg);
+    filter: brightness(2.5);
+  }
+  59.7% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
+  60% {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-67deg);
+    filter: brightness(2.5);
+  }
+  63% {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-67px) skewX(-1deg);
+    filter: brightness(2.5);
+  }
+  65% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
+  65.1% { opacity: 1; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); }
+  70.01%, 89% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
+
+  90%, 92% { opacity: 1; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: none; }
+  92.1%, 93% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
+  93.1%, 100% {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
+    filter: none;
+  }
+}
+
+@keyframes neonGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 2px rgba(0,255,255,0.35),
+      0 1px 7px rgba(0,255,255,0.4),
+      0 2px 10px rgba(0,255,255,0.45);
+  }
+  50% {
+    box-shadow:
+      0 0 3px rgba(0,255,255,0.38),
+      0 1px 7px rgba(0,255,255,0.43),
+      0 2px 14px rgba(0,255,255,0.48);
+  }
+}
+
+.painel.painel-surgindo {
+  animation:
+
+    inicializacao-falha    7s linear forwards,
+
+    neon-border-flicker    7s linear forwards,
+
+    neon-flicker-startup   7s linear forwards,
+
+    ventoComOscilacao      14s ease-in-out infinite 8s,
+
+    neonGlow               2.7s linear infinite 7s;
+}
+
+
+
 @keyframes neonGlow {
   0%, 100% {
     box-shadow:
@@ -24,11 +139,8 @@
     margin-left: 1100px;
     margin-top: 210px;
     border-radius: 20px;
-    animation: neonGlow 2.7s linear infinite;
-
-    transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+    
     transform-origin: 90% 25%; /* profundidade / inclnacao */
-    transition: transform 9.6s ease;
 }
 /* comentarios gerados para facilitar a modificacao da animacao */
 @keyframes ventoComOscilacao {
@@ -72,10 +184,10 @@
     }
 }
 
-.painel:hover {
+/* .painel:hover {
     transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
     animation: ventoComOscilacao 14s ease-in-out 9s infinite , neonGlow 2.5s ease-in-out infinite;
-}
+} */
 
 .painel p{
     margin-top: 0px;
@@ -155,6 +267,7 @@
     box-shadow: 1px 1px 8px rgb(0 255 170);
     position: relative;
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     overflow-y: auto;
     overflow-x: hidden;
     

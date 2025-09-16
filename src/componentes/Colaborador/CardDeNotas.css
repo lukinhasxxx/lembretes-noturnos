@@ -15,6 +15,15 @@
     left: 406px;
     cursor: pointer;
 }
+.cards .card .pinOff:hover,
+.cards .card .pinOn:hover{
+    transform: scale(0.92);
+}
+.cards .card .pinOff:active,
+.cards .card .pinOn:active{
+    transform: scale(0.85);
+}
+
 
 .cards .card .lixeira {
     user-select: none;
@@ -24,6 +33,14 @@
     top: 45px;
     left: 406px;
     cursor: pointer;
+}
+
+.cards .card .lixeira:hover {
+    transform: scale(0.92);
+}
+
+.cards .card .lixeira:active {
+     transform: scale(0.85);
 }
 
 .cards .cabecalho {

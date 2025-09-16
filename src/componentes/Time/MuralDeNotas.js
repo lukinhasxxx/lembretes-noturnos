@@ -9,7 +9,7 @@ const MuralDeNotas = ({lembretes, aoDeletar, aoFixar,painelLigadoPermanente}) =>
 
     return (
     
-        painelLigadoPermanente === true && <section className='painel' style={{display:mostrarPainel?'block':'none'}} > 
+        painelLigadoPermanente === true && (<section className={`painel ${painelLigadoPermanente ? 'painel-surgindo' : ''}`} style={{display:mostrarPainel?'block':'none'}} > 
         <p>Lembretes Noturnos</p>
 
             <div className='zona-dos-cards'>
@@ -27,9 +27,7 @@ const MuralDeNotas = ({lembretes, aoDeletar, aoFixar,painelLigadoPermanente}) =>
                     Você ainda não possui lembretes no painel, por favor, vá até o tablet e adicione.
                 </text>}
                 </div>
-            </section>
-
- 
+            </section>)
     )
 }
 

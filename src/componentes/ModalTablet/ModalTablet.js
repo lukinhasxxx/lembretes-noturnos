@@ -23,11 +23,13 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 };
 
     const abrirApp = (idDoApp, telaParaAbrir) => {
+        setTimeout(() => {
         setTelaAtiva(telaParaAbrir);
         setUltimaTela({...ultimaTela,[idDoApp]:telaParaAbrir})
         if (!appsAbertos.includes(idDoApp)){
             setAppsAbertos([...appsAbertos,idDoApp])
-        }
+        }},150)
+
     }
 
     const fecharApp = (idDoAppParaFechar) => {
@@ -140,7 +142,20 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                         </div>
                     
                     <div className='tela-about'>
-                        <h2>Aqui vai ser o texto do bicho</h2>
+
+
+
+ <p>
+                                    Teste, aqui vao ficar os textos do about
+                     
+
+  </p>
+
+
+
+
+
+
                     </div>
                     
    
