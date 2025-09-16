@@ -1,11 +1,10 @@
 
 @keyframes inicializacao-falha {
 
-  /* O painel começa invisível E já na posição 3D */
   0%, 20% {
     opacity: 0;
     transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
-    filter: none;
+    filter: brightness(1);
   }
 
   20.01%, 22.99% { opacity: 1; }
@@ -55,32 +54,61 @@
   57% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
   59% {
     opacity: 1;
-    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-67deg);
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-57deg);
     filter: brightness(2.5);
   }
   59.7% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
   60% {
     opacity: 1;
-    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-67deg);
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-57deg);
     filter: brightness(2.5);
   }
   63% {
     opacity: 1;
-    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-67px) skewX(-1deg);
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-57px) skewX(-1deg);
     filter: brightness(2.5);
   }
   65% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
   65.1% { opacity: 1; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); }
   70.01%, 89% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
 
-  90%, 92% { opacity: 1; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: none; }
+  90%, 92% { opacity: 1; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
   92.1%, 93% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
   93.1%, 100% {
     opacity: 1;
     transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
-    filter: none;
+    filter: brightness(1);
+    
   }
 }
+
+
+@keyframes neon-border-flicker {
+
+  41%, 41.1% {
+    box-shadow:
+      0 0 4px rgba(0,255,255,0.5),
+      0 2px 10px rgba(0,255,255,0.55),
+      0 3px 15px rgba(0,255,255,0.6);
+  }
+
+  59%, 60% {
+    box-shadow:
+      0 0 4px rgba(0,255,255,0.5),
+      0 2px 10px rgba(0,255,255,0.55),
+      0 3px 15px rgba(0,255,255,0.6);
+  }
+
+  /* 
+  entre o 40 e o 43 fica bom
+  40.01%, 42.99% (eh o range real)
+
+  */
+  0%, 40.99%, 42.01%, 58.72%, 60.72%, 100% {
+    box-shadow: none;
+  }
+}
+
 
 @keyframes neonGlow {
   0%, 100% {
@@ -96,36 +124,18 @@
       0 2px 14px rgba(0,255,255,0.48);
   }
 }
-
 .painel.painel-surgindo {
   animation:
 
-    inicializacao-falha    7s linear forwards,
+    inicializacao-falha    7s linear none,
 
-    neon-border-flicker    7s linear forwards,
+    neon-border-flicker    7s linear none,
 
     neon-flicker-startup   7s linear forwards,
 
-    ventoComOscilacao      14s ease-in-out infinite 8s,
+    ventoComOscilacao      14s ease-in-out infinite 7s,
 
     neonGlow               2.7s linear infinite 7s;
-}
-
-
-
-@keyframes neonGlow {
-  0%, 100% {
-    box-shadow:
-      0 0 2px rgba(0,255,255,0.35),
-      0 1px 7px rgba(0,255,255,0.4),
-      0 2px 10px rgba(0,255,255,0.45);
-  }
-  50% {
-    box-shadow:
-      0 0 3px rgba(0,255,255,0.38),
-      0 1px 7px rgba(0,255,255,0.43),
-      0 2px 14px rgba(0,255,255,0.48);
-  }
 }
 
 .painel{
@@ -184,11 +194,6 @@
     }
 }
 
-/* .painel:hover {
-    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
-    animation: ventoComOscilacao 14s ease-in-out 9s infinite , neonGlow 2.5s ease-in-out infinite;
-} */
-
 .painel p{
     margin-top: 0px;
     color: violet;
@@ -227,7 +232,6 @@
   border: solid 4px #78d8eece;
 
 }
-
 
 /* unico jeito do firefox estilizar separado do chrome */
 @-moz-document url-prefix() {
@@ -269,8 +273,7 @@
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     overflow-y: auto;
-    overflow-x: hidden;
-    
+    overflow-x: hidden; 
 }
 
 .painel .zona-dos-cards .card::before {

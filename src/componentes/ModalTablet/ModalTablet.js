@@ -145,11 +145,28 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
 
 
+
+
  <p>
-                                    Teste, aqui vao ficar os textos do about
+Aqui vai o sobre
                      
 
   </p>
+
+
+  <div className='abrir-lembrete' onClick={                                 ()=> {
+                                    const proximaTela = 'lembretes.exe';
+                                    setTelaAtiva(proximaTela);
+                                    setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
+                                 }}>
+
+      <p>→ Clique aqui para adicionar um novo registro de memória</p> 
+
+  </div>
+
+
+
+
 
 
 
