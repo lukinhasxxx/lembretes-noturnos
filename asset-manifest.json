@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/lembretes-noturnos/static/css/main.8182a910.css",
+    "main.js": "/lembretes-noturnos/static/js/main.fa763240.js",
+    "index.html": "/lembretes-noturnos/index.html",
+    "main.8182a910.css.map": "/lembretes-noturnos/static/css/main.8182a910.css.map",
+    "main.fa763240.js.map": "/lembretes-noturnos/static/js/main.fa763240.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8182a910.css",
+    "static/js/main.fa763240.js"
+  ]
+}
