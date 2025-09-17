@@ -3,13 +3,13 @@ import './MuralDeNotas.css'
 import CardDeNotas from '../Colaborador/CardDeNotas'
 import { useContext } from 'react'
 
-const MuralDeNotas = ({lembretes, aoDeletar, aoFixar,painelLigadoPermanente}) => {
+const MuralDeNotas = ({lembretes, aoDeletar, aoFixar,painelLigadoPermanente, animacaoDeveRodar, conteudoVisivelPainel}) => {
     const {mostrarPainel} = useContext(VisibilidadePainelContext)
 
 
     return (
     
-        painelLigadoPermanente === true && <section className='painel' style={{display:mostrarPainel?'block':'none'}} > 
+        painelLigadoPermanente === true && (<section className={`painel ${animacaoDeveRodar ? 'painel-surgindo' : ''}`} style={{opacity:mostrarPainel?'1':'0'}} > 
         <p>Lembretes Noturnos</p>
 
             <div className='zona-dos-cards'>
@@ -22,14 +22,12 @@ const MuralDeNotas = ({lembretes, aoDeletar, aoFixar,painelLigadoPermanente}) =>
                         />
                     })
                 }
-            {lembretes.length <= 0 && <text
+            {lembretes.length <= 0 && conteudoVisivelPainel && (<text
             className='lembrete-vazio'>
                     Você ainda não possui lembretes no painel, por favor, vá até o tablet e adicione.
-                </text>}
+                </text>)}
                 </div>
-            </section>
-
- 
+            </section>)
     )
 }
 

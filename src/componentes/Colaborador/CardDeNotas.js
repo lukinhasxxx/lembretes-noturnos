@@ -7,8 +7,10 @@ const CardDeNotas = ({lembretes, aoFixar, aoDeletar}) => {
 const [fixarLembrete, setFixarLembrete] = useState(false)
 
 const validarFixado = () => {
+    setTimeout( ()=>{
     setFixarLembrete(fixarLembrete => !fixarLembrete)
-    aoFixar(lembretes.id)
+    aoFixar(lembretes.id)}
+    ,100)
 
 }
 
