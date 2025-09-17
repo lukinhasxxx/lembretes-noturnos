@@ -56,7 +56,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 alt='Modal do tablet'
             />
                         <div className='tablet-tela'  > 
-            <div className='area-de-trabalho' style={{backgroundImage:"url('/imagens/windows/windowsWallpaper.jpg')",backgroundRepeat:"no-repeat"}}  >
+            <div className='area-de-trabalho' style={{backgroundImage:`url(${process.env.PUBLIC_URL}/imagens/windows/windowsWallpaper.jpg)`,backgroundRepeat:"no-repeat"}}  >
             
                 {/* aqui manda a partir da area de trabalho */}
                 {/* icone */}
