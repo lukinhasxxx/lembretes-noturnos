@@ -2,11 +2,11 @@
     display: flex;
     flex-wrap: wrap;
     opacity: 1;
-    height: 387px;
-    position: fixed;
-    width: 664px;
-    top: 337px;
-    left: 386px;
+    height: 385px;
+    position: absolute;
+    width: 666px;
+    top: 9.7%;
+    left: 6.35%;
 }
 
 .tablet-tela .area-de-trabalho {
@@ -318,22 +318,22 @@ form h2 {
 
 /* barra de tarefas */
 .secao-tablet-modal .tablet-modal {
-  user-select: none;
-position: fixed;
-left: 337px;
-top: 290px;
-height: 482px;
-width: 760px;
-pointer-events: none;
+    -webkit-user-select: none;
+    user-select: none;
+    position: absolute;
+    height: 482px;
+    width: 760px;
+    pointer-events: none;
 }
 
 .tablet-tela .barra-de-tarefas {
- display: flex;
- position: fixed;
- background-color: rgb(0,0,0,0.9);
- height: 36px;
- width: 664px;
- top: 689px;
+    display: flex;
+    position: absolute;
+    background-color: rgb(0, 0, 0, 0.9);
+    height: 36px;
+    width: 666px;
+    top: 91.6%;
+    left: 0%;
 }
 
 .barra-de-tarefas .menu-iniciar{

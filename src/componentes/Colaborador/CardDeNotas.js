@@ -22,7 +22,7 @@ aoDeletar(lembretes.id)
         <div className='cards'>
             <div className="card" >
             <img className='lixeira'
-                 src='/imagens/windows/lixeira.svg'
+                 src=  {process.env.PUBLIC_URL+ '/imagens/windows/lixeira.svg'}
                   alt='lixeira'
                   onClick={() => deletarItem()}
                    />
@@ -30,7 +30,7 @@ aoDeletar(lembretes.id)
             {
                 fixarLembrete === false && (
                 <img className='pinOff'
-                 src='/imagens/windows/pinOff.png'
+                 src={ process.env.PUBLIC_URL+ '/imagens/windows/pinOff.png'}
                   alt='pin fixar'
                   onClick={() => validarFixado()}
                    />
@@ -40,7 +40,7 @@ aoDeletar(lembretes.id)
             {
                 fixarLembrete === true && (
                 <img className='pinOn'
-                 src='/imagens/windows/pinOn.png'
+                 src={ process.env.PUBLIC_URL+ '/imagens/windows/pinOn.png'}
                  alt='pin desfixar'
                  onClick={() => validarFixado()}
                    />
