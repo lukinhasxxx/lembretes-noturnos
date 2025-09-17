@@ -1,15 +1,24 @@
-.botao {
+form .botao-lembrete {
     background-color: #6278f7;
-    border-radius: 10px;
+    border-radius: 44px;
     font-weight: 700;
     font-size: 18px;
     padding: 32px;
     border: none;
     cursor: pointer;
     color: white;
-    margin: 32px 0;
+    margin: 28px 40px;
+    transition: background-color 0.5s ease;
+    box-shadow: 7px 5px 8px rgb(82 86 197 / 30%);
 }
 
-.botao:hover {
-    color:#95ffd4;
+form .botao-lembrete:hover {
+    color: #97ffd5;
+    border: 1px solid #00ffe7;
+    background: #62b1f7;
+    transition: transform 0.2s ease;
+}
+
+form .botao-lembrete:active {
+transform:scale(0.95);
 }

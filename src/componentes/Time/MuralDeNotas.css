@@ -1,0 +1,320 @@
+
+@keyframes inicializacao-falha {
+
+  0%, 20% {
+    opacity: 0;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
+    filter: brightness(1);
+  }
+
+  20.01%, 22.99% { opacity: 1; }
+  20.3% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  20.6% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  20.9% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-1px); }
+  21.2% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px);  }
+  21.5% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  21.8% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  22.1% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  22.4% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px);  }
+  22.7% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-1px); }
+
+  23%, 25% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); }
+
+  30.01%, 32.99% { opacity: 1; }
+  30.3% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-3px); }
+  30.6% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(3px);  }
+  30.9% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-1px); }
+  31.2% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px);  }
+  31.5% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  31.8% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  32.1% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  32.4% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  32.7% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+
+  33%, 40% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); }
+
+  40.01%, 42.99% { opacity: 1; }
+  40.3% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  40.6% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  40.9% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  41.2% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  41.5% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  41.8% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  42.1% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  42.4% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
+  42.7% { transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+
+  43%, 55% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); }
+
+  55.1% {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-27deg);
+    filter: brightness(2.5);
+  }
+  57% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
+  59% {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-57deg);
+    filter: brightness(2.5);
+  }
+  59.7% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
+  60% {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-57deg);
+    filter: brightness(2.5);
+  }
+
+  60.1% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
+  60.8% {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(27deg);
+    filter: brightness(2.5);
+  }
+
+    60.9% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
+  61.4% {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-57deg);
+    filter: brightness(2.5);
+  }
+
+  63% {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg) translateX(-57px) skewX(-1deg);
+    filter: brightness(2.5);
+  }
+  65% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
+  65.1% { opacity: 1; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); }
+  70.01%, 89% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
+
+  90%, 92% { opacity: 1; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
+  92.1%, 93% { opacity: 0; transform: perspective(1000px) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
+  93.1%, 100% {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
+    filter: brightness(1);
+    
+  }
+}
+
+
+@keyframes neon-border-flicker {
+
+  41%, 41.1% {
+    box-shadow:
+      0 0 4px rgba(0, 255, 255, 0.342),
+      0 2px 10px rgba(0, 255, 255, 0.438),
+      0 3px 15px rgba(0, 255, 255, 0.411);
+  }
+
+  59%, 60% {
+    box-shadow:
+      0 0 4px rgba(0, 255, 255, 0.555),
+      0 2px 10px rgba(0, 255, 255, 0.719),
+      0 3px 15px rgba(0,255,255,0.6);
+  }
+
+  61%, 100% {
+    box-shadow:
+      0 0 4px rgba(0,255,255,0.5),
+      0 2px 10px rgba(0,255,255,0.55),
+      0 3px 15px rgba(0,255,255,0.6);
+  }
+
+  /* 
+  entre o 40 e o 43 fica bom
+  40.01%, 42.99% (eh o range real)
+
+  */
+  0%, 40.99%, 42.01%, 58.72%, 85.72%, 100% {
+    box-shadow: none;
+  }
+}
+
+
+@keyframes neonGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 2px rgba(0,255,255,0.35),
+      0 1px 7px rgba(0, 255, 255, 0.521),
+      0 2px 10px rgb(0, 255, 255);
+  }
+
+  50% {
+    box-shadow:
+      0 0 3px rgba(0,255,255,0.38),
+      0 1px 7px rgba(0, 255, 255, 0.589),
+      0 2px 14px rgba(0, 255, 255, 0.699);
+  }
+}
+.painel.painel-surgindo {
+  animation:
+
+    inicializacao-falha    6s linear none,
+    neon-border-flicker    6s linear none,
+    neon-flicker-startup   6s linear forwards,
+    ventoComOscilacao      14s ease-in-out infinite 6s,
+    neonGlow               2.7s linear infinite 6s;
+}
+
+.painel{
+    text-align: center;
+    padding: 32px;
+    position: fixed;
+    background-blend-mode: multiply;
+    background-color: rgba(70, 107, 185, 0.0);
+    width: 460px;
+    height: 450px;
+    margin-left: 59%;
+    margin-top: 9%;
+    border-radius: 20px;
+    
+    transform-origin: 90% 25%; /* profundidade / inclnacao */
+}
+/* comentarios gerados para facilitar a modificacao da animacao */
+@keyframes ventoComOscilacao {
+    /* Base inclinada */
+    0% {
+        transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
+    }
+    /* Balanço leve para trás */
+    15% {
+        transform: perspective(1000px) rotateY(-34deg) rotateX(0deg);
+    }
+    /* Volta um pouco */
+    30% {
+        transform: perspective(1000px) rotateY(-36deg) rotateX(0deg);
+    }
+    /* Rajada forte para trás */
+    45% {
+        transform: perspective(1000px) rotateY(-33deg) rotateX(1deg);
+    }
+    /* Oscilação no fim da rajada */
+    50% {
+        transform: perspective(1000px) rotateY(-33.5deg) rotateX(2deg);
+    }
+    55% {
+        transform: perspective(1000px) rotateY(-32.8deg) rotateX(3deg);
+    }
+    60% {
+        transform: perspective(1000px) rotateY(-33.2deg) rotateX(2deg);
+    }
+    /* Começa a voltar */
+    75% {
+        transform: perspective(1000px) rotateY(-34deg) rotateX(0deg);
+    }
+    /* Pequena oscilação antes de estabilizar */
+    85% {
+        transform: perspective(1000px) rotateY(-36deg) rotateX(0deg);
+    }
+    /* Retorna à base */
+    100% {
+        transform: perspective(1000px) rotateY(-35deg) rotateX(0deg);
+    }
+}
+
+.painel p{
+    margin-top: 0px;
+    color: violet;
+    text-shadow: 4px 1px 0px #00806f;
+    font-size: 26px;
+    user-select: none;
+}
+
+.painel text {
+    font-size: 24px;
+    color: #fff509;
+    text-shadow: 5px 2px 0px #800000;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border: 0px solid #00eeff;
+  box-shadow: 0 0 7px rgba(255, 0, 255,0.5);
+}
+
+::-webkit-scrollbar-thumb {
+    /* aqui mexo na cor DENTRO da barrinha */
+  background: #00fff1;
+  border-radius: 5px;
+  background-clip: content-box;
+  /* aqui eh a cor ao REDOR da barrinha */
+  border: solid 4px #a0c3cb96;
+  animation: neonPulse 1.5s ease-in-out infinite;
+}
+::-webkit-scrollbar-thumb:hover {
+
+  border: solid 4px #78d8eece;
+
+}
+
+/* unico jeito do firefox estilizar separado do chrome */
+@-moz-document url-prefix() {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #00bbff47 transparent;
+  }
+}
+
+.painel h3 {
+    font-size: 32px;
+    border-bottom: 4px solid;
+    display: inline-block;
+    padding-bottom: 8px;
+}
+
+.painel .zona-dos-cards {
+    display: flex;
+    flex-direction: column;
+    background-color:rgb(36, 56, 156, 0);
+    box-shadow: 0px 0px 7px rgb(253, 255, 8 ,0.5);
+    padding-right:5px ;
+    width: 460px;
+    height: 394px;
+    border-radius: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-wrap: nowrap;
+}
+
+.painel .zona-dos-cards .card {
+    background-color: rgb(0 255 175 / 12%);
+    height: 120px;
+    margin-left: 10px;
+    margin-top: 10px;
+    border: none; 
+    box-shadow: 1px 1px 8px rgb(0 255 170);
+    position: relative;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(4px);
+    overflow-y: auto;
+    overflow-x: hidden; 
+}
+
+.painel .zona-dos-cards .card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 40px;
+    border-top: 2px solid rgba(95, 255, 247, 1);
+    border-left: 2px solid rgba(95, 255, 247, 1);
+    border-top-left-radius: 10px;
+}
+
+.painel .zona-dos-cards .card::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 50px;
+    height: 40px;
+    border-bottom: 2px solid rgba(95, 255, 247, 1);
+    border-right:2px solid rgba(95, 255, 247, 1);
+    border-bottom-right-radius: 10px;
+}

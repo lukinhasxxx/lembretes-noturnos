@@ -1,115 +1,122 @@
-import Banner from './componentes/Banner';
-import Formulario from './componentes/Formulario';
+import ModalTablet from './componentes/ModalTablet/ModalTablet';
+import  VisibilidadePainelProvider from './contexts/VisibilidadePainel';
+//aqui eh pra eu importar o provider, sem o contexto
 import { useState } from 'react';
-import Time from './componentes/Time'
-import Footer from './componentes/Footer';
+import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import { v4 as uuidv4 } from 'uuid';
-
 
 function App() {
 
-  const [times, setTimes] = useState([
-    {  
-      id:uuidv4(),
-      nome:'Programacao',
-      cor:'#D9F7E9'
-    },
-    {  
-      id:uuidv4(),
-      nome:'Front-End',
-      cor:'#E8F8FF'
-    },
-    {  
-      id:uuidv4(),
-      nome:'Data Science',
-      cor:'#F0F8E2'
-    },
-    {  
-      id:uuidv4(),
-      nome:'Devops',
-      cor:'#FDE7E8'
-    },
-    {  
-      id:uuidv4(),
-      nome:'UX e Design',
-      cor:'#FAE9F5'
-    },
-    {  
-      id:uuidv4(),
-      nome:'Mobile',
-      cor:'#FFF5D9'
-    },
-    {  
-      id:uuidv4(),
-      nome:'Inovacao e Gestao',
-      cor:'#FFEEDF'
-    }
-  ])
+const [lembretes, setLembretes] = useState([])
+const [painelLigadoPermanente,setPainelLigadoPermanente] = useState(false)
+const [animacaoJaAtivada,setAnimacaoJaAtivada] = useState(false)
+const [primeiraMensagemPainel,setPrimeiraMensagemPainel] = useState(false)
+// const [tabletJaIniciou,setTabletJaIniciou] = useState(false);
+// const [animacaoTabletDeveRodar, setAnimacaoTabletDeveRodar] = useState(false)
 
 
-  const [colaboradores, setColaboradores] = useState([])
+const adicionarLembrete = (textoDaNota) => {
 
-  const aoNovoColaboradorAdicionado = (colaborador) => {
-    colaborador.id = uuidv4();
-    colaborador.favorito = false;
-    console.log(colaborador.favorito)
-    setColaboradores([...colaboradores,colaborador])
+  const novoLembrete = {
+    id: uuidv4(),
+    texto: textoDaNota,
+    fixar: false
+  };
+
+setTimeout(()=> {
+
+if(!painelLigadoPermanente){
+    setPainelLigadoPermanente(true)
+    setAnimacaoJaAtivada(true);
+    setModalAberto(false);
+    setLigarTablet(false);
+
+
+    setTimeout(()=> {
+        setLembretes(lembretesAnteriores => [...lembretesAnteriores, novoLembrete])
+          setPrimeiraMensagemPainel(true);
+        
+        } ,5000) 
+      } else {
+          setLembretes( lembretesAnteriores => [...lembretesAnteriores, novoLembrete]);
+          if(!primeiraMensagemPainel){
+            setPrimeiraMensagemPainel(true)
+          }
   }
 
-    function deletarColaborador(id) {
-      setColaboradores(colaboradores.filter(colaborador => colaborador.id !== id))
-      
+},200)
+};
+
+function fixarLembrete(id) {
+  setLembretes(lembretes.map(lembrete => {
+    if (lembrete.id === id) {
+      return { ...lembrete, fixar: !lembrete.fixar
+      };
+    } else{
+      return lembrete
     }
+  }).sort((a,b)=> b.fixar-a.fixar)
+);
 
-  function mudarCorDoTime (cor, id) {
-    setTimes(times.map( time =>
-    {
-      if(time.id === id) {
-          time.cor=cor;
-          console.log(id)
-      } 
-      return time;}
-      
-     ))
-  }    
+}
+   function deletarLembrete(id) {
+      setTimeout(()=>{
+        setLembretes(lembretes.filter(lembrete => lembrete.id !== id))}
+        ,200)
 
-  function cadastrarTime (novoTime){
-    setTimes([...times,{...novoTime, id:uuidv4()}])
-  }
-
-function resolverFavorito(id) {
-  setColaboradores(colaboradores.map(colaborador => {
-    if (colaborador.id === id) {
-      return { ...colaborador, favorito: !colaborador.favorito };
     }
-    return colaborador;
-  }));
+    
+
+const [ligarTablet,setLigarTablet] = useState(false)
+const [modalAberto,setModalAberto] = useState(false)
+
+const gerenciarTablet = () => {
+
+setModalAberto(ligado=> !ligado);
+setLigarTablet(ligado =>!ligado);
 }
 
   return (
+    <VisibilidadePainelProvider>
+    
     <div className="App">
-      <Banner/>
-      <Formulario 
-      cadastrarTime= {cadastrarTime}
-      times = {times.map(time => time.nome )} 
-      aoColaboradorCadastrado= {colaborador => aoNovoColaboradorAdicionado(colaborador)}/>
 
-      {times.map(time => 
-        <Time  
-          aoFavoritar = {resolverFavorito}
-          id={time.id} 
-          mudarCor = {mudarCorDoTime}
-          key = {time.nome}
-          nome={time.nome}
-          corPrimaria = {time.cor}
-          corSecundaria = {time.cor}
-          colaboradores = {colaboradores.filter(colaborador=> colaborador.time === time.nome)}
-          aoDeletar = {deletarColaborador}
+    <video autoPlay loop muted className='video-background' >
+      <source src={process.env.PUBLIC_URL + '/videos/video-background.mp4'} type='video/mp4' />
+    </video>
 
-        />)
-      }
-        <Footer/>
+          {modalAberto && 
+        <ModalTablet
+          aoSubmeter={adicionarLembrete}
+          validarLigadoDesligado = {ligarTablet}
+          painelLigadoPermanente={painelLigadoPermanente}
+        />
+       }
+
+        <div className='zona-interacao-tablet' 
+        onClick={gerenciarTablet}>{ligarTablet}
+          <img 
+          className='tablet-img'
+          src= {process.env.PUBLIC_URL + '/imagens/tabletPNG.png'}
+            alt='tablet'
+            style ={{filter: ligarTablet ?  "drop-shadow(1px 1px 3px #00D7FF)" : "none"
+            }}
+            onClick={gerenciarTablet}
+          />
+
+      </div>
+      
+        <MuralDeNotas
+          lembretes={lembretes} 
+          aoDeletar={deletarLembrete}
+          aoFixar={fixarLembrete}
+          painelLigadoPermanente={painelLigadoPermanente}
+          animacaoDeveRodar={animacaoJaAtivada}
+          conteudoVisivelPainel={primeiraMensagemPainel}
+      />
+     
     </div>
+  </VisibilidadePainelProvider>
   );
 }
 

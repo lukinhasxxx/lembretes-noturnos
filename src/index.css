@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: -apple-system, BlinkMacSystemFont, "Share Tech Mono", monospace, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -12,5 +12,35 @@ code {
     monospace;
 }
 .App {
-  background-color: lightblue;
+  height: 100vh;
+  position: relative;
 }
+
+.App .secao-tablet-modal {
+    width: 760px;
+    height: 482px;
+    position: absolute;
+    margin-left: 16.5%;
+    margin-top: 14.2%;
+}
+ .video-background{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+ }
+
+.zona-interacao-tablet {
+    position: fixed;
+    top: 87vh;
+    left: 64vw;
+    transform: translate(-50%, -50%);
+    height: 50px;
+    width: 110px;
+    cursor: pointer;
+    user-select: none;
+}
+
