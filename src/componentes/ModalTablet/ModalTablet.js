@@ -42,6 +42,15 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 setTelaAtiva('desktop')} 
             },300)
 }
+    // depois adaptar direito essa funcao pra reciclar tudo
+    // const abrirLembretes = (nomeDoApp) =>{
+    // const proximaTela = 'nomeDoApp';
+    // setTelaAtiva(proximaTela);
+    // setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
+    // }
+
+
+
 
     return (
 
@@ -141,20 +150,45 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                         </div>
                     
                     <div className='tela-about'>
-                        <p>
-                        Teste, aqui vai ser o about
-                                            
+                        <h2>Sobre o projeto</h2>
+                        <p>Olá, esse é o <strong className='strong-about' >Lembretes Noturnos</strong></p>
+                        <p>Este projeto foi feito utilizando React e tem como finalidade a interação com diversos itens da cena<br></br><br></br>
+                           No momento, é possível interagir com:    
                         </p>
+                    <div className='listas-desordenadas-about' >
+                        <ui>
+                            <li>
+                                O tablet em cima da mesa
+                            </li>
+                            <br></br>
+                            <li>
+                                Com as notas dentro painel, fixar, desfixar
+                            </li>
+                            <br></br>
+                            <li>
+                                Parcialmente com o sistema do tablet
+                            </li>
+                            <br></br>
 
-                    <div className='abrir-lembrete' onClick={                                 ()=> {
-                                                        const proximaTela = 'lembretes.exe';
-                                                        setTelaAtiva(proximaTela);
-                                                        setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
-                                                    }}>
+                        </ui>
+                    </div>
+                    <div>Para adicionar uma nota, você pode navegar na aba no canto superior esquerdo da página ou
+                    <div className='abrir-lembrete' 
+                    onClick={()=> {
+                        const proximaTela = 'lembretes.exe';
+                        setTelaAtiva(proximaTela);
+                        setUltimaTela(
+                            {...ultimaTela,app_lembretes:proximaTela})
+                            }}> clicar aqui
+                    </div>
 
-                        <p>→ Clique aqui para adicionar um novo registro ao painel</p> 
+
+
+
 
                     </div>
+
+
 
 
                     </div>

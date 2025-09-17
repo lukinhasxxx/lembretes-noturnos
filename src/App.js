@@ -64,7 +64,10 @@ function fixarLembrete(id) {
 
 }
    function deletarLembrete(id) {
-      setLembretes(lembretes.filter(lembrete => lembrete.id !== id))
+      setTimeout(()=>{
+        setLembretes(lembretes.filter(lembrete => lembrete.id !== id))}
+        ,200)
+
     }
     
 

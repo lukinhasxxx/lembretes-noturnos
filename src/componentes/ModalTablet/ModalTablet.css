@@ -26,7 +26,7 @@ position: relative;
 
 .tablet-tela .area-de-trabalho .about .janela-about .janela-pro-lembrete {
     margin-left: 5px;
-    margin-top: 5px;
+    margin-top: 4px;
     height: 25px;
     width: 90px;
     position: absolute;
@@ -78,16 +78,25 @@ position: relative;
 
 
 
-
-
-
-
 .tablet-tela .area-de-trabalho .about .janela-about {
   height: 34px;
   width: auto;
-
-
 }
+
+ .about .tela-about .abrir-lembrete {
+    margin-left: 10px;
+    font-size: 18px;
+    display: inline-block;
+    color: #f052ff;
+    text-shadow: 2px 2px 5px #43ffc1;
+    cursor: pointer;
+ }
+
+.about .tela-about .abrir-lembrete:hover {
+  transform: scale(1.05);
+}
+
+
 
 .tablet-tela .area-de-trabalho .about .tela-about {
   background: linear-gradient(to right, #d0cbd5, #fff3c6);
@@ -98,27 +107,23 @@ position: relative;
   position: relative;
 }
 
-.tablet-tela .area-de-trabalho .about .tela-about h2{
-  margin-top: 0px;
-  color: aliceblue;
-  text-shadow: 1px 1px 1px #ff00fc;
+.about .tela-about .strong-about{
+    font-size: 19px;
+    color: #ffffff;
+    text-shadow: 2px 1px 8px #00ffe7;
 }
 
-/* Se tiver algum botao la dentro, vai usar isso aqui
+.tablet-tela .area-de-trabalho .about .listas-desordenadas-about {
+  margin-left: 40px;
+}
 
-  background-color: #6278f7;
-    border-radius: 44px;
-    font-weight: 700;
-    font-size: 18px;
-    padding: 32px;
-    border: none;
-    cursor: pointer;
-    color: white;
-    margin: 28px 40px;
-    transition: background-color 0.5s ease;
-    box-shadow: 7px 5px 8px rgb(82 86 197 / 30%); */
 
-/* lembretes */
+.tablet-tela .area-de-trabalho .about .tela-about h2{
+margin-top: 0px;
+    color: aliceblue;
+    text-shadow: 2px 1px 1px #001fff;
+}
+
 
 .tablet-tela .janela-lembretes {
 user-select: none;
