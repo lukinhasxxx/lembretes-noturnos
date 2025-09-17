@@ -45,11 +45,7 @@ if(!painelLigadoPermanente){
   }
 
 },200)
-  
-
 };
-
-
 
 function fixarLembrete(id) {
   setLembretes(lembretes.map(lembrete => {
@@ -84,6 +80,11 @@ setLigarTablet(ligado =>!ligado);
     <VisibilidadePainelProvider>
     
     <div className="App">
+
+    <video autoPlay loop muted className='video-background' >
+      <source src={process.env.PUBLIC_URL + '/videos/video-background.mp4'} type='video/mp4' />
+    </video>
+
           {modalAberto && 
         <ModalTablet
           aoSubmeter={adicionarLembrete}
@@ -96,7 +97,7 @@ setLigarTablet(ligado =>!ligado);
         onClick={gerenciarTablet}>{ligarTablet}
           <img 
           className='tablet-img'
-          src='/imagens/tabletPNG.png'
+          src= {process.env.PUBLIC_URL + '/imagens/tabletPNG.png'}
             alt='tablet'
             style ={{filter: ligarTablet ?  "drop-shadow(1px 1px 3px #00D7FF)" : "none"
             }}

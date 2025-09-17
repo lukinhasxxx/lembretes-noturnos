@@ -48,14 +48,14 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     // setTelaAtiva(proximaTela);
     // setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
     // }
-
-
-
-
     return (
-
-    <div>
-            <div className='tablet-tela'  > 
+        <div>
+            <section className='secao-tablet-modal'>
+                <img className='tablet-modal' src={ process.env.PUBLIC_URL + '/imagens/tabletModal.png'}
+                style={{display: validarLigadoDesligado ? "" : " none" }}
+                alt='Modal do tablet'
+            />
+                        <div className='tablet-tela'  > 
             <div className='area-de-trabalho' style={{backgroundImage:"url('/imagens/windows/windowsWallpaper.jpg')",backgroundRepeat:"no-repeat"}}  >
             
                 {/* aqui manda a partir da area de trabalho */}
@@ -64,7 +64,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     <div className='icone-lembretes'
                    onClick={() => abrirApp('app_lembretes','about.exe') }>
                     
-                    <img src='/imagens/windows/lembretesIcone.png'
+                    <img src={ process.env.PUBLIC_URL +'/imagens/windows/lembretesIcone.png'}
                     alt='abrir lembretes' />
                     <span>Lembretes.exe</span>
                     <div className='selecionar-lembrete' ></div>
@@ -72,7 +72,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 {/* icone */}
                 {telaAtiva === 'desktop' && (<div className='icone-led'
                    onClick={() => abrirApp('app_config','config.exe') }>
-                    <img src='/imagens/windows/ledIcone.png'
+                    <img src={ process.env.PUBLIC_URL+ '/imagens/windows/ledIcone.png'}
                     alt='abrir lembretes' />
                     <span>Config.exe</span>
                     <div className='selecionar-configuracao' ></div>
@@ -80,7 +80,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
                 {/* app de fato */}
                 {telaAtiva ==='config.exe' && (<div className='janela-configuracao-led' >
-                        <img src="/imagens/windows/iconeFechar.png" alt="Icone de fechar" 
+                        <img src={process.env.PUBLIC_URL +"/imagens/windows/iconeFechar.png"} alt="Icone de fechar" 
                         onClick={() => fecharApp('app_config','config.exe')}/>
                         <span>Pagina em manutenção.</span>
                     </div>
@@ -89,7 +89,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 {/* APP de fato */}
                 { telaAtiva === 'lembretes.exe' && (
 
-                <div className='janela-lembretes' >
+        <div className='janela-lembretes' >
                     <div className='janela-pro-about' onClick={
                         ()=> {
                            const proximaTela = 'about.exe';
@@ -130,26 +130,23 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
                     <Botao className='botao-lembrete' >Enviar lembrete</Botao>
                 </form>
-            </div>
-
-                )}
-
-                { telaAtiva ==='about.exe' && (
-                    <div className='about' >
-                        <div className='janela-about' >
-                            <div className='janela-pro-lembrete' onClick={
-                                 ()=> {
-                                    const proximaTela = 'lembretes.exe';
-                                    setTelaAtiva(proximaTela);
-                                    setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
+        </div>
+            )}
+            {telaAtiva ==='about.exe' && (
+                 <div className='about' >
+                     <div className='janela-about' >
+                        <div className='janela-pro-lembrete' onClick={
+                            ()=> {
+                                const proximaTela = 'lembretes.exe';
+                                setTelaAtiva(proximaTela);
+                                 setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
                                  }} >
                                 <p>Lembretes</p> 
                             </div>
                             <img src={ process.env.PUBLIC_URL+ "/imagens/windows/iconeFechar.png"} alt="Icone de fechar"
                             onClick={() => fecharApp('app_lembretes','about.exe')} />
                         </div>
-                    
-                    <div className='tela-about'>
+            <div className='tela-about'>
                         <h2>Sobre o projeto</h2>
                         <p>Olá, esse é o <strong className='strong-about' >Lembretes Noturnos</strong></p>
                         <p>Este projeto foi feito utilizando React e tem como finalidade a interação com diversos itens da cena<br></br><br></br>
@@ -172,7 +169,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
                         </ui>
                     </div>
-                    <div>Para adicionar uma nota, você pode navegar na aba no canto superior esquerdo da página ou
+                <div>Para adicionar uma nota, você pode navegar na aba no canto superior esquerdo da página ou
                     <div className='abrir-lembrete' 
                     onClick={()=> {
                         const proximaTela = 'lembretes.exe';
@@ -181,31 +178,19 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             {...ultimaTela,app_lembretes:proximaTela})
                             }}> clicar aqui
                     </div>
-
-
-
-
-
-                    </div>
-
-
-
-
-                    </div>
-                    
-   
-                    </div>
-                )}
+                 </div>
+            </div>
+        </div>)}
     </div>
 
     <div className="barra-de-tarefas">
     
         <div className='menu-iniciar' >
-            <img src="/imagens/windows/menuIniciar.png" alt="Menu iniciar" />
+            <img src = {process.env.PUBLIC_URL + "/imagens/windows/menuIniciar.png"} alt="Menu iniciar" />
         </div>
 
         <div className="seta-voltar" onClick={() => setTelaAtiva('desktop')}>
-          <img src="/imagens/windows/setaVoltar.png" alt="Voltar para o Desktop" />
+          <img src={ process.env.PUBLIC_URL + "/imagens/windows/setaVoltar.png"} alt="Voltar para o Desktop" />
         </div>
 
     <div className='icones-apps-abertos' >
@@ -215,8 +200,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
             key={app}
             className='icone-na-barra'
             onClick={() => setTelaAtiva(ultimaTela[app])} >
-                {app === 'app_lembretes' && <img className='icone-na-barra-lembretes' src= '/imagens/windows/lembretesIcone.png' alt='abrir lembretes' /> }
-                {app === 'app_config' && <img className='icone-na-barra-led'  src='/imagens/windows/ledIcone.png' alt='abrir config' /> }
+                {app === 'app_lembretes' && <img className='icone-na-barra-lembretes' src={ process.env.PUBLIC_URL+ '/imagens/windows/lembretesIcone.png'} alt='abrir lembretes' /> }
+                {app === 'app_config' && <img className='icone-na-barra-led'  src={process.env.PUBLIC_URL+'/imagens/windows/ledIcone.png'} alt='abrir config' /> }
             </div>
          )
         )
@@ -225,15 +210,15 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
         <div className='barra-tarefas-inferior-direito' >
             <div className='icone-bateria' >
-                    <img src="/imagens/windows/bateriaIcone.png" alt="Bateria carregando" />
+                    <img src={ process.env.PUBLIC_URL+ "/imagens/windows/bateriaIcone.png"} alt="Bateria carregando" />
                 </div> 
             
             <div className='icone-wifi' >
-                    <img src="/imagens/windows/wifiIcone.png" alt="\Icone wifi" />
+                    <img src={ process.env.PUBLIC_URL + "/imagens/windows/wifiIcone.png"} alt="\Icone wifi" />
                 </div> 
 
                 <div className='icone-som' >
-                    <img src="/imagens/windows/semSomIcone.png" alt="Icone sem som" />
+                    <img src={ process.env.PUBLIC_URL + "/imagens/windows/semSomIcone.png"} alt="Icone sem som" />
                 </div> 
 
                 <div className='idioma'>
@@ -244,19 +229,13 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 <Relogio/>
       </div>
         <div className='icone-notificacoes' >
-        <img src="/imagens/windows/iconeNotificacoes.png" alt="Icone de notificacoes" />
+        <img src={ process.env.PUBLIC_URL+  "/imagens/windows/iconeNotificacoes.png"} alt="Icone de notificacoes" />
         </div> 
     </div>
 
         </div>
-            <section className='secao-tablet-modal'>
-                <img className='tablet-modal' src='/imagens/tabletModal.png'
-                style={{display: validarLigadoDesligado ? "" : " none" }}
-                alt='Modal do tablet'
-            />
             </section>
     </div>
-
 
     )
 }
