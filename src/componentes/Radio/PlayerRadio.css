@@ -1,0 +1,21 @@
+.zona-radio {
+position: relative;
+}
+
+.zona-interacao-radio{
+    position: absolute;
+    width: 170px;
+    height: 130px;
+    left: 16vw;
+    top: 76vh;
+    cursor: pointer;    
+
+}
+
+.imagem-radio{
+    position: absolute;
+    height: 170px;
+    top: -3vh;
+    pointer-events: none;
+    user-select: none;
+}
