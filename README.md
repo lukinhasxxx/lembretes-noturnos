@@ -28,9 +28,9 @@ O projeto foi construído utilizando as seguintes tecnologias:
 
 ## Estrutura base
 Para "salvar" o projeto original fiz a tag v1.0-organo-base
-Toda modificação para o projeto atual ta concentrada na branch "develop-lembretes-noturnos".
+Toda modificação para o projeto atual ta concentrada na branch "develop-lembretes-noturnos"
+O Lembretes Noturnos começa a partir da tag v2.0
 
-## Como Rodar o Projeto
+## Status do projeto
 
-Ao ser finalizado, será hospedado no git pages.
-
+Ainda em andamento, mas a fase inicial pode ser acessada aqui https://lukinhasxxx.github.io/lembretes-noturnos/

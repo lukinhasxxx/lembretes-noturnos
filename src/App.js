@@ -1,5 +1,6 @@
 import ModalTablet from './componentes/ModalTablet/ModalTablet';
 import  VisibilidadePainelProvider from './contexts/VisibilidadePainel';
+import PlayerRadio from './componentes/Radio/PlayerRadio';
 //aqui eh pra eu importar o provider, sem o contexto
 import { useState } from 'react';
 import MuralDeNotas from './componentes/Time/MuralDeNotas'
@@ -11,6 +12,8 @@ const [lembretes, setLembretes] = useState([])
 const [painelLigadoPermanente,setPainelLigadoPermanente] = useState(false)
 const [animacaoJaAtivada,setAnimacaoJaAtivada] = useState(false)
 const [primeiraMensagemPainel,setPrimeiraMensagemPainel] = useState(false)
+
+
 // const [tabletJaIniciou,setTabletJaIniciou] = useState(false);
 // const [animacaoTabletDeveRodar, setAnimacaoTabletDeveRodar] = useState(false)
 
@@ -81,10 +84,10 @@ setLigarTablet(ligado =>!ligado);
     
     <div className="App">
 
-    <video autoPlay loop muted className='video-background' >
+    <video  loop muted className='video-background' >
       <source src={process.env.PUBLIC_URL + '/videos/video-background.mp4'} type='video/mp4' />
     </video>
-
+      <PlayerRadio/>
           {modalAberto && 
         <ModalTablet
           aoSubmeter={adicionarLembrete}

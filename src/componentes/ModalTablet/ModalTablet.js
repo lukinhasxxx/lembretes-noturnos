@@ -3,6 +3,7 @@ import './ModalTablet.css'
 import Botao from '../Botao'
 import { useState,useContext } from 'react'
 import Relogio from '../Relogio/Relogio'
+import WindowBar from '../WindowBar/WindowBar'
 
 const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente}) => {
 
@@ -71,7 +72,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                  </div>)}
                 {/* icone */}
                 {telaAtiva === 'desktop' && (<div className='icone-led'
-                   onClick={() => abrirApp('app_config','config.exe') }>
+                   onClick={
+                    () => abrirApp('app_config','config.exe') }>
                     <img src={ process.env.PUBLIC_URL+ '/imagens/windows/ledIcone.png'}
                     alt='abrir lembretes' />
                     <span>Config.exe</span>
@@ -79,10 +81,16 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 </div>)}
 
                 {/* app de fato */}
-                {telaAtiva ==='config.exe' && (<div className='janela-configuracao-led' >
-                        <img src={process.env.PUBLIC_URL +"/imagens/windows/iconeFechar.png"} alt="Icone de fechar" 
-                        onClick={() => fecharApp('app_config','config.exe')}/>
-                        <span>Pagina em manutenção.</span>
+                {telaAtiva ==='config.exe' && (
+                   
+                    <div className='janela-configuracao-led' >
+                       
+                    <WindowBar 
+                    fecharApp = {fecharApp}
+                    idDoAppPraFechar='app_config'
+                    />
+
+                    <span>Pagina em manutenção.</span>
                     </div>
                 )}
                 
@@ -90,18 +98,23 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 { telaAtiva === 'lembretes.exe' && (
 
         <div className='janela-lembretes' >
+
+                <WindowBar
+                fecharApp = {fecharApp}
+                idDoAppPraFechar = 'app_lembretes'
+                >
                     <div className='janela-pro-about' onClick={
                         ()=> {
                            const proximaTela = 'about.exe';
                             setTelaAtiva(proximaTela);
                             setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
                             }} >
-                                <p>About</p> 
+                            <p>About</p> 
                     </div>
-                    
-                    <img src={ process.env.PUBLIC_URL+ "/imagens/windows/iconeFechar.png"} alt="Icone de fechar"
-                    onClick={() => fecharApp('app_lembretes','lembretes.exe')} />
+                </WindowBar>    
+
                     <form onSubmit={aoSalvar}>
+     
                     <h2>Deixe seu lembrete para ser incluído no painel.</h2>
                 <div className='grupo-painel'>
                         <textarea
@@ -131,12 +144,31 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     <Botao className='botao-lembrete' >Enviar lembrete</Botao>
                 </form>
         </div>
+
             )}
             {telaAtiva ==='about.exe' && (
                  <div className='about' >
-                     <div className='janela-about' >
-                        <div className='janela-pro-lembrete' onClick={
-                            ()=> {
+
+                {/* Janela superior */}
+    <WindowBar 
+    idDoAppPraFechar = 'app_lembretes'
+    fecharApp = {fecharApp} 
+    >
+    <div className= 'janela-pro-lembrete' 
+        onClick={
+            ()=> {
+                const proximaTela = 'lembretes.exe';
+                setTelaAtiva(proximaTela);
+                    setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
+                    }} >
+                <p>Lembretes</p> 
+        </div>
+    </WindowBar>
+
+                     {/* <div className='window-bar' >
+                        <div className='tab-lembrete' 
+                            onClick={
+                                ()=> {
                                 const proximaTela = 'lembretes.exe';
                                 setTelaAtiva(proximaTela);
                                  setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
@@ -145,7 +177,10 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             </div>
                             <img src={ process.env.PUBLIC_URL+ "/imagens/windows/iconeFechar.png"} alt="Icone de fechar"
                             onClick={() => fecharApp('app_lembretes','about.exe')} />
-                        </div>
+                        </div> */}
+
+            {/* <Componente as funcoes aqui,  /> */}
+
             <div className='tela-about'>
                         <h2>Sobre o projeto</h2>
                         <p>Olá, esse é o <strong className='strong-about' >Lembretes Noturnos</strong></p>
