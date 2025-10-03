@@ -82,9 +82,14 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
                 {/* app de fato */}
                 {telaAtiva ==='config.exe' && (
+                   
                     <div className='janela-configuracao-led' >
-                    <img src={process.env.PUBLIC_URL +"/imagens/windows/iconeFechar.png"} alt="Icone de fechar" 
-                    onClick={() => fecharApp('app_config','config.exe')}/>
+                       
+                    <WindowBar 
+                    fecharApp = {fecharApp}
+                    idDoAppPraFechar='app_config'
+                    />
+
                     <span>Pagina em manutenção.</span>
                     </div>
                 )}
@@ -92,15 +97,12 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 {/* APP de fato */}
                 { telaAtiva === 'lembretes.exe' && (
 
-
-
-
-
-
-
         <div className='janela-lembretes' >
 
-
+                <WindowBar
+                fecharApp = {fecharApp}
+                idDoAppPraFechar = 'app_lembretes'
+                >
                     <div className='janela-pro-about' onClick={
                         ()=> {
                            const proximaTela = 'about.exe';
@@ -109,19 +111,10 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             }} >
                             <p>About</p> 
                     </div>
-                    
-
-
-
-
-
-
-                    
-
-                    <img src={ process.env.PUBLIC_URL+ "/imagens/windows/iconeFechar.png"} alt="Icone de fechar"
-                    onClick={() => fecharApp('app_lembretes','lembretes.exe')} />
+                </WindowBar>    
 
                     <form onSubmit={aoSalvar}>
+     
                     <h2>Deixe seu lembrete para ser incluído no painel.</h2>
                 <div className='grupo-painel'>
                         <textarea
@@ -152,10 +145,6 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 </form>
         </div>
 
-
-
-
-
             )}
             {telaAtiva ==='about.exe' && (
                  <div className='about' >
@@ -176,8 +165,6 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         </div>
     </WindowBar>
 
-
-
                      {/* <div className='window-bar' >
                         <div className='tab-lembrete' 
                             onClick={
@@ -191,7 +178,6 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             <img src={ process.env.PUBLIC_URL+ "/imagens/windows/iconeFechar.png"} alt="Icone de fechar"
                             onClick={() => fecharApp('app_lembretes','about.exe')} />
                         </div> */}
-
 
             {/* <Componente as funcoes aqui,  /> */}
 

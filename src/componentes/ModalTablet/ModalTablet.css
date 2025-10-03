@@ -14,10 +14,7 @@ width: 665px;
 background-size: contain;
 }
 
-
 /* about */
-
-
 
 
 .tablet-tela .area-de-trabalho .about .tela-about {
@@ -47,15 +44,14 @@ margin-top: 0px;
 }
 
 
-.tablet-tela .janela-lembretes {
-user-select: none;
-background: linear-gradient(to right, #bcabff, #aaf7f4de);
-max-height: 40px;
-}
+/* aqui sao as tabs, guias dentro do about*/
 
-.tablet-tela .janela-lembretes  .janela-pro-about {
+.tablet-tela .area-de-trabalho .about .window-bar .janela-pro-lembrete,
+.tablet-tela .janela-lembretes  .janela-pro-about
+
+{
     margin-left: 5px;
-    margin-top: 5px;
+    margin-top: 4px;
     height: 25px;
     width: 90px;
     position: absolute;
@@ -65,24 +61,46 @@ max-height: 40px;
     background-color: rgb(95, 95, 252);
     box-shadow: 2px 2px 2px rgb(0 0 0);
     opacity: 0.9;
-    transition: background-color 0.5s ease, transform 0.3s ease;
+    transition: background-color 0.5s ease, transform 0.3s ease; 
 }
-.tablet-tela .janela-lembretes  .janela-pro-about:hover {
+
+.tablet-tela .area-de-trabalho .about .window-bar .janela-pro-lembrete:hover,
+.tablet-tela .janela-lembretes  .janela-pro-about:hover
+
+{
   opacity: 0.7;
   background-color: rgb(77 171 255);
   box-shadow: 2px 2px 2px rgb(24, 59, 255)
 }
 
-.tablet-tela .janela-lembretes  .janela-pro-about:active{
+.tablet-tela .area-de-trabalho .about .window-bar .janela-pro-lembrete:active,
+.tablet-tela .janela-lembretes .janela-pro-about:active
+{
   transform: scale(0.90);
 }
 
-.tablet-tela .janela-lembretes  .janela-pro-about p {
+.tablet-tela .area-de-trabalho .about .window-bar .janela-pro-lembrete p,
+.tablet-tela .janela-lembretes  .janela-pro-about p
+
+{
     margin-top: 3px;
     margin-left: 5px;
     font-size: 15px;
     color: #38fff7d1;
     text-shadow: 2px 1px 2px #3325a3ad;
+}
+
+ .about .tela-about .abrir-lembrete {
+    margin-left: 10px;
+    font-size: 18px;
+    display: inline-block;
+    color: #f052ff;
+    text-shadow: 2px 2px 5px #43ffc1;
+    cursor: pointer;
+ }
+
+.about .tela-about .abrir-lembrete:hover {
+  transform: scale(1.05);
 }
 
 .tablet-tela .janela-lembretes img {
@@ -251,7 +269,7 @@ form h2 {
 .tablet-tela .barra-de-tarefas {
     display: flex;
     position: absolute;
-    background-color: rgb(0, 0, 0, 0.9);
+    background-color: rgb(0, 0, 0, 1);
     height: 36px;
     width: 666px;
     top: 91.6%;
