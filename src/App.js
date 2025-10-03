@@ -12,6 +12,8 @@ const [lembretes, setLembretes] = useState([])
 const [painelLigadoPermanente,setPainelLigadoPermanente] = useState(false)
 const [animacaoJaAtivada,setAnimacaoJaAtivada] = useState(false)
 const [primeiraMensagemPainel,setPrimeiraMensagemPainel] = useState(false)
+
+
 // const [tabletJaIniciou,setTabletJaIniciou] = useState(false);
 // const [animacaoTabletDeveRodar, setAnimacaoTabletDeveRodar] = useState(false)
 

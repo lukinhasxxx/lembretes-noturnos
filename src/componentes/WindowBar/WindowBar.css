@@ -1,0 +1,79 @@
+.tablet-tela .area-de-trabalho .about .window-bar{
+user-select: none;
+background: linear-gradient(to right, #bcabff, #aaf7f4de);
+max-height: 40px;
+position: relative;
+}
+
+
+.tablet-tela .area-de-trabalho .about .window-bar .janela-pro-lembrete {
+    margin-left: 5px;
+    margin-top: 4px;
+    height: 25px;
+    width: 90px;
+    position: absolute;
+    border: rgb(0, 255, 213) solid 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: rgb(95, 95, 252);
+    box-shadow: 2px 2px 2px rgb(0 0 0);
+    opacity: 0.9;
+    transition: background-color 0.5s ease, transform 0.3s ease; 
+}
+
+.tablet-tela .area-de-trabalho .about .window-bar .janela-pro-lembrete:hover {
+  opacity: 0.7;
+  background-color: rgb(77 171 255);
+  box-shadow: 2px 2px 2px rgb(24, 59, 255)
+}
+
+.tablet-tela .area-de-trabalho .about .window-bar .janela-pro-lembrete:active {
+  transform: scale(0.90);
+}
+
+.tablet-tela .area-de-trabalho .about .window-bar .janela-pro-lembrete p {
+    margin-top: 3px;
+    margin-left: 5px;
+    font-size: 15px;
+    color: #38fff7d1;
+    text-shadow: 2px 1px 2px #3325a3ad;
+}
+
+
+.tablet-tela .area-de-trabalho .about .window-bar img {
+    margin-top: 4px;
+    margin-left: 625px;
+    padding-left: 9px;
+    cursor: pointer;
+    transition: filter 0.4s ease;
+}
+
+.tablet-tela .area-de-trabalho .about .window-bar img:hover {
+  filter: brightness(1.6);
+  transform: scale(1.1);
+  transition: transform 0.4s ease;
+}
+
+.tablet-tela .area-de-trabalho .about .window-bar img:active {
+  transform: scale(0.9);
+}
+
+
+
+.tablet-tela .area-de-trabalho .about .window-bar {
+  height: 34px;
+  width: auto;
+}
+
+ .about .tela-about .abrir-lembrete {
+    margin-left: 10px;
+    font-size: 18px;
+    display: inline-block;
+    color: #f052ff;
+    text-shadow: 2px 2px 5px #43ffc1;
+    cursor: pointer;
+ }
+
+.about .tela-about .abrir-lembrete:hover {
+  transform: scale(1.05);
+}
