@@ -217,10 +217,32 @@ margin-left: -29px;
 .janela-configuracao-led {
   position: relative;
     display: flex;
+    flex-direction: column;
     user-select: none;
     height: 350px;
     width: 664px;
     background-color: rgb(215, 218, 243);
+}
+
+.janela-configuracao-led .texto-explicacao {
+  margin-top: 10%;
+  margin-left: 6%;
+}
+
+.luz-radio {
+  display: inline-block;
+  margin-top: 12;
+  margin-left: 6%;
+}
+ .janela-configuracao-led .aviso-radio-desligado,
+.janela-configuracao-led .texto-alterar-luz-radio
+ {
+  margin-left: 8%;
+  margin-top: -2%;
+}
+
+.janela-configuracao-led .texto-configuracao {
+  text-shadow: 1px 1px 1px rgb(71 255 77 / 93%);
 }
 
 .janela-configuracao-led img{
@@ -233,8 +255,8 @@ margin-left: -29px;
 
 .janela-configuracao-led span {
   position: absolute;
-  margin-left: 200px;
-  margin-top: 150px;
+  margin-top: 7%;
+  margin-left: 4%;
   font-size: 26px;
 }
 

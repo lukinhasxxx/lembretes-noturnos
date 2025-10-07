@@ -5,7 +5,7 @@ import { useState,useContext } from 'react'
 import Relogio from '../Relogio/Relogio'
 import WindowBar from '../WindowBar/WindowBar'
 
-const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente}) => {
+const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, corNeon, radioLigado}) => {
 
     //perto do fim do projeto ai componetiza, modulariza as coisas
     const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)   
@@ -22,6 +22,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         aoSubmeter(nome)
         setNome('')
 };
+
+
 
     const abrirApp = (idDoApp, telaParaAbrir) => {
         setTimeout(() => {
@@ -83,16 +85,35 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 {/* app de fato */}
                 {telaAtiva ==='config.exe' && (
                    
-                    <div className='janela-configuracao-led' >
-                       
-                    <WindowBar 
+            <div className='janela-configuracao-led'  >
+                <WindowBar 
                     fecharApp = {fecharApp}
                     idDoAppPraFechar='app_config'
-                    />
+                />
+                    <span className='texto-configuracao' >Configurações</span>
+                    <p className='texto-explicacao' >Aqui você pode configurar a luz de alguns elementos do cenário </p>
+                    <h3 className='luz-radio' >Luz do rádio</h3>
 
-                    <span>Pagina em manutenção.</span>
-                    </div>
-                )}
+            {radioLigado ?  
+                <div className='texto-alterar-luz-radio' > Clique no botão ao lado para mudar a luz do rádio</div> : 
+                    
+                <div> 
+                    <p className='aviso-radio-desligado' >O rádio está <strong>desligado</strong> no momento. 
+                        <br></br>
+                        Para ligar, clique no rádio na escada.
+                    </p> 
+                </div>
+            }
+
+                <input 
+                    className='input-cor' 
+                    type='color' 
+                    style={{display: radioLigado? "block":"none"}}
+                    onChange={(evento)=>{corNeon(evento.target.value)}}
+                />
+
+            </div>
+            )}
                 
                 {/* APP de fato */}
                 { telaAtiva === 'lembretes.exe' && (
