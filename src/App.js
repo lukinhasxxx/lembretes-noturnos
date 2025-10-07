@@ -12,6 +12,8 @@ const [lembretes, setLembretes] = useState([])
 const [painelLigadoPermanente,setPainelLigadoPermanente] = useState(false)
 const [animacaoJaAtivada,setAnimacaoJaAtivada] = useState(false)
 const [primeiraMensagemPainel,setPrimeiraMensagemPainel] = useState(false)
+const [radioLigado, setRadioLigado] = useState(false)
+const [luzRadio, setLuzRadio] = useState('#00D7FF')
 
 
 // const [tabletJaIniciou,setTabletJaIniciou] = useState(false);
@@ -87,12 +89,19 @@ setLigarTablet(ligado =>!ligado);
     <video  loop muted className='video-background' >
       <source src={process.env.PUBLIC_URL + '/videos/video-background.mp4'} type='video/mp4' />
     </video>
-      <PlayerRadio/>
+      <PlayerRadio 
+        corLuzRadio = {luzRadio} 
+        radioLigado={radioLigado} 
+        setRadioLigado={setRadioLigado}
+        />
+
           {modalAberto && 
         <ModalTablet
           aoSubmeter={adicionarLembrete}
           validarLigadoDesligado = {ligarTablet}
           painelLigadoPermanente={painelLigadoPermanente}
+          corNeon = {setLuzRadio}
+          radioLigado={radioLigado}
         />
        }
 
