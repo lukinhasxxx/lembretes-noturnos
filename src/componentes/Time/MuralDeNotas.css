@@ -318,3 +318,30 @@
     border-right:2px solid rgba(95, 255, 247, 1);
     border-bottom-right-radius: 10px;
 }
+
+
+
+
+
+
+
+
+/* media query 1920px x 955 */
+@media (max-width:1920px) {
+
+}
+
+/* media query 1600px x 820 */
+@media (max-width: 1600px) {
+
+}
+
+/* media query 1440px x 810 */
+@media (max-width: 1440px) {
+
+}
+
+/* media query 1366px x 690 */
+@media (max-width:1368px) {
+  
+}

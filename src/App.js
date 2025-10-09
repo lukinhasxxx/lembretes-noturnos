@@ -6,6 +6,7 @@ import { useState } from 'react';
 import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import { v4 as uuidv4 } from 'uuid';
 
+
 function App() {
 
 const [lembretes, setLembretes] = useState([])
@@ -18,6 +19,7 @@ const [luzRadio, setLuzRadio] = useState('#00D7FF')
 
 // const [tabletJaIniciou,setTabletJaIniciou] = useState(false);
 // const [animacaoTabletDeveRodar, setAnimacaoTabletDeveRodar] = useState(false)
+
 
 
 const adicionarLembrete = (textoDaNota) => {
