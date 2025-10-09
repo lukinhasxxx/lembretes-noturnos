@@ -1,3 +1,16 @@
+/* 
+ Desktop - 1920px x 950px
+            1600px x 870px
+
+Notebook - 1600px x 820px
+            1366px x 690px
+
+
+
+
+
+*/
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Share Tech Mono", monospace, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -44,3 +57,62 @@ code {
     user-select: none;
 }
 
+
+/* media query 1920px x 955 */
+@media (max-width:1920px){
+  
+  .zona-interacao-tablet  {
+    top: 87vh;
+  
+  }
+}
+
+  .zona-interacao-tablet .tablet-img {
+    height: auto;
+    width: 110px;
+  }
+
+/* media query 1600px 820*/
+@media (max-width: 1600px) {
+
+  .zona-interacao-tablet {
+    top: 87vh;
+    left: 64.5vw;
+  }
+
+  .zona-interacao-tablet .tablet-img {
+    height: auto;
+    width: 90px;
+  }
+
+}
+
+
+/* media query 1440px por 810*/
+@media (max-width: 1440px) {
+  .zona-interacao-tablet {
+    top: 83.4vh;
+    left: 64.5vw;
+  }
+
+  .zona-interacao-tablet .tablet-img {
+    height: auto;
+    width: 90px;
+  }
+
+}
+
+
+/* media query 1366px x 690*/
+@media (max-width:1368px){
+
+  .zona-interacao-tablet {
+    top: 88vh;
+    left: 65vw;
+  }
+.zona-interacao-tablet .tablet-img {
+    height: auto;
+    width: 84px;
+  }
+  
+}
