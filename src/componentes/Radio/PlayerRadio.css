@@ -1,0 +1,107 @@
+.zona-radio {
+position: relative;
+}
+
+.zona-interacao-radio {
+    position: absolute;
+    width: 170px;
+    height: 130px;
+    left: 16vw;
+    top: 76vh;
+    cursor: pointer;    
+
+}
+
+.imagem-radio{
+    position: absolute;
+    height: 170px;
+    top: -3vh;
+    pointer-events: none;
+    user-select: none;
+}
+
+.input-cor{
+    position: absolute;
+    width: 4%; 
+    top: 50%;
+    left: 73%;
+    border-radius: 10px;
+
+}
+
+.input-cor:hover {
+    background-color: rgb(90 241 206 / 45%);
+    box-shadow: 1px 1px 8px rgb(0 78 255 / 80%);
+}
+
+.input-cor:active {
+    background-color: rgb(90 241 206 / 45%);
+    box-shadow: 1px 1px 2px rgba(25, 0, 255, 0.7);
+    transform: translate(1px);
+}
+
+
+
+
+/* media query 1920px x 955 */
+
+@media (max-width:1920px) {
+
+.zona-interacao-radio {
+    left: 15vw;
+    top: 75vh;
+ 
+}
+}
+
+
+
+
+/* media query 1600px 820*/ 
+@media (max-width: 1600px) {
+  .zona-interacao-radio {
+    top: 75vh;
+    left: 16vw;
+  }
+
+  .imagem-radio {
+    width: 135px; /* ~proporcional entre 1920 e 1366 */
+    height: auto;
+  }
+}
+
+/* media query 1440px por 810*/
+@media (max-width: 1440px) {
+  .zona-interacao-radio {
+    top: 73vh;
+    left: 14vw;
+  }
+
+  .imagem-radio {
+    width: 129px;
+    height: auto;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+/* media query 1366px x 690*/
+
+@media (max-width:1366px) {
+
+.zona-interacao-radio {
+    left: 15vw;
+    top: 75vh;
+}
+
+.imagem-radio {
+    width: 123px;
+    height: auto;
+}}

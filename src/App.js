@@ -1,9 +1,11 @@
 import ModalTablet from './componentes/ModalTablet/ModalTablet';
 import  VisibilidadePainelProvider from './contexts/VisibilidadePainel';
+import PlayerRadio from './componentes/Radio/PlayerRadio';
 //aqui eh pra eu importar o provider, sem o contexto
 import { useState } from 'react';
 import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import { v4 as uuidv4 } from 'uuid';
+
 
 function App() {
 
@@ -11,8 +13,13 @@ const [lembretes, setLembretes] = useState([])
 const [painelLigadoPermanente,setPainelLigadoPermanente] = useState(false)
 const [animacaoJaAtivada,setAnimacaoJaAtivada] = useState(false)
 const [primeiraMensagemPainel,setPrimeiraMensagemPainel] = useState(false)
+const [radioLigado, setRadioLigado] = useState(false)
+const [luzRadio, setLuzRadio] = useState('#00D7FF')
+
+
 // const [tabletJaIniciou,setTabletJaIniciou] = useState(false);
 // const [animacaoTabletDeveRodar, setAnimacaoTabletDeveRodar] = useState(false)
+
 
 
 const adicionarLembrete = (textoDaNota) => {
@@ -84,12 +91,19 @@ setLigarTablet(ligado =>!ligado);
     <video autoPlay loop muted className='video-background' >
       <source src={process.env.PUBLIC_URL + '/videos/video-background.mp4'} type='video/mp4' />
     </video>
+      <PlayerRadio 
+        corLuzRadio = {luzRadio} 
+        radioLigado={radioLigado} 
+        setRadioLigado={setRadioLigado}
+        />
 
           {modalAberto && 
         <ModalTablet
           aoSubmeter={adicionarLembrete}
           validarLigadoDesligado = {ligarTablet}
           painelLigadoPermanente={painelLigadoPermanente}
+          corNeon = {setLuzRadio}
+          radioLigado={radioLigado}
         />
        }
 

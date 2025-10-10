@@ -1,0 +1,40 @@
+/* separar apenas o que eh barra da guia, depois com um VIRGULA repetimos a 
+estilizacao pros botoes, por isso precisa ficar bem separado */
+
+/* Aqui eh APENAS A BARRA E O BOTAO DE FECHAR */
+
+.window-bar {
+
+user-select: none;
+background: linear-gradient(to right, #bcabff, #aaf7f4de);
+max-height: 40px;
+position: relative;
+}
+
+.window-bar img {
+    margin-top: 4px;
+    margin-left: 625px;
+    padding-left: 9px;
+    cursor: pointer;
+    transition: filter 0.4s ease;
+}
+
+.window-bar {
+  height: 34px;
+  width: 100%;
+}
+
+.window-bar img:hover {
+  filter: brightness(1.6);
+  transform: scale(1.1);
+  transition: transform 0.4s ease;
+}
+
+.window-bar img:active {
+  transform: scale(0.9);
+}
+
+
+
+/* AQUI EH APENAS AS TABS, ABAS, GUIAS, LEMBRETES E ABOUT */
+

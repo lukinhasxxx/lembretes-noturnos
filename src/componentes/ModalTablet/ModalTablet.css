@@ -14,88 +14,7 @@ width: 665px;
 background-size: contain;
 }
 
-
 /* about */
-.tablet-tela .area-de-trabalho .about .janela-about{
-user-select: none;
-background: linear-gradient(to right, #bcabff, #aaf7f4de);
-max-height: 40px;
-position: relative;
-}
-
-
-.tablet-tela .area-de-trabalho .about .janela-about .janela-pro-lembrete {
-    margin-left: 5px;
-    margin-top: 4px;
-    height: 25px;
-    width: 90px;
-    position: absolute;
-    border: rgb(0, 255, 213) solid 1px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: rgb(95, 95, 252);
-    box-shadow: 2px 2px 2px rgb(0 0 0);
-    opacity: 0.9;
-    transition: background-color 0.5s ease, transform 0.3s ease; 
-}
-
-.tablet-tela .area-de-trabalho .about .janela-about .janela-pro-lembrete:hover {
-  opacity: 0.7;
-  background-color: rgb(77 171 255);
-  box-shadow: 2px 2px 2px rgb(24, 59, 255)
-}
-
-.tablet-tela .area-de-trabalho .about .janela-about .janela-pro-lembrete:active {
-  transform: scale(0.90);
-}
-
-.tablet-tela .area-de-trabalho .about .janela-about .janela-pro-lembrete p {
-    margin-top: 3px;
-    margin-left: 5px;
-    font-size: 15px;
-    color: #38fff7d1;
-    text-shadow: 2px 1px 2px #3325a3ad;
-}
-
-
-.tablet-tela .area-de-trabalho .about .janela-about img {
-    margin-top: 4px;
-    margin-left: 625px;
-    padding-left: 9px;
-    cursor: pointer;
-    transition: filter 0.4s ease;
-}
-
-.tablet-tela .area-de-trabalho .about .janela-about img:hover {
-  filter: brightness(1.6);
-  transform: scale(1.1);
-  transition: transform 0.4s ease;
-}
-
-.tablet-tela .area-de-trabalho .about .janela-about img:active {
-  transform: scale(0.9);
-}
-
-
-
-.tablet-tela .area-de-trabalho .about .janela-about {
-  height: 34px;
-  width: auto;
-}
-
- .about .tela-about .abrir-lembrete {
-    margin-left: 10px;
-    font-size: 18px;
-    display: inline-block;
-    color: #f052ff;
-    text-shadow: 2px 2px 5px #43ffc1;
-    cursor: pointer;
- }
-
-.about .tela-about .abrir-lembrete:hover {
-  transform: scale(1.05);
-}
-
 
 
 .tablet-tela .area-de-trabalho .about .tela-about {
@@ -125,15 +44,14 @@ margin-top: 0px;
 }
 
 
-.tablet-tela .janela-lembretes {
-user-select: none;
-background: linear-gradient(to right, #bcabff, #aaf7f4de);
-max-height: 40px;
-}
+/* aqui sao as tabs, guias dentro do about*/
 
-.tablet-tela .janela-lembretes  .janela-pro-about {
+.tablet-tela .area-de-trabalho .about .window-bar .janela-pro-lembrete,
+.tablet-tela .janela-lembretes  .janela-pro-about
+
+{
     margin-left: 5px;
-    margin-top: 5px;
+    margin-top: 4px;
     height: 25px;
     width: 90px;
     position: absolute;
@@ -143,24 +61,46 @@ max-height: 40px;
     background-color: rgb(95, 95, 252);
     box-shadow: 2px 2px 2px rgb(0 0 0);
     opacity: 0.9;
-    transition: background-color 0.5s ease, transform 0.3s ease;
+    transition: background-color 0.5s ease, transform 0.3s ease; 
 }
-.tablet-tela .janela-lembretes  .janela-pro-about:hover {
+
+.tablet-tela .area-de-trabalho .about .window-bar .janela-pro-lembrete:hover,
+.tablet-tela .janela-lembretes  .janela-pro-about:hover
+
+{
   opacity: 0.7;
   background-color: rgb(77 171 255);
   box-shadow: 2px 2px 2px rgb(24, 59, 255)
 }
 
-.tablet-tela .janela-lembretes  .janela-pro-about:active{
+.tablet-tela .area-de-trabalho .about .window-bar .janela-pro-lembrete:active,
+.tablet-tela .janela-lembretes .janela-pro-about:active
+{
   transform: scale(0.90);
 }
 
-.tablet-tela .janela-lembretes  .janela-pro-about p {
+.tablet-tela .area-de-trabalho .about .window-bar .janela-pro-lembrete p,
+.tablet-tela .janela-lembretes  .janela-pro-about p
+
+{
     margin-top: 3px;
     margin-left: 5px;
     font-size: 15px;
     color: #38fff7d1;
     text-shadow: 2px 1px 2px #3325a3ad;
+}
+
+ .about .tela-about .abrir-lembrete {
+    margin-left: 10px;
+    font-size: 18px;
+    display: inline-block;
+    color: #f052ff;
+    text-shadow: 2px 2px 5px #43ffc1;
+    cursor: pointer;
+ }
+
+.about .tela-about .abrir-lembrete:hover {
+  transform: scale(1.05);
 }
 
 .tablet-tela .janela-lembretes img {
@@ -217,13 +157,13 @@ color: white;
 margin-left: -33px;
 }
 
-.icones-apps-abertos .icone-na-barra {
-width: 30px;
+.icones-apps-abertos .icone-na-barra img {
+width: 35px;
 }
 
 .icones-apps-abertos .icone-na-barra .icone-na-barra-lembretes {
-  margin-top: 5px ;
-  height: 22px;
+  margin-top: 3px ;
+  height: 28px;
   user-select: none;
 }
 
@@ -237,9 +177,13 @@ width: 30px;
 position: relative;
 user-select: none;
 margin-top: 55px;
-margin-left: 70px;
+margin-left: 62px;
 height: 35px;
 width: 35px;
+}
+
+.tablet-tela .area-de-trabalho .icone-led img {
+  height: 40px;
 }
 
 .tablet-tela .area-de-trabalho .icone-led span{
@@ -277,10 +221,32 @@ margin-left: -29px;
 .janela-configuracao-led {
   position: relative;
     display: flex;
+    flex-direction: column;
     user-select: none;
     height: 350px;
     width: 664px;
     background-color: rgb(215, 218, 243);
+}
+
+.janela-configuracao-led .texto-explicacao {
+  margin-top: 10%;
+  margin-left: 6%;
+}
+
+.luz-radio {
+  display: inline-block;
+  margin-top: 12;
+  margin-left: 6%;
+}
+ .janela-configuracao-led .aviso-radio-desligado,
+.janela-configuracao-led .texto-alterar-luz-radio
+ {
+  margin-left: 8%;
+  margin-top: -2%;
+}
+
+.janela-configuracao-led .texto-configuracao {
+  text-shadow: 1px 1px 1px rgb(71 255 77 / 93%);
 }
 
 .janela-configuracao-led img{
@@ -293,8 +259,8 @@ margin-left: -29px;
 
 .janela-configuracao-led span {
   position: absolute;
-  margin-left: 200px;
-  margin-top: 150px;
+  margin-top: 7%;
+  margin-left: 4%;
   font-size: 26px;
 }
 
@@ -329,7 +295,7 @@ form h2 {
 .tablet-tela .barra-de-tarefas {
     display: flex;
     position: absolute;
-    background-color: rgb(0, 0, 0, 0.9);
+    background-color: rgb(0, 0, 0, 1);
     height: 36px;
     width: 666px;
     top: 91.6%;
