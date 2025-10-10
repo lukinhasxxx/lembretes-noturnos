@@ -157,13 +157,13 @@ color: white;
 margin-left: -33px;
 }
 
-.icones-apps-abertos .icone-na-barra {
-width: 30px;
+.icones-apps-abertos .icone-na-barra img {
+width: 35px;
 }
 
 .icones-apps-abertos .icone-na-barra .icone-na-barra-lembretes {
-  margin-top: 5px ;
-  height: 22px;
+  margin-top: 3px ;
+  height: 28px;
   user-select: none;
 }
 
@@ -177,9 +177,13 @@ width: 30px;
 position: relative;
 user-select: none;
 margin-top: 55px;
-margin-left: 70px;
+margin-left: 62px;
 height: 35px;
 width: 35px;
+}
+
+.tablet-tela .area-de-trabalho .icone-led img {
+  height: 40px;
 }
 
 .tablet-tela .area-de-trabalho .icone-led span{

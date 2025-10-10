@@ -2,17 +2,17 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    width: 445px;
+    width: 23.5vw;
 }
 
 .cards .card .pinOff,
 .cards .card .pinOn{
     user-select: none;
     height: auto;
-    width: 24px;
+    width: 1.5vw;
     position: absolute;
     top: 0;
-    left: 406px;
+    left: 21vw;
     cursor: pointer;
 }
 .cards .card .pinOff:hover,
@@ -27,11 +27,11 @@
 
 .cards .card .lixeira {
     user-select: none;
-    height: 24px;
-    width: 24px;
+    height: auto;
+    width: 1.4vw;
     position: absolute;
-    top: 45px;
-    left: 406px;
+    top: 2.5vw;
+    left: 21vw;
     cursor: pointer;
 }
 
@@ -48,49 +48,48 @@
     border-radius: 10px 10px 0px 0px;
 }
 
-.cards img {
+/* .cards img {
     width: 100px;
     border-radius: 50%;
     position: relative;
-}
+} */
 
 .cards .card {
     background: #FFFFFF;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.08);
     border-radius: 10px 10px 10px 10px;
-
 }
 
 .cards .card h4 {
     color: #1eff14;
-    font-size: 18px;
-    line-height: 22px;
+    font-size: clamp(10px, 0.94vw, 18px);
+    line-height: clamp(12px, 1.15vw, 22px);
     font-weight: bold;
-    margin-bottom: 8px;
     text-shadow: 1px 0px 4px red;
-    margin-top: 7px;
-    margin-left: 5px;
-    max-height: 103px;
-    max-width: 401px;
+    margin-bottom: 0.42vw;
+    margin-top: 0.36vw;
+    margin-left: 0.26vw;
+    max-height: 5.36vw;;
+    max-width: 20.8vw;
     overflow-wrap: anywhere;
 }
 
 .cards .card h5 {
-    font-size: 18px;
-    line-height: 22px;
+    font-size: clamp(12px, 0.94vw, 18px);   
+    line-height: clamp(16px, 1.15vw, 22px);
     color: #212121;
-    padding: 0 16px;
+    padding: 0 0.83vw;
 }
 
 .deletar {
     position:absolute;
-    right: -10px;
-    top: -10px;
+    right: -0.52vw;
+    top: -0.52vw; 
     cursor: pointer;
 }
 
 .favoritar {
-    margin-top: 20px;
+    margin-top: 1.04vw; 
 }
 
 .coracao1{

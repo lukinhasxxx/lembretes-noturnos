@@ -4,13 +4,7 @@
 
 Notebook - 1600px x 820px
             1366px x 690px
-
-
-
-
-
 */
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Share Tech Mono", monospace, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -57,7 +51,6 @@ code {
     user-select: none;
 }
 
-
 /* media query 1920px x 955 */
 @media (max-width:1920px){
   
@@ -66,7 +59,6 @@ code {
   
   }
 }
-
   .zona-interacao-tablet .tablet-img {
     height: auto;
     width: 110px;
@@ -87,7 +79,6 @@ code {
 
 }
 
-
 /* media query 1440px por 810*/
 @media (max-width: 1440px) {
   .zona-interacao-tablet {
@@ -101,7 +92,6 @@ code {
   }
 
 }
-
 
 /* media query 1366px x 690*/
 @media (max-width:1368px){

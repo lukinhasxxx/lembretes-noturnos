@@ -88,7 +88,7 @@ setLigarTablet(ligado =>!ligado);
     
     <div className="App">
 
-    <video  loop muted className='video-background' >
+    <video autoPlay loop muted className='video-background' >
       <source src={process.env.PUBLIC_URL + '/videos/video-background.mp4'} type='video/mp4' />
     </video>
       <PlayerRadio 
