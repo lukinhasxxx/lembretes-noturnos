@@ -42,66 +42,93 @@ position: relative;
 
 
 
-
-/* media query 1920px x 955 */
-
-@media (max-width:1920px) {
-
-.zona-interacao-radio {
-    left: 15vw;
-    top: 75vh;
- 
-}
-}
-
-
-
-
-/* media query 1600px 820*/ 
-@media (max-width: 1600px) {
+/* Até 1279px HD (innerHeight ~620px) */
+@media (max-width: 1279px) {
   .zona-interacao-radio {
-    top: 75vh;
-    left: 16vw;
+    left: clamp(8vw, 10vw, 12vw); 
+    top: clamp(74vh, 75vh, 76vh);
   }
-
   .imagem-radio {
-    width: 135px; /* ~proporcional entre 1920 e 1366 */
+    width: 123px;
     height: auto;
   }
 }
 
-/* media query 1440px por 810*/
-@media (max-width: 1440px) {
+/* 1280×600 (innerHeight ~600px) */
+@media (min-width: 1280px) and (max-width: 1365px) {
   .zona-interacao-radio {
-    top: 73vh;
-    left: 14vw;
+    left: clamp(12vw, 15vw, 17vw); 
+    top: clamp(72vh, 73vh, 74vh);
   }
-
   .imagem-radio {
     width: 129px;
     height: auto;
   }
 }
 
-
-
-
-
-
-
-
-
-
-/* media query 1366px x 690*/
-
-@media (max-width:1366px) {
-
-.zona-interacao-radio {
-    left: 15vw;
-    top: 75vh;
+/* 1366×650 (innerHeight ~650px) */
+@media (min-width: 1366px) and (max-width: 1439px) {
+  .zona-interacao-radio {
+    top: clamp(74vh, 75vh, 76vh);
+    left: clamp(13vw, 15vw, 17vw); 
+  }
+  .imagem-radio {
+    width: 129px;
+    height: auto;
+  }
 }
 
-.imagem-radio {
-    width: 123px;
+/* 1440×780 (innerHeight ~780px) */
+@media (min-width: 1440px) and (max-width: 1535px) {
+  .zona-interacao-radio {
+    top: clamp(71vh, 72vh, 73vh);
+    left: clamp(14vw, 16vw, 18vw);
+  }
+  .imagem-radio {
+    width: 135px;
     height: auto;
-}}
+  }
+}
+
+/* 1536×770 (innerHeight ~770px) */
+@media (min-width: 1536px) and (max-width: 1599px) {
+  .zona-interacao-radio {
+    top: clamp(73vh, 74vh, 75vh);
+    left: clamp(14vw, 16vw, 17vw);
+  }
+  .imagem-radio {
+    width: 140px;
+    height: auto;
+  }
+}
+
+/* 1600×800 (innerHeight ~800px) */
+@media (min-width: 1600px) and (max-width: 1919px) {
+  .zona-interacao-radio {
+    left: clamp(13vw, 15vw, 17vw); 
+      top: clamp(73vh, 75vh, 80vh);
+  }
+  .imagem-radio {
+    width: 145px;
+    height: auto;
+  }
+}
+
+/* 1920×955 (innerHeight ~955px) */
+@media (min-width: 1920px) {
+  .zona-interacao-radio {
+    left: clamp(14vw, 15vw, 16vw);
+    top: clamp(73vh, 77vh, 78vh); 
+  }
+  .imagem-radio {
+    width: 150px;
+    height: auto;
+  }
+}
+
+
+
+
+
+
+
