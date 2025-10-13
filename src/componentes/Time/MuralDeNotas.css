@@ -325,23 +325,26 @@
 
 
 
-
-/* media query 1920px x 955 */
-@media (max-width:1920px) {
-
-}
-
-/* media query 1600px x 820 */
-@media (max-width: 1600px) {
-
-}
-
-/* media query 1440px x 810 */
-@media (max-width: 1440px) {
-
-}
-
 /* media query 1366px x 690 */
-@media (max-width:1368px) {
+@media (max-width: 1365px) {
 
 }
+
+/* media query  1366x690 */
+@media (min-width: 1366px) and (max-width: 1439px) {
+
+}
+
+/* media query 1440x810 */
+@media (min-width: 1440px) and (max-width: 1599px) {
+
+}
+
+/* media query 1600x820 */
+@media (min-width: 1600px) and (max-width: 1919px) {
+
+}
+
+/* @media (max-width: 1920px) {
+
+} */

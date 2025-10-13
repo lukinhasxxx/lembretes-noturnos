@@ -1,10 +1,4 @@
-/* 
- Desktop - 1920px x 950px
-            1600px x 870px
 
-Notebook - 1600px x 820px
-            1366px x 690px
-*/
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Share Tech Mono", monospace, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -51,58 +45,148 @@ code {
     user-select: none;
 }
 
-/* media query 1920px x 955 */
-@media (max-width:1920px){
-  
-  .zona-interacao-tablet  {
-    top: 87vh;
-  
+
+
+
+
+/* Até 1279px HD (innerHeight ~620px) */
+@media (max-width: 1279px) {
+  .App .secao-tablet-modal {
+    transform-origin: top left;
+    transform: scale(0.7);
+    margin-left: 13%;
+    margin-top: 5%;
+  }
+  .zona-interacao-tablet {
+top: clamp(83vh, 84vh, 85vh);
+    left: clamp(68vw, 69vw, 71vw);
+  }
+  .zona-interacao-tablet .tablet-img {
+    height: auto;
+    width: 77px; /* 110 × 0.7 */
   }
 }
+
+/* 1280×600 (innerHeight ~600px) */
+/* 1280×600 (innerHeight ~600px) */
+@media (min-width: 1280px) and (max-width: 1365px) {
+  .App .secao-tablet-modal {
+    transform-origin: top left;
+    transform: scale(0.70);
+    margin-left: 18%;
+    margin-top: 7%;
+  }
+  .zona-interacao-tablet {
+    top: clamp(89vh, 91vh, 93vh); 
+    left: clamp(64vw, 65vw, 67vw);
+  }
+  .zona-interacao-tablet .tablet-img {
+    height: auto;
+    width: 82.5px;
+  }
+}
+
+/* 1366×650 (innerHeight ~650px) */
+@media (min-width: 1366px) and (max-width: 1439px) {
+  .App .secao-tablet-modal {
+    transform-origin: top left;
+    transform: scale(0.77);
+    margin-left: 16%;
+    margin-top: 6%;
+  }
+  .zona-interacao-tablet {
+    top: clamp(88vh, 90vh, 92vh); 
+    left: clamp(64vw, 65vw, 67vw); 
+  }
+  .zona-interacao-tablet .tablet-img {
+    height: auto;
+    width: 82px;
+  }
+}
+
+/* 1440×780 (innerHeight ~780px) */
+@media (min-width: 1440px) and (max-width: 1535px) {
+  .App .secao-tablet-modal {
+    transform-origin: top left;
+    transform: scale(0.81);
+    margin-left: 16%;
+    margin-top: 7.5%;
+  }
+  .zona-interacao-tablet {
+    top: clamp(82vh, 85vh, 87vh);
+    left: clamp(64vw, 65vw, 66vw);
+  }
+  .zona-interacao-tablet .tablet-img {
+    height: auto;
+    width: 89px;
+  }
+}
+
+/* 1536×770 (innerHeight ~770px) */
+@media (min-width: 1536px) and (max-width: 1599px) {
+  .App .secao-tablet-modal {
+    transform-origin: top left;
+    transform: scale(0.82);
+    margin-left: 17%;
+    margin-top: 8%;
+  }
+  .zona-interacao-tablet {
+    top: clamp(85vh, 87.5vh, 89vh);
+    left: clamp(63.6vw, 64.6vw, 65.6vw);
+  }
+  .zona-interacao-tablet .tablet-img {
+    height: auto;
+    width: 93.5px;
+  }
+}
+
+/* 1600×800 (innerHeight ~800px) */
+@media (min-width: 1600px) and (max-width: 1919px) {
+  .App .secao-tablet-modal {
+    transform-origin: top left;
+    transform: scale(0.90);
+    margin-left: 18%;
+    margin-top: 7%;
+  }
+  .zona-interacao-tablet {
+    top: clamp(82vh, 87.5vh, 89vh);
+    left: clamp(63.5vw, 64.5vw, 65.5vw);
+  }
+  .zona-interacao-tablet .tablet-img {
+    height: auto;
+    width: 99px;
+  }
+}
+
+/* 1920×955 (innerHeight ~955px) */
+@media (min-width: 1920px) {
+  .App .secao-tablet-modal {
+    transform-origin: top left;
+    transform: scale(1);
+    margin-left: 19%;
+    margin-top: 10%;
+  }
+  .zona-interacao-tablet {
+    top: clamp(85vh, 87vh, 89vh); 
+    left: clamp(63vw, 64vw, 65vw);
+  }
   .zona-interacao-tablet .tablet-img {
     height: auto;
     width: 110px;
   }
-
-/* media query 1600px 820*/
-@media (max-width: 1600px) {
-
-  .zona-interacao-tablet {
-    top: 87vh;
-    left: 64.5vw;
-  }
-
-  .zona-interacao-tablet .tablet-img {
-    height: auto;
-    width: 90px;
-  }
-
 }
 
-/* media query 1440px por 810*/
-@media (max-width: 1440px) {
-  .zona-interacao-tablet {
-    top: 83.4vh;
-    left: 64.5vw;
+
+
+
+
+
+/* 1920x955*/
+
+/* @media (max-width: 1920px) {
+  .App .secao-tablet-modal {
+    transform-origin: top left;
+    transform: scale(1);
   }
 
-  .zona-interacao-tablet .tablet-img {
-    height: auto;
-    width: 90px;
-  }
-
-}
-
-/* media query 1366px x 690*/
-@media (max-width:1368px){
-
-  .zona-interacao-tablet {
-    top: 88vh;
-    left: 65vw;
-  }
-.zona-interacao-tablet .tablet-img {
-    height: auto;
-    width: 84px;
-  }
-  
-}
+} */
