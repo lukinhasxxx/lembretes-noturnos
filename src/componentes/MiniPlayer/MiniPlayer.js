@@ -5,14 +5,29 @@ const MiniPlayer = ({ musicaAtual, estaTocando, tocarOuPausar, proximaMusica, mu
     return (
 
         <div className="mini-player-container"> {}
-            <p className="nome-musica"> tocando no momento :{musicaAtual.nome} </p>
+            <div className="mini-player-display">
+                <p className="nome-musica" data-text={`Tocando no momento: ${musicaAtual.nome}`}>
+                 Tocando no momento: {musicaAtual.nome}
+                 </p>
+    
+        </div>
 
             <div className="controle-player">
-                <button onClick={musicaAnterior}>anterior</button>
+                <button className="botao-voltar" onClick={musicaAnterior}>
+                    <img src={process.env.PUBLIC_URL + '/imagens/player/voltar.png'} alt="botao de voltar musica" />
+                </button>
 
-                <button onClick={tocarOuPausar}>{estaTocando?'Pause':'Play'}</button>
 
-                <button onClick={proximaMusica}>proximo</button>
+            <button  className="botao-play-pause" onClick={tocarOuPausar}>
+                    <img
+                        src={process.env.PUBLIC_URL + (estaTocando ? '/imagens/player/pause.svg' : '/imagens/player/play.svg')}
+                        alt={estaTocando ? 'botao de pausar musica' : 'botao de tocar musica'}
+                     />
+            </button>
+
+                <button className="botao-avancar" onClick={proximaMusica}>
+                    <img src={process.env.PUBLIC_URL + '/imagens/player/avancar.png'} alt="botao de avancar a musica" />
+                </button>
             </div>
 
         </div>

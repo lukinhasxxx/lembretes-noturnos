@@ -27,9 +27,9 @@ const [luzRadio, setLuzRadio] = useState('#00D7FF')
 const audioRef = useRef(null);
 const playlist = [
   {nome:"Good Night\nFFASounds", src:"/audio/track1.mp3"},
-  {nome:"4EM\nGrimes", src:"/audio/track2.mp3"},
+  {nome:"4ÆM\nGrimes", src:"/audio/track2.mp3"},
   {nome:"Backyard\nLofium", src:"/audio/track3.mp3"},
-  {nome:"Antagonistic\nChris Cardena-4EM\nGrimes", src:"/audio/track4.mp3"},
+  {nome:"Antagonistic\nChris Cardena", src:"/audio/track4.mp3"},
   {nome:"Shadow of Winter\nFrosty", src:"/audio/track5.mp3"},
   {nome:"Rain\nLo-fi Ambience", src:"/audio/track6.mp3"},
   {nome:"Oblivion\nGrimes", src:"/audio/track7.mp3"},
