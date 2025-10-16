@@ -1,0 +1,219 @@
+/* simular um painelzinho de led em volta do nome da musica */
+
+:root {
+  --neon-c: #00e5ff;
+  --bg-holo: rgba(10, 10, 30, 0.5);
+}
+
+.mini-player-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  z-index: 10;
+  top: clamp(50vh, 60vh, 70vh);
+  left: clamp(6vw, 13vw, 20vw);
+  min-width: clamp(140px, 12vw, 220px);
+  max-width: clamp(14vw, 18vw, 28vw);  
+  position: absolute;
+  border-radius: 25px;
+  width: clamp(150px, 17vw, 340px); 
+  height: clamp(8vh, 13vh, 18vh); 
+  text-align: center;
+  background: rgb(10 10 30 / 38%);
+  border: 1px solid #00e5ff9e;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 12px #1900ffe0;
+  padding: clamp(6px, 0.6rem, 12px);
+  /*  font-family: "Orbitron", sans-serif; */
+}
+
+.controle-player {
+    display: flex;
+    gap: clamp(8px, 1.2vw, 10px);
+    justify-content: center;
+    margin-top: clamp(4px, 2.8%, 10px);
+    width: clamp(120px, 54%, 300px); 
+    height: auto;
+}
+
+.mini-player-display {
+    border-radius: 30px;
+    box-shadow: 0px 0px 10px rgb(129 76 149);
+    height: clamp(34%, 48%, 64%); 
+    width: 100%;
+    user-select: none;
+}
+
+.mini-player-container .botao-voltar img,
+.mini-player-container .botao-play-pause img,
+.mini-player-container .botao-avancar img {
+  height: auto;
+  width: 100%;
+  max-height: clamp(18px, 4.6vh, 52px);
+}
+
+.controle-player button {
+  background: transparent;
+  border: 1px solid #ababab00;
+  border-radius: 4px;
+  color: var(--neon-c);
+  padding: clamp(3px, 0.6vw, 3px); 
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.controle-player button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px var(--neon-c);
+}
+
+/* ---------------------------------------------- */
+/* A PARTIR DAQUI SÓ O EFEITO DE GLITCH NO TEXTO  */
+/* ---------------------------------------------- */
+
+
+.mini-player-container .mini-player-display .nome-musica {
+  max-height: 100%;
+  max-width: 100%;
+  white-space: pre-wrap;
+  color: #00FFFF;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(4px, 0.6vw, 12px);
+  position: relative;
+
+  text-shadow:
+    -1px  0    0 rgba(255,  0,  0, 0.8),
+     1px  0    0 rgba(  0,  0,255, 0.8),
+     0    2px  0 rgba(  0,255,  0, 0.6);
+  animation: text-glitch 2s infinite linear alternate-reverse;
+}
+
+.mini-player-container .mini-player-display .nome-musica::before,
+.mini-player-container .mini-player-display .nome-musica::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  color: inherit;
+  background: transparent;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.mini-player-container .mini-player-display .nome-musica::before {
+  left: 2px;
+  text-shadow: -1px 0 0 rgba(255,0,0,0.7);
+  animation: glitch-split 20s infinite steps(1, end);
+}
+
+.mini-player-container .mini-player-display .nome-musica::after {
+  left: -2px;
+  text-shadow: 1px 0 0 rgba(0,0,255,0.7);
+  animation: glitch-split 20s infinite steps(1, end) reverse;
+}
+
+@keyframes text-glitch {
+  0%,100% {
+    text-shadow:
+      -1px 0   0 rgba(255,  0,  0,0.8),
+       1px 0   0 rgba(  0,  0,255,0.8),
+       0   2px 0 rgba(  0,255,  0,0.6);
+  }
+  25% {
+    text-shadow:
+       2px -1px 0 rgba(255,  0,  0,0.8),
+      -2px  1px 0 rgba(  0,  0,255,0.8),
+       1px -2px 0 rgba(  0,255,  0,0.6);
+  }
+  50% {
+    text-shadow:
+      -1px  1px 0 rgba(255,  0,  0,0.8),
+       1px -1px 0 rgba(  0,  0,255,0.8),
+      -2px   0   0 rgba(  0,255,  0,0.6);
+  }
+  75% {
+    text-shadow:
+       1px  0   0 rgba(255,  0,  0,0.8),
+      -1px  0   0 rgba(  0,  0,255,0.8),
+       0    1px 0 rgba(  0,255,  0,0.6);
+  }
+}
+
+@keyframes glitch-split {
+
+  0%, 14%   { clip: rect(0, 9999px, 0, 0); transform: translateX(0); }
+
+  15%       { clip: rect(5px, 9999px, 15px, 0); transform: translateX(-4px); }
+  16%       { clip: rect(15px, 9999px, 30px, 0); transform: translateX(5px); }
+  17%, 24%  { clip: rect(0, 9999px, 0, 0); transform: translateX(0); } 
+
+ 
+  25%       { clip: rect(8px, 9999px, 22px, 0); transform: translateX(-3px); }
+  26%       { clip: rect(18px, 9999px, 35px, 0); transform: translateX(3px); }
+  27%, 39%  { clip: rect(0, 9999px, 0, 0); transform: translateX(0); } 
+
+  40%       { clip: rect(10px, 9999px, 25px, 0); transform: translateX(-3px); }
+  41%       { clip: rect(20px, 9999px, 40px, 0); transform: translateX(4px); }
+  42%, 59%  { clip: rect(0, 9999px, 0, 0); transform: translateX(0); } 
+
+  60%       { clip: rect(12px, 9999px, 28px, 0); transform: translateX(-2px); }
+  62%       { clip: rect(25px, 9999px, 45px, 0); transform: translateX(3px); }
+  64%, 79%  { clip: rect(0, 9999px, 0, 0); transform: translateX(0); }
+
+  80%       { clip: rect(6px, 9999px, 18px, 0); transform: translateX(-3px); }
+  81%       { clip: rect(16px, 9999px, 32px, 0); transform: translateX(3px); }
+  82%, 100% { clip: rect(0, 9999px, 0, 0); transform: translateX(0); }}
+
+
+
+
+
+
+  /* Até 1279px HD (innerHeight ~620px) */
+@media (max-width: 1279px) {
+  .mini-player-container {
+    top: 55%;
+  }
+}
+
+/* 1280×600 (innerHeight ~600px) */
+@media (min-width: 1280px) and (max-width: 1365px) {
+    .mini-player-container {
+    top: 54%;
+  }
+}
+
+/* 1366×650 (innerHeight ~650px) */
+@media (min-width: 1366px) and (max-width: 1439px) {
+    .mini-player-container {
+    top: 57%;
+  }
+}
+
+/* 1440×780 (innerHeight ~780px) */
+@media (min-width: 1440px) and (max-width: 1535px) {
+    .mini-player-container {
+    top: 54%;
+  }
+}
+
+/* 1536×770 (innerHeight ~770px) */
+@media (min-width: 1536px) and (max-width: 1599px) {
+    .mini-player-container {
+    top: 56%;
+  }
+}
+
+/* 1600×800 (innerHeight ~800px) */
+@media (min-width: 1600px) and (max-width: 1919px) {
+    .mini-player-container {
+    top: 56%;
+  }
+}
+
+/* 1920×955 (innerHeight ~955px) */
+@media (min-width: 1920px) {
+    .mini-player-container {
+    top: 58%;
+  }
+}

@@ -1,15 +1,13 @@
 import './PlayerRadio.css'
 
-const PlayerRadio = ({corLuzRadio, radioLigado, setRadioLigado}) => {
+const PlayerRadio = ({corLuzRadio, radioLigado, aoClicarNoRadio}) => {
 
-    const controlarRadio = () => {
-        setRadioLigado( ligado => !ligado )
-     }
+
 
 
     return (
         <div className='zona-radio' >
-          <div className='zona-interacao-radio' onClick={()=>controlarRadio()}>
+          <div className='zona-interacao-radio' onClick={aoClicarNoRadio}>
             <img 
                 className='imagem-radio' 
                 alt='imagem de um radio' 
