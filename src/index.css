@@ -164,7 +164,7 @@ top: clamp(83vh, 84vh, 85vh);
     transform-origin: top left;
     transform: scale(1);
     margin-left: 19%;
-    margin-top: 10%;
+    margin-top: 5%;
   }
   .zona-interacao-tablet {
     top: clamp(85vh, 87vh, 89vh); 
