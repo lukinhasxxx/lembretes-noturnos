@@ -34,3 +34,5 @@ O Lembretes Noturnos começa a partir da tag v2.0
 ## Status do projeto
 
 Ainda em andamento, mas a fase inicial pode ser acessada aqui https://lukinhasxxx.github.io/lembretes-noturnos/
+
+O projeto ainda se encontra com responsividade apenas em Desktop.
