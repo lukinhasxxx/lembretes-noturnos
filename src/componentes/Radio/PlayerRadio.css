@@ -45,11 +45,11 @@ position: relative;
 /* Até 1279px HD (innerHeight ~620px) */
 @media (max-width: 1279px) {
   .zona-interacao-radio {
-    left: clamp(8vw, 10vw, 12vw); 
-    top: clamp(74vh, 75vh, 76vh);
+    left: clamp(10vw, 15vw, 15vw); 
+    top: clamp(71vh, 72vh, 75vh);
   }
   .imagem-radio {
-    width: 123px;
+    width: 113px;
     height: auto;
   }
 }
