@@ -16,6 +16,8 @@ const [painelLigadoPermanente,setPainelLigadoPermanente] = useState(false)
 const [animacaoJaAtivada,setAnimacaoJaAtivada] = useState(false)
 const [primeiraMensagemPainel,setPrimeiraMensagemPainel] = useState(false)
 const [radioLigado, setRadioLigado] = useState(false)
+const [foiDesligadoComBotao, setfoiDesligadoComBotao] = useState(true)
+const [foiPausadoManualmente, setFoiPausadoManualmente] = useState(false);
 const [luzRadio, setLuzRadio] = useState('#00D7FF')
 
 
@@ -43,8 +45,10 @@ const [estaTocando, setEstaTocando] = useState(false);
 const tocarOuPausar = () => {
   if(estaTocando){
     audioRef.current.pause();
+    setFoiPausadoManualmente(true)
   } else {
     audioRef.current.play();
+    setFoiPausadoManualmente(false)
   }
   setEstaTocando(!estaTocando)
 }
@@ -61,25 +65,42 @@ setIndiceMusicaAtual ( (indiceAnterior)=> (indiceAnterior -1 +musicas.length) % 
 useEffect( () => {
   if (estaTocando){
     audioRef.current.play();
-    console.log(audioRef.current)
   }
-},[indiceMusicaAtual]  )
+},[indiceMusicaAtual, estaTocando]  )
+
+
 
 const gerenciarEstadoRadio = () => {
 
-  if (radioLigado) {
-    audioRef.current.pause();
-    setEstaTocando(false);  
-  } 
-
-  else {
-    audioRef.current.play(); 
-    setEstaTocando(true); 
+  if (!radioLigado) {
+    if (!foiPausadoManualmente || !foiDesligadoComBotao) {
+      audioRef.current.play();
+      setEstaTocando(true);
+      setFoiPausadoManualmente(false);
+      setfoiDesligadoComBotao(true);
+    } else {
+      audioRef.current.pause();
+      setEstaTocando(false);
+    }
   }
   setRadioLigado(ligado => !ligado);
 }
 
 
+
+
+
+const gerenciarDesligamentoRadio = () => {
+
+audioRef.current.pause();
+  setEstaTocando(false);
+  setRadioLigado(false);
+  setfoiDesligadoComBotao(false);
+
+  
+
+
+}
 
 
 
@@ -163,6 +184,8 @@ setLigarTablet(ligado =>!ligado);
     tocarOuPausar={tocarOuPausar}
     proximaMusica={proximaMusica}
     musicaAnterior={musicaAnterior}
+    aoDesligarRadio = {gerenciarDesligamentoRadio}
+
     />}
 
       <PlayerRadio 
