@@ -9,12 +9,11 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  z-index: 10;
+  z-index:3;
   top: clamp(50vh, 60vh, 70vh);
   left: clamp(6vw, 13vw, 20vw);
   min-width: clamp(140px, 12vw, 220px);
   max-width: clamp(14vw, 18vw, 28vw);  
-  position: absolute;
   border-radius: 25px;
   width: clamp(150px, 17vw, 340px); 
   height: clamp(8vh, 13vh, 18vh); 
@@ -24,6 +23,8 @@
   backdrop-filter: blur(6px);
   box-shadow: 0 0 12px #1900ffe0;
   padding: clamp(6px, 0.6rem, 12px);
+  cursor: auto;
+    /* position: absolute; */
   /*  font-family: "Orbitron", sans-serif; */
 }
 
@@ -191,9 +192,25 @@
   82%, 100% { clip: rect(0, 9999px, 0, 0); transform: translateX(0); }}
 
 
+/* ''parte arrastavel'' aqui, mini player */
 
+  
+.App .draggable-wrapper {
 
+  box-shadow: rgb(0, 0, 0) 1px 1px 10px;
+  border-radius: 49px;
+  cursor: grab;
+  position: absolute;
+  left: clamp(6vw, 13vw, 20vw);
+  top: clamp(50vh, 60vh, 70vh);
+  transform: translate(238px, -18px);
+  padding:clamp(8px, 1vw, 16px);
+  z-index: 1;
+}
 
+.App .draggable-wrapper:active {
+  cursor: grabbing;
+}
 
   /* Até 1279px HD (innerHeight ~620px) */
 @media (max-width: 1279px) {

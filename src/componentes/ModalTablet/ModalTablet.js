@@ -54,6 +54,9 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     return (
         <div>
             <section className='secao-tablet-modal'>
+
+            <div className="handle"></div>
+
                 <img className='tablet-modal' src={ process.env.PUBLIC_URL + '/imagens/tabletModal.png'}
                 style={{display: validarLigadoDesligado ? "" : " none" }}
                 alt='Modal do tablet'
