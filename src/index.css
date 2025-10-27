@@ -15,15 +15,15 @@ code {
 .App {
   height: 100vh;
   position: relative;
+  overflow: hidden;  
 }
 
 .App .secao-tablet-modal {
     width: 760px;
     height: 482px;
     position: absolute;
-    margin-left: 19%;
-    margin-top: 10%;
 }
+
  .video-background{
   position: fixed;
   top: 0;
@@ -72,7 +72,7 @@ top: clamp(83vh, 84vh, 85vh);
 @media (min-width: 1280px) and (max-width: 1365px) {
   .App .secao-tablet-modal {
     transform-origin: top left;
-    transform: scale(0.70);
+    transform: scale(0.66);
     margin-left: 18%;
     margin-top: 7%;
   }
@@ -90,7 +90,7 @@ top: clamp(83vh, 84vh, 85vh);
 @media (min-width: 1366px) and (max-width: 1439px) {
   .App .secao-tablet-modal {
     transform-origin: top left;
-    transform: scale(0.77);
+    transform: scale(0.70);
     margin-left: 16%;
     margin-top: 6%;
   }
@@ -163,8 +163,7 @@ top: clamp(83vh, 84vh, 85vh);
   .App .secao-tablet-modal {
     transform-origin: top left;
     transform: scale(1);
-    margin-left: 19%;
-    margin-top: 5%;
+
   }
   .zona-interacao-tablet {
     top: clamp(85vh, 87vh, 89vh); 
@@ -175,10 +174,6 @@ top: clamp(83vh, 84vh, 85vh);
     width: 110px;
   }
 }
-
-
-
-
 
 
 /* 1920x955*/

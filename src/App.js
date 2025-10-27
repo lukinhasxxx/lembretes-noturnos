@@ -1,4 +1,5 @@
 //aqui eh pra eu importar o provider, sem o contexto
+import Draggable from 'react-draggable';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -16,9 +17,13 @@ const [painelLigadoPermanente,setPainelLigadoPermanente] = useState(false)
 const [animacaoJaAtivada,setAnimacaoJaAtivada] = useState(false)
 const [primeiraMensagemPainel,setPrimeiraMensagemPainel] = useState(false)
 const [radioLigado, setRadioLigado] = useState(false)
+const [foiDesligadoComBotao, setfoiDesligadoComBotao] = useState(true)
+const [foiPausadoManualmente, setFoiPausadoManualmente] = useState(false);
 const [luzRadio, setLuzRadio] = useState('#00D7FF')
+const [volume, setVolume] = useState(1)
 
-
+const nodeRefMiniPlayer = useRef(null);
+const nodeRefTablet= useRef(null)
 
 
 // const [tabletJaIniciou,setTabletJaIniciou] = useState(false);
@@ -43,45 +48,59 @@ const [estaTocando, setEstaTocando] = useState(false);
 const tocarOuPausar = () => {
   if(estaTocando){
     audioRef.current.pause();
+    setFoiPausadoManualmente(true)
   } else {
     audioRef.current.play();
+    setFoiPausadoManualmente(false)
   }
   setEstaTocando(!estaTocando)
 }
 
 const proximaMusica= () => {
   // eh praticamente um(0 + 1) % 2 = 1. (1 + 1) % 2 = 0.
-  setIndiceMusicaAtual( (indiceAnterior)=> (indiceAnterior + 1) % musicas.length     )
+  setTimeout( ()=> {
+    setIndiceMusicaAtual( (indiceAnterior)=> (indiceAnterior + 1) % musicas.length)
+  },150 )
+  
 }
 
 const musicaAnterior = () => {
-setIndiceMusicaAtual ( (indiceAnterior)=> (indiceAnterior -1 +musicas.length) % musicas.length)
+    setTimeout( ()=> {
+    setIndiceMusicaAtual ( (indiceAnterior)=> (indiceAnterior -1 +musicas.length) % musicas.length)
+  },150  )
+
 }
 
 useEffect( () => {
   if (estaTocando){
     audioRef.current.play();
-    console.log(audioRef.current)
   }
-},[indiceMusicaAtual]  )
+},[indiceMusicaAtual, estaTocando]  )
+
 
 const gerenciarEstadoRadio = () => {
 
-  if (radioLigado) {
-    audioRef.current.pause();
-    setEstaTocando(false);  
-  } 
-
-  else {
-    audioRef.current.play(); 
-    setEstaTocando(true); 
+  if (!radioLigado) {
+    if (!foiPausadoManualmente || !foiDesligadoComBotao) {
+      audioRef.current.play();
+      setEstaTocando(true);
+      setFoiPausadoManualmente(false);
+      setfoiDesligadoComBotao(true);
+    } else {
+      audioRef.current.pause();
+      setEstaTocando(false);
+    }
   }
   setRadioLigado(ligado => !ligado);
 }
 
+const gerenciarDesligamentoRadio = () => {
 
-
-
+audioRef.current.pause();
+  setEstaTocando(false);
+  setRadioLigado(false);
+  setfoiDesligadoComBotao(false);
+}
 
 const adicionarLembrete = (textoDaNota) => {
 
@@ -90,7 +109,6 @@ const adicionarLembrete = (textoDaNota) => {
     texto: textoDaNota,
     fixar: false
   };
-
 
 setTimeout(()=> {
 
@@ -116,6 +134,16 @@ if(!painelLigadoPermanente){
 },200)
 };
 
+
+useEffect( ()=>{
+if(audioRef.current){
+  audioRef.current.volume=volume
+}
+
+
+},[volume] )
+
+
 function fixarLembrete(id) {
   setLembretes(lembretes.map(lembrete => {
     if (lembrete.id === id) {
@@ -132,7 +160,6 @@ function fixarLembrete(id) {
       setTimeout(()=>{
         setLembretes(lembretes.filter(lembrete => lembrete.id !== id))}
         ,200)
-
     }
     
 
@@ -153,17 +180,118 @@ setLigarTablet(ligado =>!ligado);
     <video autoPlay loop muted className='video-background' >
       <source src={process.env.PUBLIC_URL + '/videos/video-background.mp4'} type='video/mp4' />
     </video>
-    <audio ref={audioRef} src= {process.env.PUBLIC_URL +musicas[indiceMusicaAtual].src } />
+    <audio 
+    ref={audioRef}
+    src= {process.env.PUBLIC_URL +musicas[indiceMusicaAtual].src}
+    onEnded={proximaMusica}
+    input type='range'
+    />
 
-    {radioLigado === true &&
-    <MiniPlayer
-    radioLigado={radioLigado}
-    musicaAtual={musicas[indiceMusicaAtual]}
-    estaTocando= {estaTocando}
-    tocarOuPausar={tocarOuPausar}
-    proximaMusica={proximaMusica}
-    musicaAnterior={musicaAnterior}
-    />}
+
+{radioLigado === true &&
+   <Draggable 
+   nodeRef={nodeRefMiniPlayer}
+   bounds='parent'
+   distance={10}
+   enableUserSelectHack={false}
+   cancel="button, input, textarea, select, option, a, img"
+   >
+      <div 
+        className='draggable-wrapper'
+        ref={nodeRefMiniPlayer}
+        >
+          
+          <MiniPlayer
+          radioLigado={radioLigado}
+          musicaAtual={musicas[indiceMusicaAtual]}
+          estaTocando= {estaTocando}
+          tocarOuPausar={tocarOuPausar}
+          proximaMusica={proximaMusica}
+          musicaAnterior={musicaAnterior}
+          aoDesligarRadio = {gerenciarDesligamentoRadio}
+          volumeAtual={volume}
+          aoMudarVolume={setVolume}
+          />
+
+      </div>
+    </Draggable>
+}
+
+
+ {modalAberto && 
+<Draggable
+  nodeRef={nodeRefTablet}
+  bounds="parent"
+  enableUserSelectHack={false}
+  handle=".handle"
+  cancel="button, input, textarea, select, option, a, .no-drag"
+  defaultPosition={{
+    x: window.innerWidth * 0.2,
+    y: window.innerHeight * 0.09,
+  }}
+>
+  <div
+    ref={nodeRefTablet}
+    style={{ display: 'inline-block', position: 'absolute', top: 0, left: 0 }}
+  >
+    <ModalTablet
+      aoSubmeter={adicionarLembrete}
+      validarLigadoDesligado={ligarTablet}
+      painelLigadoPermanente={painelLigadoPermanente}
+      corNeon={setLuzRadio}
+      radioLigado={radioLigado}
+    />
+  </div>
+</Draggable>
+ }
+
+
+
+
+
+
+
+
+ {/* {modalAberto && 
+      <Draggable 
+      nodeRef={nodeRefTablet}
+      bounds='parent'
+      enableUserSelectHack={false}
+      cancel="button, input, textarea, select, option, a"
+      defaultPosition={{ 
+      x: window.innerWidth * 0.2,
+      y: window.innerHeight * 0.09,
+    }}
+      >
+        <div ref={nodeRefTablet} 
+        style={{display: 'inline-block', position: 'absolute',        top: 0,    
+        left: 0  }}
+        >
+
+              <ModalTablet
+                aoSubmeter={adicionarLembrete}
+                validarLigadoDesligado = {ligarTablet}
+                painelLigadoPermanente={painelLigadoPermanente}
+                corNeon = {setLuzRadio}
+                radioLigado={radioLigado}
+              />        
+        </div>
+      </Draggable>
+ }
+ */}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       <PlayerRadio 
         corLuzRadio = {luzRadio} 
@@ -172,15 +300,7 @@ setLigarTablet(ligado =>!ligado);
         aoClicarNoRadio = {gerenciarEstadoRadio}
         />
 
-          {modalAberto && 
-        <ModalTablet
-          aoSubmeter={adicionarLembrete}
-          validarLigadoDesligado = {ligarTablet}
-          painelLigadoPermanente={painelLigadoPermanente}
-          corNeon = {setLuzRadio}
-          radioLigado={radioLigado}
-        />
-       }
+        
 
         <div className='zona-interacao-tablet' 
         onClick={gerenciarTablet}>{ligarTablet}
