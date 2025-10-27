@@ -218,14 +218,17 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             </li>
                             <br></br>
                             <li>
-                                Com as notas dentro painel, fixar, desfixar
+                                Com as notas dentro painel, fixar, desfixar etc.
                             </li>
                             <br></br>
                             <li>
                                 Parcialmente com o sistema do tablet
                             </li>
                             <br></br>
-
+                            <li>Interagir com o rádio e com o player</li>
+                            <br></br>
+                            <li>Também é possível movimentar o tablet e o player de rádio livremente</li>
+                            <br></br>
                         </ui>
                     </div>
                 <div>Para adicionar uma nota, você pode navegar na aba no canto superior esquerdo da página ou

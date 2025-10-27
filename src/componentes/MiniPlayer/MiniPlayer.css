@@ -16,7 +16,7 @@
   max-width: clamp(14vw, 18vw, 28vw);  
   border-radius: 25px;
   width: clamp(150px, 17vw, 340px); 
-  height: clamp(8vh, 13vh, 18vh); 
+  height: clamp(8vh, 17vh, 20vh); 
   text-align: center;
   background: rgb(10 10 30 / 38%);
   border: 1px solid #00e5ff9e;
@@ -43,9 +43,9 @@
 
 .controle-player {
     display: flex;
-    gap: clamp(8px, 1.2vw, 10px);
+    gap: clamp(8px, 2vw, 21px);
     justify-content: center;
-    margin-top: clamp(4px, 2.8%, 10px);
+    margin-top: clamp(4px, 3.5%, 12px);
     width: clamp(120px, 70%, 300px);
     /* QUANDO FOR ADICIONANDO BOTAO NO PLAYER AUMENTA O WIDTH DE CIMA!!!!!!!!!!!! */
     height: auto;
@@ -67,6 +67,7 @@
   height: auto;
   width: 100%;
   max-height: clamp(18px, 4.6vh, 52px);
+  user-select: none;
 }
 
 .controle-player button {
@@ -92,6 +93,45 @@
 .botao-desligar:active img {
   transform: scale(1);
   transition: transform 0.2s ease;
+}
+
+.mini-player-container .controle-volume {
+    margin-left: -36%;
+    height: 27%;
+    position: relative;
+    user-select: none;
+}
+
+.mini-player-container .controle-volume .botao-volume {
+  margin-top: 31%;
+  cursor: pointer;
+  height: 75%;
+  width: auto;
+}
+
+.mini-player-container .controle-volume .botao-volume:hover{
+    transform: scale(1.07);
+    transition: transform 0.3s , box-shadow 0.3s;
+    box-shadow: rgb(0 0 0) 1px 1px 10px;
+    border-radius: 11px;
+}
+
+.mini-player-container .controle-volume .botao-volume:active {
+  transform: scale(0.95);
+  transition: transform 0.3s;
+
+}
+
+.mini-player-container .controle-volume img {
+  margin-top: 5%;
+}
+
+.mini-player-container .volume-slider {
+    user-select: none;
+    position: absolute;
+    margin-top: 37%;
+    margin-left: 25%;
+    margin-top: 60%;
 }
 
 /* ---------------------------------------------- */
@@ -201,8 +241,8 @@
   border-radius: 49px;
   cursor: grab;
   position: absolute;
-  left: clamp(6vw, 13vw, 20vw);
-  top: clamp(50vh, 60vh, 70vh);
+  left: clamp(6vw, 9vw, 20vw);
+  top: clamp(50vh, 57vh, 70vh);
   transform: translate(238px, -18px);
   padding:clamp(8px, 1vw, 16px);
   z-index: 1;

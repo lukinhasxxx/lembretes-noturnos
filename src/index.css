@@ -22,8 +22,8 @@ code {
     width: 760px;
     height: 482px;
     position: absolute;
-
 }
+
  .video-background{
   position: fixed;
   top: 0;
@@ -174,10 +174,6 @@ top: clamp(83vh, 84vh, 85vh);
     width: 110px;
   }
 }
-
-
-
-
 
 
 /* 1920x955*/
