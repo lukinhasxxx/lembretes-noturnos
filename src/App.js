@@ -20,6 +20,7 @@ const [radioLigado, setRadioLigado] = useState(false)
 const [foiDesligadoComBotao, setfoiDesligadoComBotao] = useState(true)
 const [foiPausadoManualmente, setFoiPausadoManualmente] = useState(false);
 const [luzRadio, setLuzRadio] = useState('#00D7FF')
+const [volume, setVolume] = useState(1)
 
 const nodeRefMiniPlayer = useRef(null);
 const nodeRefTablet= useRef(null)
@@ -57,11 +58,17 @@ const tocarOuPausar = () => {
 
 const proximaMusica= () => {
   // eh praticamente um(0 + 1) % 2 = 1. (1 + 1) % 2 = 0.
-  setIndiceMusicaAtual( (indiceAnterior)=> (indiceAnterior + 1) % musicas.length     )
+  setTimeout( ()=> {
+    setIndiceMusicaAtual( (indiceAnterior)=> (indiceAnterior + 1) % musicas.length)
+  },150 )
+  
 }
 
 const musicaAnterior = () => {
-setIndiceMusicaAtual ( (indiceAnterior)=> (indiceAnterior -1 +musicas.length) % musicas.length)
+    setTimeout( ()=> {
+    setIndiceMusicaAtual ( (indiceAnterior)=> (indiceAnterior -1 +musicas.length) % musicas.length)
+  },150  )
+
 }
 
 useEffect( () => {
@@ -127,6 +134,16 @@ if(!painelLigadoPermanente){
 },200)
 };
 
+
+useEffect( ()=>{
+if(audioRef.current){
+  audioRef.current.volume=volume
+}
+
+
+},[volume] )
+
+
 function fixarLembrete(id) {
   setLembretes(lembretes.map(lembrete => {
     if (lembrete.id === id) {
@@ -167,6 +184,7 @@ setLigarTablet(ligado =>!ligado);
     ref={audioRef}
     src= {process.env.PUBLIC_URL +musicas[indiceMusicaAtual].src}
     onEnded={proximaMusica}
+    input type='range'
     />
 
 
@@ -174,7 +192,7 @@ setLigarTablet(ligado =>!ligado);
    <Draggable 
    nodeRef={nodeRefMiniPlayer}
    bounds='parent'
-   distance={100}
+   distance={10}
    enableUserSelectHack={false}
    cancel="button, input, textarea, select, option, a, img"
    >
@@ -182,7 +200,7 @@ setLigarTablet(ligado =>!ligado);
         className='draggable-wrapper'
         ref={nodeRefMiniPlayer}
         >
-              
+          
           <MiniPlayer
           radioLigado={radioLigado}
           musicaAtual={musicas[indiceMusicaAtual]}
@@ -191,6 +209,8 @@ setLigarTablet(ligado =>!ligado);
           proximaMusica={proximaMusica}
           musicaAnterior={musicaAnterior}
           aoDesligarRadio = {gerenciarDesligamentoRadio}
+          volumeAtual={volume}
+          aoMudarVolume={setVolume}
           />
 
       </div>
