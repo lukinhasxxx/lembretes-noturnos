@@ -21,6 +21,7 @@ const [foiDesligadoComBotao, setfoiDesligadoComBotao] = useState(true)
 const [foiPausadoManualmente, setFoiPausadoManualmente] = useState(false);
 const [luzRadio, setLuzRadio] = useState('#00D7FF')
 const [volume, setVolume] = useState(1)
+const [ligarPainelRadio, setLigarPainelRadio] = useState(false)
 
 const nodeRefMiniPlayer = useRef(null);
 const nodeRefTablet= useRef(null)
@@ -138,10 +139,20 @@ if(!painelLigadoPermanente){
 useEffect( ()=>{
 if(audioRef.current){
   audioRef.current.volume=volume
+}},[volume] )
+
+
+const painelRadio = () => {
+
+if (estaTocando) {
+   setLigarPainelRadio(true)
+} else {
+  setLigarPainelRadio(false)
 }
 
+return ligarPainelRadio
+}
 
-},[volume] )
 
 
 function fixarLembrete(id) {
@@ -177,7 +188,7 @@ setLigarTablet(ligado =>!ligado);
     
     <div className="App">
 
-    <video autoPlay loop muted className='video-background' >
+    <video autoPlay loop muted disablePictureInPicture className='video-background' >
       <source src={process.env.PUBLIC_URL + '/videos/video-background.mp4'} type='video/mp4' />
     </video>
     <audio 
@@ -247,11 +258,6 @@ setLigarTablet(ligado =>!ligado);
 
 
 
-
-
-
-
-
  {/* {modalAberto && 
       <Draggable 
       nodeRef={nodeRefTablet}
@@ -283,21 +289,12 @@ setLigarTablet(ligado =>!ligado);
 
 
 
-
-
-
-
-
-
-
-
-
-
       <PlayerRadio 
         corLuzRadio = {luzRadio} 
         radioLigado={radioLigado} 
         setRadioLigado={setRadioLigado}
         aoClicarNoRadio = {gerenciarEstadoRadio}
+        painelRadio = {painelRadio}
         />
 
         
