@@ -1,6 +1,6 @@
 import './PlayerRadio.css'
 
-const PlayerRadio = ({corLuzRadio, radioLigado, aoClicarNoRadio}) => {
+const PlayerRadio = ({corLuzRadio, radioLigado, aoClicarNoRadio, painelRadio}) => {
 
 
 
@@ -12,8 +12,11 @@ const PlayerRadio = ({corLuzRadio, radioLigado, aoClicarNoRadio}) => {
                 className='imagem-radio' 
                 alt='imagem de um radio' 
                 src = { process.env.PUBLIC_URL + '/imagens/playerRadio.png'} 
-                style={{filter: radioLigado? `drop-shadow(3px 14px 37px ${corLuzRadio})`: "none"}}
+                style={{filter: radioLigado? `drop-shadow(-18px 38px 37px ${corLuzRadio})`: "none"}}
             />
+            <div className='painel-radio'
+            style={{filter: painelRadio()? ` opacity(0.8)`: "opacity(0)"}}
+            ></div>
         </div>
     </div>
     )
