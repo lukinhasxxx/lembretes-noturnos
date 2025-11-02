@@ -47,10 +47,26 @@ code {
 
 
 
+/* ZOOM 125% 1280 X 720 (INNERHEIGHT ~448PX) */
+@media (min-width: 1024px) and (max-width: 1092px) {
+  .App .secao-tablet-modal {
+    transform-origin: top left;
+    transform: scale(0.56);
+    margin-left: 13%;
+    margin-top: 5%;
+  }
+  .zona-interacao-tablet {
+    top: clamp(93vh, 94.5vh, 96vh);
+    left: clamp(66vw, 66.5vw, 67vw);
+  }
+  .zona-interacao-tablet .tablet-img {
+    height: auto;
+    width: 66px; 
+  }
+}
 
-
-/* Até 1279px HD (innerHeight ~620px) */
-@media (max-width: 1279px) {
+/* ZOOM 125% 1366 X 768 (INNERHEIGHT ~486PX) */
+@media (min-width: 1093px) and (max-width: 1151px) {
   .App .secao-tablet-modal {
     transform-origin: top left;
     transform: scale(0.7);
@@ -58,16 +74,36 @@ code {
     margin-top: 5%;
   }
   .zona-interacao-tablet {
-top: clamp(83vh, 84vh, 85vh);
+    top: clamp(83vh, 84vh, 85vh);
     left: clamp(68vw, 69vw, 71vw);
   }
   .zona-interacao-tablet .tablet-img {
     height: auto;
-    width: 77px; /* 110 × 0.7 */
+    width: 77px; 
   }
 }
 
-/* 1280×600 (innerHeight ~600px) */
+/* ZOOM 125% 1440 X 900 (INNERHEIGHT ~592PX) */
+@media (min-width: 1152px) and (max-width: 1279px) {
+
+
+  
+  .App .secao-tablet-modal {
+    transform-origin: top left;
+    transform: scale(0.60);
+    margin-left: 13%;
+    margin-top: 5%;
+  }
+  .zona-interacao-tablet {
+    top: clamp(85vh, 88vh, 89vh);
+    left: clamp(66vw, 66vw, 68vw);
+  }
+  .zona-interacao-tablet .tablet-img {
+    height: auto;
+    width: 77px;
+  }
+}
+
 /* 1280×600 (innerHeight ~600px) */
 @media (min-width: 1280px) and (max-width: 1365px) {
   .App .secao-tablet-modal {
@@ -131,7 +167,7 @@ top: clamp(83vh, 84vh, 85vh);
     margin-top: 8%;
   }
   .zona-interacao-tablet {
-    top: clamp(85vh, 87.5vh, 89vh);
+    top: clamp(87vh, 89.5vh, 91vh);
     left: clamp(63.6vw, 64.6vw, 65.6vw);
   }
   .zona-interacao-tablet .tablet-img {
@@ -149,7 +185,7 @@ top: clamp(83vh, 84vh, 85vh);
     margin-top: 7%;
   }
   .zona-interacao-tablet {
-    top: clamp(82vh, 87.5vh, 89vh);
+    top: clamp(82vh, 88.5vh, 90vh);
     left: clamp(63.5vw, 64.5vw, 65.5vw);
   }
   .zona-interacao-tablet .tablet-img {
@@ -166,7 +202,7 @@ top: clamp(83vh, 84vh, 85vh);
 
   }
   .zona-interacao-tablet {
-    top: clamp(85vh, 87vh, 89vh); 
+    top: clamp(85vh, 87.7vh, 89vh); 
     left: clamp(63vw, 64vw, 65vw);
   }
   .zona-interacao-tablet .tablet-img {
@@ -174,14 +210,3 @@ top: clamp(83vh, 84vh, 85vh);
     width: 110px;
   }
 }
-
-
-/* 1920x955*/
-
-/* @media (max-width: 1920px) {
-  .App .secao-tablet-modal {
-    transform-origin: top left;
-    transform: scale(1);
-  }
-
-} */
