@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/lembretes-noturnos/static/css/main.912894be.css",
-    "main.js": "/lembretes-noturnos/static/js/main.34a7015e.js",
+    "main.css": "/lembretes-noturnos/static/css/main.db955bda.css",
+    "main.js": "/lembretes-noturnos/static/js/main.1f803c6b.js",
     "index.html": "/lembretes-noturnos/index.html",
-    "main.912894be.css.map": "/lembretes-noturnos/static/css/main.912894be.css.map",
-    "main.34a7015e.js.map": "/lembretes-noturnos/static/js/main.34a7015e.js.map"
+    "main.db955bda.css.map": "/lembretes-noturnos/static/css/main.db955bda.css.map",
+    "main.1f803c6b.js.map": "/lembretes-noturnos/static/js/main.1f803c6b.js.map"
   },
   "entrypoints": [
-    "static/css/main.912894be.css",
-    "static/js/main.34a7015e.js"
+    "static/css/main.db955bda.css",
+    "static/js/main.1f803c6b.js"
   ]
 }
