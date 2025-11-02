@@ -14,8 +14,17 @@ const PlayerRadio = ({corLuzRadio, radioLigado, aoClicarNoRadio, painelRadio}) =
                 src = { process.env.PUBLIC_URL + '/imagens/playerRadio.png'} 
                 style={{filter: radioLigado? `drop-shadow(-18px 38px 37px ${corLuzRadio})`: "none"}}
             />
-            <div className='painel-radio'
-            style={{filter: painelRadio()? ` opacity(0.8)`: "opacity(0)"}}
+            <div 
+            className='painel-shadow'
+            style={{filter: painelRadio()? ` opacity(1)`: "opacity(0)"}}
+            >
+
+            </div>
+
+            
+            <div 
+                className='painel-radio'
+                style={{filter: painelRadio()? ` opacity(0.9)`: "opacity(0)"}}
             ></div>
         </div>
     </div>
