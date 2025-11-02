@@ -101,7 +101,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 <div className='texto-alterar-luz-radio' > Clique no botão ao lado para mudar a luz do rádio</div> : 
                     
                 <div> 
-                    <p className='aviso-radio-desligado' >O rádio está <strong>desligado</strong> no momento. 
+                    <p className='aviso-radio-desligado' >O led do rádio está <strong>desligado</strong> no momento. 
                         <br></br>
                         Para ligar, clique no rádio na escada.
                     </p> 
