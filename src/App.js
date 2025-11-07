@@ -10,6 +10,7 @@ import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import MiniPlayer from './componentes/MiniPlayer/MiniPlayer';
 
 
+
 function App() {
 
 const [lembretes, setLembretes] = useState([])
@@ -22,9 +23,12 @@ const [foiPausadoManualmente, setFoiPausadoManualmente] = useState(false);
 const [luzRadio, setLuzRadio] = useState('#00D7FF')
 const [volume, setVolume] = useState(1)
 const [ligarPainelRadio, setLigarPainelRadio] = useState(false)
+const [ligarTabletPrimeiraVez, setLigarTabletPrimeiraVez] = useState(false)
 
 const nodeRefMiniPlayer = useRef(null);
 const nodeRefTablet= useRef(null)
+
+
 
 
 // const [tabletJaIniciou,setTabletJaIniciou] = useState(false);
@@ -181,6 +185,7 @@ const gerenciarTablet = () => {
 
 setModalAberto(ligado=> !ligado);
 setLigarTablet(ligado =>!ligado);
+setLigarTabletPrimeiraVez(true);
 }
 
   return (

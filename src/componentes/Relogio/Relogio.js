@@ -17,10 +17,9 @@ return () => {
 },[])
 
     return (
-    <div>
+    <div style={{display:'flex'}}>
         <div className='relogio-tablet'>
             <span>{dataAtual.toLocaleTimeString('pt-BR',{ hour: '2-digit',minute: '2-digit'})}</span>
-            <br></br>
             <span>{dataAtual.toLocaleDateString('pt-BR')}</span>
         </div>
     </div>

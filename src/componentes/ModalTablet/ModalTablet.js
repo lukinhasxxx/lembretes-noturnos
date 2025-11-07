@@ -4,6 +4,7 @@ import Botao from '../Botao'
 import { useState,useContext } from 'react'
 import Relogio from '../Relogio/Relogio'
 import WindowBar from '../WindowBar/WindowBar'
+import BotaoUpload from '../BotaoUpload'
 
 const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, corNeon, radioLigado}) => {
 
@@ -16,6 +17,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         app_lembrete:'about.exe',
         app_config:'config.exe'
     })
+    const [previa, setPrevia] = useState(null)
+    const [mudarWallpaper, setMudarWallpaper] = useState(false)
 
     const aoSalvar = (evento) => {
         evento.preventDefault()
@@ -45,6 +48,18 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 setTelaAtiva('desktop')} 
             },300)
 }
+    
+        const lidarComMudancas = (evento) => {
+        const arquivo = evento.target.files[0]
+        
+        if (arquivo) {
+            setPrevia (URL.createObjectURL(arquivo));
+            console.log("teste arquivo",arquivo)
+            }
+            setMudarWallpaper(arquivo)
+        }
+        
+
     // depois adaptar direito essa funcao pra reciclar tudo
     // const abrirLembretes = (nomeDoApp) =>{
     // const proximaTela = 'nomeDoApp';
@@ -61,8 +76,23 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 style={{display: validarLigadoDesligado ? "" : " none" }}
                 alt='Modal do tablet'
             />
-                        <div className='tablet-tela'  > 
-            <div className='area-de-trabalho' style={{backgroundImage:`url(${process.env.PUBLIC_URL}/imagens/windows/windowsWallpaper.jpg)`,backgroundRepeat:"no-repeat"}}  >
+    <div className='tablet-tela' > 
+            <div 
+                className='area-de-trabalho' 
+                style={{
+                    backgroundImage: mudarWallpaper ? `url(${previa})`:
+                    `url(${process.env.PUBLIC_URL}/imagens/windows/windowsWallpaper.jpg)`
+                
+                
+                }}
+                    
+            >
+
+                    {/* ,backgroundRepeat:"no-repeat" */}
+
+
+
+
             
                 {/* aqui manda a partir da area de trabalho */}
                 {/* icone */}
@@ -114,6 +144,14 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     style={{display: radioLigado? "block":"none"}}
                     onChange={(evento)=>{corNeon(evento.target.value)}}
                 />
+
+            
+                <BotaoUpload 
+                previa={previa}
+                setPrevia={setPrevia}
+                lidarComMudancas={lidarComMudancas}
+                />
+
 
             </div>
             )}
@@ -285,17 +323,17 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
                 <div className='idioma'>
                     <span>POR</span>
-                    <br></br>
+                    
                     <span>PTB2</span>
                 </div>
                 <Relogio/>
-      </div>
-        <div className='icone-notificacoes' >
-        <img src={ process.env.PUBLIC_URL+  "/imagens/windows/iconeNotificacoes.png"} alt="Icone de notificacoes" />
-        </div> 
-    </div>
-
         </div>
+            <div className='icone-notificacoes' >
+            <img src={ process.env.PUBLIC_URL+  "/imagens/windows/iconeNotificacoes.png"} alt="Icone de notificacoes" />
+            </div> 
+        </div>
+
+    </div>
             </section>
     </div>
 
