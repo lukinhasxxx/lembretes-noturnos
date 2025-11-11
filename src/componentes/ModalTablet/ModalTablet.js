@@ -118,42 +118,66 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 {/* app de fato */}
                 {telaAtiva ==='config.exe' && (
                    
-            <div className='janela-configuracao-led'  >
+
+    <div>
                 <WindowBar 
                     fecharApp = {fecharApp}
                     idDoAppPraFechar='app_config'
                 />
-                    <span className='texto-configuracao' >Configurações</span>
-                    <p className='texto-explicacao' >Aqui você pode configurar a luz de alguns elementos do cenário </p>
-                    <h3 className='luz-radio' >Luz do rádio</h3>
 
-            {radioLigado ?  
-                <div className='texto-alterar-luz-radio' > Clique no botão ao lado para mudar a luz do rádio</div> : 
-                    
-                <div> 
-                    <p className='aviso-radio-desligado' >O led do rádio está <strong>desligado</strong> no momento. 
-                        <br></br>
-                        Para ligar, clique no rádio na escada.
-                    </p> 
-                </div>
-            }
-
-                <input 
-                    className='input-cor' 
-                    type='color' 
-                    style={{display: radioLigado? "block":"none"}}
-                    onChange={(evento)=>{corNeon(evento.target.value)}}
-                />
-
-            
-                <BotaoUpload 
-                previa={previa}
-                setPrevia={setPrevia}
-                lidarComMudancas={lidarComMudancas}
-                />
+        
 
 
-            </div>
+        
+        <div className='janela-configuracao-led' >
+            <div className='wrapper-configuracao' >
+
+                        <span className='texto-configuracao' >Configurações</span>
+                        <p className='texto-explicacao' >Aqui você pode configurar algumas coisas do sistema e/ou cenário </p>
+                        <h3 className='luz-radio' >Luz do rádio</h3>
+
+                {radioLigado ?  
+                    <div className='texto-alterar-luz-radio' > Clique no botão ao lado para mudar a luz do rádio</div> : 
+                        
+                    <div> 
+                        <p className='aviso-radio-desligado' >O led do rádio está <strong>desligado</strong> no momento. 
+                            <br></br>
+                            Para ligar, clique no rádio na escada.
+                        </p> 
+                    </div>
+                }
+
+                    <input 
+                        className='input-cor' 
+                        type='color' 
+                        style={{display: radioLigado? "block":"none"}}
+                        onChange={(evento)=>{corNeon(evento.target.value)}}
+                    />
+
+                <h3 className='texto-wallpaper' >Mudar wallpaper do sistema</h3>
+
+                    <BotaoUpload 
+                    previa={previa}
+                    setPrevia={setPrevia}
+                    lidarComMudancas={lidarComMudancas}
+                    />
+
+        </div>
+
+
+
+
+        </div>
+
+
+
+
+
+</div>
+
+
+
+       
             )}
                 
                 {/* APP de fato */}
@@ -323,7 +347,6 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
                 <div className='idioma'>
                     <span>POR</span>
-                    
                     <span>PTB2</span>
                 </div>
                 <Relogio/>

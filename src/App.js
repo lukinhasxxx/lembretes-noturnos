@@ -185,7 +185,8 @@ const gerenciarTablet = () => {
 
 setModalAberto(ligado=> !ligado);
 setLigarTablet(ligado =>!ligado);
-setLigarTabletPrimeiraVez(true);
+setLigarTabletPrimeiraVez(true)
+console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
 }
 
   return (
@@ -234,7 +235,7 @@ setLigarTabletPrimeiraVez(true);
 }
 
 
- {modalAberto && 
+ {ligarTabletPrimeiraVez && 
 <Draggable
   nodeRef={nodeRefTablet}
   bounds="parent"
@@ -248,7 +249,7 @@ setLigarTabletPrimeiraVez(true);
 >
   <div
     ref={nodeRefTablet}
-    style={{ display: 'inline-block', position: 'absolute', top: 0, left: 0 }}
+    style={{ display: modalAberto? 'inline-block':'none', position: 'absolute', top: 0, left: 0 }}
   >
     <ModalTablet
       aoSubmeter={adicionarLembrete}
