@@ -1,12 +1,23 @@
-import { useState } from "react"
+import "./botaoUpload.css"
 
 const BotaoUpload = ({previa, lidarComMudancas}) => {
     
 
     return (
-        <div>
-            <input type="file" accept="image/*" onChange={lidarComMudancas}
-            />
+        <div className="wrapper-upload">
+            <label className="upload">
+                <img className="imagem-upload" 
+                    alt="imagem do upload" 
+                    src={process.env.PUBLIC_URL+ "/imagens/windows/botaoUpload.png" }
+                />
+
+                <input type="file"
+                    className="botao-upload"
+                    accept="image/*"
+                    onChange={lidarComMudancas}
+                />
+            </label>
+
             {
                 previa && <img 
                 className="previa-wallpaper" 
@@ -15,7 +26,6 @@ const BotaoUpload = ({previa, lidarComMudancas}) => {
                 width="100"
                 />
              }
-            <div style={{color:'green',cursor:'pointer'}} >CLICA E VE SE A IMAGEM EH AP REVIA MESMO</div>
             
         </div>
     )

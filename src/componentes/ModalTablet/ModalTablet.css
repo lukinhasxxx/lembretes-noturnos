@@ -233,7 +233,7 @@ margin-left: -29px;
     flex-direction: column;
     user-select: none;
     height: 319px;
-    width: 664px;
+    width: 665px;
     background-color: rgb(215, 218, 243);
 }
 
@@ -266,18 +266,7 @@ margin: 2% 4%;
   text-shadow: 1px 1px 1px rgb(71 255 77 / 93%);
 }
 
-.janela-configuracao-led img{
-    height: 26px;
-    margin-left: 634px;
-    margin-top: 4px;
-}
 
- .janela-configuracao-led .previa-wallpaper {
-  height: 50px;
-  width: 100px;
-  margin-left: 65%;
-  margin-top: 4px;
-}
 
 
 
