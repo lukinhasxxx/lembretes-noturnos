@@ -1,0 +1,40 @@
+.wrapper-upload {
+position: relative;
+width: 150px;
+height: 54px;
+margin-left: 2%;
+
+}
+
+
+.wrapper-upload .imagem-upload {
+position: absolute;
+border-radius: 6px;
+box-shadow: 2px 2px 4px #2b3bfc;
+position: absolute;
+width: 150px;
+height: 54px;
+}
+
+.wrapper-upload .imagem-upload:hover{
+transform: scale(1.05);
+box-shadow: 3px 4px 11px #2b3bfc;
+transition: transform 0.25s, box-shadow 0.25s;
+}
+
+
+
+.wrapper-upload .previa-wallpaper {
+height: 110px;
+width: 180px;
+margin-left: 174%;
+margin-top: -32%;
+}
+
+.wrapper-upload .botao-upload {
+display: none; 
+width: 146px;
+height: 50px;
+
+
+}

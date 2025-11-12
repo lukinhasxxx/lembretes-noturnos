@@ -11,9 +11,14 @@
     left: 6.35%;
 }
 
+/* wallpaper */
+
 .tablet-tela .area-de-trabalho {
-width: 665px;
-background-size: contain;
+    width: 665px;
+    height: 101%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 /* about */
@@ -23,7 +28,7 @@ background-size: contain;
   background: linear-gradient(to right, #d0cbd5, #fff3c6);
   padding: 36px 64px;
   align-self: center;
-  height: 244px;
+  height: 247px;
   overflow-y: auto;
   position: relative;
 }
@@ -212,6 +217,7 @@ margin-left: -29px;
 
 }
 
+
 .icones-apps-abertos .icone-na-barra .icone-na-barra-led {
   user-select: none;
 }
@@ -221,48 +227,50 @@ margin-left: -29px;
 }
 
 .janela-configuracao-led {
-  position: relative;
+  overflow: auto;
+    position: relative;
     display: flex;
     flex-direction: column;
     user-select: none;
-    height: 350px;
-    width: 664px;
+    height: 319px;
+    width: 665px;
     background-color: rgb(215, 218, 243);
 }
 
+
+.janela-configuracao-led .wrapper-configuracao {
+margin: 2% 4%;
+}
+.janela-configuracao-led .wrapper-configuracao p {
+  margin-left: 3%;
+}
+
 .janela-configuracao-led .texto-explicacao {
-  margin-top: 10%;
-  margin-left: 6%;
+ 
+ 
 }
 
 .luz-radio {
   display: inline-block;
-  margin-top: 12;
-  margin-left: 6%;
+
+  
 }
  .janela-configuracao-led .aviso-radio-desligado,
 .janela-configuracao-led .texto-alterar-luz-radio
  {
-  margin-left: 8%;
-  margin-top: -2%;
+  
+  margin-top: 1%;
 }
 
 .janela-configuracao-led .texto-configuracao {
   text-shadow: 1px 1px 1px rgb(71 255 77 / 93%);
 }
 
-.janela-configuracao-led img{
-    height: 26px;
-    margin-left: 634px;
-    margin-top: 4px;
-}
+
 
 
 
 .janela-configuracao-led span {
-  position: absolute;
-  margin-top: 7%;
-  margin-left: 4%;
   font-size: 26px;
 }
 
@@ -297,10 +305,10 @@ form h2 {
 .tablet-tela .barra-de-tarefas {
     display: flex;
     position: absolute;
-    background-color: rgb(0, 0, 0, 1);
+    background-color: rgb(0, 0, 0, 0.01);
     height: 36px;
     width: 666px;
-    top: 91.6%;
+    top: 91.7%;
     left: 0%;
 }
 
@@ -388,8 +396,9 @@ background-color: rgba(46, 45, 45, 0.76);
   width: 35px;
 }
 .idioma span {
-  padding-top: 2px;
-  margin-left: 4px;
+    display: flex;
+    margin-top: 9%;
+    margin-left: 13%;
 }
 
 .idioma:hover {

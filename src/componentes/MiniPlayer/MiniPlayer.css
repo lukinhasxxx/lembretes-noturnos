@@ -136,15 +136,62 @@
 
 /* NEGOCIO DE VOLUME NO FIREFOX */
 
-/* AQUI EH a BOLINHA PRO FIREFOX!!!! */
-.mini-player-container .volume-slider::-moz-range-thumb {
-background-color: red;
-}
-/* BARRA pro FIREFOX */
-.mini-player-container .volume-slider::-moz-range-track {
-  background-color: pink;
+/* Firefox */
+.mini-player-container .volume-slider {
+  -moz-appearance: none; /* remove estilo padrão */
+  appearance: none;
+  width: 6vw;
+  height: 1.5vh;
+  background: transparent;
+  cursor: pointer;
+  margin-left: 10px;
 }
 
+/* barra completa */
+.mini-player-container .volume-slider::-moz-range-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
+  border: 1px solid rgba(0, 217, 255, 0.4);
+}
+
+/* parte preenchida da barra (até o thumb) */
+.mini-player-container .volume-slider::-moz-range-progress {
+  height: 6px;
+  background: rgba(0, 217, 255, 0.4);
+  border-radius: 3px;
+}
+
+/* bolinha */
+.mini-player-container .volume-slider::-moz-range-thumb {
+  -moz-appearance: none;
+  appearance: none;
+  width: clamp(12px,14px,18px);
+  height: clamp(12px,14px,18px);
+  background: #00e1ff;
+  border-radius: 50%;
+  border: none;
+  box-shadow: 
+    0 0 5px #00D7FF,
+    0 0 10px #00D7FF;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+/* hover */
+.mini-player-container .volume-slider::-moz-range-thumb:hover {
+  box-shadow: 
+    0 0 10px #00D7FF,
+    0 0 20px #00D7FF;
+}
+
+/* active */
+.mini-player-container .volume-slider:active::-moz-range-thumb {
+  transform: scale(1.1);
+  box-shadow: 
+    0 0 15px #00D7FF,
+    0 0 30px #00D7FF;
+}
 
 
 
