@@ -1,11 +1,13 @@
 .relogio-tablet {
+    display: flex;
+    flex-direction: column;
     width: 86px;
     height: 36px;
     color: white;
     font-size: 13px;
     margin-left: 10px;
     user-select: none;
-
+    text-align: center;
 }
 .relogio-tablet span {
     margin-left: 8px;

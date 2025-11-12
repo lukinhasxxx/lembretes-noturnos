@@ -4,6 +4,7 @@ import Botao from '../Botao'
 import { useState,useContext } from 'react'
 import Relogio from '../Relogio/Relogio'
 import WindowBar from '../WindowBar/WindowBar'
+import BotaoUpload from '../BotaoUpload'
 
 const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, corNeon, radioLigado}) => {
 
@@ -16,6 +17,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         app_lembrete:'about.exe',
         app_config:'config.exe'
     })
+    const [previa, setPrevia] = useState(null)
+    const [mudarWallpaper, setMudarWallpaper] = useState(false)
 
     const aoSalvar = (evento) => {
         evento.preventDefault()
@@ -45,6 +48,18 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 setTelaAtiva('desktop')} 
             },300)
 }
+    
+        const lidarComMudancas = (evento) => {
+        const arquivo = evento.target.files[0]
+        
+        if (arquivo) {
+            setPrevia (URL.createObjectURL(arquivo));
+            console.log("teste arquivo",arquivo)
+            }
+            setMudarWallpaper(arquivo)
+        }
+        
+
     // depois adaptar direito essa funcao pra reciclar tudo
     // const abrirLembretes = (nomeDoApp) =>{
     // const proximaTela = 'nomeDoApp';
@@ -61,8 +76,23 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 style={{display: validarLigadoDesligado ? "" : " none" }}
                 alt='Modal do tablet'
             />
-                        <div className='tablet-tela'  > 
-            <div className='area-de-trabalho' style={{backgroundImage:`url(${process.env.PUBLIC_URL}/imagens/windows/windowsWallpaper.jpg)`,backgroundRepeat:"no-repeat"}}  >
+    <div className='tablet-tela' > 
+            <div 
+                className='area-de-trabalho' 
+                style={{
+                    backgroundImage: mudarWallpaper ? `url(${previa})`:
+                    `url(${process.env.PUBLIC_URL}/imagens/windows/windowsWallpaper.jpg)`
+                
+                
+                }}
+                    
+            >
+
+                    {/* ,backgroundRepeat:"no-repeat" */}
+
+
+
+
             
                 {/* aqui manda a partir da area de trabalho */}
                 {/* icone */}
@@ -88,34 +118,66 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 {/* app de fato */}
                 {telaAtiva ==='config.exe' && (
                    
-            <div className='janela-configuracao-led'  >
+
+    <div>
                 <WindowBar 
                     fecharApp = {fecharApp}
                     idDoAppPraFechar='app_config'
                 />
-                    <span className='texto-configuracao' >Configurações</span>
-                    <p className='texto-explicacao' >Aqui você pode configurar a luz de alguns elementos do cenário </p>
-                    <h3 className='luz-radio' >Luz do rádio</h3>
 
-            {radioLigado ?  
-                <div className='texto-alterar-luz-radio' > Clique no botão ao lado para mudar a luz do rádio</div> : 
-                    
-                <div> 
-                    <p className='aviso-radio-desligado' >O led do rádio está <strong>desligado</strong> no momento. 
-                        <br></br>
-                        Para ligar, clique no rádio na escada.
-                    </p> 
-                </div>
-            }
+        
 
-                <input 
-                    className='input-cor' 
-                    type='color' 
-                    style={{display: radioLigado? "block":"none"}}
-                    onChange={(evento)=>{corNeon(evento.target.value)}}
-                />
 
-            </div>
+        
+        <div className='janela-configuracao-led' >
+            <div className='wrapper-configuracao' >
+
+                        <span className='texto-configuracao' >Configurações</span>
+                        <p className='texto-explicacao' >Aqui você pode configurar algumas coisas do sistema e/ou cenário </p>
+                        <h3 className='luz-radio' >Luz do rádio</h3>
+
+                {radioLigado ?  
+                    <p className='texto-alterar-luz-radio' > Clique no botão ao lado para mudar a luz do rádio</p> : 
+                        
+                    <div> 
+                        <p className='aviso-radio-desligado' >O led do rádio está <strong>desligado</strong> no momento. 
+                            <br></br>
+                            Para ligar, clique no rádio na escada.
+                        </p> 
+                    </div>
+                }
+
+                    <input 
+                        className='input-cor' 
+                        type='color' 
+                        style={{display: radioLigado? "block":"none"}}
+                        onChange={(evento)=>{corNeon(evento.target.value)}}
+                    />
+
+                <h3 className='texto-wallpaper' >Mudar wallpaper do sistema</h3>
+
+                    <BotaoUpload 
+                    previa={previa}
+                    setPrevia={setPrevia}
+                    lidarComMudancas={lidarComMudancas}
+                    />
+
+        </div>
+
+
+
+
+        </div>
+
+
+
+
+
+</div>
+
+
+
+       
             )}
                 
                 {/* APP de fato */}
@@ -285,17 +347,16 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
                 <div className='idioma'>
                     <span>POR</span>
-                    <br></br>
                     <span>PTB2</span>
                 </div>
                 <Relogio/>
-      </div>
-        <div className='icone-notificacoes' >
-        <img src={ process.env.PUBLIC_URL+  "/imagens/windows/iconeNotificacoes.png"} alt="Icone de notificacoes" />
-        </div> 
-    </div>
-
         </div>
+            <div className='icone-notificacoes' >
+            <img src={ process.env.PUBLIC_URL+  "/imagens/windows/iconeNotificacoes.png"} alt="Icone de notificacoes" />
+            </div> 
+        </div>
+
+    </div>
             </section>
     </div>
 
