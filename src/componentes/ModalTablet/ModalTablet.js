@@ -19,14 +19,25 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     })
     const [previa, setPrevia] = useState(null)
     const [mudarWallpaper, setMudarWallpaper] = useState(false)
+    const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
+
+    const wallpapersProntos = [
+    { id: 1, src: "/imagens/windows/previasWallpaper/previa1.png", alt: "Previa 1" },
+    { id: 2, src: "/imagens/windows/previasWallpaper/previa2.png", alt: "Previa 2" },
+    { id: 3, src: "/imagens/windows/previasWallpaper/previa3.gif", alt: "Previa 3" },
+    { id: 4, src: "/imagens/windows/previasWallpaper/previa4.png", alt: "Previa 4" } 
+];
+
+const selecionarPreset = (caminhoDaImagem) => {
+    setPrevia(process.env.PUBLIC_URL + caminhoDaImagem);
+    setMudarWallpaper(true)
+}
 
     const aoSalvar = (evento) => {
         evento.preventDefault()
         aoSubmeter(nome)
         setNome('')
 };
-
-
 
     const abrirApp = (idDoApp, telaParaAbrir) => {
         setTimeout(() => {
@@ -59,6 +70,15 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
             setMudarWallpaper(arquivo)
         }
         
+        const abrirWrapperWallpaper = () => {
+            setWrapperPreviaWallpaper( 
+                wrapperPreviaWallpaper => !wrapperPreviaWallpaper
+            )
+        } 
+
+
+
+
 
     // depois adaptar direito essa funcao pra reciclar tudo
     // const abrirLembretes = (nomeDoApp) =>{
@@ -82,15 +102,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 style={{
                     backgroundImage: mudarWallpaper ? `url(${previa})`:
                     `url(${process.env.PUBLIC_URL}/imagens/windows/windowsWallpaper.jpg)`
-                
-                
                 }}
-                    
             >
-
-                    {/* ,backgroundRepeat:"no-repeat" */}
-
-
 
 
             
@@ -119,18 +132,14 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 {telaAtiva ==='config.exe' && (
                    
 
-    <div>
-                <WindowBar 
-                    fecharApp = {fecharApp}
-                    idDoAppPraFechar='app_config'
-                />
-
-        
-
-
-        
+<div>
+    <WindowBar 
+        fecharApp = {fecharApp}
+        idDoAppPraFechar='app_config'
+    />
         <div className='janela-configuracao-led' >
             <div className='wrapper-configuracao' >
+
 
                         <span className='texto-configuracao' >Configurações</span>
                         <p className='texto-explicacao' >Aqui você pode configurar algumas coisas do sistema e/ou cenário </p>
@@ -162,23 +171,44 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     lidarComMudancas={lidarComMudancas}
                     />
 
+                <h3>Wallpapers de exemplo</h3>
+
+                <button 
+                    className='botao-abrir-previa'
+                    onClick={()=> abrirWrapperWallpaper()}
+                    style={{boxShadow: wrapperPreviaWallpaper?"1px 1px 11px #0015ffff":"none"}}
+                 
+                 >Wallpapers</button>
+
+                {
+                    wrapperPreviaWallpaper === true && (
+                    <div className='container-galeria-presets'>
+                        {
+                            wallpapersProntos.map((wallpaper)=>(
+                                <img
+                                    onDragStart={(e) => e.preventDefault()}
+                                    key={wallpaper.id}
+                                    className='miniatura-preset'
+                                    src={process.env.PUBLIC_URL + wallpaper.src}
+                                    alt={wallpaper.alt}
+                                    onClick={()=> selecionarPreset(wallpaper.src)}
+                                />
+                            ))
+                        }
+
+                    </div>
+                    )
+                }
+                
+
+
+                    
+           </div>
+
         </div>
+    </div>
 
-
-
-
-        </div>
-
-
-
-
-
-</div>
-
-
-
-       
-            )}
+                 )}
                 
                 {/* APP de fato */}
                 { telaAtiva === 'lembretes.exe' && (
@@ -227,7 +257,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     }
                 </div>
 
-                    <Botao className='botao-lembrete' >Enviar lembrete</Botao>
+                    <Botao className='botao-lembrete' data-text = "Enviar lembrete" >Enviar lembrete</Botao>
                 </form>
         </div>
 
