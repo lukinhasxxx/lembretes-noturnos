@@ -8,7 +8,7 @@ const BotaoUpload = ({previa, lidarComMudancas}) => {
             <label className="upload">
                 <img className="imagem-upload" 
                     alt="imagem do upload" 
-                    src={process.env.PUBLIC_URL+ "/imagens/windows/botaoUpload.png" }
+                    src={process.env.PUBLIC_URL+ "/imagens/windows/novoBotaoUpload.png" }
                 />
 
                 <input type="file"

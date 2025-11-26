@@ -1,24 +1,70 @@
+
 form .botao-lembrete {
     background-color: #6278f7;
     border-radius: 44px;
     font-weight: 700;
     font-size: 18px;
-    padding: 32px;
+    padding: 20px 40px;
     border: none;
     cursor: pointer;
     color: white;
     margin: 28px 40px;
-    transition: background-color 0.5s ease;
+    transition: background-color 0.3s ease;
     box-shadow: 7px 5px 8px rgb(82 86 197 / 30%);
+    position: relative;
+    overflow: hidden; 
 }
 
+
 form .botao-lembrete:hover {
-    color: #97ffd5;
-    border: 1px solid #00ffe7;
-    background: #62b1f7;
-    transition: transform 0.2s ease;
+    color: #b8ff8c;
+    border: 1px solid #85fff2;
+    background: #050808;
+    box-shadow: 1px 1px 13px #12e2ff;
 }
 
 form .botao-lembrete:active {
-transform:scale(0.95);
+    transform: scale(0.95);
+}
+
+
+
+form .botao-lembrete::after {
+    content: 'Lembrete';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    background: linear-gradient(45deg, transparent 0%, #00e6f6 8%, #000000 12%);
+
+    text-shadow: 
+        -2px -2px 0px #F8F005,
+         2px  2px 0px #00E6F6;
+
+    clip-path: inset(50% 50% 50% 50%);
+    opacity: 0;
+    pointer-events: none;
+    font-family: 'Bebas Neue', sans-serif; 
+    font-size: 24px;
+    letter-spacing: 2px;
+}
+
+
+form .botao-lembrete:hover::after {
+    animation: glitchSoft 1.3s steps(2, end) infinite; /*a velocidade da animacao aqui */
+    opacity: 1;
+}
+
+@keyframes glitchSoft {
+    0% { clip-path: inset(70% 0 0 0); transform: translate(-4px, -3px); }
+    12% { clip-path: inset(20% 0 40% 0); transform: translate(3px, 2px); }
+    25% { clip-path: inset(50% 0 10% 0); transform: translate(-2px, 3px); }
+    38% { clip-path: inset(15% 0 60% 0); transform: translate(2px, 1px); }
+    50% { clip-path: inset(40% 0 25% 0); transform: translate(-1px, -2px); }
+    65% { clip-path: inset(10% 0 70% 0); transform: translate(2px, -1px); }
+    80% { clip-path: inset(60% 0 15% 0); transform: translate(-3px, 1px); }
+    100% { clip-path: inset(0 0 0 0); transform: translate(0,0); }
 }

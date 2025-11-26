@@ -10,7 +10,6 @@ import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import MiniPlayer from './componentes/MiniPlayer/MiniPlayer';
 
 
-
 function App() {
 
 const [lembretes, setLembretes] = useState([])
@@ -201,8 +200,8 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
     ref={audioRef}
     src= {process.env.PUBLIC_URL +musicas[indiceMusicaAtual].src}
     onEnded={proximaMusica}
-    input type='range'
     />
+
 
 
 {radioLigado === true &&
@@ -329,6 +328,7 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
      
     </div>
   </VisibilidadePainelProvider>
+
   );
 }
 
