@@ -1,16 +1,18 @@
 /* FALTA PERSONALIZAR APENAS NO FIREFOX A BARRA DE VOLUME */
 
-/* .zona-radio fica sem position: assim a zona de interação se posiciona em relação ao palco (a arte), não à tela */
+/* posição e tamanho vêm da <Ancora ponto="radio"> (cena.config.js); aqui só ocupa 100% dela */
+.zona-radio {
+    width: 100%;
+    height: 100%;
+}
 
-/* coordenadas em % do palco, medidas na arte 1920x1080 (x 288, y 804, 170x130) */
 .zona-interacao-radio {
-    position: absolute;
-    left: 15%;
-    top: 74.5%;
-    width: 8.85%;
-    height: 12.04%;
+    position: relative;
+    /* isola a margem do .painel-radio; sem isso ela vaza e empurra o rádio inteiro para baixo */
+    display: flow-root;
+    width: 100%;
+    height: 100%;
     cursor: pointer;
-
 }
 
 

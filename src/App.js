@@ -9,6 +9,7 @@ import PlayerRadio from './componentes/Radio/PlayerRadio';
 import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import MiniPlayer from './componentes/MiniPlayer/MiniPlayer';
 import Palco from './features/cena/Palco/Palco';
+import Ancora from './features/cena/Ancora/Ancora';
 
 
 function App() {
@@ -195,14 +196,17 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
     <div className="App">
 
     <Palco videoSrc={process.env.PUBLIC_URL + '/videos/video-background.mp4'}>
-      <PlayerRadio
-        corLuzRadio = {luzRadio}
-        radioLigado={radioLigado}
-        setRadioLigado={setRadioLigado}
-        aoClicarNoRadio = {gerenciarEstadoRadio}
-        painelRadio = {painelRadio}
-        />
+      <Ancora ponto='radio'>
+        <PlayerRadio
+          corLuzRadio = {luzRadio}
+          radioLigado={radioLigado}
+          setRadioLigado={setRadioLigado}
+          aoClicarNoRadio = {gerenciarEstadoRadio}
+          painelRadio = {painelRadio}
+          />
+      </Ancora>
 
+      <Ancora ponto='tablet'>
         <div className='zona-interacao-tablet'
         onClick={gerenciarTablet}>{ligarTablet}
           <img
@@ -213,8 +217,8 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
             }}
             onClick={gerenciarTablet}
           />
-
-      </div>
+        </div>
+      </Ancora>
     </Palco>
     <audio 
     ref={audioRef}

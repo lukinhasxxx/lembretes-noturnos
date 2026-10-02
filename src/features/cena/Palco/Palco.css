@@ -1,8 +1,5 @@
+/* --palco-largura e --palco-altura vêm do cena.config.js (via Palco.js) */
 .palco {
-    /* resolução nativa do vídeo de fundo (1920x1080) */
-    --palco-largura: 1920;
-    --palco-altura: 1080;
-
     position: fixed;
     top: 50%;
     left: 50%;

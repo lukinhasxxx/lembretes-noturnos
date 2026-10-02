@@ -24,14 +24,10 @@ code {
     position: absolute;
 }
 
-/* tablet da mesa: coordenadas em % do palco, medidas na arte 1920x1080 (centro x 1229, y 900, 110x50) */
+/* tablet da mesa: posição e tamanho vêm da <Ancora ponto="tablet"> (cena.config.js); aqui só ocupa 100% dela */
 .zona-interacao-tablet {
-    position: absolute;
-    top: 83.33%;
-    left: 64%;
-    transform: translate(-50%, -50%);
-    height: 4.63%;
-    width: 5.73%;
+    height: 100%;
+    width: 100%;
     cursor: pointer;
     user-select: none;
 }
