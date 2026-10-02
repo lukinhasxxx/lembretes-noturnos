@@ -10,6 +10,8 @@ import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import MiniPlayer from './componentes/MiniPlayer/MiniPlayer';
 import Palco from './features/cena/Palco/Palco';
 import Ancora from './features/cena/Ancora/Ancora';
+import JanelaHud from './features/hud/JanelaHud/JanelaHud';
+import { MODAL_TABLET } from './features/hud/hud.config';
 
 
 function App() {
@@ -281,8 +283,10 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
     y: window.innerHeight * 0.09,
   }}
 >
-  <div
-    ref={nodeRefTablet}
+  <JanelaHud
+    nodeRef={nodeRefTablet}
+    largura={MODAL_TABLET.largura}
+    altura={MODAL_TABLET.altura}
     style={{ display: modalAberto? 'inline-block':'none', position: 'absolute', top: 0, left: 0 }}
   >
     <ModalTablet
@@ -292,7 +296,7 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
       corNeon={setLuzRadio}
       radioLigado={radioLigado}
     />
-  </div>
+  </JanelaHud>
 </Draggable>
  }
 

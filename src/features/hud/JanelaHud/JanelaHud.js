@@ -1,0 +1,30 @@
+import { useEscalaHud } from '../hooks/useEscalaHud'
+
+// Janela do HUD que encolhe/cresce inteira (como uma imagem) conforme a tela.
+// Caixa de fora: tamanho já escalado, é ela que o <Draggable> move e usa para calcular os limites.
+// Caixa de dentro: tamanho base (escala 1), escalada via transform; o conteúdo não precisa saber da escala.
+// O ...resto repassa o que o <Draggable> injeta (className, style com translate, eventos do mouse).
+const JanelaHud = ({ nodeRef, largura, altura, style, children, ...resto }) => {
+    const escala = useEscalaHud()
+
+    return (
+        <div
+            ref={nodeRef}
+            {...resto}
+            style={{ ...style, width: largura * escala, height: altura * escala }}
+        >
+            <div
+                style={{
+                    width: largura,
+                    height: altura,
+                    transform: `scale(${escala})`,
+                    transformOrigin: 'top left',
+                }}
+            >
+                {children}
+            </div>
+        </div>
+    )
+}
+
+export default JanelaHud
