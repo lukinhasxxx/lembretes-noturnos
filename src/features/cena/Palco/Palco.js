@@ -9,6 +9,8 @@ const Palco = ({ videoSrc, children }) => {
         <div
             className='palco'
             style={{ '--palco-largura': CENA.largura, '--palco-altura': CENA.altura }}
+            // a cena não é arrastável: bloqueia o drag nativo do vídeo/imagens/seleção
+            onDragStart={(evento) => evento.preventDefault()}
         >
             <video
                 className='palco-video'

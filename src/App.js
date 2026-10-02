@@ -252,6 +252,8 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
       <div 
         className='draggable-wrapper'
         ref={nodeRefMiniPlayer}
+        // bloqueia o drag nativo (imagem/seleção), que engole o mouseup e prende o player no mouse
+        onDragStart={(evento) => evento.preventDefault()}
         >
           
           <MiniPlayer

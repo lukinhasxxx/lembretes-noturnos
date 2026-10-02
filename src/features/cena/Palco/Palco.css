@@ -17,6 +17,10 @@
 
     /* habilita cqw/cqh nos filhos: 1cqw = 1% da largura do palco (= da arte na tela) */
     container-type: size;
+
+    /* a cena é um cenário, não um documento: nada nela é selecionável */
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .palco-video {

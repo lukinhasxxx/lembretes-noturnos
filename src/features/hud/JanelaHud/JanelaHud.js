@@ -11,6 +11,9 @@ const JanelaHud = ({ nodeRef, largura, altura, style, children, ...resto }) => {
         <div
             ref={nodeRef}
             {...resto}
+            // bloqueia o drag nativo do navegador (imagem/seleção "fantasma"): ele engole o mouseup
+            // e faz a janela ficar grudada no mouse
+            onDragStart={(evento) => evento.preventDefault()}
             style={{ ...style, width: largura * escala, height: altura * escala }}
         >
             <div
