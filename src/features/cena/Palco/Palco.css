@@ -1,0 +1,30 @@
+.palco {
+    /* resolução nativa do vídeo de fundo (1920x1080) */
+    --palco-largura: 1920;
+    --palco-altura: 1080;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* cresce até cobrir a tela sem distorcer:
+       se a tela for mais larga que 16:9, a largura manda; se for mais alta, a altura manda */
+    width: max(100vw, calc(100vh * var(--palco-largura) / var(--palco-altura)));
+    height: max(100vh, calc(100vw * var(--palco-altura) / var(--palco-largura)));
+    width: max(100vw, calc(100dvh * var(--palco-largura) / var(--palco-altura)));
+    height: max(100dvh, calc(100vw * var(--palco-altura) / var(--palco-largura)));
+
+    overflow: hidden;
+    z-index: 0;
+}
+
+.palco-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    /* o palco já tem a proporção do vídeo; o cover aqui só absorve arredondamento de subpixel */
+    object-fit: cover;
+    pointer-events: none;
+}

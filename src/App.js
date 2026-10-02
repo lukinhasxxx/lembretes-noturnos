@@ -8,6 +8,7 @@ import VisibilidadePainelProvider from './contexts/VisibilidadePainel';
 import PlayerRadio from './componentes/Radio/PlayerRadio';
 import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import MiniPlayer from './componentes/MiniPlayer/MiniPlayer';
+import Palco from './features/cena/Palco/Palco';
 
 
 function App() {
@@ -193,9 +194,28 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
     
     <div className="App">
 
-    <video autoPlay loop muted disablePictureInPicture className='video-background' >
-      <source src={process.env.PUBLIC_URL + '/videos/video-background.mp4'} type='video/mp4' />
-    </video>
+    <Palco videoSrc={process.env.PUBLIC_URL + '/videos/video-background.mp4'}>
+      <PlayerRadio
+        corLuzRadio = {luzRadio}
+        radioLigado={radioLigado}
+        setRadioLigado={setRadioLigado}
+        aoClicarNoRadio = {gerenciarEstadoRadio}
+        painelRadio = {painelRadio}
+        />
+
+        <div className='zona-interacao-tablet'
+        onClick={gerenciarTablet}>{ligarTablet}
+          <img
+          className='tablet-img'
+          src= {process.env.PUBLIC_URL + '/imagens/tabletPNG.png'}
+            alt='tablet'
+            style ={{filter: ligarTablet ?  "drop-shadow(1px 1px 3px #00D7FF)" : "none"
+            }}
+            onClick={gerenciarTablet}
+          />
+
+      </div>
+    </Palco>
     <audio 
     ref={audioRef}
     src= {process.env.PUBLIC_URL +musicas[indiceMusicaAtual].src}
@@ -294,28 +314,6 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
 
 
 
-      <PlayerRadio 
-        corLuzRadio = {luzRadio} 
-        radioLigado={radioLigado} 
-        setRadioLigado={setRadioLigado}
-        aoClicarNoRadio = {gerenciarEstadoRadio}
-        painelRadio = {painelRadio}
-        />
-
-        
-
-        <div className='zona-interacao-tablet' 
-        onClick={gerenciarTablet}>{ligarTablet}
-          <img 
-          className='tablet-img'
-          src= {process.env.PUBLIC_URL + '/imagens/tabletPNG.png'}
-            alt='tablet'
-            style ={{filter: ligarTablet ?  "drop-shadow(1px 1px 3px #00D7FF)" : "none"
-            }}
-            onClick={gerenciarTablet}
-          />
-
-      </div>
       
         <MuralDeNotas
           lembretes={lembretes} 
