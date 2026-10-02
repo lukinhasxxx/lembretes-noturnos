@@ -10,4 +10,5 @@ export const CENA = {
 export const PONTOS = {
     radio: { x: 310, y: 804, largura: 170, altura: 130 },
     tablet: { x: 1174, y: 875, largura: 110, altura: 50 },
+    mural: { x: 1139, y: 234, largura: 522, altura: 510 },
 }

@@ -219,6 +219,17 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
           />
         </div>
       </Ancora>
+
+      <Ancora ponto='mural'>
+        <MuralDeNotas
+          lembretes={lembretes}
+          aoDeletar={deletarLembrete}
+          aoFixar={fixarLembrete}
+          painelLigadoPermanente={painelLigadoPermanente}
+          animacaoDeveRodar={animacaoJaAtivada}
+          conteudoVisivelPainel={primeiraMensagemPainel}
+        />
+      </Ancora>
     </Palco>
     <audio 
     ref={audioRef}
@@ -319,14 +330,6 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
 
 
       
-        <MuralDeNotas
-          lembretes={lembretes} 
-          aoDeletar={deletarLembrete}
-          aoFixar={fixarLembrete}
-          painelLigadoPermanente={painelLigadoPermanente}
-          animacaoDeveRodar={animacaoJaAtivada}
-          conteudoVisivelPainel={primeiraMensagemPainel}
-      />
      
     </div>
   </VisibilidadePainelProvider>
