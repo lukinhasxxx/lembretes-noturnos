@@ -1,4 +1,4 @@
-import "./botaoUpload.css"
+import "./BotaoUpload.css"
 
 const BotaoUpload = ({previa, lidarComMudancas}) => {
     

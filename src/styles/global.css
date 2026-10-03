@@ -1,0 +1,18 @@
+/* Estilos globais da aplicação (o resto do CSS mora em cada feature) */
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Share Tech Mono", monospace, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.App {
+  height: 100vh;
+  /* altura visível real (no mobile desconta a barra de endereço); 100vh fica de fallback */
+  height: 100dvh;
+  position: relative;
+  overflow: hidden;
+}

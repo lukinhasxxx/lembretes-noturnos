@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- lua crescente neon sobre fundo noturno (favicon provisório do Lembretes Noturnos) -->
+  <defs>
+    <mask id="recorte-lua">
+      <rect width="64" height="64" fill="white"/>
+      <circle cx="41" cy="24" r="17" fill="black"/>
+    </mask>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0a0a1e"/>
+  <circle cx="30" cy="34" r="21" fill="#00e5ff" opacity="0.25" mask="url(#recorte-lua)"/>
+  <circle cx="30" cy="34" r="18" fill="#00e5ff" mask="url(#recorte-lua)"/>
+  <circle cx="50" cy="44" r="2" fill="#f052ff"/>
+  <circle cx="46" cy="14" r="1.5" fill="#ffffff"/>
+</svg>

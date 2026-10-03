@@ -641,3 +641,31 @@ transform: scale(0.95);
 
 
 /* responsividade */
+
+/* tamanho base do modal (escala 1); o HUD escala o conjunto (features/hud) */
+.App .secao-tablet-modal {
+    width: 760px;
+    height: 482px;
+    position: absolute;
+}
+
+/* seletor de cor do LED do rádio, no app Config.exe */
+.input-cor{
+    position: absolute;
+    width: 4%; 
+    top: 50%;
+    left: 73%;
+    border-radius: 10px;
+
+}
+
+.input-cor:hover {
+    background-color: rgb(90 241 206 / 45%);
+    box-shadow: 1px 1px 8px rgb(0 78 255 / 80%);
+}
+
+.input-cor:active {
+    background-color: rgb(90 241 206 / 45%);
+    box-shadow: 1px 1px 2px rgba(25, 0, 255, 0.7);
+    transform: translate(1px);
+}
