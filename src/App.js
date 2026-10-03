@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import ModalTablet from './componentes/ModalTablet/ModalTablet';
+import { ModalTablet, TabletMesa } from './features/tablet';
 import { MuralDeNotas, VisibilidadePainelProvider } from './features/mural';
 import { PlayerRadio, MiniPlayer } from './features/radio';
 import Palco from './features/cena/Palco/Palco';
@@ -204,17 +204,7 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
       </Ancora>
 
       <Ancora ponto='tablet'>
-        <div className='zona-interacao-tablet'
-        onClick={gerenciarTablet}>{ligarTablet}
-          <img
-          className='tablet-img'
-          src= {process.env.PUBLIC_URL + '/imagens/tabletPNG.png'}
-            alt='tablet'
-            style ={{filter: ligarTablet ?  "drop-shadow(calc(1 * var(--px-arte)) calc(1 * var(--px-arte)) calc(3 * var(--px-arte)) #00D7FF)" : "none"
-            }}
-            onClick={gerenciarTablet}
-          />
-        </div>
+        <TabletMesa ligado={ligarTablet} aoClicar={gerenciarTablet} />
       </Ancora>
 
       <Ancora ponto='mural'>

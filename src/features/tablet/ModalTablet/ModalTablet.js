@@ -1,10 +1,10 @@
-import { VisibilidadePainelContext } from '../../features/mural'
+import { VisibilidadePainelContext } from '../../mural'
 import './ModalTablet.css'
-import Botao from '../Botao'
+import Botao from '../componentes/Botao/Botao'
 import { useState,useContext } from 'react'
-import Relogio from '../Relogio/Relogio'
-import WindowBar from '../WindowBar/WindowBar'
-import BotaoUpload from '../BotaoUpload'
+import Relogio from '../sistema/Relogio/Relogio'
+import WindowBar from '../sistema/WindowBar/WindowBar'
+import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
 
 const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, corNeon, radioLigado}) => {
 

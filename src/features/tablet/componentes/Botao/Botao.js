@@ -1,4 +1,4 @@
-import "./botao.css"
+import "./Botao.css"
 
 const Botao = ({children, className}) => {
     return (

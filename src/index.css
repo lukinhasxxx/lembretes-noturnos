@@ -19,24 +19,3 @@ code {
   position: relative;
   overflow: hidden;  
 }
-
-.App .secao-tablet-modal {
-    width: 760px;
-    height: 482px;
-    position: absolute;
-}
-
-/* tablet da mesa: posição e tamanho vêm da <Ancora ponto="tablet"> (cena.config.js); aqui só ocupa 100% dela */
-.zona-interacao-tablet {
-    height: 100%;
-    width: 100%;
-    cursor: pointer;
-    user-select: none;
-}
-
-.zona-interacao-tablet .tablet-img {
-    display: block;
-    width: 100%;
-    height: auto;
-    pointer-events: none;
-}
