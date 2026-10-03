@@ -12,3 +12,10 @@ export const MODAL_TABLET = {
     largura: 760,
     altura: 482,
 }
+
+// Tamanho base (escala 1) do mini player com a área de pegar (.draggable-wrapper):
+// player 347x183 + 16px de padding em cada lado.
+export const MINI_PLAYER = {
+    largura: 379,
+    altura: 215,
+}

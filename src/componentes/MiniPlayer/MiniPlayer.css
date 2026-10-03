@@ -9,14 +9,11 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  z-index:3;
-  top: clamp(50vh, 60vh, 70vh);
-  left: clamp(6vw, 13vw, 20vw);
-  min-width: clamp(140px, 12vw, 220px);
-  max-width: clamp(14vw, 18vw, 28vw);  
+  /* tamanho base (escala 1, medido em 1920x955); o HUD escala o player inteiro conforme a tela */
+  box-sizing: border-box;
   border-radius: 25px;
-  width: clamp(150px, 17vw, 340px); 
-  height: clamp(8vh, 17vh, 20vh); 
+  width: 347px;
+  height: 183px;
   text-align: center;
   background: rgb(10 10 30 / 38%);
   border: 1px solid #00e5ff9e;
@@ -43,7 +40,7 @@
 
 .controle-player {
     display: flex;
-    gap: clamp(8px, 2vw, 21px);
+    gap: 21px;
     justify-content: center;
     margin-top: clamp(4px, 3.5%, 12px);
     width: clamp(120px, 70%, 300px);
@@ -66,7 +63,7 @@
  .mini-player-container .botao-desligar img {
   height: auto;
   width: 100%;
-  max-height: clamp(18px, 4.6vh, 52px);
+  max-height: 44px;
   user-select: none;
 }
 
@@ -75,7 +72,7 @@
   border: 1px solid #ababab00;
   border-radius: 4px;
   color: var(--neon-c);
-  padding: clamp(3px, 0.6vw, 3px); 
+  padding: 3px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.3s;
 }
@@ -140,8 +137,8 @@
 .mini-player-container .volume-slider {
   -moz-appearance: none; /* remove estilo padrão */
   appearance: none;
-  width: 6vw;
-  height: 1.5vh;
+  width: 115px;
+  height: 14px;
   background: transparent;
   cursor: pointer;
   margin-left: 10px;
@@ -201,8 +198,8 @@
   -webkit-appearance: none;
   appearance: none; 
   
-  width: 6vw; 
-  height: 1.5vh; 
+  width: 115px;
+  height: 14px;
   background: transparent; /* importante, barra do slider transparente */
   cursor: pointer;
   margin-left: 10px; 
@@ -264,7 +261,7 @@
   white-space: pre-wrap;
   color: #00FFFF;
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(4px, 0.6vw, 12px);
+  font-size: 11.5px;
   position: relative;
 
   text-shadow:
@@ -354,68 +351,17 @@
 /* ''parte arrastavel'' aqui, mini player */
 
   
+/* área de pegar em volta do player; posição e escala vêm da <JanelaArrastavel> (features/hud) */
 .App .draggable-wrapper {
-
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
   box-shadow: rgb(0, 0, 0) 1px 1px 10px;
   border-radius: 49px;
   cursor: grab;
-  position: absolute;
-  left: clamp(6vw, 9vw, 20vw);
-  top: clamp(50vh, 57vh, 70vh);
-  transform: translate(238px, -18px);
-  padding:clamp(8px, 1vw, 16px);
-  z-index: 1;
+  padding: 16px;
 }
 
 .App .draggable-wrapper:active {
   cursor: grabbing;
-}
-
-  /* Até 1279px HD (innerHeight ~620px) */
-@media (max-width: 1279px) {
-  .mini-player-container {
-    top: 55%;
-  }
-}
-
-/* 1280×600 (innerHeight ~600px) */
-@media (min-width: 1280px) and (max-width: 1365px) {
-    .mini-player-container {
-    top: 54%;
-  }
-}
-
-/* 1366×650 (innerHeight ~650px) */
-@media (min-width: 1366px) and (max-width: 1439px) {
-    .mini-player-container {
-    top: 57%;
-  }
-}
-
-/* 1440×780 (innerHeight ~780px) */
-@media (min-width: 1440px) and (max-width: 1535px) {
-    .mini-player-container {
-    top: 54%;
-  }
-}
-
-/* 1536×770 (innerHeight ~770px) */
-@media (min-width: 1536px) and (max-width: 1599px) {
-    .mini-player-container {
-    top: 56%;
-  }
-}
-
-/* 1600×800 (innerHeight ~800px) */
-@media (min-width: 1600px) and (max-width: 1919px) {
-    .mini-player-container {
-    top: 56%;
-  }
-}
-
-/* 1920×955 (innerHeight ~955px) */
-@media (min-width: 1920px) {
-    .mini-player-container {
-    top: 58%;
-  }
 }

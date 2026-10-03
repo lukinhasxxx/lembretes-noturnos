@@ -1,5 +1,4 @@
 //aqui eh pra eu importar o provider, sem o contexto
-import Draggable from 'react-draggable';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,8 +9,8 @@ import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import MiniPlayer from './componentes/MiniPlayer/MiniPlayer';
 import Palco from './features/cena/Palco/Palco';
 import Ancora from './features/cena/Ancora/Ancora';
-import JanelaHud from './features/hud/JanelaHud/JanelaHud';
-import { MODAL_TABLET } from './features/hud/hud.config';
+import JanelaArrastavel from './features/hud/JanelaArrastavel/JanelaArrastavel';
+import { MINI_PLAYER, MODAL_TABLET } from './features/hud/hud.config';
 
 
 function App() {
@@ -28,8 +27,6 @@ const [volume, setVolume] = useState(1)
 const [ligarPainelRadio, setLigarPainelRadio] = useState(false)
 const [ligarTabletPrimeiraVez, setLigarTabletPrimeiraVez] = useState(false)
 
-const nodeRefMiniPlayer = useRef(null);
-const nodeRefTablet= useRef(null)
 
 
 
@@ -242,20 +239,14 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
 
 
 {radioLigado === true &&
-   <Draggable 
-   nodeRef={nodeRefMiniPlayer}
-   bounds='parent'
-   distance={10}
-   enableUserSelectHack={false}
+   <JanelaArrastavel
+   largura={MINI_PLAYER.largura}
+   altura={MINI_PLAYER.altura}
+   posicaoInicial={({ larguraTela, alturaTela }) => ({ x: larguraTela * 0.09, y: alturaTela * 0.57 })}
    cancel="button, input, textarea, select, option, a, img"
+   zIndex={1}
    >
-      <div 
-        className='draggable-wrapper'
-        ref={nodeRefMiniPlayer}
-        // bloqueia o drag nativo (imagem/seleção), que engole o mouseup e prende o player no mouse
-        onDragStart={(evento) => evento.preventDefault()}
-        >
-          
+      <div className='draggable-wrapper'>
           <MiniPlayer
           radioLigado={radioLigado}
           musicaAtual={musicas[indiceMusicaAtual]}
@@ -267,30 +258,20 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
           volumeAtual={volume}
           aoMudarVolume={setVolume}
           />
-
       </div>
-    </Draggable>
+    </JanelaArrastavel>
 }
 
 
- {ligarTabletPrimeiraVez && 
-<Draggable
-  nodeRef={nodeRefTablet}
-  bounds="parent"
-  enableUserSelectHack={false}
+ {ligarTabletPrimeiraVez &&
+<JanelaArrastavel
+  largura={MODAL_TABLET.largura}
+  altura={MODAL_TABLET.altura}
+  posicaoInicial={({ larguraTela, alturaTela }) => ({ x: larguraTela * 0.2, y: alturaTela * 0.09 })}
+  visivel={modalAberto}
   handle=".handle"
   cancel="button, input, textarea, select, option, a, .no-drag"
-  defaultPosition={{
-    x: window.innerWidth * 0.2,
-    y: window.innerHeight * 0.09,
-  }}
 >
-  <JanelaHud
-    nodeRef={nodeRefTablet}
-    largura={MODAL_TABLET.largura}
-    altura={MODAL_TABLET.altura}
-    style={{ display: modalAberto? 'inline-block':'none', position: 'absolute', top: 0, left: 0 }}
-  >
     <ModalTablet
       aoSubmeter={adicionarLembrete}
       validarLigadoDesligado={ligarTablet}
@@ -298,8 +279,7 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
       corNeon={setLuzRadio}
       radioLigado={radioLigado}
     />
-  </JanelaHud>
-</Draggable>
+</JanelaArrastavel>
  }
 
 
