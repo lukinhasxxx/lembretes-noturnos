@@ -1,0 +1,38 @@
+/* --palco-largura e --palco-altura vêm do cena.config.js (via Palco.js) */
+.palco {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* cresce até cobrir a tela sem distorcer:
+       se a tela for mais larga que 16:9, a largura manda; se for mais alta, a altura manda */
+    width: max(100vw, calc(100vh * var(--palco-largura) / var(--palco-altura)));
+    height: max(100vh, calc(100vw * var(--palco-altura) / var(--palco-largura)));
+    width: max(100vw, calc(100dvh * var(--palco-largura) / var(--palco-altura)));
+    height: max(100dvh, calc(100vw * var(--palco-altura) / var(--palco-largura)));
+
+    overflow: hidden;
+    z-index: 0;
+
+    /* habilita cqw/cqh nos filhos: 1cqw = 1% da largura do palco (= da arte na tela) */
+    container-type: size;
+
+    /* 1 pixel da arte (1/1920 do palco) na tela. Uso nos filhos: calc(15 * var(--px-arte))
+       em 1920 de largura vale 1px; em telas menores encolhe junto com a arte */
+    --px-arte: 0.0520833cqw;
+
+    /* a cena é um cenário, não um documento: nada nela é selecionável */
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.palco-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    /* o palco já tem a proporção do vídeo; o cover aqui só absorve arredondamento de subpixel */
+    object-fit: cover;
+    pointer-events: none;
+}

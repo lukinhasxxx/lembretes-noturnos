@@ -1,5 +1,4 @@
 //aqui eh pra eu importar o provider, sem o contexto
-import Draggable from 'react-draggable';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,6 +7,10 @@ import VisibilidadePainelProvider from './contexts/VisibilidadePainel';
 import PlayerRadio from './componentes/Radio/PlayerRadio';
 import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import MiniPlayer from './componentes/MiniPlayer/MiniPlayer';
+import Palco from './features/cena/Palco/Palco';
+import Ancora from './features/cena/Ancora/Ancora';
+import JanelaArrastavel from './features/hud/JanelaArrastavel/JanelaArrastavel';
+import { MINI_PLAYER, MODAL_TABLET } from './features/hud/hud.config';
 
 
 function App() {
@@ -24,8 +27,6 @@ const [volume, setVolume] = useState(1)
 const [ligarPainelRadio, setLigarPainelRadio] = useState(false)
 const [ligarTabletPrimeiraVez, setLigarTabletPrimeiraVez] = useState(false)
 
-const nodeRefMiniPlayer = useRef(null);
-const nodeRefTablet= useRef(null)
 
 
 
@@ -193,9 +194,42 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
     
     <div className="App">
 
-    <video autoPlay loop muted disablePictureInPicture className='video-background' >
-      <source src={process.env.PUBLIC_URL + '/videos/video-background.mp4'} type='video/mp4' />
-    </video>
+    <Palco videoSrc={process.env.PUBLIC_URL + '/videos/video-background.mp4'}>
+      <Ancora ponto='radio'>
+        <PlayerRadio
+          corLuzRadio = {luzRadio}
+          radioLigado={radioLigado}
+          setRadioLigado={setRadioLigado}
+          aoClicarNoRadio = {gerenciarEstadoRadio}
+          painelRadio = {painelRadio}
+          />
+      </Ancora>
+
+      <Ancora ponto='tablet'>
+        <div className='zona-interacao-tablet'
+        onClick={gerenciarTablet}>{ligarTablet}
+          <img
+          className='tablet-img'
+          src= {process.env.PUBLIC_URL + '/imagens/tabletPNG.png'}
+            alt='tablet'
+            style ={{filter: ligarTablet ?  "drop-shadow(calc(1 * var(--px-arte)) calc(1 * var(--px-arte)) calc(3 * var(--px-arte)) #00D7FF)" : "none"
+            }}
+            onClick={gerenciarTablet}
+          />
+        </div>
+      </Ancora>
+
+      <Ancora ponto='mural'>
+        <MuralDeNotas
+          lembretes={lembretes}
+          aoDeletar={deletarLembrete}
+          aoFixar={fixarLembrete}
+          painelLigadoPermanente={painelLigadoPermanente}
+          animacaoDeveRodar={animacaoJaAtivada}
+          conteudoVisivelPainel={primeiraMensagemPainel}
+        />
+      </Ancora>
+    </Palco>
     <audio 
     ref={audioRef}
     src= {process.env.PUBLIC_URL +musicas[indiceMusicaAtual].src}
@@ -205,18 +239,14 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
 
 
 {radioLigado === true &&
-   <Draggable 
-   nodeRef={nodeRefMiniPlayer}
-   bounds='parent'
-   distance={10}
-   enableUserSelectHack={false}
+   <JanelaArrastavel
+   largura={MINI_PLAYER.largura}
+   altura={MINI_PLAYER.altura}
+   posicaoInicial={({ larguraTela, alturaTela }) => ({ x: larguraTela * 0.09, y: alturaTela * 0.57 })}
    cancel="button, input, textarea, select, option, a, img"
+   zIndex={1}
    >
-      <div 
-        className='draggable-wrapper'
-        ref={nodeRefMiniPlayer}
-        >
-          
+      <div className='draggable-wrapper'>
           <MiniPlayer
           radioLigado={radioLigado}
           musicaAtual={musicas[indiceMusicaAtual]}
@@ -228,28 +258,20 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
           volumeAtual={volume}
           aoMudarVolume={setVolume}
           />
-
       </div>
-    </Draggable>
+    </JanelaArrastavel>
 }
 
 
- {ligarTabletPrimeiraVez && 
-<Draggable
-  nodeRef={nodeRefTablet}
-  bounds="parent"
-  enableUserSelectHack={false}
+ {ligarTabletPrimeiraVez &&
+<JanelaArrastavel
+  largura={MODAL_TABLET.largura}
+  altura={MODAL_TABLET.altura}
+  posicaoInicial={({ larguraTela, alturaTela }) => ({ x: larguraTela * 0.2, y: alturaTela * 0.09 })}
+  visivel={modalAberto}
   handle=".handle"
   cancel="button, input, textarea, select, option, a, .no-drag"
-  defaultPosition={{
-    x: window.innerWidth * 0.2,
-    y: window.innerHeight * 0.09,
-  }}
 >
-  <div
-    ref={nodeRefTablet}
-    style={{ display: modalAberto? 'inline-block':'none', position: 'absolute', top: 0, left: 0 }}
-  >
     <ModalTablet
       aoSubmeter={adicionarLembrete}
       validarLigadoDesligado={ligarTablet}
@@ -257,74 +279,17 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
       corNeon={setLuzRadio}
       radioLigado={radioLigado}
     />
-  </div>
-</Draggable>
+</JanelaArrastavel>
  }
 
 
 
- {/* {modalAberto && 
-      <Draggable 
-      nodeRef={nodeRefTablet}
-      bounds='parent'
-      enableUserSelectHack={false}
-      cancel="button, input, textarea, select, option, a"
-      defaultPosition={{ 
-      x: window.innerWidth * 0.2,
-      y: window.innerHeight * 0.09,
-    }}
-      >
-        <div ref={nodeRefTablet} 
-        style={{display: 'inline-block', position: 'absolute',        top: 0,    
-        left: 0  }}
-        >
-
-              <ModalTablet
-                aoSubmeter={adicionarLembrete}
-                validarLigadoDesligado = {ligarTablet}
-                painelLigadoPermanente={painelLigadoPermanente}
-                corNeon = {setLuzRadio}
-                radioLigado={radioLigado}
-              />        
-        </div>
-      </Draggable>
- }
- */}
 
 
 
 
-      <PlayerRadio 
-        corLuzRadio = {luzRadio} 
-        radioLigado={radioLigado} 
-        setRadioLigado={setRadioLigado}
-        aoClicarNoRadio = {gerenciarEstadoRadio}
-        painelRadio = {painelRadio}
-        />
 
-        
-
-        <div className='zona-interacao-tablet' 
-        onClick={gerenciarTablet}>{ligarTablet}
-          <img 
-          className='tablet-img'
-          src= {process.env.PUBLIC_URL + '/imagens/tabletPNG.png'}
-            alt='tablet'
-            style ={{filter: ligarTablet ?  "drop-shadow(1px 1px 3px #00D7FF)" : "none"
-            }}
-            onClick={gerenciarTablet}
-          />
-
-      </div>
       
-        <MuralDeNotas
-          lembretes={lembretes} 
-          aoDeletar={deletarLembrete}
-          aoFixar={fixarLembrete}
-          painelLigadoPermanente={painelLigadoPermanente}
-          animacaoDeveRodar={animacaoJaAtivada}
-          conteudoVisivelPainel={primeiraMensagemPainel}
-      />
      
     </div>
   </VisibilidadePainelProvider>

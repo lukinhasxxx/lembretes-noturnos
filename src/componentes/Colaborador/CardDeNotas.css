@@ -2,17 +2,17 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    width: 23.5vw;
+    width: 23.5cqw;
 }
 
 .cards .card .pinOff,
 .cards .card .pinOn{
     user-select: none;
     height: auto;
-    width: 1.5vw;
+    width: 1.5cqw;
     position: absolute;
     top: 0;
-    left: 21vw;
+    left: 21cqw;
     cursor: pointer;
 }
 .cards .card .pinOff:hover,
@@ -28,10 +28,10 @@
 .cards .card .lixeira {
     user-select: none;
     height: auto;
-    width: 1.4vw;
+    width: 1.4cqw;
     position: absolute;
-    top: 2.5vw;
-    left: 21vw;
+    top: 2.5cqw;
+    left: 21cqw;
     cursor: pointer;
 }
 
@@ -45,7 +45,7 @@
 
 .cards .cabecalho {
     background-color:  #F0F0F0;
-    border-radius: 10px 10px 0px 0px;
+    border-radius: calc(10 * var(--px-arte)) calc(10 * var(--px-arte)) 0px 0px;
 }
 
 /* .cards img {
@@ -56,40 +56,40 @@
 
 .cards .card {
     background: #FFFFFF;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.08);
-    border-radius: 10px 10px 10px 10px;
+    box-shadow: calc(5 * var(--px-arte)) calc(5 * var(--px-arte)) calc(15 * var(--px-arte)) rgba(0, 0, 0, 0.08);
+    border-radius: calc(10 * var(--px-arte)) calc(10 * var(--px-arte)) calc(10 * var(--px-arte)) calc(10 * var(--px-arte));
 }
 
 .cards .card h4 {
     color: #1eff14;
-    font-size: clamp(10px, 0.94vw, 18px);
-    line-height: clamp(12px, 1.15vw, 22px);
+    font-size: max(10px, 0.94cqw);
+    line-height: max(12px, 1.15cqw);
     font-weight: bold;
-    text-shadow: 1px 0px 4px red;
-    margin-bottom: 0.42vw;
-    margin-top: 0.36vw;
-    margin-left: 0.26vw;
-    max-height: 5.36vw;;
-    max-width: 20.8vw;
+    text-shadow: calc(1 * var(--px-arte)) 0px calc(4 * var(--px-arte)) red;
+    margin-bottom: 0.42cqw;
+    margin-top: 0.36cqw;
+    margin-left: 0.26cqw;
+    max-height: 5.36cqw;;
+    max-width: 20.8cqw;
     overflow-wrap: anywhere;
 }
 
 .cards .card h5 {
-    font-size: clamp(12px, 0.94vw, 18px);   
-    line-height: clamp(16px, 1.15vw, 22px);
+    font-size: max(12px, 0.94cqw);   
+    line-height: max(16px, 1.15cqw);
     color: #212121;
-    padding: 0 0.83vw;
+    padding: 0 0.83cqw;
 }
 
 .deletar {
     position:absolute;
-    right: -0.52vw;
-    top: -0.52vw; 
+    right: -0.52cqw;
+    top: -0.52cqw; 
     cursor: pointer;
 }
 
 .favoritar {
-    margin-top: 1.04vw; 
+    margin-top: 1.04cqw; 
 }
 
 .coracao1{
