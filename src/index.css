@@ -14,6 +14,8 @@ code {
 }
 .App {
   height: 100vh;
+  /* altura visível real (no mobile desconta a barra de endereço); 100vh fica de fallback */
+  height: 100dvh;
   position: relative;
   overflow: hidden;  
 }
@@ -24,189 +26,17 @@ code {
     position: absolute;
 }
 
- .video-background{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  z-index: -1;
- }
-
+/* tablet da mesa: posição e tamanho vêm da <Ancora ponto="tablet"> (cena.config.js); aqui só ocupa 100% dela */
 .zona-interacao-tablet {
-    position: fixed;
-    top: 87vh;
-    left: 64vw;
-    transform: translate(-50%, -50%);
-    height: 50px;
-    width: 110px;
+    height: 100%;
+    width: 100%;
     cursor: pointer;
     user-select: none;
 }
 
-
-
-/* ZOOM 125% 1280 X 720 (INNERHEIGHT ~448PX) */
-@media (min-width: 1024px) and (max-width: 1092px) {
-  .App .secao-tablet-modal {
-    transform-origin: top left;
-    transform: scale(0.56);
-    margin-left: 13%;
-    margin-top: 5%;
-  }
-  .zona-interacao-tablet {
-    top: clamp(93vh, 94.5vh, 96vh);
-    left: clamp(66vw, 66.5vw, 67vw);
-  }
-  .zona-interacao-tablet .tablet-img {
+.zona-interacao-tablet .tablet-img {
+    display: block;
+    width: 100%;
     height: auto;
-    width: 66px; 
-  }
-}
-
-/* ZOOM 125% 1366 X 768 (INNERHEIGHT ~486PX) */
-@media (min-width: 1093px) and (max-width: 1151px) {
-  .App .secao-tablet-modal {
-    transform-origin: top left;
-    transform: scale(0.7);
-    margin-left: 13%;
-    margin-top: 5%;
-  }
-  .zona-interacao-tablet {
-    top: clamp(83vh, 84vh, 85vh);
-    left: clamp(68vw, 69vw, 71vw);
-  }
-  .zona-interacao-tablet .tablet-img {
-    height: auto;
-    width: 77px; 
-  }
-}
-
-/* ZOOM 125% 1440 X 900 (INNERHEIGHT ~592PX) */
-@media (min-width: 1152px) and (max-width: 1279px) {
-
-
-  
-  .App .secao-tablet-modal {
-    transform-origin: top left;
-    transform: scale(0.60);
-    margin-left: 13%;
-    margin-top: 5%;
-  }
-  .zona-interacao-tablet {
-    top: clamp(85vh, 88vh, 89vh);
-    left: clamp(66vw, 66vw, 68vw);
-  }
-  .zona-interacao-tablet .tablet-img {
-    height: auto;
-    width: 77px;
-  }
-}
-
-/* 1280×600 (innerHeight ~600px) */
-@media (min-width: 1280px) and (max-width: 1365px) {
-  .App .secao-tablet-modal {
-    transform-origin: top left;
-    transform: scale(0.66);
-    margin-left: 18%;
-    margin-top: 7%;
-  }
-  .zona-interacao-tablet {
-    top: clamp(89vh, 91vh, 93vh); 
-    left: clamp(64vw, 65vw, 67vw);
-  }
-  .zona-interacao-tablet .tablet-img {
-    height: auto;
-    width: 82.5px;
-  }
-}
-
-/* 1366×650 (innerHeight ~650px) */
-@media (min-width: 1366px) and (max-width: 1439px) {
-  .App .secao-tablet-modal {
-    transform-origin: top left;
-    transform: scale(0.70);
-    margin-left: 16%;
-    margin-top: 6%;
-  }
-  .zona-interacao-tablet {
-    top: clamp(88vh, 90vh, 92vh); 
-    left: clamp(64vw, 65vw, 67vw); 
-  }
-  .zona-interacao-tablet .tablet-img {
-    height: auto;
-    width: 82px;
-  }
-}
-
-/* 1440×780 (innerHeight ~780px) */
-@media (min-width: 1440px) and (max-width: 1535px) {
-  .App .secao-tablet-modal {
-    transform-origin: top left;
-    transform: scale(0.81);
-    margin-left: 16%;
-    margin-top: 7.5%;
-  }
-  .zona-interacao-tablet {
-    top: clamp(82vh, 85vh, 87vh);
-    left: clamp(64vw, 65vw, 66vw);
-  }
-  .zona-interacao-tablet .tablet-img {
-    height: auto;
-    width: 89px;
-  }
-}
-
-/* 1536×770 (innerHeight ~770px) */
-@media (min-width: 1536px) and (max-width: 1599px) {
-  .App .secao-tablet-modal {
-    transform-origin: top left;
-    transform: scale(0.82);
-    margin-left: 17%;
-    margin-top: 8%;
-  }
-  .zona-interacao-tablet {
-    top: clamp(87vh, 89.5vh, 91vh);
-    left: clamp(63.6vw, 64.6vw, 65.6vw);
-  }
-  .zona-interacao-tablet .tablet-img {
-    height: auto;
-    width: 93.5px;
-  }
-}
-
-/* 1600×800 (innerHeight ~800px) */
-@media (min-width: 1600px) and (max-width: 1919px) {
-  .App .secao-tablet-modal {
-    transform-origin: top left;
-    transform: scale(0.90);
-    margin-left: 18%;
-    margin-top: 7%;
-  }
-  .zona-interacao-tablet {
-    top: clamp(82vh, 88.5vh, 90vh);
-    left: clamp(63.5vw, 64.5vw, 65.5vw);
-  }
-  .zona-interacao-tablet .tablet-img {
-    height: auto;
-    width: 99px;
-  }
-}
-
-/* 1920×955 (innerHeight ~955px) */
-@media (min-width: 1920px) {
-  .App .secao-tablet-modal {
-    transform-origin: top left;
-    transform: scale(1);
-
-  }
-  .zona-interacao-tablet {
-    top: clamp(85vh, 87.7vh, 89vh); 
-    left: clamp(63vw, 64vw, 65vw);
-  }
-  .zona-interacao-tablet .tablet-img {
-    height: auto;
-    width: 110px;
-  }
+    pointer-events: none;
 }
