@@ -5,10 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { ModalTablet, TabletMesa } from './features/tablet';
 import { MuralDeNotas, VisibilidadePainelProvider } from './features/mural';
 import { PlayerRadio, MiniPlayer } from './features/radio';
-import Palco from './features/cena/Palco/Palco';
-import Ancora from './features/cena/Ancora/Ancora';
-import JanelaArrastavel from './features/hud/JanelaArrastavel/JanelaArrastavel';
-import { MINI_PLAYER, MODAL_TABLET } from './features/hud/hud.config';
+import { Palco, Ancora } from './features/cena';
+import { JanelaArrastavel, MINI_PLAYER, MODAL_TABLET } from './features/hud';
 
 
 function App() {
