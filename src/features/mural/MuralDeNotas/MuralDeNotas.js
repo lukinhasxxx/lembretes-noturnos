@@ -1,6 +1,6 @@
-import { VisibilidadePainelContext } from '../../contexts/VisibilidadePainel'
+import { VisibilidadePainelContext } from '../contexts/VisibilidadePainel'
 import './MuralDeNotas.css'
-import CardDeNotas from '../Colaborador/CardDeNotas'
+import CardDeNotas from '../CardDeNotas/CardDeNotas'
 import { useContext } from 'react'
 
 const MuralDeNotas = ({lembretes, aoDeletar, aoFixar,painelLigadoPermanente, animacaoDeveRodar, conteudoVisivelPainel}) => {

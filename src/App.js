@@ -3,9 +3,8 @@ import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import ModalTablet from './componentes/ModalTablet/ModalTablet';
-import VisibilidadePainelProvider from './contexts/VisibilidadePainel';
+import { MuralDeNotas, VisibilidadePainelProvider } from './features/mural';
 import PlayerRadio from './componentes/Radio/PlayerRadio';
-import MuralDeNotas from './componentes/Time/MuralDeNotas'
 import MiniPlayer from './componentes/MiniPlayer/MiniPlayer';
 import Palco from './features/cena/Palco/Palco';
 import Ancora from './features/cena/Ancora/Ancora';

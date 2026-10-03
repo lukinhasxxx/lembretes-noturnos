@@ -1,4 +1,4 @@
-import { VisibilidadePainelContext } from '../../contexts/VisibilidadePainel'
+import { VisibilidadePainelContext } from '../../features/mural'
 import './ModalTablet.css'
 import Botao from '../Botao'
 import { useState,useContext } from 'react'
