@@ -1,3 +1,4 @@
+/* Estilos globais da aplicação (o resto do CSS mora em cada feature) */
 
 body {
   margin: 0;
@@ -8,14 +9,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
 .App {
   height: 100vh;
   /* altura visível real (no mobile desconta a barra de endereço); 100vh fica de fallback */
   height: 100dvh;
   position: relative;
-  overflow: hidden;  
+  overflow: hidden;
 }

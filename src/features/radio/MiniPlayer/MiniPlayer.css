@@ -1,11 +1,9 @@
 /* simular um painelzinho de led em volta do nome da musica */
 
-:root {
-  --neon-c: #00e5ff;
-  --bg-holo: rgba(10, 10, 30, 0.5);
-}
-
 .mini-player-container {
+  /* cor neon dos botões do player (só usada aqui, por isso fica no container e não no :root) */
+  --cor-neon-botoes-player: #00e5ff;
+
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -71,7 +69,7 @@
   background: transparent;
   border: 1px solid #ababab00;
   border-radius: 4px;
-  color: var(--neon-c);
+  color: var(--cor-neon-botoes-player);
   padding: 3px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.3s;
@@ -79,7 +77,7 @@
 
 .controle-player button:hover {
   transform: scale(1.1);
-  box-shadow: 0 0 8px var(--neon-c);
+  box-shadow: 0 0 8px var(--cor-neon-botoes-player);
 }
 
 .botao-desligar:hover img {

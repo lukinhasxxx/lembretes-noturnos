@@ -1,0 +1,37 @@
+/* Scrollbar neon de TODA a página (lista do mural, telas do tablet etc.) */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border: 0px solid #00eeff;
+  box-shadow: 0 0 7px rgba(255, 0, 255,0.5);
+}
+
+::-webkit-scrollbar-thumb {
+    /* aqui mexo na cor DENTRO da barrinha */
+  background: #00fff1;
+  border-radius: 5px;
+  background-clip: content-box;
+  /* aqui eh a cor ao REDOR da barrinha */
+  border: solid 4px #a0c3cb96;
+  /* atenção: @keyframes neonPulse não existe no projeto, então essa animação não faz nada (criar se quiser o pulso) */
+  animation: neonPulse 1.5s ease-in-out infinite;
+}
+::-webkit-scrollbar-thumb:hover {
+
+  border: solid 4px #78d8eece;
+
+}
+
+/* Firefox: só onde ::-webkit-scrollbar não existe.
+   (sem essa condição, o Chrome 121+ também aplicaria scrollbar-color e ignoraria o estilo acima) */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #00bbff47 transparent;
+  }
+}
