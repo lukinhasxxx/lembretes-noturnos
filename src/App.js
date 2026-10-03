@@ -212,7 +212,7 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
           className='tablet-img'
           src= {process.env.PUBLIC_URL + '/imagens/tabletPNG.png'}
             alt='tablet'
-            style ={{filter: ligarTablet ?  "drop-shadow(1px 1px 3px #00D7FF)" : "none"
+            style ={{filter: ligarTablet ?  "drop-shadow(calc(1 * var(--px-arte)) calc(1 * var(--px-arte)) calc(3 * var(--px-arte)) #00D7FF)" : "none"
             }}
             onClick={gerenciarTablet}
           />
@@ -284,33 +284,7 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
 
 
 
- {/* {modalAberto && 
-      <Draggable 
-      nodeRef={nodeRefTablet}
-      bounds='parent'
-      enableUserSelectHack={false}
-      cancel="button, input, textarea, select, option, a"
-      defaultPosition={{ 
-      x: window.innerWidth * 0.2,
-      y: window.innerHeight * 0.09,
-    }}
-      >
-        <div ref={nodeRefTablet} 
-        style={{display: 'inline-block', position: 'absolute',        top: 0,    
-        left: 0  }}
-        >
 
-              <ModalTablet
-                aoSubmeter={adicionarLembrete}
-                validarLigadoDesligado = {ligarTablet}
-                painelLigadoPermanente={painelLigadoPermanente}
-                corNeon = {setLuzRadio}
-                radioLigado={radioLigado}
-              />        
-        </div>
-      </Draggable>
- }
- */}
 
 
 

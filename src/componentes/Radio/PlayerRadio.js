@@ -12,7 +12,7 @@ const PlayerRadio = ({corLuzRadio, radioLigado, aoClicarNoRadio, painelRadio}) =
                 className='imagem-radio' 
                 alt='imagem de um radio' 
                 src = { process.env.PUBLIC_URL + '/imagens/playerRadio.png'} 
-                style={{filter: radioLigado? `drop-shadow(-18px 38px 37px ${corLuzRadio})`: "none"}}
+                style={{filter: radioLigado? `drop-shadow(calc(-18 * var(--px-arte)) calc(38 * var(--px-arte)) calc(37 * var(--px-arte)) ${corLuzRadio})`: "none"}}
             />
             <div 
             className='painel-shadow'

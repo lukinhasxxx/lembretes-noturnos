@@ -18,6 +18,10 @@
     /* habilita cqw/cqh nos filhos: 1cqw = 1% da largura do palco (= da arte na tela) */
     container-type: size;
 
+    /* 1 pixel da arte (1/1920 do palco) na tela. Uso nos filhos: calc(15 * var(--px-arte))
+       em 1920 de largura vale 1px; em telas menores encolhe junto com a arte */
+    --px-arte: 0.0520833cqw;
+
     /* a cena é um cenário, não um documento: nada nela é selecionável */
     -webkit-user-select: none;
     user-select: none;

@@ -8,79 +8,79 @@
   }
 
   20.01%, 22.99% { opacity: 1; }
-  20.3% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
-  20.6% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
-  20.9% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-1px); }
-  21.2% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(1px);  }
-  21.5% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
-  21.8% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
-  22.1% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
-  22.4% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(1px);  }
-  22.7% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-1px); }
+  20.3% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-2 * var(--px-arte))); }
+  20.6% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(2 * var(--px-arte)));  }
+  20.9% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-1 * var(--px-arte))); }
+  21.2% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(1 * var(--px-arte)));  }
+  21.5% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-2 * var(--px-arte))); }
+  21.8% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(2 * var(--px-arte)));  }
+  22.1% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-2 * var(--px-arte))); }
+  22.4% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(1 * var(--px-arte)));  }
+  22.7% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-1 * var(--px-arte))); }
 
   23%, 25% { opacity: 0; transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg); }
 
   30.01%, 32.99% { opacity: 1; }
-  30.3% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-3px); }
-  30.6% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(3px);  }
-  30.9% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-1px); }
-  31.2% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(1px);  }
-  31.5% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
-  31.8% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
-  32.1% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
-  32.4% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
-  32.7% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  30.3% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-3 * var(--px-arte))); }
+  30.6% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(3 * var(--px-arte)));  }
+  30.9% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-1 * var(--px-arte))); }
+  31.2% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(1 * var(--px-arte)));  }
+  31.5% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-2 * var(--px-arte))); }
+  31.8% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(2 * var(--px-arte)));  }
+  32.1% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-2 * var(--px-arte))); }
+  32.4% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(2 * var(--px-arte)));  }
+  32.7% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-2 * var(--px-arte))); }
 
   33%, 40% { opacity: 0; transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg); }
 
   40.01%, 42.99% { opacity: 1; }
-  40.3% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
-  40.6% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
-  40.9% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
-  41.2% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
-  41.5% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
-  41.8% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
-  42.1% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
-  42.4% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(2px);  }
-  42.7% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-2px); }
+  40.3% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-2 * var(--px-arte))); }
+  40.6% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(2 * var(--px-arte)));  }
+  40.9% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-2 * var(--px-arte))); }
+  41.2% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(2 * var(--px-arte)));  }
+  41.5% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-2 * var(--px-arte))); }
+  41.8% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(2 * var(--px-arte)));  }
+  42.1% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-2 * var(--px-arte))); }
+  42.4% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(2 * var(--px-arte)));  }
+  42.7% { transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-2 * var(--px-arte))); }
 
   43%, 55% { opacity: 0; transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg); }
 
   55.1% {
     opacity: 1;
-    transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-27deg);
+    transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(1 * var(--px-arte))) skewX(-27deg);
     filter: brightness(2.5);
   }
   57% { opacity: 0; transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
   59% {
     opacity: 1;
-    transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-57deg);
+    transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(1 * var(--px-arte))) skewX(-57deg);
     filter: brightness(2.5);
   }
   59.7% { opacity: 0; transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
   60% {
     opacity: 1;
-    transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-57deg);
+    transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(1 * var(--px-arte))) skewX(-57deg);
     filter: brightness(2.5);
   }
 
   60.1% { opacity: 0; transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
   60.8% {
     opacity: 1;
-    transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(27deg);
+    transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(1 * var(--px-arte))) skewX(27deg);
     filter: brightness(2.5);
   }
 
     60.9% { opacity: 0; transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
   61.4% {
     opacity: 1;
-    transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(1px) skewX(-57deg);
+    transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(1 * var(--px-arte))) skewX(-57deg);
     filter: brightness(2.5);
   }
 
   63% {
     opacity: 1;
-    transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(-57px) skewX(-1deg);
+    transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg) translateX(calc(-57 * var(--px-arte))) skewX(-1deg);
     filter: brightness(2.5);
   }
   65% { opacity: 0; transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg); filter: brightness(1); }
@@ -102,23 +102,23 @@
 
   41%, 41.1% {
     box-shadow:
-      0 0 4px rgba(0, 255, 255, 0.342),
-      0 2px 10px rgba(0, 255, 255, 0.438),
-      0 3px 15px rgba(0, 255, 255, 0.411);
+      0 0 calc(4 * var(--px-arte)) rgba(0, 255, 255, 0.342),
+      0 calc(2 * var(--px-arte)) calc(10 * var(--px-arte)) rgba(0, 255, 255, 0.438),
+      0 calc(3 * var(--px-arte)) calc(15 * var(--px-arte)) rgba(0, 255, 255, 0.411);
   }
 
   59%, 60% {
     box-shadow:
-      0 0 4px rgba(0, 255, 255, 0.555),
-      0 2px 10px rgba(0, 255, 255, 0.719),
-      0 3px 15px rgba(0,255,255,0.6);
+      0 0 calc(4 * var(--px-arte)) rgba(0, 255, 255, 0.555),
+      0 calc(2 * var(--px-arte)) calc(10 * var(--px-arte)) rgba(0, 255, 255, 0.719),
+      0 calc(3 * var(--px-arte)) calc(15 * var(--px-arte)) rgba(0,255,255,0.6);
   }
 
   61%, 100% {
     box-shadow:
-      0 0 4px rgba(0,255,255,0.5),
-      0 2px 10px rgba(0,255,255,0.55),
-      0 3px 15px rgba(0,255,255,0.6);
+      0 0 calc(4 * var(--px-arte)) rgba(0,255,255,0.5),
+      0 calc(2 * var(--px-arte)) calc(10 * var(--px-arte)) rgba(0,255,255,0.55),
+      0 calc(3 * var(--px-arte)) calc(15 * var(--px-arte)) rgba(0,255,255,0.6);
   }
 
   /* 
@@ -135,16 +135,16 @@
 @keyframes neonGlow {
   0%, 100% {
     box-shadow:
-      0 0 2px rgba(0,255,255,0.35),
-      0 1px 7px rgba(0, 255, 255, 0.521),
-      0 2px 10px rgb(0, 255, 255);
+      0 0 calc(2 * var(--px-arte)) rgba(0,255,255,0.35),
+      0 calc(1 * var(--px-arte)) calc(7 * var(--px-arte)) rgba(0, 255, 255, 0.521),
+      0 calc(2 * var(--px-arte)) calc(10 * var(--px-arte)) rgb(0, 255, 255);
   }
 
   50% {
     box-shadow:
-      0 0 3px rgba(0,255,255,0.38),
-      0 1px 7px rgba(0, 255, 255, 0.589),
-      0 2px 14px rgba(0, 255, 255, 0.699);
+      0 0 calc(3 * var(--px-arte)) rgba(0,255,255,0.38),
+      0 calc(1 * var(--px-arte)) calc(7 * var(--px-arte)) rgba(0, 255, 255, 0.589),
+      0 calc(2 * var(--px-arte)) calc(14 * var(--px-arte)) rgba(0, 255, 255, 0.699);
   }
 }
 .painel.painel-surgindo {
@@ -171,7 +171,7 @@
     background-color: rgba(70, 107, 185, 0.0);
     width: 100%;
     height: 100%;
-    border-radius: 20px;
+    border-radius: calc(20 * var(--px-arte));
     
     transform-origin: 90% 25%; /* profundidade / inclnacao */
 }
@@ -220,15 +220,15 @@
 .painel p{
     margin-top: 0px;
     color: violet;
-    text-shadow: 4px 1px 0px #00806f;
-    font-size: clamp(12px, 1.35cqw, 26px);
+    text-shadow: calc(4 * var(--px-arte)) calc(1 * var(--px-arte)) 0px #00806f;
+    font-size: max(12px, 1.35cqw);
     user-select: none;
 }
 
 .painel text {
-    font-size: clamp(12px, 1.25cqw, 24px);
+    font-size: max(12px, 1.25cqw);
     color: #fff509;
-    text-shadow: 5px 2px 0px #800000;
+    text-shadow: calc(5 * var(--px-arte)) calc(2 * var(--px-arte)) 0px #800000;
 }
 
 ::-webkit-scrollbar {
@@ -265,23 +265,23 @@
 }
 
 .painel h3 {
-    font-size:clamp(18px, 1.67cqw, 32px);
-    border-bottom: 4px solid;
+    font-size:max(18px, 1.67cqw);
+    border-bottom: calc(4 * var(--px-arte)) solid;
     display: inline-block;
-    padding-bottom: 8px;
+    padding-bottom: calc(8 * var(--px-arte));
 }
 
 .painel .zona-dos-cards {
     display: flex;
     flex-direction: column;
     background-color:rgb(36, 56, 156, 0);
-    box-shadow: 0px 0px 7px rgb(253, 255, 8 ,0.5);
+    box-shadow: 0px 0px calc(7 * var(--px-arte)) rgb(253, 255, 8 ,0.5);
     padding-right:0.26cqw;
     width: 100%;
     /* via variável porque o minificador do CRA ainda não reconhece cqw dentro de calc */
     --altura-titulo-mural: 2.7cqw;
     height: calc(100% - var(--altura-titulo-mural));
-    border-radius: 10px;
+    border-radius: calc(10 * var(--px-arte));
     overflow-y: auto;
     overflow-x: hidden;
     flex-wrap: nowrap;
@@ -293,10 +293,10 @@
     margin-left: 0.52cqw;
     margin-top: 0.52cqw;
     border: none; 
-    box-shadow: 1px 1px 8px rgb(0 255 170);
+    box-shadow: calc(1 * var(--px-arte)) calc(1 * var(--px-arte)) calc(8 * var(--px-arte)) rgb(0 255 170);
     position: relative;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(calc(5 * var(--px-arte)));
+    -webkit-backdrop-filter: blur(calc(4 * var(--px-arte)));
     overflow-y: auto;
     overflow-x: hidden; 
 }
@@ -306,11 +306,11 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 50px;
-    height: 40px;
-    border-top: 2px solid rgba(95, 255, 247, 1);
-    border-left: 2px solid rgba(95, 255, 247, 1);
-    border-top-left-radius: 10px;
+    width: calc(50 * var(--px-arte));
+    height: calc(40 * var(--px-arte));
+    border-top: calc(2 * var(--px-arte)) solid rgba(95, 255, 247, 1);
+    border-left: calc(2 * var(--px-arte)) solid rgba(95, 255, 247, 1);
+    border-top-left-radius: calc(10 * var(--px-arte));
 }
 
 .painel .zona-dos-cards .card::after {
@@ -318,39 +318,9 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    width: 50px;
-    height: 40px;
-    border-bottom: 2px solid rgba(95, 255, 247, 1);
-    border-right:2px solid rgba(95, 255, 247, 1);
-    border-bottom-right-radius: 10px;
+    width: calc(50 * var(--px-arte));
+    height: calc(40 * var(--px-arte));
+    border-bottom: calc(2 * var(--px-arte)) solid rgba(95, 255, 247, 1);
+    border-right:calc(2 * var(--px-arte)) solid rgba(95, 255, 247, 1);
+    border-bottom-right-radius: calc(10 * var(--px-arte));
 }
-
-
-
-
-
-
-
-/* media query 1366px x 690 */
-@media (max-width: 1365px) {
-
-}
-
-/* media query  1366x690 */
-@media (min-width: 1366px) and (max-width: 1439px) {
-
-}
-
-/* media query 1440x810 */
-@media (min-width: 1440px) and (max-width: 1599px) {
-
-}
-
-/* media query 1600x820 */
-@media (min-width: 1600px) and (max-width: 1919px) {
-
-}
-
-/* @media (max-width: 1920px) {
-
-} */

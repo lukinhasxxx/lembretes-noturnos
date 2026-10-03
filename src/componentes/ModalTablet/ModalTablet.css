@@ -615,14 +615,6 @@ margin-left: 7px;
 transform: scale(0.95);
 }
 
-/* zona de interacao do tablet */
-.tablet-img {
-  position: absolute;
-  height: 50px;
-  width: 110px;
-  pointer-events: none;
-}
-
 .area-texto{
   border: 2px solid #0085ff;
     border-radius: 28px;

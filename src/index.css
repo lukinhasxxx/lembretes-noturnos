@@ -14,6 +14,8 @@ code {
 }
 .App {
   height: 100vh;
+  /* altura visível real (no mobile desconta a barra de endereço); 100vh fica de fallback */
+  height: 100dvh;
   position: relative;
   overflow: hidden;  
 }
@@ -33,6 +35,8 @@ code {
 }
 
 .zona-interacao-tablet .tablet-img {
+    display: block;
     width: 100%;
     height: auto;
+    pointer-events: none;
 }
