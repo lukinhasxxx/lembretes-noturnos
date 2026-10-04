@@ -7,7 +7,8 @@ import { usePontoFocal } from '../hooks/usePontoFocal'
 // Tudo que for renderizado como children fica no mesmo sistema de coordenadas da arte:
 // left: 15% dentro do palco = 15% da largura do vídeo, em qualquer tela.
 // Quando a tela corta a arte, o ponto focal desloca o palco para manter os pontos de interesse visíveis.
-const Palco = ({ videoSrc, children }) => {
+// posterSrc: imagem do primeiro frame, mostrada na hora enquanto o vídeo carrega (evita tela preta).
+const Palco = ({ videoSrc, posterSrc, children }) => {
     const palcoRef = useRef(null)
     usePontoFocal(palcoRef)
 
@@ -22,6 +23,7 @@ const Palco = ({ videoSrc, children }) => {
             <video
                 className='palco-video'
                 src={videoSrc}
+                poster={posterSrc}
                 autoPlay
                 loop
                 muted

@@ -190,7 +190,10 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
     
     <div className="App">
 
-    <Palco videoSrc={process.env.PUBLIC_URL + '/videos/video-background.mp4'}>
+    <Palco
+      videoSrc={process.env.PUBLIC_URL + '/videos/video-background.mp4'}
+      posterSrc={process.env.PUBLIC_URL + '/imagens/poster-cena.jpg'}
+    >
       <Ancora ponto='radio'>
         <PlayerRadio
           corLuzRadio = {luzRadio}
@@ -216,8 +219,10 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
         />
       </Ancora>
     </Palco>
-    <audio 
+    <audio
     ref={audioRef}
+    // não baixa nada de áudio ao abrir o site; a faixa só carrega quando o rádio der play
+    preload='none'
     src= {process.env.PUBLIC_URL +musicas[indiceMusicaAtual].src}
     onEnded={proximaMusica}
     />
