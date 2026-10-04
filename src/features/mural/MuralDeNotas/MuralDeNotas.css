@@ -152,7 +152,6 @@
 
     inicializacao-falha    6s linear none,
     neon-border-flicker    6s linear none,
-    neon-flicker-startup   6s linear forwards,
     ventoComOscilacao      14s ease-in-out infinite 6s,
     neonGlow               2.7s linear infinite 6s;
 }
@@ -162,6 +161,9 @@
 .painel{
     /* distância da "câmera" do 3D; em cqw para a inclinação ficar igual em qualquer tela (1000px de 1920) */
     --mural-perspectiva: 52.08cqw;
+    /* força do vento no ciclo atual (1 = balanço original); o MuralDeNotas.js sorteia novos valores a cada ciclo */
+    --forca-rajada-vento: 1;
+    --forca-brisa-vento: 1;
 
     text-align: center;
     padding: 1.6cqw;
@@ -175,47 +177,57 @@
     
     transform-origin: 90% 25%; /* profundidade / inclnacao */
 }
-/* comentarios gerados para facilitar a modificacao da animacao */
+/* VENTO: o painel fica preso no topo por duas barras, então ele NÃO gira de lado (rotateY fixo em -35deg).
+   O único movimento natural é o de pêndulo: a parte de baixo balança para frente/trás, pivotando na borda de cima.
+   translateY(-25%) ... translateY(25%) leva o eixo do rotateX do transform-origin (25% da altura) até o topo;
+   com rotateX(0deg) as duas translações se anulam e o painel fica idêntico à posição base.
+   rotateX positivo = parte de baixo vai para a frente do painel (na direção do sofá).
+   A força de cada ciclo vem de --forca-rajada-vento e --forca-brisa-vento, sorteadas a cada volta
+   da animação no MuralDeNotas.js (valores padrão no .painel). */
 @keyframes ventoComOscilacao {
-    /* Base inclinada */
+    /* Parado */
     0% {
-        transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg);
+        transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) translateY(-25%) rotateX(0deg) translateY(25%);
     }
-    /* Balanço leve para trás */
+    /* Brisa leve (sinal da força decide: para frente ou para trás) */
     15% {
-        transform: perspective(var(--mural-perspectiva)) rotateY(-34deg) rotateX(0deg);
+        transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) translateY(-25%) rotateX(calc(var(--forca-brisa-vento) * 0.8deg)) translateY(25%);
     }
-    /* Volta um pouco */
+    /* Volta e passa um pouco */
     30% {
-        transform: perspective(var(--mural-perspectiva)) rotateY(-36deg) rotateX(0deg);
+        transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) translateY(-25%) rotateX(calc(var(--forca-brisa-vento) * -0.4deg)) translateY(25%);
     }
-    /* Rajada forte para trás */
+    /* Rajada */
     45% {
-        transform: perspective(var(--mural-perspectiva)) rotateY(-33deg) rotateX(1deg);
+        transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) translateY(-25%) rotateX(calc(var(--forca-rajada-vento) * 3deg)) translateY(25%);
     }
-    /* Oscilação no fim da rajada */
+    /* Oscilação durante a rajada */
     50% {
-        transform: perspective(var(--mural-perspectiva)) rotateY(-33.5deg) rotateX(2deg);
+        transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) translateY(-25%) rotateX(calc(var(--forca-rajada-vento) * 2.2deg)) translateY(25%);
     }
+    /* Pico da rajada */
     55% {
-        transform: perspective(var(--mural-perspectiva)) rotateY(-32.8deg) rotateX(3deg);
+        transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) translateY(-25%) rotateX(calc(var(--forca-rajada-vento) * 3.6deg)) translateY(25%);
     }
+    /* Ainda empurrando */
     60% {
-        transform: perspective(var(--mural-perspectiva)) rotateY(-33.2deg) rotateX(2deg);
+        transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) translateY(-25%) rotateX(calc(var(--forca-rajada-vento) * 2.6deg)) translateY(25%);
     }
     /* Começa a voltar */
     75% {
-        transform: perspective(var(--mural-perspectiva)) rotateY(-34deg) rotateX(0deg);
+        transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) translateY(-25%) rotateX(calc(var(--forca-rajada-vento) * 0.6deg)) translateY(25%);
     }
-    /* Pequena oscilação antes de estabilizar */
+    /* Passa um pouco para trás, como pêndulo */
     85% {
-        transform: perspective(var(--mural-perspectiva)) rotateY(-36deg) rotateX(0deg);
+        transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) translateY(-25%) rotateX(calc(var(--forca-rajada-vento) * -0.8deg)) translateY(25%);
     }
     /* Retorna à base */
     100% {
-        transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) rotateX(0deg);
+        transform: perspective(var(--mural-perspectiva)) rotateY(-35deg) translateY(-25%) rotateX(0deg) translateY(25%);
     }
 }
+
+
 
 .painel p{
     margin-top: 0px;
@@ -290,4 +302,219 @@
     border-bottom: calc(2 * var(--px-arte)) solid rgba(95, 255, 247, 1);
     border-right:calc(2 * var(--px-arte)) solid rgba(95, 255, 247, 1);
     border-bottom-right-radius: calc(10 * var(--px-arte));
+}
+
+/* ---------------------------------------------------------------- */
+/* LIMPAR TUDO: aba holográfica na lateral + notas sumindo          */
+/* ---------------------------------------------------------------- */
+
+/* notas "dando glitch" e sumindo antes de serem apagadas (duração = DURACAO_APAGANDO_NOTAS_MS no App.js) */
+.painel.apagando-notas .zona-dos-cards {
+    animation: notas-apagando 0.45s steps(6) forwards;
+}
+
+@keyframes notas-apagando {
+    0%   { opacity: 1;   transform: translateX(0);                              filter: brightness(1); }
+    30%  { opacity: 0.8; transform: translateX(calc(-6 * var(--px-arte))) skewX(-8deg); filter: brightness(1.8) hue-rotate(60deg); }
+    55%  { opacity: 0.5; transform: translateX(calc(5 * var(--px-arte)))  skewX(10deg); filter: brightness(2.2); }
+    80%  { opacity: 0.2; transform: translateX(calc(-3 * var(--px-arte))) scaleY(0.6);  filter: brightness(2.5) hue-rotate(-40deg); }
+    100% { opacity: 0;   transform: translateX(0) scaleY(0.2);              filter: brightness(1); }
+}
+
+/* faixa na borda esquerda: uma mancha escura suave, no tom do painel, que só indica "tem algo aqui".
+   Passar o mouse nela projeta o botão "Deletar tudo" para fora do painel. */
+.painel .zona-hover-limpar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2.8cqw;
+    z-index: 3;
+    border-radius: calc(20 * var(--px-arte)) 0 0 calc(20 * var(--px-arte));
+    background: linear-gradient(to right, rgba(0, 28, 44, 0.55), rgba(0, 28, 44, 0.22) 55%, transparent);
+    cursor: pointer;
+    transition: background 0.4s ease;
+}
+
+.painel .zona-hover-limpar:hover,
+.painel .zona-hover-limpar.ativa {
+    background: linear-gradient(to right, rgba(0, 46, 66, 0.7), rgba(0, 120, 140, 0.18) 55%, transparent);
+}
+
+/* raio sutil: um brilho borrado que dá um "estalo" rápido de tempos em tempos, dentro da mancha */
+.painel .zona-hover-limpar::after {
+    content: "";
+    position: absolute;
+    top: 30%;
+    bottom: 30%;
+    left: 35%;
+    width: calc(3 * var(--px-arte));
+    border-radius: calc(3 * var(--px-arte));
+    background: linear-gradient(to bottom, transparent, #c9fbff 30%, #6ff 50%, #c9fbff 70%, transparent);
+    filter: blur(calc(1.5 * var(--px-arte)));
+    opacity: 0;
+    animation: raio-sutil-faixa 5.5s steps(1) infinite;
+    pointer-events: none;
+}
+
+/* aba que se projeta para FORA do painel, pela esquerda, no plano do holograma (acompanha a inclinação e o vento).
+   Escondida: recolhida atrás da borda. O atraso ao esconder dá tempo do mouse ir da faixa até a aba. */
+.painel .aba-limpar {
+    position: absolute;
+    top: 40%;
+    right: 100%;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 0.5cqw;
+    padding-right: 0.8cqw; /* encosta na borda do painel sem deixar "buraco" para o hover */
+    transform-origin: right center;
+    transform: translateX(40%) scaleX(0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease 0.3s, transform 0.3s ease 0.3s, visibility 0s linear 0.6s;
+}
+
+.painel .zona-hover-limpar:hover ~ .aba-limpar,
+.painel .aba-limpar:hover,
+.painel .aba-limpar.fixada,
+.painel .aba-limpar.confirmando {
+    transform: translateX(0) scaleX(1);
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+    animation: aba-limpar-projetar 0.4s steps(5);
+}
+
+/* botões da aba: simples e estáticos (o efeito fica na borda do painel) */
+.painel .botao-aba-limpar {
+    min-width: 6cqw;
+    height: 2.4cqw;
+    padding: 0 0.9cqw;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: max(10px, 0.9cqw);
+    letter-spacing: 0.08em;
+    color: #cfefff;
+    background: rgba(4, 14, 26, 0.88);
+    border: calc(1 * var(--px-arte)) solid rgba(0, 230, 246, 0.5);
+    border-radius: calc(10 * var(--px-arte));
+    cursor: pointer;
+}
+
+.painel .botao-aba-limpar:active {
+    transform: scale(0.95);
+}
+
+/* hover leve nos botões: sobe um pouquinho e ganha um brilho fraco */
+.painel .botao-aba-limpar {
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+}
+
+.painel .botao-aba-limpar:hover {
+    transform: translateY(calc(-2 * var(--px-arte)));
+}
+
+.painel .botao-aba-limpar:hover:active {
+    transform: scale(0.95);
+}
+
+/* Sim: brilho azul neon claro */
+.painel .botao-aba-limpar-sim:hover {
+    border-color: #7ff6ff;
+    box-shadow: 0 0 calc(10 * var(--px-arte)) rgba(110, 240, 255, 0.55);
+}
+
+/* Não: brilho roxo claro */
+.painel .botao-aba-limpar-nao:hover {
+    border-color: #c9a8ff;
+    box-shadow: 0 0 calc(10 * var(--px-arte)) rgba(190, 150, 255, 0.55);
+}
+
+/* borda parada na mesma cor do brilho do hover: Sim azul, Não roxo */
+.painel .botao-aba-limpar-sim {
+    min-width: 3.6cqw;
+    border-color: rgba(110, 240, 255, 0.6);
+}
+
+.painel .botao-aba-limpar-nao {
+    min-width: 3.6cqw;
+    border-color: rgba(190, 150, 255, 0.6);
+}
+
+.painel .pergunta-aba-limpar {
+    white-space: nowrap;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: max(11px, 1cqw);
+    color: #5ffff7;
+    text-shadow: 0 0 calc(8 * var(--px-arte)) rgba(0, 255, 255, 0.8);
+}
+
+/* entra "ligando" como holograma */
+@keyframes aba-limpar-projetar {
+    0%   { opacity: 0;   filter: brightness(2.5); }
+    40%  { opacity: 0.4; filter: brightness(1.8); }
+    60%  { opacity: 0.1; }
+    80%  { opacity: 0.9; filter: brightness(1.4); }
+    100% { opacity: 1;   filter: brightness(1); }
+}
+
+/* BORDA EM GLITCH: mouse em "Deletar tudo"/"Sim" → o contorno do painel pisca com o MESMO glitch do botão
+   "Wallpapers" do tablet (fatias horizontais --fatia-1..5 + tremido, ciano com sombra amarela, steps(2)).
+   ::before = contorno ciano; ::after = contorno amarelo fazendo o glitch ao contrário */
+.painel.borda-em-glitch::before,
+.painel.borda-em-glitch::after {
+    --fatia-1: inset(80% -6% 0 0);
+    --fatia-2: inset(50% -6% 30% 0);
+    --fatia-3: inset(10% -6% 85% 0);
+    --fatia-4: inset(40% -6% 43% 0);
+    --fatia-5: inset(80% -6% 5% 0);
+
+    /* contorna só a área das notas (.zona-dos-cards): começa abaixo do título
+       (padding do painel 1.6cqw + altura reservada do título 2.7cqw) e respeita o padding nas laterais/embaixo */
+    --glitch-topo-notas: 4.3cqw;
+    --glitch-lado-notas: 1.6cqw;
+
+    content: "";
+    position: absolute;
+    top: calc(var(--glitch-topo-notas) - 6 * var(--px-arte));
+    left: calc(var(--glitch-lado-notas) - 6 * var(--px-arte));
+    right: calc(var(--glitch-lado-notas) - 6 * var(--px-arte));
+    bottom: calc(var(--glitch-lado-notas) - 6 * var(--px-arte));
+    border-radius: calc(14 * var(--px-arte));
+    pointer-events: none;
+    z-index: 4;
+    clip-path: var(--fatia-1);
+}
+
+.painel.borda-em-glitch::before {
+    border: calc(3 * var(--px-arte)) solid #00E6F6;
+    box-shadow: calc(-3 * var(--px-arte)) calc(-3 * var(--px-arte)) 0 #F8F005, 0 0 calc(10 * var(--px-arte)) #00E6F6;
+    animation: glitch-borda-painel 0.9s steps(2, end) infinite;
+}
+
+.painel.borda-em-glitch::after {
+    border: calc(2 * var(--px-arte)) solid #F8F005;
+    opacity: 0.8;
+    animation: glitch-borda-painel 0.9s steps(2, end) infinite reverse;
+}
+
+@keyframes glitch-borda-painel {
+    0%   { clip-path: var(--fatia-1); transform: translate(calc(-20 * var(--px-arte)), calc(-10 * var(--px-arte))); }
+    10%  { clip-path: var(--fatia-3); transform: translate(calc(10 * var(--px-arte)), calc(10 * var(--px-arte))); }
+    20%  { clip-path: var(--fatia-1); transform: translate(calc(-10 * var(--px-arte)), calc(10 * var(--px-arte))); }
+    30%  { clip-path: var(--fatia-3); transform: translate(0, calc(5 * var(--px-arte))); }
+    40%  { clip-path: var(--fatia-2); transform: translate(calc(-5 * var(--px-arte)), 0); }
+    50%  { clip-path: var(--fatia-3); transform: translate(calc(5 * var(--px-arte)), 0); }
+    60%  { clip-path: var(--fatia-4); transform: translate(calc(5 * var(--px-arte)), calc(10 * var(--px-arte))); }
+    70%  { clip-path: var(--fatia-2); transform: translate(calc(-10 * var(--px-arte)), calc(10 * var(--px-arte))); }
+    80%  { clip-path: var(--fatia-5); transform: translate(calc(20 * var(--px-arte)), calc(-10 * var(--px-arte))); }
+    90%  { clip-path: var(--fatia-1); transform: translate(calc(-10 * var(--px-arte)), 0); }
+    100% { clip-path: var(--fatia-1); transform: translate(0, 0); }
+}
+
+/* "estalo" do raio sutil dentro da faixa da esquerda */
+@keyframes raio-sutil-faixa {
+    0%, 68%, 70%, 72%, 100% { opacity: 0; transform: translateY(0); }
+    69%                     { opacity: 0.9; transform: translateY(calc(-6 * var(--px-arte))); }
+    71%                     { opacity: 0.5; transform: translateY(calc(4 * var(--px-arte))); }
 }

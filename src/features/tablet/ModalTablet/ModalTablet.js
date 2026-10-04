@@ -5,8 +5,9 @@ import { useState,useContext } from 'react'
 import Relogio from '../sistema/Relogio/Relogio'
 import WindowBar from '../sistema/WindowBar/WindowBar'
 import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
+import { useEstadoPersistido } from '../../../shared/hooks/useEstadoPersistido'
 
-const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, corNeon, radioLigado}) => {
+const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
 
     //perto do fim do projeto ai componetiza, modulariza as coisas
     const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)   
@@ -17,8 +18,13 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         app_lembrete:'about.exe',
         app_config:'config.exe'
     })
-    const [previa, setPrevia] = useState(null)
-    const [mudarWallpaper, setMudarWallpaper] = useState(false)
+    // só o wallpaper de exemplo (preset) é salvo; o de upload é uma imagem inteira e não cabe bem no localStorage.
+    // salva o caminho sem o PUBLIC_URL, para funcionar tanto no localhost quanto no GitHub Pages
+    const [wallpaperPresetSalvo, setWallpaperPresetSalvo] = useEstadoPersistido('wallpaper-preset', null)
+    const [previa, setPrevia] = useState(() =>
+        wallpaperPresetSalvo ? process.env.PUBLIC_URL + wallpaperPresetSalvo : null
+    )
+    const [mudarWallpaper, setMudarWallpaper] = useState(() => Boolean(wallpaperPresetSalvo))
     const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
 
     const wallpapersProntos = [
@@ -31,6 +37,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 const selecionarPreset = (caminhoDaImagem) => {
     setPrevia(process.env.PUBLIC_URL + caminhoDaImagem);
     setMudarWallpaper(true)
+    setWallpaperPresetSalvo(caminhoDaImagem)
 }
 
     const aoSalvar = (evento) => {
@@ -225,9 +232,9 @@ const selecionarPreset = (caminhoDaImagem) => {
                             setTelaAtiva(proximaTela);
                             setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
                             }} >
-                            <p>About</p> 
+                            <p>About</p>
                     </div>
-                </WindowBar>    
+                </WindowBar>
 
                     <form onSubmit={aoSalvar}>
      
@@ -251,6 +258,16 @@ const selecionarPreset = (caminhoDaImagem) => {
                             onClick={()=>{alterarVisibilidadePainel()}
                                     }>
                             <div className='botao-mostrar-esconder-painel' ><p>{textoBotao}</p>
+                            </div>
+                        </div>
+                        )
+                    }
+                    { // mural ainda desligado, mas há lembretes salvos (ex.: depois do F5): liga com a animação
+                        painelLigadoPermanente === false && haLembretesSalvos && (
+                        <div className='mostrar-e-esconder'
+                            onClick={()=>{aoLigarMural()}
+                                    }>
+                            <div className='botao-mostrar-esconder-painel' ><p>Mostrar painel</p>
                             </div>
                         </div>
                         )
