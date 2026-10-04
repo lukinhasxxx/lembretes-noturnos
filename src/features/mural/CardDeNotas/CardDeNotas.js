@@ -1,14 +1,14 @@
-import { useState } from 'react'
 import './CardDeNotas.css'
 
 
 const CardDeNotas = ({lembretes, aoFixar, aoDeletar}) => {
 
-const [fixarLembrete, setFixarLembrete] = useState(false)
+// o "fixado" vem do próprio lembrete (que é salvo no navegador), não de um estado local do card:
+// assim o pin continua certo depois de recarregar a página
+const fixarLembrete = lembretes.fixar
 
 const validarFixado = () => {
     setTimeout( ()=>{
-    setFixarLembrete(fixarLembrete => !fixarLembrete)
     aoFixar(lembretes.id)}
     ,100)
 

@@ -152,7 +152,6 @@
 
     inicializacao-falha    6s linear none,
     neon-border-flicker    6s linear none,
-    neon-flicker-startup   6s linear forwards,
     ventoComOscilacao      14s ease-in-out infinite 6s,
     neonGlow               2.7s linear infinite 6s;
 }

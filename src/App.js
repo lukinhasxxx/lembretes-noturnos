@@ -7,21 +7,29 @@ import { MuralDeNotas, VisibilidadePainelProvider } from './features/mural';
 import { PlayerRadio, MiniPlayer } from './features/radio';
 import { Palco, Ancora } from './features/cena';
 import { JanelaArrastavel, MINI_PLAYER, MODAL_TABLET } from './features/hud';
+import { useEstadoPersistido } from './shared/hooks/useEstadoPersistido';
+
+// momento em que a borda neon definitiva do mural acende (neonGlow começa com 6s de atraso em .painel-surgindo,
+// no MuralDeNotas.css). As notas só aparecem aqui, no fim da animação de ligar.
+const MOMENTO_BORDA_FINAL_MURAL_MS = 6000
 
 
 function App() {
 
-const [lembretes, setLembretes] = useState([])
+const [lembretes, setLembretes] = useEstadoPersistido('lembretes', [])
 const [painelLigadoPermanente,setPainelLigadoPermanente] = useState(false)
 const [animacaoJaAtivada,setAnimacaoJaAtivada] = useState(false)
 const [primeiraMensagemPainel,setPrimeiraMensagemPainel] = useState(false)
 const [radioLigado, setRadioLigado] = useState(false)
 const [foiDesligadoComBotao, setfoiDesligadoComBotao] = useState(true)
 const [foiPausadoManualmente, setFoiPausadoManualmente] = useState(false);
-const [luzRadio, setLuzRadio] = useState('#00D7FF')
-const [volume, setVolume] = useState(1)
+const [luzRadio, setLuzRadio] = useEstadoPersistido('luz-radio', '#00D7FF')
+const [volume, setVolume] = useEstadoPersistido('volume', 1)
 const [ligarPainelRadio, setLigarPainelRadio] = useState(false)
 const [ligarTabletPrimeiraVez, setLigarTabletPrimeiraVez] = useState(false)
+// enquanto o mural faz a animação de ligar, as notas (inclusive as salvas) ficam escondidas;
+// todas aparecem juntas na piscada final, no mesmo momento em que a nota nova entra
+const [notasVisiveisNoMural, setNotasVisiveisNoMural] = useState(true)
 
 
 
@@ -118,13 +126,18 @@ if(!painelLigadoPermanente){
     setAnimacaoJaAtivada(true);
     setModalAberto(false);
     setLigarTablet(false);
+    setNotasVisiveisNoMural(false);
 
 
     setTimeout(()=> {
         setLembretes(lembretesAnteriores => [...lembretesAnteriores, novoLembrete])
-          setPrimeiraMensagemPainel(true);
-        
-        } ,5000) 
+        } ,5000)
+
+    // revela as notas e libera a mensagem de "sem lembretes" juntas, para ela não piscar antes
+    setTimeout(()=> {
+        setNotasVisiveisNoMural(true);
+        setPrimeiraMensagemPainel(true);
+        } ,MOMENTO_BORDA_FINAL_MURAL_MS)
       } else {
           setLembretes( lembretesAnteriores => [...lembretesAnteriores, novoLembrete]);
           if(!primeiraMensagemPainel){
@@ -210,7 +223,7 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
 
       <Ancora ponto='mural'>
         <MuralDeNotas
-          lembretes={lembretes}
+          lembretes={notasVisiveisNoMural ? lembretes : []}
           aoDeletar={deletarLembrete}
           aoFixar={fixarLembrete}
           painelLigadoPermanente={painelLigadoPermanente}
