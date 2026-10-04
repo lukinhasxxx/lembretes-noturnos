@@ -7,7 +7,7 @@ import WindowBar from '../sistema/WindowBar/WindowBar'
 import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
 import { useEstadoPersistido } from '../../../shared/hooks/useEstadoPersistido'
 
-const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, corNeon, radioLigado}) => {
+const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
 
     //perto do fim do projeto ai componetiza, modulariza as coisas
     const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)   
@@ -232,9 +232,9 @@ const selecionarPreset = (caminhoDaImagem) => {
                             setTelaAtiva(proximaTela);
                             setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
                             }} >
-                            <p>About</p> 
+                            <p>About</p>
                     </div>
-                </WindowBar>    
+                </WindowBar>
 
                     <form onSubmit={aoSalvar}>
      
@@ -258,6 +258,16 @@ const selecionarPreset = (caminhoDaImagem) => {
                             onClick={()=>{alterarVisibilidadePainel()}
                                     }>
                             <div className='botao-mostrar-esconder-painel' ><p>{textoBotao}</p>
+                            </div>
+                        </div>
+                        )
+                    }
+                    { // mural ainda desligado, mas há lembretes salvos (ex.: depois do F5): liga com a animação
+                        painelLigadoPermanente === false && haLembretesSalvos && (
+                        <div className='mostrar-e-esconder'
+                            onClick={()=>{aoLigarMural()}
+                                    }>
+                            <div className='botao-mostrar-esconder-painel' ><p>Mostrar painel</p>
                             </div>
                         </div>
                         )
