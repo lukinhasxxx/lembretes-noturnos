@@ -165,21 +165,6 @@ color: white;
 margin-left: -33px;
 }
 
-.icones-apps-abertos .icone-na-barra img {
-width: 35px;
-}
-
-.icones-apps-abertos .icone-na-barra .icone-na-barra-lembretes {
-  margin-top: 3px ;
-  height: 28px;
-  user-select: none;
-}
-
-.icones-apps-abertos .icone-na-barra .icone-na-barra-lembretes:hover{
- background-color: rgba(46, 45, 45, 0.76);
- filter: brightness(1.1);
-}
-
 /* Icone led */
 .tablet-tela .area-de-trabalho .icone-led {
 position: relative;
@@ -219,13 +204,6 @@ margin-left: -29px;
 }
 
 
-.icones-apps-abertos .icone-na-barra .icone-na-barra-led {
-  user-select: none;
-}
-
-.icones-apps-abertos .icone-na-barra .icone-na-barra-led:hover{
- background-color: rgba(46, 45, 45, 0.76);
-}
 
 .janela-configuracao-led {
   overflow: auto;
@@ -458,132 +436,6 @@ form h2 {
     pointer-events: none;
 }
 
-.tablet-tela .barra-de-tarefas {
-    display: flex;
-    position: absolute;
-    background-color: rgb(0, 0, 0, 0.01);
-    height: 36px;
-    width: 666px;
-    top: 91.7%;
-    left: 0%;
-}
-
-.barra-de-tarefas .menu-iniciar{
-user-select: none;
-width: 40px;
-}
-
-.barra-de-tarefas .menu-iniciar img {
-    margin-left: 11px;
-    margin-top: 7px;
-    height: auto;
-    width: 18px;
-}
-
-.barra-de-tarefas .menu-iniciar:hover {
-  background-color: rgba(46, 45, 45, 0.76);
-}
-
-.barra-de-tarefas .seta-voltar{
-  user-select: none;
-  width: 45px;
-}
-
-.barra-de-tarefas .seta-voltar img{
-display: flex;
-height: 20px;
-width: auto;
-margin-top: 6px;
-margin-left: 11px;
-}
-.barra-de-tarefas .seta-voltar:hover {
-   background-color: rgba(46, 45, 45, 0.76);
-}
-
-.icones-apps-abertos {
-  display: grid;
-  grid-template-columns: repeat(4,40px);
-  margin-left: 10px;
-}
-
-.barra-de-tarefas .icone-bateria {
-  user-select: none;
-  width: 24px;
-}
-.barra-de-tarefas .icone-bateria img {
-  margin-left: 1px;
-  height: 12px;
-  margin-top: 10px;
-}
-.barra-de-tarefas .icone-bateria:hover {
-background-color: rgba(46, 45, 45, 0.76);
-}
-
-.barra-de-tarefas .icone-wifi  {
-  user-select: none;
-  width: 20px;
-}
-
-.barra-de-tarefas .icone-wifi img {
-    height: 15px;
-    margin-top: 10px;
-    margin-left: 2px;
-}
-.barra-de-tarefas .icone-wifi:hover {
-background-color: rgba(46, 45, 45, 0.76);
-}
-
-.barra-de-tarefas .icone-som img {
-  user-select: none;
-    height: auto;
-    width: 26px;
-    margin-top: 4px;
-}
-
-.barra-de-tarefas .icone-som:hover{
-background-color: rgba(46, 45, 45, 0.76);
-}
-
-.idioma {
-  height: 36px;
-  color: white;
-  font-size: 13px;
-  user-select: none;
-  width: 35px;
-}
-.idioma span {
-    display: flex;
-    margin-top: 9%;
-    margin-left: 13%;
-}
-
-.idioma:hover {
-   background-color: rgba(46, 45, 45, 0.76);
-}
-
-.barra-de-tarefas .icone-notificacoes {
-  user-select: none;
-margin-left: 20px;
-width: 34px;
-}
-
-.barra-de-tarefas .icone-notificacoes img {
-height: 20px;
-margin-top: 10px;
-margin-left: 7px;
-}
-
-.barra-de-tarefas .icone-notificacoes:hover {
-  background-color: rgba(46, 45, 45, 0.76);
- 
-}
-
-.barra-tarefas-inferior-direito {
-  margin-left: 115px;
-  display: flex;
-  gap: 8px;
-}
-
 .botao-mostrar-esconder-painel {
     width: 74px;
     height: 55px;
@@ -647,6 +499,15 @@ transform: scale(0.95);
     width: 760px;
     height: 482px;
     position: absolute;
+    /* entrada leve ao abrir. Roda de novo a cada abertura: o modal fechado fica com display: none
+       (JanelaArrastavel) e, ao voltar a aparecer, o navegador reinicia a animação */
+    animation: tablet-abrindo 0.28s ease-out;
+    transform-origin: center bottom;
+}
+
+@keyframes tablet-abrindo {
+    from { opacity: 0; transform: translateY(12px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* seletor de cor do LED do rádio, no app Config.exe */

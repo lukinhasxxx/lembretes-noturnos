@@ -1,0 +1,214 @@
+/* Tela de boot: cobre a tela do tablet inteira (por cima da área de trabalho e da barra de tarefas) */
+.tela-boot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    /* a área de trabalho e a barra de tarefas passam ~4px do .tablet-tela (height: 101%): acompanha elas */
+    height: 101%;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, #0b0f24 0%, #000 70%);
+    overflow: hidden;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+/* scanlines leves de tela antiga */
+.tela-boot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 3px);
+    pointer-events: none;
+}
+
+.tela-boot-centro {
+    position: relative;
+    width: 110px;
+    height: 110px;
+}
+
+/* partículas: a animação dura o boot inteiro e tem 4 fases (porcentagens = fração do boot):
+   1. órbita (0–35.7%): espiral para dentro, parando no lugar de um quadrado do logo
+   2. respiro (35.7–40.7%): pulsam paradas, desenhando o formato do logo
+   3. cruzamento (40.7–54.3%): cada uma atravessa pelo centro até a diagonal oposta
+   4. viram o logo (54.3–78.6%): a bolinha "abre" num quadrado (border-radius 50% → 2px) e some
+      enquanto o quadrado do logo daquele lugar acende
+   --angulo-final, --raio-final e --escala-final vêm do TelaBoot.js.
+   rotate(ângulo) + translateX(raio) põe a bolinha num ponto da órbita; translateX(-raio) é o ponto oposto.
+   O rotate(-ângulo) depois do translateX desfaz o giro: sem ele o quadrado final ficaria torto (losango). */
+.tela-boot-particula {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    border-radius: 50%;
+    background: var(--cor-particula);
+    box-shadow: 0 0 8px 2px var(--cor-particula), 0 0 18px 4px var(--cor-particula);
+    opacity: 0;
+    /* por cima do logo: o brilho dela "vira" o quadrado que acende embaixo */
+    z-index: 1;
+    animation: particula-formando-logo var(--duracao-boot) linear forwards;
+}
+
+@keyframes particula-formando-logo {
+    0% {
+        transform: rotate(calc(var(--angulo-final) - 540deg)) translateX(80px) rotate(calc(var(--angulo-final) * -1)) scale(1);
+        opacity: 0;
+        animation-timing-function: cubic-bezier(0.3, 0.1, 0.25, 1); /* desacelera ao estacionar */
+    }
+    6%  { opacity: 1; }
+    35.7% {
+        transform: rotate(var(--angulo-final)) translateX(var(--raio-final)) rotate(calc(var(--angulo-final) * -1)) scale(0.8);
+        animation-timing-function: ease-in-out;
+    }
+    38.2% {
+        transform: rotate(var(--angulo-final)) translateX(var(--raio-final)) rotate(calc(var(--angulo-final) * -1)) scale(1.15);
+        animation-timing-function: ease-in-out;
+    }
+    40.7% {
+        transform: rotate(var(--angulo-final)) translateX(var(--raio-final)) rotate(calc(var(--angulo-final) * -1)) scale(0.8);
+        /* cruzamento: velocidade do "atravessar" (mais suave que um ease-in-out forte) */
+        animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+    }
+    54.3% {
+        transform: rotate(var(--angulo-final)) translateX(calc(var(--raio-final) * -1)) rotate(calc(var(--angulo-final) * -1)) scale(0.8);
+        border-radius: 50%;
+        opacity: 1;
+        animation-timing-function: ease-out;
+    }
+    /* abre de bolinha para quadrado, já no tamanho do quadrado do logo */
+    66% {
+        transform: rotate(var(--angulo-final)) translateX(calc(var(--raio-final) * -1)) rotate(calc(var(--angulo-final) * -1)) scale(var(--escala-final));
+        border-radius: 2px;
+        opacity: 0.8;
+    }
+    78.6%, 100% {
+        transform: rotate(var(--angulo-final)) translateX(calc(var(--raio-final) * -1)) rotate(calc(var(--angulo-final) * -1)) scale(var(--escala-final));
+        border-radius: 2px;
+        opacity: 0;
+    }
+}
+
+/* logo: os quadrados acendem um por um no lugar onde cada partícula chegou e "cresceu" */
+.tela-boot-logo {
+    position: absolute;
+    inset: 15px;
+    filter: drop-shadow(0 0 6px #6ef0ff) drop-shadow(0 0 14px #b98cff);
+    /* flicker de neon depois que o logo se formou */
+    animation: logo-piscando calc(var(--duracao-boot) * 0.14) linear calc(var(--duracao-boot) * 0.786) both;
+}
+
+/* cada quadrado cresce a partir do próprio centro (transform-box: fill-box) */
+.tela-boot-logo .logo-sistema-vidraca {
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+    animation: vidraca-acendendo calc(var(--duracao-boot) * 0.243) ease-out calc(var(--duracao-boot) * 0.543) forwards;
+}
+
+@keyframes vidraca-acendendo {
+    from { opacity: 0; transform: scale(0.3); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes logo-piscando {
+    0%, 100% { opacity: 1; }
+    20%  { opacity: 0.3; }
+    35%  { opacity: 1; }
+    55%  { opacity: 0.6; }
+}
+
+/* glitch do logo: mesmas fatias e saltos do botão "Wallpapers" (ModalTablet.css → @keyframes glitch).
+   Duas cópias do logo ficam por cima, escondidas (clip-path recorta tudo); na hora em que ele pisca,
+   mostram só uma fatia por vez, deslocada. Uma ciano com sombra roxa e outra roxa, ao contrário. */
+.tela-boot-logo-glitch {
+    --slice-0: inset(50% 50% 50% 50%);
+    --slice-1: inset(80% -6px 0 0);
+    --slice-2: inset(50% -6px 30% 0);
+    --slice-3: inset(10% -6px 85% 0);
+    --slice-4: inset(40% -6px 43% 0);
+    --slice-5: inset(80% -6px 5% 0);
+
+    position: absolute;
+    inset: 15px;
+    z-index: 2;
+    clip-path: var(--slice-0);
+    filter: drop-shadow(-3px -3px 0 #b98cff);
+    animation: glitch-logo-boot calc(var(--duracao-boot) * 0.2) steps(2, end) calc(var(--duracao-boot) * 0.786);
+}
+
+/* cores do próprio logo (degradê ciano → roxo), para o glitch parecer parte dele */
+.tela-boot-logo-glitch polygon {
+    fill: #6ef0ff;
+    stroke: none;
+}
+
+.tela-boot-logo-glitch-reverso {
+    filter: none;
+    animation-direction: reverse;
+}
+
+.tela-boot-logo-glitch-reverso polygon {
+    fill: #b98cff;
+}
+
+@keyframes glitch-logo-boot {
+    0%   { clip-path: var(--slice-1); transform: translate(-20px, -10px); }
+    10%  { clip-path: var(--slice-3); transform: translate(10px, 10px); }
+    20%  { clip-path: var(--slice-1); transform: translate(-10px, 10px); }
+    30%  { clip-path: var(--slice-3); transform: translate(0px, 5px); }
+    40%  { clip-path: var(--slice-2); transform: translate(-5px, 0px); }
+    50%  { clip-path: var(--slice-3); transform: translate(5px, 0px); }
+    60%  { clip-path: var(--slice-4); transform: translate(5px, 10px); }
+    70%  { clip-path: var(--slice-2); transform: translate(-10px, 10px); }
+    80%  { clip-path: var(--slice-5); transform: translate(20px, -10px); }
+    90%  { clip-path: var(--slice-1); transform: translate(-10px, 0px); }
+    100% { clip-path: var(--slice-1); transform: translate(0); }
+}
+
+.tela-boot-texto {
+    margin: 22px 0 10px;
+    color: #c9f7ff;
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 6px #6ef0ff;
+    opacity: 0;
+    animation: aparecer-boot calc(var(--duracao-boot) * 0.12) ease-out calc(var(--duracao-boot) * 0.786) forwards;
+}
+
+/* barra de loading: um trecho neon correndo de um lado para o outro */
+.tela-boot-barra {
+    position: relative;
+    width: 140px;
+    height: 2px;
+    background: rgba(110, 240, 255, 0.15);
+    overflow: hidden;
+    opacity: 0;
+    animation: aparecer-boot calc(var(--duracao-boot) * 0.12) ease-out calc(var(--duracao-boot) * 0.786) forwards;
+}
+
+.tela-boot-barra::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, #6ef0ff, #ff4fd8, transparent);
+    animation: barra-boot-correndo 1s ease-in-out infinite;
+}
+
+@keyframes barra-boot-correndo {
+    0%   { left: -40%; }
+    100% { left: 100%; }
+}
+
+@keyframes aparecer-boot {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
