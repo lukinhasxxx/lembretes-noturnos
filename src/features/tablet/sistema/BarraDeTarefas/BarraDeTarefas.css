@@ -1,0 +1,26 @@
+.tablet-tela .barra-de-tarefas {
+    position: absolute;
+    top: 91.7%;
+    left: 0;
+    width: 100%;
+    height: var(--altura-barra-de-tarefas);
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
+.barra-de-tarefas-apps-abertos {
+    display: flex;
+    margin-left: 10px;
+}
+
+.barra-de-tarefas-bandeja {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+    padding-right: 9px;
+}
+
+/* no Windows o botão de notificações fica um pouco separado do relógio */
+.barra-de-tarefas-bandeja .botao-notificacoes {
+    margin-left: 12px;
+}

@@ -1,0 +1,24 @@
+.botao-barra-de-tarefas {
+    /* zera o estilo padrão de <button> do navegador */
+    all: unset;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: var(--largura-padrao-botao-barra-de-tarefas);
+    height: var(--altura-barra-de-tarefas);
+    color: var(--cor-texto-sistema);
+    font-size: var(--tamanho-fonte-sistema);
+    line-height: 1.25;
+    user-select: none;
+}
+
+.botao-barra-de-tarefas:hover {
+    background-color: var(--cor-hover-sistema);
+}
+
+.botao-barra-de-tarefas img {
+    width: auto;
+}

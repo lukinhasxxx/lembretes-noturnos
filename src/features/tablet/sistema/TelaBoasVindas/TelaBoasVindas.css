@@ -1,0 +1,106 @@
+/* Tela de boas-vindas: cobre a tela do tablet inteira, por cima da área de trabalho */
+.tela-boas-vindas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    /* a área de trabalho e a barra de tarefas passam ~4px do .tablet-tela (height: 101%): acompanha elas */
+    height: 101%;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    animation: boas-vindas-aparecendo 0.35s ease-out;
+}
+
+@keyframes boas-vindas-aparecendo {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* wallpaper desfocado e escurecido; o scale esconde a borda clara que o blur cria */
+.tela-boas-vindas-fundo {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px) brightness(0.65);
+    transform: scale(1.1);
+}
+
+.tela-boas-vindas-avatar,
+.tela-boas-vindas-usuario,
+.tela-boas-vindas-status {
+    position: relative;
+}
+
+.tela-boas-vindas-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.tela-boas-vindas-avatar svg {
+    width: 58px;
+    height: 58px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.tela-boas-vindas-usuario {
+    margin: 14px 0 18px;
+    font-size: 28px;
+    font-weight: 300;
+}
+
+.tela-boas-vindas-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+}
+
+/* spinner de pontinhos girando, estilo Windows */
+.spinner-pontos {
+    position: relative;
+    width: 22px;
+    height: 22px;
+}
+
+.spinner-pontos span {
+    position: absolute;
+    inset: 0;
+    animation: ponto-girando 2.2s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+    animation-delay: calc(var(--indice-ponto) * 0.12s);
+    opacity: 0;
+}
+
+.spinner-pontos span::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 3px;
+    height: 3px;
+    margin-left: -1.5px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+@keyframes ponto-girando {
+    0%   { transform: rotate(0deg); opacity: 1; }
+    75%  { transform: rotate(540deg); opacity: 1; }
+    76%  { opacity: 0; }
+    100% { transform: rotate(540deg); opacity: 0; }
+}

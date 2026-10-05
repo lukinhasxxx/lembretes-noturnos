@@ -1,0 +1,9 @@
+/* Tokens do "design system" do sistema do tablet: barra de tarefas, menu iniciar e janelas usam estes valores.
+   Ficam presos na .tablet-tela para não vazar para o resto do site. */
+.tablet-tela {
+    --altura-barra-de-tarefas: 36px;
+    --largura-padrao-botao-barra-de-tarefas: 40px;
+    --cor-hover-sistema: rgba(46, 45, 45, 0.76);
+    --cor-texto-sistema: #fff;
+    --tamanho-fonte-sistema: 13px;
+}
