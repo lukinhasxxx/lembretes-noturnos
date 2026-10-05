@@ -15,7 +15,8 @@
     user-select: none;
 }
 
-.botao-barra-de-tarefas:hover {
+.botao-barra-de-tarefas:hover,
+.botao-barra-de-tarefas.ativo {
     background-color: var(--cor-hover-sistema);
 }
 

@@ -1,0 +1,190 @@
+/* Menu iniciar: abre logo acima da barra de tarefas, alinhado à esquerda (como no Windows 10) */
+.menu-iniciar {
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+    z-index: 5;
+    display: flex;
+    width: 360px;
+    height: 280px;
+    /* sem backdrop-filter: dentro do modal escalado (transform: scale) ele fazia o navegador redesenhar
+       tudo, deixando a tela levemente arroxeada e "descendo" 1px enquanto o menu ficava aberto */
+    background: var(--cor-fundo-menu-iniciar);
+    border: 1px solid var(--cor-borda-neon-sistema);
+    border-bottom: none;
+    box-shadow: 0 0 12px rgba(110, 240, 255, 0.2), 0 0 24px rgba(185, 140, 255, 0.12);
+    color: var(--cor-texto-sistema);
+    font-family: var(--fonte-sistema);
+    font-size: var(--tamanho-fonte-sistema);
+    user-select: none;
+    animation: menu-iniciar-subindo 0.2s ease-out;
+}
+
+@keyframes menu-iniciar-subindo {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* zera o estilo padrão de <button> do navegador em tudo do menu */
+.menu-iniciar button {
+    all: unset;
+    box-sizing: border-box;
+    cursor: default;
+}
+
+/* ---------- coluna de atalhos (esquerda) ---------- */
+
+.menu-iniciar-coluna {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 44px;
+    padding: 4px 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.menu-iniciar-coluna-base {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-iniciar .menu-iniciar-atalho {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 40px;
+}
+
+/* faixa neon na lateral do item com hover: o toque CyberOS no hover do Windows */
+.menu-iniciar .menu-iniciar-atalho:hover,
+.menu-iniciar .menu-iniciar-item:hover {
+    background-color: var(--cor-hover-sistema);
+    box-shadow: inset 2px 0 0 var(--cor-destaque-sistema);
+}
+
+.menu-iniciar-atalho svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: var(--cor-texto-sistema);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+}
+
+.menu-iniciar-atalho img {
+    height: 22px;
+}
+
+/* popups de usuário e energia: abrem ao lado da coluna */
+.menu-iniciar-com-popup {
+    position: relative;
+}
+
+.menu-iniciar-popup {
+    position: absolute;
+    left: 100%;
+    bottom: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 120px;
+    padding: 4px 0;
+    background: rgba(18, 22, 40, 0.97);
+    border: 1px solid var(--cor-borda-neon-sistema);
+    box-shadow: 0 0 10px rgba(185, 140, 255, 0.2);
+}
+
+.menu-iniciar-popup-titulo {
+    padding: 6px 12px;
+    color: var(--cor-destaque-sistema);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.menu-iniciar .menu-iniciar-popup button {
+    padding: 7px 12px;
+}
+
+.menu-iniciar .menu-iniciar-popup button:hover {
+    background-color: var(--cor-hover-sistema);
+}
+
+/* ---------- lista de apps (meio) ---------- */
+
+.menu-iniciar-lista {
+    width: 140px;
+    padding: 8px 4px;
+    overflow-y: auto;
+}
+
+.menu-iniciar-titulo-secao {
+    display: block;
+    margin: 0 6px 6px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--cor-destaque-secundaria-sistema);
+}
+
+.menu-iniciar-letra {
+    display: block;
+    padding: 6px 8px 2px;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.menu-iniciar .menu-iniciar-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 5px 8px;
+}
+
+.menu-iniciar-item img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+/* ---------- blocos fixados (direita) ---------- */
+
+.menu-iniciar-blocos {
+    flex: 1;
+    padding: 8px 10px;
+}
+
+.menu-iniciar-grade-blocos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+}
+
+/* bloco com o degradê do logo, como um "live tile" neon */
+.menu-iniciar .menu-iniciar-bloco {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    aspect-ratio: 1;
+    padding: 8px;
+    background: linear-gradient(135deg, rgba(110, 240, 255, 0.28), rgba(185, 140, 255, 0.28));
+    border: 1px solid transparent;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.menu-iniciar .menu-iniciar-bloco:hover {
+    border-color: var(--cor-destaque-sistema);
+    box-shadow: 0 0 8px rgba(110, 240, 255, 0.45);
+}
+
+.menu-iniciar-bloco img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    align-self: center;
+    margin-top: 8px;
+}
+
+.menu-iniciar-bloco span {
+    font-size: 11px;
+}

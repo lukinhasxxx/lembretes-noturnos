@@ -2,6 +2,15 @@
 const en = {
     'sistema.iniciando': 'Starting {sistema}',
     'sistema.boasVindas': 'Welcome',
+
+    'menuIniciar.abrir': 'Start',
+    'menuIniciar.apps': 'Apps',
+    'menuIniciar.fixados': 'Pinned',
+    'menuIniciar.configuracoes': 'Settings',
+    'menuIniciar.energia': 'Power',
+    'menuIniciar.bloquear': 'Lock',
+    'menuIniciar.desligar': 'Shut down',
+    'menuIniciar.reiniciar': 'Restart',
 }
 
 export default en

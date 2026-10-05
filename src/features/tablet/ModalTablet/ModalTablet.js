@@ -10,6 +10,7 @@ import { useEstadoPersistido } from '../../../shared/hooks/useEstadoPersistido'
 import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
 import { ESTADOS_SISTEMA } from '../tablet.config'
+import { APPS } from '../apps.config'
 
 // estadoSistema: em que ponto o sistema está (boot, boas-vindas, área de trabalho), vem do useSistemaTablet
 const ModalTablet = ({aoSubmeter, validarLigadoDesligado, estadoSistema, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
@@ -361,6 +362,7 @@ const selecionarPreset = (caminhoDaImagem) => {
     <BarraDeTarefas
         appsAbertos={appsAbertos}
         aoClicarNoApp={(idDoApp) => setTelaAtiva(ultimaTela[idDoApp])}
+        aoAbrirApp={(idDoApp) => abrirApp(idDoApp, APPS[idDoApp].telaInicial)}
         aoVoltarParaAreaDeTrabalho={() => setTelaAtiva('desktop')}
     />
 
