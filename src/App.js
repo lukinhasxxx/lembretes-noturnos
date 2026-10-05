@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { ModalTablet, TabletMesa } from './features/tablet';
+import { ModalTablet, TabletMesa, useSistemaTablet } from './features/tablet';
 import { MuralDeNotas, VisibilidadePainelProvider } from './features/mural';
 import { PlayerRadio, MiniPlayer } from './features/radio';
 import { Palco, Ancora } from './features/cena';
@@ -213,9 +213,12 @@ const limparTodosLembretes = () => {
 
 const [ligarTablet,setLigarTablet] = useState(false)
 const [modalAberto,setModalAberto] = useState(false)
+// sistema do tablet: desligado até o primeiro clique; aí roda boot → boas-vindas → área de trabalho
+const { estadoSistema, ligarSistema } = useSistemaTablet()
 
 const gerenciarTablet = () => {
 
+ligarSistema() // só faz algo se o tablet estiver desligado
 setModalAberto(ligado=> !ligado);
 setLigarTablet(ligado =>!ligado);
 setLigarTabletPrimeiraVez(true)
@@ -305,6 +308,7 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
     <ModalTablet
       aoSubmeter={adicionarLembrete}
       validarLigadoDesligado={ligarTablet}
+      estadoSistema={estadoSistema}
       painelLigadoPermanente={painelLigadoPermanente}
       haLembretesSalvos={lembretes.length > 0}
       aoLigarMural={ligarMuralComAnimacao}
