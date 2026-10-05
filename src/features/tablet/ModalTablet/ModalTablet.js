@@ -2,7 +2,8 @@ import { VisibilidadePainelContext } from '../../mural'
 import './ModalTablet.css'
 import Botao from '../componentes/Botao/Botao'
 import { useState,useContext } from 'react'
-import Relogio from '../sistema/Relogio/Relogio'
+import '../sistema/temaSistema.css'
+import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
 import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
 import { useEstadoPersistido } from '../../../shared/hooks/useEstadoPersistido'
@@ -357,54 +358,11 @@ const selecionarPreset = (caminhoDaImagem) => {
         </div>)}
     </div>
 
-    <div className="barra-de-tarefas">
-    
-        <div className='menu-iniciar' >
-            <img src = {process.env.PUBLIC_URL + "/imagens/windows/menuIniciar.png"} alt="Menu iniciar" />
-        </div>
-
-        <div className="seta-voltar" onClick={() => setTelaAtiva('desktop')}>
-          <img src={ process.env.PUBLIC_URL + "/imagens/windows/setaVoltar.png"} alt="Voltar para o Desktop" />
-        </div>
-
-    <div className='icones-apps-abertos' >
-    {
-        appsAbertos.map(app =>(
-            <div 
-            key={app}
-            className='icone-na-barra'
-            onClick={() => setTelaAtiva(ultimaTela[app])} >
-                {app === 'app_lembretes' && <img className='icone-na-barra-lembretes' src={ process.env.PUBLIC_URL+ '/imagens/windows/lembretesIcone.png'} alt='abrir lembretes' /> }
-                {app === 'app_config' && <img className='icone-na-barra-led'  src={process.env.PUBLIC_URL+'/imagens/windows/ledIcone.png'} alt='abrir config' /> }
-            </div>
-         )
-        )
-    }
-    </div>
-
-        <div className='barra-tarefas-inferior-direito' >
-            <div className='icone-bateria' >
-                    <img src={ process.env.PUBLIC_URL+ "/imagens/windows/bateriaIcone.png"} alt="Bateria carregando" />
-                </div> 
-            
-            <div className='icone-wifi' >
-                    <img src={ process.env.PUBLIC_URL + "/imagens/windows/wifiIcone.png"} alt="\Icone wifi" />
-                </div> 
-
-                <div className='icone-som' >
-                    <img src={ process.env.PUBLIC_URL + "/imagens/windows/semSomIcone.png"} alt="Icone sem som" />
-                </div> 
-
-                <div className='idioma'>
-                    <span>POR</span>
-                    <span>PTB2</span>
-                </div>
-                <Relogio/>
-        </div>
-            <div className='icone-notificacoes' >
-            <img src={ process.env.PUBLIC_URL+  "/imagens/windows/iconeNotificacoes.png"} alt="Icone de notificacoes" />
-            </div>
-        </div>
+    <BarraDeTarefas
+        appsAbertos={appsAbertos}
+        aoClicarNoApp={(idDoApp) => setTelaAtiva(ultimaTela[idDoApp])}
+        aoVoltarParaAreaDeTrabalho={() => setTelaAtiva('desktop')}
+    />
 
         {/* boot e boas-vindas cobrem a tela inteira (área de trabalho + barra de tarefas) */}
         {estadoSistema === ESTADOS_SISTEMA.ligando && <TelaBoot />}
