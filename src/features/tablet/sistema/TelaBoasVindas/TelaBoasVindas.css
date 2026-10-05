@@ -15,6 +15,11 @@
     background: #000;
     color: #fff;
     font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* o fade é só do conteúdo: o fundo preto da tela já está opaco desde o primeiro frame,
+   senão a área de trabalho (montada por baixo) aparece por um instante entre o boot e o Bem-vindo */
+.tela-boas-vindas > * {
     animation: boas-vindas-aparecendo 0.35s ease-out;
 }
 
@@ -71,7 +76,9 @@
     font-size: 15px;
 }
 
-/* spinner de pontinhos girando, estilo Windows */
+/* spinner de pontinhos girando, inspirado no do Windows, mas contínuo:
+   cada volta desacelera em cima e acelera embaixo, então os pontos se juntam e se espalham sem nunca sumir.
+   O atraso negativo faz cada ponto já começar um pouco "atrás" do anterior. */
 .spinner-pontos {
     position: relative;
     width: 22px;
@@ -81,9 +88,8 @@
 .spinner-pontos span {
     position: absolute;
     inset: 0;
-    animation: ponto-girando 2.2s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
-    animation-delay: calc(var(--indice-ponto) * 0.12s);
-    opacity: 0;
+    animation: ponto-girando 2.4s infinite;
+    animation-delay: calc(var(--indice-ponto) * -0.15s);
 }
 
 .spinner-pontos span::before {
@@ -98,9 +104,9 @@
     background: #fff;
 }
 
+/* 2 voltas por ciclo: 720° termina exatamente onde 0° começa, então o loop não dá salto */
 @keyframes ponto-girando {
-    0%   { transform: rotate(0deg); opacity: 1; }
-    75%  { transform: rotate(540deg); opacity: 1; }
-    76%  { opacity: 0; }
-    100% { transform: rotate(540deg); opacity: 0; }
+    0%   { transform: rotate(0deg);   animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95); }
+    50%  { transform: rotate(360deg); animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95); }
+    100% { transform: rotate(720deg); }
 }
