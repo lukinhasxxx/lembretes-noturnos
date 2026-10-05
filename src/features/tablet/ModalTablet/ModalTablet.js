@@ -6,8 +6,12 @@ import Relogio from '../sistema/Relogio/Relogio'
 import WindowBar from '../sistema/WindowBar/WindowBar'
 import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
 import { useEstadoPersistido } from '../../../shared/hooks/useEstadoPersistido'
+import TelaBoot from '../sistema/TelaBoot/TelaBoot'
+import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
+import { ESTADOS_SISTEMA } from '../tablet.config'
 
-const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
+// estadoSistema: em que ponto o sistema está (boot, boas-vindas, área de trabalho), vem do useSistemaTablet
+const ModalTablet = ({aoSubmeter, validarLigadoDesligado, estadoSistema, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
 
     //perto do fim do projeto ai componetiza, modulariza as coisas
     const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)   
@@ -26,6 +30,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     )
     const [mudarWallpaper, setMudarWallpaper] = useState(() => Boolean(wallpaperPresetSalvo))
     const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
+    // wallpaper que está na área de trabalho agora (também usado no fundo da tela de boas-vindas)
+    const wallpaperAtual = mudarWallpaper ? previa : `${process.env.PUBLIC_URL}/imagens/windows/windowsWallpaper.jpg`
 
     const wallpapersProntos = [
     { id: 1, src: "/imagens/windows/previasWallpaper/previa1.png", alt: "Previa 1" },
@@ -106,10 +112,7 @@ const selecionarPreset = (caminhoDaImagem) => {
     <div className='tablet-tela' > 
             <div 
                 className='area-de-trabalho' 
-                style={{
-                    backgroundImage: mudarWallpaper ? `url(${previa})`:
-                    `url(${process.env.PUBLIC_URL}/imagens/windows/windowsWallpaper.jpg)`
-                }}
+                style={{ backgroundImage: `url(${wallpaperAtual})` }}
             >
 
 
@@ -400,8 +403,12 @@ const selecionarPreset = (caminhoDaImagem) => {
         </div>
             <div className='icone-notificacoes' >
             <img src={ process.env.PUBLIC_URL+  "/imagens/windows/iconeNotificacoes.png"} alt="Icone de notificacoes" />
-            </div> 
+            </div>
         </div>
+
+        {/* boot e boas-vindas cobrem a tela inteira (área de trabalho + barra de tarefas) */}
+        {estadoSistema === ESTADOS_SISTEMA.ligando && <TelaBoot />}
+        {estadoSistema === ESTADOS_SISTEMA.boasVindas && <TelaBoasVindas wallpaper={wallpaperAtual} />}
 
     </div>
             </section>
