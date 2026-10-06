@@ -1,0 +1,151 @@
+/* Moldura da tela de bloqueio: cobre a tela do tablet inteira, por cima da área de trabalho e do login,
+   e recorta o que passar dela (nada sai da tela do tablet) */
+.tela-bloqueio-recorte {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    /* a área de trabalho e a barra de tarefas passam ~4px do .tablet-tela (height: 101%): acompanha elas */
+    height: 101%;
+    z-index: 10;
+    overflow: hidden;
+}
+
+/* --progresso (0 a 1, vem do JS): 0 = bloqueada, 1 = igual à tela de login.
+   Sem fade de entrada no fundo: ele aparece opaco desde o primeiro frame (é o mesmo wallpaper da área de trabalho),
+   senão a tela de login, que já está montada por baixo, aparece por um instante */
+.tela-bloqueio {
+    --progresso: 0;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    color: #fff;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    user-select: none;
+    /* o arraste é tratado no JS: o navegador não rola nem faz gesto próprio */
+    touch-action: none;
+    cursor: grab;
+    /* fica opaca até ~60% do progresso e então apaga, revelando o login (que tem o mesmo fundo desfocado) */
+    opacity: clamp(0, calc((1 - var(--progresso)) * 2.5), 1);
+}
+
+.tela-bloqueio.arrastando {
+    cursor: grabbing;
+}
+
+/* wallpaper: vai do nítido até o mesmo desfoque/escurecido/zoom do fundo do login (.tela-boas-vindas-fundo) */
+.tela-bloqueio-fundo {
+    position: absolute;
+    inset: 0;
+    background-color: #000;
+    background-size: cover;
+    background-position: center;
+    filter: blur(calc(var(--progresso) * 8px)) brightness(calc(1 - var(--progresso) * 0.35));
+    transform: scale(calc(1 + var(--progresso) * 0.1));
+}
+
+/* escurece embaixo para o relógio e a dica lerem bem em qualquer wallpaper; some junto com eles */
+.tela-bloqueio::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0) 55%);
+    opacity: calc(1 - var(--progresso));
+}
+
+/* relógio + dica: sobem e apagam com o progresso; na entrada fazem um fade (só eles, o fundo não) */
+.tela-bloqueio-conteudo {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    transform: translateY(calc(var(--progresso) * -70px));
+    opacity: calc(1 - var(--progresso) * 1.6);
+    animation: tela-bloqueio-aparecendo 0.4s ease-out;
+}
+
+@keyframes tela-bloqueio-aparecendo {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* soltou depois do mínimo: completa até o login, desacelerando no fim */
+.tela-bloqueio.completando,
+.tela-bloqueio.completando .tela-bloqueio-fundo,
+.tela-bloqueio.completando .tela-bloqueio-conteudo,
+.tela-bloqueio.completando::before {
+    transition: opacity 0.45s cubic-bezier(0.2, 0.7, 0.3, 1),
+                transform 0.45s cubic-bezier(0.2, 0.7, 0.3, 1),
+                filter 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+/* soltou antes do mínimo: volta a ficar bloqueada */
+.tela-bloqueio.voltando,
+.tela-bloqueio.voltando .tela-bloqueio-fundo,
+.tela-bloqueio.voltando .tela-bloqueio-conteudo,
+.tela-bloqueio.voltando::before {
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out, filter 0.3s ease-out;
+}
+
+/* clique sem arrastar: saída mais leve, sobe um pouco enquanto apaga */
+.tela-bloqueio.saindoClique {
+    animation: tela-bloqueio-saindo-clique 0.45s ease-in forwards;
+}
+
+@keyframes tela-bloqueio-saindo-clique {
+    from { transform: translateY(0);    opacity: 1; }
+    to   { transform: translateY(-12%); opacity: 0; }
+}
+
+.tela-bloqueio-relogio {
+    position: absolute;
+    left: 28px;
+    bottom: 34px;
+    display: flex;
+    flex-direction: column;
+    text-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+.tela-bloqueio-hora {
+    font-size: 64px;
+    font-weight: 200;
+    line-height: 1;
+}
+
+.tela-bloqueio-data {
+    margin-top: 6px;
+    font-size: 19px;
+    font-weight: 300;
+}
+
+/* "segunda-feira, 5 de outubro" → "Segunda-feira, 5 de outubro" (capitalize deixaria "De Outubro") */
+.tela-bloqueio-data::first-letter {
+    text-transform: uppercase;
+}
+
+/* dica para desbloquear: respira devagar, no ritmo calmo da cena */
+.tela-bloqueio-dica {
+    position: absolute;
+    right: 24px;
+    bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--cor-destaque-sistema);
+    animation: tela-bloqueio-dica-respirando 3s ease-in-out infinite;
+}
+
+.tela-bloqueio-dica svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+@keyframes tela-bloqueio-dica-respirando {
+    0%, 100% { opacity: 0.35; }
+    50%      { opacity: 0.85; }
+}

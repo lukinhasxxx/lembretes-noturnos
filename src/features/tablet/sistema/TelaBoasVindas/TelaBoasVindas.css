@@ -76,6 +76,34 @@
     font-size: 15px;
 }
 
+/* botão "Entrar" da tela de login: vidro claro com borda, como no Windows 10 */
+.tela-boas-vindas-entrar {
+    all: unset;
+    position: relative;
+    box-sizing: border-box;
+    min-width: 96px;
+    padding: 5px 22px;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    background-color: rgba(255, 255, 255, 0.18);
+    font-size: 13px;
+    text-align: center;
+    cursor: default;
+    transition: border-color 0.2s, background-color 0.2s, transform 0.08s;
+}
+
+/* hover: só clareia um pouco o vidro e a borda */
+.tela-boas-vindas-entrar:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.28);
+}
+
+/* pressionado (fica assim enquanto o botão estiver seguro): vidro mais escuro, borda neon e o botão "afunda" um pouco */
+.tela-boas-vindas-entrar:active {
+    border-color: var(--cor-destaque-sistema);
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(0.96);
+}
+
 /* spinner de pontinhos girando, inspirado no do Windows, mas contínuo:
    cada volta desacelera em cima e acelera embaixo, então os pontos se juntam e se espalham sem nunca sumir.
    O atraso negativo faz cada ponto já começar um pouco "atrás" do anterior. */

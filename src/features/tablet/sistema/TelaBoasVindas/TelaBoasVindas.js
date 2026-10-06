@@ -2,10 +2,12 @@ import './TelaBoasVindas.css'
 import { useIdioma } from '../../../../shared/i18n/Idioma'
 import { SISTEMA } from '../../tablet.config'
 
-// Tela "Bem-vindo" depois do boot: wallpaper atual desfocado, avatar, nome do usuário e o spinner de pontinhos.
-// A futura tela de bloqueio vai reaproveitar este visual.
-// wallpaper: url da imagem de fundo (a mesma da área de trabalho)
-const TelaBoasVindas = ({ wallpaper }) => {
+// Tela do usuário: wallpaper atual desfocado, avatar e nome. Embaixo do nome muda conforme a etapa:
+// - 'boasVindas': spinner + "Bem-vindo" (depois do boot)
+// - 'login': botão "Entrar" (depois de tirar a tela de bloqueio)
+// - 'aguarde': spinner + "Aguarde..." (depois do "Entrar")
+// wallpaper: url da imagem de fundo (a mesma da área de trabalho); aoEntrar: clique no "Entrar"
+const TelaBoasVindas = ({ wallpaper, etapa = 'boasVindas', aoEntrar }) => {
     const { t } = useIdioma()
 
     return (
@@ -22,14 +24,20 @@ const TelaBoasVindas = ({ wallpaper }) => {
 
             <p className='tela-boas-vindas-usuario'>{SISTEMA.usuario}</p>
 
-            <div className='tela-boas-vindas-status'>
-                <div className='spinner-pontos'>
-                    {[0, 1, 2, 3, 4].map(indice => (
-                        <span key={indice} style={{ '--indice-ponto': indice }} />
-                    ))}
+            {etapa === 'login' ? (
+                <button type='button' className='tela-boas-vindas-entrar' onClick={aoEntrar}>
+                    {t('sistema.entrar')}
+                </button>
+            ) : (
+                <div className='tela-boas-vindas-status'>
+                    <div className='spinner-pontos'>
+                        {[0, 1, 2, 3, 4].map(indice => (
+                            <span key={indice} style={{ '--indice-ponto': indice }} />
+                        ))}
+                    </div>
+                    <span>{t(etapa === 'aguarde' ? 'sistema.aguarde' : 'sistema.boasVindas')}</span>
                 </div>
-                <span>{t('sistema.boasVindas')}</span>
-            </div>
+            )}
         </div>
     )
 }

@@ -37,9 +37,9 @@ const IconeMenu = () => (
 
 // Menu iniciar no estilo do Windows 10 com a pele do CyberOS:
 // coluna de atalhos à esquerda, lista de apps no meio e blocos fixados à direita.
-// aoAbrirApp(idDoApp): abre um app do apps.config.js; aoFechar: fecha o menu.
-// Bloquear, Desligar e Reiniciar ainda não têm ação (próxima etapa: ligar no useSistemaTablet).
-const MenuIniciar = ({ aoAbrirApp, aoFechar }) => {
+// aoAbrirApp(idDoApp): abre um app do apps.config.js; aoBloquear: vai para a tela de bloqueio; aoFechar: fecha o menu.
+// Desligar e Reiniciar ainda não têm ação (próxima etapa: ligar no useSistemaTablet).
+const MenuIniciar = ({ aoAbrirApp, aoBloquear, aoFechar }) => {
     const { t } = useIdioma()
     // popup aberto na coluna da esquerda: 'usuario', 'energia' ou null
     const [popupAberto, setPopupAberto] = useState(null)
@@ -50,6 +50,11 @@ const MenuIniciar = ({ aoAbrirApp, aoFechar }) => {
 
     const abrirApp = (idDoApp) => {
         aoAbrirApp(idDoApp)
+        aoFechar()
+    }
+
+    const bloquear = () => {
+        aoBloquear()
         aoFechar()
     }
 
@@ -73,7 +78,7 @@ const MenuIniciar = ({ aoAbrirApp, aoFechar }) => {
                         {popupAberto === 'usuario' && (
                             <div className='menu-iniciar-popup'>
                                 <span className='menu-iniciar-popup-titulo'>{SISTEMA.usuario}</span>
-                                <button type='button'>{t('menuIniciar.bloquear')}</button>
+                                <button type='button' onClick={bloquear}>{t('menuIniciar.bloquear')}</button>
                             </div>
                         )}
                     </div>

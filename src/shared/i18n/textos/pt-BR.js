@@ -3,6 +3,8 @@
 const ptBR = {
     'sistema.iniciando': 'Iniciando {sistema}',
     'sistema.boasVindas': 'Bem-vindo',
+    'sistema.entrar': 'Entrar',
+    'sistema.aguarde': 'Aguarde...',
 
     'menuIniciar.abrir': 'Iniciar',
     'menuIniciar.apps': 'Apps',
@@ -12,6 +14,8 @@ const ptBR = {
     'menuIniciar.bloquear': 'Bloquear',
     'menuIniciar.desligar': 'Desligar',
     'menuIniciar.reiniciar': 'Reiniciar',
+
+    'bloqueio.desbloquear': 'Arraste para desbloquear',
 }
 
 export default ptBR

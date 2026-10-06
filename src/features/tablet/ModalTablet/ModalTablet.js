@@ -9,11 +9,13 @@ import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
 import { useEstadoPersistido } from '../../../shared/hooks/useEstadoPersistido'
 import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
+import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
 import { ESTADOS_SISTEMA } from '../tablet.config'
 import { APPS } from '../apps.config'
 
-// estadoSistema: em que ponto o sistema está (boot, boas-vindas, área de trabalho), vem do useSistemaTablet
-const ModalTablet = ({aoSubmeter, validarLigadoDesligado, estadoSistema, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
+// estadoSistema: em que ponto o sistema está (boot, boas-vindas, área de trabalho, bloqueado), vem do useSistemaTablet
+// aoBloquear / aoDesbloquear / aoEntrar: ações do useSistemaTablet (menu iniciar → Bloquear / tela de bloqueio saiu / "Entrar")
+const ModalTablet = ({aoSubmeter, validarLigadoDesligado, estadoSistema, aoBloquear, aoDesbloquear, aoEntrar, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
 
     //perto do fim do projeto ai componetiza, modulariza as coisas
     const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)   
@@ -363,12 +365,26 @@ const selecionarPreset = (caminhoDaImagem) => {
         appsAbertos={appsAbertos}
         aoClicarNoApp={(idDoApp) => setTelaAtiva(ultimaTela[idDoApp])}
         aoAbrirApp={(idDoApp) => abrirApp(idDoApp, APPS[idDoApp].telaInicial)}
+        aoBloquear={aoBloquear}
         aoVoltarParaAreaDeTrabalho={() => setTelaAtiva('desktop')}
     />
 
-        {/* boot e boas-vindas cobrem a tela inteira (área de trabalho + barra de tarefas) */}
+        {/* boot, tela do usuário e bloqueio cobrem a tela inteira (área de trabalho + barra de tarefas).
+            Bloqueado: a tela de login já fica montada embaixo e a de bloqueio (por cima) sai revelando ela */}
         {estadoSistema === ESTADOS_SISTEMA.ligando && <TelaBoot />}
         {estadoSistema === ESTADOS_SISTEMA.boasVindas && <TelaBoasVindas wallpaper={wallpaperAtual} />}
+        {(estadoSistema === ESTADOS_SISTEMA.bloqueado
+            || estadoSistema === ESTADOS_SISTEMA.login
+            || estadoSistema === ESTADOS_SISTEMA.entrando) && (
+            <TelaBoasVindas
+                wallpaper={wallpaperAtual}
+                etapa={estadoSistema === ESTADOS_SISTEMA.entrando ? 'aguarde' : 'login'}
+                aoEntrar={aoEntrar}
+            />
+        )}
+        {estadoSistema === ESTADOS_SISTEMA.bloqueado && (
+            <TelaBloqueio wallpaper={wallpaperAtual} aoDesbloquear={aoDesbloquear} />
+        )}
 
     </div>
             </section>
