@@ -15,6 +15,11 @@
     background: #000;
     color: #fff;
     font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* o fade é só do conteúdo: o fundo preto da tela já está opaco desde o primeiro frame,
+   senão a área de trabalho (montada por baixo) aparece por um instante entre o boot e o Bem-vindo */
+.tela-boas-vindas > * {
     animation: boas-vindas-aparecendo 0.35s ease-out;
 }
 
@@ -71,7 +76,37 @@
     font-size: 15px;
 }
 
-/* spinner de pontinhos girando, estilo Windows */
+/* botão "Entrar" da tela de login: vidro claro com borda, como no Windows 10 */
+.tela-boas-vindas-entrar {
+    all: unset;
+    position: relative;
+    box-sizing: border-box;
+    min-width: 96px;
+    padding: 5px 22px;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    background-color: rgba(255, 255, 255, 0.18);
+    font-size: 13px;
+    text-align: center;
+    cursor: default;
+    transition: border-color 0.2s, background-color 0.2s, transform 0.08s;
+}
+
+/* hover: só clareia um pouco o vidro e a borda */
+.tela-boas-vindas-entrar:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.28);
+}
+
+/* pressionado (fica assim enquanto o botão estiver seguro): vidro mais escuro, borda neon e o botão "afunda" um pouco */
+.tela-boas-vindas-entrar:active {
+    border-color: var(--cor-destaque-sistema);
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(0.96);
+}
+
+/* spinner de pontinhos girando, inspirado no do Windows, mas contínuo:
+   cada volta desacelera em cima e acelera embaixo, então os pontos se juntam e se espalham sem nunca sumir.
+   O atraso negativo faz cada ponto já começar um pouco "atrás" do anterior. */
 .spinner-pontos {
     position: relative;
     width: 22px;
@@ -81,9 +116,8 @@
 .spinner-pontos span {
     position: absolute;
     inset: 0;
-    animation: ponto-girando 2.2s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
-    animation-delay: calc(var(--indice-ponto) * 0.12s);
-    opacity: 0;
+    animation: ponto-girando 2.4s infinite;
+    animation-delay: calc(var(--indice-ponto) * -0.15s);
 }
 
 .spinner-pontos span::before {
@@ -98,9 +132,11 @@
     background: #fff;
 }
 
+/* 2 voltas por ciclo: 720° termina exatamente onde 0° começa, então o loop não dá salto.
+   A curva começa e termina com inclinação 0.5 (0.15/0.3): no topo o ponto anda na metade da velocidade média,
+   mas nunca para; como o fim de uma volta e o começo da próxima têm a mesma inclinação, não há "freada" no topo. */
 @keyframes ponto-girando {
-    0%   { transform: rotate(0deg); opacity: 1; }
-    75%  { transform: rotate(540deg); opacity: 1; }
-    76%  { opacity: 0; }
-    100% { transform: rotate(540deg); opacity: 0; }
+    0%   { transform: rotate(0deg);   animation-timing-function: cubic-bezier(0.3, 0.15, 0.7, 0.85); }
+    50%  { transform: rotate(360deg); animation-timing-function: cubic-bezier(0.3, 0.15, 0.7, 0.85); }
+    100% { transform: rotate(720deg); }
 }

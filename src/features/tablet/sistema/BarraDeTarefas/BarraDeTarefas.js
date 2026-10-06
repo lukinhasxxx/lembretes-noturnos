@@ -1,54 +1,104 @@
 import './BarraDeTarefas.css'
+import { useEffect, useRef, useState } from 'react'
 import BotaoBarraDeTarefas from '../BotaoBarraDeTarefas/BotaoBarraDeTarefas'
+import MenuIniciar from '../MenuIniciar/MenuIniciar'
 import Relogio from '../Relogio/Relogio'
 import { APPS } from '../../apps.config'
 
 // Barra de tarefas do sistema: à esquerda iniciar, voltar e apps abertos; à direita a bandeja (ícones de status,
 // idioma, relógio e notificações). A bandeja vai para a direita sozinha (margin-left: auto), sem medida fixa.
 // appsAbertos: ids do apps.config.js, na ordem em que foram abertos
-const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoVoltarParaAreaDeTrabalho }) => (
-    <div className='barra-de-tarefas'>
-        <BotaoBarraDeTarefas icone='/imagens/windows/menuIniciar.png' alt='Menu iniciar' tamanhoIcone={18} />
-        <BotaoBarraDeTarefas
-            icone='/imagens/windows/setaVoltar.png'
-            alt='Voltar para a área de trabalho'
-            tamanhoIcone={20}
-            largura={45}
-            aoClicar={aoVoltarParaAreaDeTrabalho}
-        />
+// aoAbrirApp(idDoApp): abre um app pelo menu iniciar; aoBloquear: Bloquear do menu iniciar
+const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, aoVoltarParaAreaDeTrabalho }) => {
+    // 'fechado' → 'aberto' → 'fechando' (animação de fechar) → 'fechado'
+    const [estadoMenuIniciar, setEstadoMenuIniciar] = useState('fechado')
+    const menuIniciarAberto = estadoMenuIniciar === 'aberto'
+    // botão iniciar + menu: clicar fora dos dois fecha o menu
+    const areaMenuIniciarRef = useRef(null)
 
-        <div className='barra-de-tarefas-apps-abertos'>
-            {appsAbertos.map(idDoApp => (
+    const fecharMenuIniciar = () => setEstadoMenuIniciar(estado => (estado === 'aberto' ? 'fechando' : estado))
+    const alternarMenuIniciar = () => setEstadoMenuIniciar(estado => (estado === 'aberto' ? 'fechando' : 'aberto'))
+
+    useEffect(() => {
+        if (!menuIniciarAberto) return
+
+        const fecharAoClicarFora = (evento) => {
+            if (!areaMenuIniciarRef.current.contains(evento.target)) fecharMenuIniciar()
+        }
+        const fecharComEsc = (evento) => {
+            if (evento.key === 'Escape') fecharMenuIniciar()
+        }
+
+        document.addEventListener('mousedown', fecharAoClicarFora)
+        document.addEventListener('keydown', fecharComEsc)
+        return () => {
+            document.removeEventListener('mousedown', fecharAoClicarFora)
+            document.removeEventListener('keydown', fecharComEsc)
+        }
+    }, [menuIniciarAberto])
+
+    return (
+        <div className='barra-de-tarefas'>
+            <div ref={areaMenuIniciarRef} className='barra-de-tarefas-area-menu-iniciar'>
                 <BotaoBarraDeTarefas
-                    key={idDoApp}
-                    icone={APPS[idDoApp].icone}
-                    alt={`Abrir ${APPS[idDoApp].nome}`}
-                    tamanhoIcone={APPS[idDoApp].tamanhoIconeBarra}
-                    aoClicar={() => aoClicarNoApp(idDoApp)}
+                    icone='/imagens/windows/menuIniciar.png'
+                    alt='Menu iniciar'
+                    tamanhoIcone={18}
+                    ativo={menuIniciarAberto}
+                    aoClicar={alternarMenuIniciar}
                 />
-            ))}
-        </div>
+                {estadoMenuIniciar !== 'fechado' && (
+                    <MenuIniciar
+                        aoAbrirApp={aoAbrirApp}
+                        aoBloquear={aoBloquear}
+                        aoFechar={fecharMenuIniciar}
+                        fechando={estadoMenuIniciar === 'fechando'}
+                        aoTerminarDeFechar={() => setEstadoMenuIniciar('fechado')}
+                    />
+                )}
+            </div>
 
-        <div className='barra-de-tarefas-bandeja'>
-            <BotaoBarraDeTarefas icone='/imagens/windows/bateriaIcone.png' alt='Bateria carregando' tamanhoIcone={12} largura={24} />
-            <BotaoBarraDeTarefas icone='/imagens/windows/wifiIcone.png' alt='Wi-Fi' tamanhoIcone={15} largura={20} />
-            <BotaoBarraDeTarefas icone='/imagens/windows/semSomIcone.png' alt='Sem som' tamanhoIcone={26} largura={26} />
-            <BotaoBarraDeTarefas largura={35}>
-                <span>POR</span>
-                <span>PTB2</span>
-            </BotaoBarraDeTarefas>
-            <BotaoBarraDeTarefas largura={86}>
-                <Relogio />
-            </BotaoBarraDeTarefas>
             <BotaoBarraDeTarefas
-                className='botao-notificacoes'
-                icone='/imagens/windows/iconeNotificacoes.png'
-                alt='Notificações'
+                icone='/imagens/windows/setaVoltar.png'
+                alt='Voltar para a área de trabalho'
                 tamanhoIcone={20}
-                largura={34}
+                largura={45}
+                aoClicar={aoVoltarParaAreaDeTrabalho}
             />
+
+            <div className='barra-de-tarefas-apps-abertos'>
+                {appsAbertos.map(idDoApp => (
+                    <BotaoBarraDeTarefas
+                        key={idDoApp}
+                        icone={APPS[idDoApp].icone}
+                        alt={`Abrir ${APPS[idDoApp].nome}`}
+                        tamanhoIcone={APPS[idDoApp].tamanhoIconeBarra}
+                        aoClicar={() => aoClicarNoApp(idDoApp)}
+                    />
+                ))}
+            </div>
+
+            <div className='barra-de-tarefas-bandeja'>
+                <BotaoBarraDeTarefas icone='/imagens/windows/bateriaIcone.png' alt='Bateria carregando' tamanhoIcone={12} largura={24} />
+                <BotaoBarraDeTarefas icone='/imagens/windows/wifiIcone.png' alt='Wi-Fi' tamanhoIcone={15} largura={20} />
+                <BotaoBarraDeTarefas icone='/imagens/windows/semSomIcone.png' alt='Sem som' tamanhoIcone={26} largura={26} />
+                <BotaoBarraDeTarefas largura={35}>
+                    <span>POR</span>
+                    <span>PTB2</span>
+                </BotaoBarraDeTarefas>
+                <BotaoBarraDeTarefas largura={86}>
+                    <Relogio />
+                </BotaoBarraDeTarefas>
+                <BotaoBarraDeTarefas
+                    className='botao-notificacoes'
+                    icone='/imagens/windows/iconeNotificacoes.png'
+                    alt='Notificações'
+                    tamanhoIcone={20}
+                    largura={34}
+                />
+            </div>
         </div>
-    </div>
-)
+    )
+}
 
 export default BarraDeTarefas

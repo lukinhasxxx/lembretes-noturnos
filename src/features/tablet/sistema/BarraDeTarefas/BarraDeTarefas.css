@@ -8,9 +8,19 @@
     background-color: rgba(0, 0, 0, 0.01);
 }
 
+/* não é posicionada: o menu iniciar (absolute) se posiciona pela barra inteira */
+.barra-de-tarefas-area-menu-iniciar {
+    display: flex;
+}
+
 .barra-de-tarefas-apps-abertos {
     display: flex;
     margin-left: 10px;
+}
+
+/* respiro de 5px de cada lado em cada app aberto (10px entre um ícone e outro) */
+.barra-de-tarefas-apps-abertos .botao-barra-de-tarefas {
+    margin: 0 5px;
 }
 
 .barra-de-tarefas-bandeja {

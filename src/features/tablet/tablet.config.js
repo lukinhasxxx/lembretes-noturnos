@@ -7,11 +7,15 @@ export const SISTEMA = {
 }
 
 // por onde o tablet passa: desligado → ligando (boot) → boasVindas → areaDeTrabalho
+// bloquear (menu iniciar): areaDeTrabalho → bloqueado → (arrastar/clicar) login → (Entrar) entrando → areaDeTrabalho
 export const ESTADOS_SISTEMA = {
     desligado: 'desligado',
     ligando: 'ligando',
     boasVindas: 'boasVindas',
     areaDeTrabalho: 'areaDeTrabalho',
+    bloqueado: 'bloqueado',
+    login: 'login',
+    entrando: 'entrando',
 }
 
 // tempos de cada tela (as animações do CSS acompanham esses valores)
@@ -22,3 +26,5 @@ export const DURACAO_BOOT_MS = 3500
 export const DURACAO_BOOT_EXTRA_MINIMA_MS = 500
 export const DURACAO_BOOT_EXTRA_MAXIMA_MS = 1250
 export const DURACAO_BOAS_VINDAS_MS = 2500
+// depois do "Entrar" na tela de login: spinner com "Aguarde..." até voltar para a área de trabalho
+export const DURACAO_ENTRANDO_MS = 1500

@@ -6,4 +6,13 @@
     --cor-hover-sistema: rgba(46, 45, 45, 0.76);
     --cor-texto-sistema: #fff;
     --tamanho-fonte-sistema: 13px;
+    --fonte-sistema: 'Segoe UI', system-ui, sans-serif;
+
+    /* "pele" CyberOS: cores do logo */
+    --cor-destaque-sistema: #6ef0ff;
+    --cor-destaque-secundaria-sistema: #b98cff;
+    --cor-borda-neon-sistema: rgba(110, 240, 255, 0.35);
+
+    /* menu iniciar: vidro escuro azulado (lembra o "acrílico" do Windows 10, sem desfoque) */
+    --cor-fundo-menu-iniciar: rgba(10, 14, 30, 0.92);
 }

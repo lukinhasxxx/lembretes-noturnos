@@ -1,13 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useDataAtual } from '../../hooks/useDataAtual'
 
 // Hora e data do sistema, atualizadas a cada segundo. O visual vem do botão da barra de tarefas onde ele fica.
 const Relogio = () => {
-    const [dataAtual, setDataAtual] = useState(new Date())
-
-    useEffect(() => {
-        const timer = setInterval(() => setDataAtual(new Date()), 1000)
-        return () => clearInterval(timer)
-    }, [])
+    const dataAtual = useDataAtual()
 
     return (
         <>
