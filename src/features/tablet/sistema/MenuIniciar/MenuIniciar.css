@@ -12,7 +12,6 @@
     background: var(--cor-fundo-menu-iniciar);
     border: 1px solid var(--cor-borda-neon-sistema);
     border-bottom: none;
-    box-shadow: 0 0 12px rgba(110, 240, 255, 0.2), 0 0 24px rgba(185, 140, 255, 0.12);
     color: var(--cor-texto-sistema);
     font-family: var(--fonte-sistema);
     font-size: var(--tamanho-fonte-sistema);
@@ -23,6 +22,17 @@
 @keyframes menu-iniciar-subindo {
     from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
+}
+
+/* fechando: a mesma animação de abrir, ao contrário; no fim o menu é desmontado (onAnimationEnd) */
+.menu-iniciar.fechando {
+    animation: menu-iniciar-descendo 0.2s ease-in forwards;
+    pointer-events: none;
+}
+
+@keyframes menu-iniciar-descendo {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(12px); }
 }
 
 /* zera o estilo padrão de <button> do navegador em tudo do menu */

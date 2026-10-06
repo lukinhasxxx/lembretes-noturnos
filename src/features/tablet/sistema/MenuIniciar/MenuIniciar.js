@@ -38,8 +38,9 @@ const IconeMenu = () => (
 // Menu iniciar no estilo do Windows 10 com a pele do CyberOS:
 // coluna de atalhos à esquerda, lista de apps no meio e blocos fixados à direita.
 // aoAbrirApp(idDoApp): abre um app do apps.config.js; aoBloquear: vai para a tela de bloqueio; aoFechar: fecha o menu.
+// fechando: toca a animação de fechar; aoTerminarDeFechar: fim dela (aí a barra desmonta o menu).
 // Desligar e Reiniciar ainda não têm ação (próxima etapa: ligar no useSistemaTablet).
-const MenuIniciar = ({ aoAbrirApp, aoBloquear, aoFechar }) => {
+const MenuIniciar = ({ aoAbrirApp, aoBloquear, aoFechar, fechando, aoTerminarDeFechar }) => {
     const { t } = useIdioma()
     // popup aberto na coluna da esquerda: 'usuario', 'energia' ou null
     const [popupAberto, setPopupAberto] = useState(null)
@@ -59,7 +60,10 @@ const MenuIniciar = ({ aoAbrirApp, aoBloquear, aoFechar }) => {
     }
 
     return (
-        <div className='menu-iniciar'>
+        <div
+            className={`menu-iniciar ${fechando ? 'fechando' : ''}`}
+            onAnimationEnd={(evento) => evento.animationName === 'menu-iniciar-descendo' && aoTerminarDeFechar()}
+        >
             <nav className='menu-iniciar-coluna'>
                 <button type='button' className='menu-iniciar-atalho' title={t('menuIniciar.abrir')}>
                     <IconeMenu />

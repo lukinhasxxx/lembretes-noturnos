@@ -10,18 +10,23 @@ import { APPS } from '../../apps.config'
 // appsAbertos: ids do apps.config.js, na ordem em que foram abertos
 // aoAbrirApp(idDoApp): abre um app pelo menu iniciar; aoBloquear: Bloquear do menu iniciar
 const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, aoVoltarParaAreaDeTrabalho }) => {
-    const [menuIniciarAberto, setMenuIniciarAberto] = useState(false)
+    // 'fechado' → 'aberto' → 'fechando' (animação de fechar) → 'fechado'
+    const [estadoMenuIniciar, setEstadoMenuIniciar] = useState('fechado')
+    const menuIniciarAberto = estadoMenuIniciar === 'aberto'
     // botão iniciar + menu: clicar fora dos dois fecha o menu
     const areaMenuIniciarRef = useRef(null)
+
+    const fecharMenuIniciar = () => setEstadoMenuIniciar(estado => (estado === 'aberto' ? 'fechando' : estado))
+    const alternarMenuIniciar = () => setEstadoMenuIniciar(estado => (estado === 'aberto' ? 'fechando' : 'aberto'))
 
     useEffect(() => {
         if (!menuIniciarAberto) return
 
         const fecharAoClicarFora = (evento) => {
-            if (!areaMenuIniciarRef.current.contains(evento.target)) setMenuIniciarAberto(false)
+            if (!areaMenuIniciarRef.current.contains(evento.target)) fecharMenuIniciar()
         }
         const fecharComEsc = (evento) => {
-            if (evento.key === 'Escape') setMenuIniciarAberto(false)
+            if (evento.key === 'Escape') fecharMenuIniciar()
         }
 
         document.addEventListener('mousedown', fecharAoClicarFora)
@@ -40,13 +45,15 @@ const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, ao
                     alt='Menu iniciar'
                     tamanhoIcone={18}
                     ativo={menuIniciarAberto}
-                    aoClicar={() => setMenuIniciarAberto(aberto => !aberto)}
+                    aoClicar={alternarMenuIniciar}
                 />
-                {menuIniciarAberto && (
+                {estadoMenuIniciar !== 'fechado' && (
                     <MenuIniciar
                         aoAbrirApp={aoAbrirApp}
                         aoBloquear={aoBloquear}
-                        aoFechar={() => setMenuIniciarAberto(false)}
+                        aoFechar={fecharMenuIniciar}
+                        fechando={estadoMenuIniciar === 'fechando'}
+                        aoTerminarDeFechar={() => setEstadoMenuIniciar('fechado')}
                     />
                 )}
             </div>
