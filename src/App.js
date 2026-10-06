@@ -214,7 +214,7 @@ const limparTodosLembretes = () => {
 const [ligarTablet,setLigarTablet] = useState(false)
 const [modalAberto,setModalAberto] = useState(false)
 // sistema do tablet: desligado até o primeiro clique; aí roda boot → boas-vindas → área de trabalho
-const { estadoSistema, ligarSistema } = useSistemaTablet()
+const { estadoSistema, ligarSistema, bloquearSistema, desbloquearSistema, entrarSistema } = useSistemaTablet()
 
 const gerenciarTablet = () => {
 
@@ -309,6 +309,9 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
       aoSubmeter={adicionarLembrete}
       validarLigadoDesligado={ligarTablet}
       estadoSistema={estadoSistema}
+      aoBloquear={bloquearSistema}
+      aoDesbloquear={desbloquearSistema}
+      aoEntrar={entrarSistema}
       painelLigadoPermanente={painelLigadoPermanente}
       haLembretesSalvos={lembretes.length > 0}
       aoLigarMural={ligarMuralComAnimacao}
