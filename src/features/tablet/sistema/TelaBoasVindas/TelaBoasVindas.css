@@ -104,9 +104,11 @@
     background: #fff;
 }
 
-/* 2 voltas por ciclo: 720° termina exatamente onde 0° começa, então o loop não dá salto */
+/* 2 voltas por ciclo: 720° termina exatamente onde 0° começa, então o loop não dá salto.
+   A curva começa e termina com inclinação 0.5 (0.15/0.3): no topo o ponto anda na metade da velocidade média,
+   mas nunca para; como o fim de uma volta e o começo da próxima têm a mesma inclinação, não há "freada" no topo. */
 @keyframes ponto-girando {
-    0%   { transform: rotate(0deg);   animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95); }
-    50%  { transform: rotate(360deg); animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95); }
+    0%   { transform: rotate(0deg);   animation-timing-function: cubic-bezier(0.3, 0.15, 0.7, 0.85); }
+    50%  { transform: rotate(360deg); animation-timing-function: cubic-bezier(0.3, 0.15, 0.7, 0.85); }
     100% { transform: rotate(720deg); }
 }
