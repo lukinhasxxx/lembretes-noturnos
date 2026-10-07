@@ -4,6 +4,8 @@ const en = {
     'sistema.boasVindas': 'Welcome',
     'sistema.entrar': 'Sign in',
     'sistema.aguarde': 'Please wait...',
+    'sistema.desligando': 'Shutting down...',
+    'sistema.reiniciando': 'Restarting...',
 
     'menuIniciar.abrir': 'Start',
     'menuIniciar.apps': 'Apps',

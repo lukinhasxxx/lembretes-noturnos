@@ -28,6 +28,19 @@
     to   { opacity: 1; }
 }
 
+/* "Desligando..."/"Reiniciando...": além de aparecer, no fim o conteúdo (fundo + spinner) apaga até sobrar o preto,
+   que emenda na tela apagada. --atraso-sumindo e --duracao-sumindo vêm do tablet.config.js */
+.tela-boas-vindas.encerrando > * {
+    animation:
+        boas-vindas-aparecendo 0.35s ease-out,
+        boas-vindas-sumindo var(--duracao-sumindo) ease-in var(--atraso-sumindo) forwards;
+}
+
+@keyframes boas-vindas-sumindo {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
 /* wallpaper desfocado e escurecido; o scale esconde a borda clara que o blur cria */
 .tela-boas-vindas-fundo {
     position: absolute;

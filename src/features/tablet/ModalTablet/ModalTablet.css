@@ -530,3 +530,15 @@ transform: scale(0.95);
     box-shadow: 1px 1px 2px rgba(25, 0, 255, 0.7);
     transform: translate(1px);
 }
+
+/* tela apagada (entre desligar e fechar o modal, e entre reiniciar e o boot): preto puro por cima de tudo.
+   height: 101% pelo mesmo motivo das outras telas do sistema (área de trabalho e barra passam ~4px da .tablet-tela) */
+.tela-sistema-apagada {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 101%;
+    z-index: 10;
+    background: #000;
+}
