@@ -44,13 +44,35 @@
 
 /* ---------- coluna de atalhos (esquerda) ---------- */
 
+/* espaço fixo de 44px no layout: o painel dentro dele expande por cima da lista sem empurrar nada */
 .menu-iniciar-coluna {
+    position: relative;
+    flex-shrink: 0;
+    width: 44px;
+}
+
+.menu-iniciar-coluna-painel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    box-sizing: border-box;
     width: 44px;
     padding: 4px 0;
+    background-color: transparent;
     border-right: 1px solid rgba(255, 255, 255, 0.06);
+    transition: width 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out;
+}
+
+/* ☰: expande mostrando os nomes, com fundo quase opaco para cobrir a lista de apps */
+.menu-iniciar-coluna-painel.expandida {
+    width: 170px;
+    background-color: rgba(14, 18, 36, 0.98);
+    border-right-color: var(--cor-borda-neon-sistema);
 }
 
 .menu-iniciar-coluna-base {
@@ -58,13 +80,41 @@
     flex-direction: column;
 }
 
+/* ícone numa caixa fixa de 44px (fica no mesmo lugar recolhido ou expandido) + nome ao lado */
 .menu-iniciar .menu-iniciar-atalho {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 44px;
+    width: 100%;
     height: 40px;
+    overflow: hidden;
+}
+
+.menu-iniciar-atalho-icone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+}
+
+/* recolhida: nome invisível; expandida: aparece logo depois da largura começar a abrir */
+.menu-iniciar-atalho-nome {
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.12s ease-out;
+}
+
+.menu-iniciar-coluna-painel.expandida .menu-iniciar-atalho-nome {
+    opacity: 1;
+    transition: opacity 0.2s ease-out 0.08s;
+}
+
+/* "Iniciar" no topo: título em caixa alta, como o "INICIAR" do Windows 10 */
+.menu-iniciar-atalho-nome-titulo {
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 }
 
 /* faixa neon na lateral do item com hover: o toque CyberOS no hover do Windows */
