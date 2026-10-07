@@ -1,7 +1,7 @@
 import { VisibilidadePainelContext } from '../../mural'
 import './ModalTablet.css'
 import Botao from '../componentes/Botao/Botao'
-import { useState,useContext } from 'react'
+import { useState,useContext,useEffect } from 'react'
 import '../sistema/temaSistema.css'
 import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
@@ -13,19 +13,33 @@ import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
 import { ESTADOS_SISTEMA } from '../tablet.config'
 import { APPS } from '../apps.config'
 
+// tela que cada app abre ao ser clicado na barra de tarefas (atualizada conforme a pessoa navega dentro do app)
+const ULTIMA_TELA_INICIAL = {
+    app_lembrete: 'about.exe',
+    app_config: 'config.exe',
+}
+
 // estadoSistema: em que ponto o sistema está (boot, boas-vindas, área de trabalho, bloqueado), vem do useSistemaTablet
 // aoBloquear / aoDesbloquear / aoEntrar: ações do useSistemaTablet (menu iniciar → Bloquear / tela de bloqueio saiu / "Entrar")
-const ModalTablet = ({aoSubmeter, validarLigadoDesligado, estadoSistema, aoBloquear, aoDesbloquear, aoEntrar, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
+// aoDesligar / aoReiniciar: ações do useSistemaTablet (menu iniciar → energia)
+const ModalTablet = ({aoSubmeter, validarLigadoDesligado, estadoSistema, aoBloquear, aoDesbloquear, aoEntrar, aoDesligar, aoReiniciar, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
 
     //perto do fim do projeto ai componetiza, modulariza as coisas
-    const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)   
+    const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)
     const [nome, setNome] = useState('')
     const [telaAtiva, setTelaAtiva] = useState('desktop')
     const [appsAbertos,setAppsAbertos] = useState([])
-    const [ultimaTela,setUltimaTela] = useState({
-        app_lembrete:'about.exe',
-        app_config:'config.exe'
-    })
+    const [ultimaTela,setUltimaTela] = useState(ULTIMA_TELA_INICIAL)
+
+    // sistema ligando (primeira vez, depois de desligar ou ao reiniciar): começa sem nenhum app aberto.
+    // A tela de boot cobre tudo nessa hora, então a troca não aparece.
+    useEffect(() => {
+        if (estadoSistema !== ESTADOS_SISTEMA.ligando) return
+
+        setTelaAtiva('desktop')
+        setAppsAbertos([])
+        setUltimaTela(ULTIMA_TELA_INICIAL)
+    }, [estadoSistema])
     // só o wallpaper de exemplo (preset) é salvo; o de upload é uma imagem inteira e não cabe bem no localStorage.
     // salva o caminho sem o PUBLIC_URL, para funcionar tanto no localhost quanto no GitHub Pages
     const [wallpaperPresetSalvo, setWallpaperPresetSalvo] = useEstadoPersistido('wallpaper-preset', null)
@@ -366,6 +380,8 @@ const selecionarPreset = (caminhoDaImagem) => {
         aoClicarNoApp={(idDoApp) => setTelaAtiva(ultimaTela[idDoApp])}
         aoAbrirApp={(idDoApp) => abrirApp(idDoApp, APPS[idDoApp].telaInicial)}
         aoBloquear={aoBloquear}
+        aoDesligar={aoDesligar}
+        aoReiniciar={aoReiniciar}
         aoVoltarParaAreaDeTrabalho={() => setTelaAtiva('desktop')}
     />
 
@@ -385,6 +401,9 @@ const selecionarPreset = (caminhoDaImagem) => {
         {estadoSistema === ESTADOS_SISTEMA.bloqueado && (
             <TelaBloqueio wallpaper={wallpaperAtual} aoDesbloquear={aoDesbloquear} />
         )}
+        {estadoSistema === ESTADOS_SISTEMA.desligando && <TelaBoasVindas wallpaper={wallpaperAtual} etapa='desligando' />}
+        {estadoSistema === ESTADOS_SISTEMA.reiniciando && <TelaBoasVindas wallpaper={wallpaperAtual} etapa='reiniciando' />}
+        {estadoSistema === ESTADOS_SISTEMA.apagado && <div className='tela-sistema-apagada' />}
 
     </div>
             </section>

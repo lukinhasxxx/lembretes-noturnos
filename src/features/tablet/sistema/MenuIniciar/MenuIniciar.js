@@ -37,10 +37,10 @@ const IconeMenu = () => (
 
 // Menu iniciar no estilo do Windows 10 com a pele do CyberOS:
 // coluna de atalhos à esquerda, lista de apps no meio e blocos fixados à direita.
-// aoAbrirApp(idDoApp): abre um app do apps.config.js; aoBloquear: vai para a tela de bloqueio; aoFechar: fecha o menu.
+// aoAbrirApp(idDoApp): abre um app do apps.config.js; aoBloquear / aoDesligar / aoReiniciar: ações do sistema;
+// aoFechar: fecha o menu.
 // fechando: toca a animação de fechar; aoTerminarDeFechar: fim dela (aí a barra desmonta o menu).
-// Desligar e Reiniciar ainda não têm ação (próxima etapa: ligar no useSistemaTablet).
-const MenuIniciar = ({ aoAbrirApp, aoBloquear, aoFechar, fechando, aoTerminarDeFechar }) => {
+const MenuIniciar = ({ aoAbrirApp, aoBloquear, aoDesligar, aoReiniciar, aoFechar, fechando, aoTerminarDeFechar }) => {
     const { t } = useIdioma()
     // popup aberto na coluna da esquerda: 'usuario', 'energia' ou null
     const [popupAberto, setPopupAberto] = useState(null)
@@ -54,8 +54,9 @@ const MenuIniciar = ({ aoAbrirApp, aoBloquear, aoFechar, fechando, aoTerminarDeF
         aoFechar()
     }
 
-    const bloquear = () => {
-        aoBloquear()
+    // Bloquear, Desligar, Reiniciar: executa a ação do sistema e fecha o menu
+    const executarAcaoDoSistema = (acao) => {
+        acao()
         aoFechar()
     }
 
@@ -82,7 +83,7 @@ const MenuIniciar = ({ aoAbrirApp, aoBloquear, aoFechar, fechando, aoTerminarDeF
                         {popupAberto === 'usuario' && (
                             <div className='menu-iniciar-popup'>
                                 <span className='menu-iniciar-popup-titulo'>{SISTEMA.usuario}</span>
-                                <button type='button' onClick={bloquear}>{t('menuIniciar.bloquear')}</button>
+                                <button type='button' onClick={() => executarAcaoDoSistema(aoBloquear)}>{t('menuIniciar.bloquear')}</button>
                             </div>
                         )}
                     </div>
@@ -107,8 +108,8 @@ const MenuIniciar = ({ aoAbrirApp, aoBloquear, aoFechar, fechando, aoTerminarDeF
                         </button>
                         {popupAberto === 'energia' && (
                             <div className='menu-iniciar-popup'>
-                                <button type='button'>{t('menuIniciar.desligar')}</button>
-                                <button type='button'>{t('menuIniciar.reiniciar')}</button>
+                                <button type='button' onClick={() => executarAcaoDoSistema(aoDesligar)}>{t('menuIniciar.desligar')}</button>
+                                <button type='button' onClick={() => executarAcaoDoSistema(aoReiniciar)}>{t('menuIniciar.reiniciar')}</button>
                             </div>
                         )}
                     </div>
