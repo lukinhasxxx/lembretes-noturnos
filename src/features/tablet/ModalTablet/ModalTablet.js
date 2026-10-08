@@ -1,7 +1,7 @@
 import { VisibilidadePainelContext } from '../../mural'
 import './ModalTablet.css'
 import Botao from '../componentes/Botao/Botao'
-import { useState,useContext,useEffect } from 'react'
+import { useState,useContext,useEffect,useRef } from 'react'
 import '../sistema/temaSistema.css'
 import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
@@ -11,13 +11,14 @@ import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
 import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
 import { ESTADOS_SISTEMA } from '../tablet.config'
-import { APPS } from '../apps.config'
+import { APPS, appDaTela } from '../apps.config'
 
-// tela que cada app abre ao ser clicado na barra de tarefas (atualizada conforme a pessoa navega dentro do app)
-const ULTIMA_TELA_INICIAL = {
-    app_lembrete: 'about.exe',
-    app_config: 'config.exe',
-}
+// tela que cada app abre ao ser clicado na barra de tarefas (atualizada conforme a pessoa navega dentro do app).
+// Começa na telaInicial de cada app do registro.
+const ULTIMA_TELA_INICIAL = Object.fromEntries(Object.values(APPS).map(app => [app.id, app.telaInicial]))
+
+// quantas telas o histórico guarda (só serve para o "minimizar" achar a tela de antes)
+const LIMITE_HISTORICO_TELAS = 20
 
 // estadoSistema: em que ponto o sistema está (boot, boas-vindas, área de trabalho, bloqueado), vem do useSistemaTablet
 // aoBloquear / aoDesbloquear / aoEntrar: ações do useSistemaTablet (menu iniciar → Bloquear / tela de bloqueio saiu / "Entrar")
@@ -30,6 +31,23 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, estadoSistema, aoBloqu
     const [telaAtiva, setTelaAtiva] = useState('desktop')
     const [appsAbertos,setAppsAbertos] = useState([])
     const [ultimaTela,setUltimaTela] = useState(ULTIMA_TELA_INICIAL)
+    // telas por onde a pessoa passou, da mais antiga para a mais recente (não precisa de re-render)
+    const historicoTelasRef = useRef(['desktop'])
+    // apps minimizados pela barra: ficam de fora quando outro app é minimizado, então minimizar um por um
+    // acaba na área de trabalho (sem ficar pulando entre dois apps)
+    const appsMinimizadosRef = useRef(new Set())
+
+    useEffect(() => {
+        // app que voltou para a frente (por qualquer caminho) deixa de estar minimizado
+        const dono = appDaTela(telaAtiva)
+        if (dono) appsMinimizadosRef.current.delete(dono)
+
+        const historico = historicoTelasRef.current
+        if (historico[historico.length - 1] === telaAtiva) return
+
+        historico.push(telaAtiva)
+        if (historico.length > LIMITE_HISTORICO_TELAS) historico.shift()
+    }, [telaAtiva])
 
     // sistema ligando (primeira vez, depois de desligar ou ao reiniciar): começa sem nenhum app aberto.
     // A tela de boot cobre tudo nessa hora, então a troca não aparece.
@@ -39,7 +57,31 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, estadoSistema, aoBloqu
         setTelaAtiva('desktop')
         setAppsAbertos([])
         setUltimaTela(ULTIMA_TELA_INICIAL)
+        historicoTelasRef.current = ['desktop']
+        appsMinimizadosRef.current.clear()
     }, [estadoSistema])
+
+    // clique num app aberto na barra de tarefas (como no Windows):
+    // - app em segundo plano → traz para a frente, na tela em que ele estava
+    // - app já na frente → "minimiza": volta para a tela de antes dele (outro app aberto e não minimizado,
+    //   ou a área de trabalho quando não sobrar nenhum)
+    const alternarAppPelaBarra = (idDoApp) => {
+        if (appDaTela(telaAtiva) !== idDoApp) {
+            setTelaAtiva(ultimaTela[idDoApp])
+            return
+        }
+
+        const minimizados = appsMinimizadosRef.current
+        minimizados.add(idDoApp)
+
+        const telaDeAntes = [...historicoTelasRef.current].reverse().find(tela => {
+            const dono = appDaTela(tela)
+            return tela === 'desktop' || (dono && !minimizados.has(dono) && appsAbertos.includes(dono))
+        })
+        const donoDaTelaDeAntes = appDaTela(telaDeAntes)
+        // outro app: volta na tela atual dele (pode ter mudado de aba depois)
+        setTelaAtiva(donoDaTelaDeAntes ? ultimaTela[donoDaTelaDeAntes] : 'desktop')
+    }
     // só o wallpaper de exemplo (preset) é salvo; o de upload é uma imagem inteira e não cabe bem no localStorage.
     // salva o caminho sem o PUBLIC_URL, para funcionar tanto no localhost quanto no GitHub Pages
     const [wallpaperPresetSalvo, setWallpaperPresetSalvo] = useEstadoPersistido('wallpaper-preset', null)
@@ -96,7 +138,6 @@ const selecionarPreset = (caminhoDaImagem) => {
         
         if (arquivo) {
             setPrevia (URL.createObjectURL(arquivo));
-            console.log("teste arquivo",arquivo)
             }
             setMudarWallpaper(arquivo)
         }
@@ -377,7 +418,7 @@ const selecionarPreset = (caminhoDaImagem) => {
 
     <BarraDeTarefas
         appsAbertos={appsAbertos}
-        aoClicarNoApp={(idDoApp) => setTelaAtiva(ultimaTela[idDoApp])}
+        aoClicarNoApp={alternarAppPelaBarra}
         aoAbrirApp={(idDoApp) => abrirApp(idDoApp, APPS[idDoApp].telaInicial)}
         aoBloquear={aoBloquear}
         aoDesligar={aoDesligar}

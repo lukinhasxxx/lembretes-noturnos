@@ -240,7 +240,6 @@ ligarSistema() // só faz algo se o tablet estiver desligado
 setModalAberto(ligado=> !ligado);
 setLigarTablet(ligado =>!ligado);
 setLigarTabletPrimeiraVez(true)
-console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
 }
 
   return (

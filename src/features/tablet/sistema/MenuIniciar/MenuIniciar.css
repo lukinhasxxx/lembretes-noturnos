@@ -124,6 +124,16 @@
     box-shadow: inset 2px 0 0 var(--cor-destaque-sistema);
 }
 
+/* usuário e energia (os que abrem o popup de Bloquear / Desligar / Reiniciar): ao clicar, o fundo do hover
+   clareia bem pouco, com uma transição curta para não "trocar seco". Os botões dentro do popup não entram aqui */
+.menu-iniciar .menu-iniciar-com-popup > .menu-iniciar-atalho {
+    transition: background-color 0.12s ease-out;
+}
+
+.menu-iniciar .menu-iniciar-com-popup > .menu-iniciar-atalho:active {
+    background-color: rgba(58, 58, 66, 0.8);
+}
+
 .menu-iniciar-atalho svg {
     width: 18px;
     height: 18px;
