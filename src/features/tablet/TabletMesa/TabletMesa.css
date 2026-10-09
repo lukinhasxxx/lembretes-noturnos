@@ -1,5 +1,7 @@
 /* posição e tamanho vêm da <Ancora ponto="tablet"> (cena.config.js); aqui só ocupa 100% dela */
 .zona-interacao-tablet {
+    /* referência do espelho (position: absolute dentro dela) */
+    position: relative;
     height: 100%;
     width: 100%;
     cursor: pointer;

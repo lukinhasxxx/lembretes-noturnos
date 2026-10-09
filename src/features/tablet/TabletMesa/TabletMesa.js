@@ -1,7 +1,9 @@
 import './TabletMesa.css'
+import EspelhoTablet from '../EspelhoTablet/EspelhoTablet'
 
 // Tablet desenhado sobre a mesinha da cena. Usado dentro de <Ancora ponto="tablet">.
 // Clicar abre/fecha o modal; quando ligado, ganha um brilho azul.
+// Por cima da imagem fica o espelho da tela do sistema, encaixado na telinha.
 const TabletMesa = ({ ligado, aoClicar }) => {
     return (
         <div className='zona-interacao-tablet' onClick={aoClicar}>
@@ -15,6 +17,7 @@ const TabletMesa = ({ ligado, aoClicar }) => {
                         : 'none',
                 }}
             />
+            <EspelhoTablet />
         </div>
     )
 }

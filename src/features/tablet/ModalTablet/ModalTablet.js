@@ -24,6 +24,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
         telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, voltarParaAreaDeTrabalho,
         wallpaperAtual, previa, setPrevia, selecionarPreset, lidarComMudancas,
+        registrarTelaDoModal,
     } = useSistemaTablet()
     const [nome, setNome] = useState('')
     const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
@@ -61,7 +62,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 style={{display: validarLigadoDesligado ? "" : " none" }}
                 alt='Modal do tablet'
             />
-    <div className='tablet-tela' > 
+    {/* registrarTelaDoModal: o espelho do tablet da mesa copia o HTML desta tela */}
+    <div className='tablet-tela' ref={registrarTelaDoModal}>
             <div 
                 className='area-de-trabalho' 
                 style={{ backgroundImage: `url(${wallpaperAtual})` }}

@@ -1,0 +1,36 @@
+/* camada do tamanho real da imagem do tablet, encolhida (scale vem do JS) até o tamanho dela na tela */
+.espelho-tablet {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: 0 0;
+    pointer-events: none;
+}
+
+/* a tela espelhada: corner pin (matrix3d vem do JS) a partir do canto de cima à esquerda */
+.espelho-tablet-tela {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: 0 0;
+    overflow: hidden;
+}
+
+/* a cópia da tela do modal: no modal a .tablet-tela fica deslocada para dentro da moldura (top/left em %);
+   aqui ela começa no canto, porque a moldura é a própria imagem do tablet da mesa */
+.espelho-tablet-copia,
+.espelho-tablet-copia > .tablet-tela {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* reflexo do vidro: faixa clara na diagonal + leve brilho geral de tela acesa */
+.espelho-tela-reflexo {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(115deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 35%),
+        rgba(110, 240, 255, 0.06);
+    pointer-events: none;
+}
