@@ -275,24 +275,19 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                            No momento, é possível interagir com:    
                         </p>
                     <div className='listas-desordenadas-about' >
-                        <ui>
+                        <ul>
                             <li>
                                 O tablet em cima da mesa
                             </li>
-                            <br></br>
                             <li>
                                 Com as notas dentro painel, fixar, desfixar etc.
                             </li>
-                            <br></br>
                             <li>
                                 Parcialmente com o sistema do tablet
                             </li>
-                            <br></br>
                             <li>Interagir com o rádio e com o player</li>
-                            <br></br>
                             <li>Também é possível movimentar o tablet e o player de rádio livremente</li>
-                            <br></br>
-                        </ui>
+                        </ul>
                     </div>
                 <div>Para adicionar uma nota, você pode navegar na aba no canto superior esquerdo da página ou
                     <div className='abrir-lembrete' 

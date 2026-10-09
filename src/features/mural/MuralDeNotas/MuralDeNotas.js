@@ -90,10 +90,10 @@ const MuralDeNotas = ({lembretes, aoDeletar, aoFixar, aoLimparTudo, apagandoNota
                         />
                     })
                 }
-            {lembretes.length <= 0 && conteudoVisivelPainel && (<text
+            {lembretes.length <= 0 && conteudoVisivelPainel && (<p
             className='lembrete-vazio'>
                     Você ainda não possui lembretes no painel, por favor, vá até o tablet e adicione.
-                </text>)}
+                </p>)}
                 </div>
             </section>)
     )

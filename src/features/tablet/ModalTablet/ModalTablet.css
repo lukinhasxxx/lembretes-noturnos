@@ -43,6 +43,17 @@
   margin-left: 40px;
 }
 
+/* a lista era um <ui> (tag inexistente) com <br> entre os itens: virou <ul> sem a margem/recuo padrão,
+   e o espaço de uma linha que o <br> dava agora é a margem de baixo de cada item */
+.tablet-tela .area-de-trabalho .about .listas-desordenadas-about ul {
+  margin: 0;
+  padding: 0;
+}
+
+.tablet-tela .area-de-trabalho .about .listas-desordenadas-about li {
+  margin-bottom: 1.2em;
+}
+
 
 .tablet-tela .area-de-trabalho .about .tela-about h2{
 margin-top: 0px;

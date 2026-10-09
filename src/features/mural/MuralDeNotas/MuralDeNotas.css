@@ -237,7 +237,10 @@
     user-select: none;
 }
 
-.painel text {
+/* era um <text> (tag que não existe no HTML): virou <p>, então zera o que o ".painel p" do título aplicaria */
+.painel .lembrete-vazio {
+    margin: 0;
+    user-select: text;
     font-size: max(12px, 1.25cqw);
     color: #fff509;
     text-shadow: calc(5 * var(--px-arte)) calc(2 * var(--px-arte)) 0px #800000;
