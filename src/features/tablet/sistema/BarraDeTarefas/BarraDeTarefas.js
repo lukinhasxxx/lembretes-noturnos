@@ -8,8 +8,8 @@ import { APPS } from '../../apps.config'
 // Barra de tarefas do sistema: à esquerda iniciar, voltar e apps abertos; à direita a bandeja (ícones de status,
 // idioma, relógio e notificações). A bandeja vai para a direita sozinha (margin-left: auto), sem medida fixa.
 // appsAbertos: ids do apps.config.js, na ordem em que foram abertos
-// aoAbrirApp(idDoApp): abre um app pelo menu iniciar; aoBloquear: Bloquear do menu iniciar
-const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, aoVoltarParaAreaDeTrabalho }) => {
+// aoAbrirApp(idDoApp): abre um app pelo menu iniciar; aoBloquear / aoDesligar / aoReiniciar: ações do menu iniciar
+const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, aoDesligar, aoReiniciar, aoVoltarParaAreaDeTrabalho }) => {
     // 'fechado' → 'aberto' → 'fechando' (animação de fechar) → 'fechado'
     const [estadoMenuIniciar, setEstadoMenuIniciar] = useState('fechado')
     const menuIniciarAberto = estadoMenuIniciar === 'aberto'
@@ -51,6 +51,8 @@ const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, ao
                     <MenuIniciar
                         aoAbrirApp={aoAbrirApp}
                         aoBloquear={aoBloquear}
+                        aoDesligar={aoDesligar}
+                        aoReiniciar={aoReiniciar}
                         aoFechar={fecharMenuIniciar}
                         fechando={estadoMenuIniciar === 'fechando'}
                         aoTerminarDeFechar={() => setEstadoMenuIniciar('fechado')}

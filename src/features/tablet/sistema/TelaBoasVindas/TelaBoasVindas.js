@@ -1,28 +1,49 @@
 import './TelaBoasVindas.css'
 import { useIdioma } from '../../../../shared/i18n/Idioma'
-import { SISTEMA } from '../../tablet.config'
+import { DURACAO_ENCERRANDO_MS, DURACAO_SUMINDO_MS, SISTEMA } from '../../tablet.config'
 
-// Tela do usuário: wallpaper atual desfocado, avatar e nome. Embaixo do nome muda conforme a etapa:
-// - 'boasVindas': spinner + "Bem-vindo" (depois do boot)
-// - 'login': botão "Entrar" (depois de tirar a tela de bloqueio)
-// - 'aguarde': spinner + "Aguarde..." (depois do "Entrar")
+// texto ao lado do spinner em cada etapa que tem spinner
+const TEXTO_DA_ETAPA = {
+    boasVindas: 'sistema.boasVindas',
+    aguarde: 'sistema.aguarde',
+    desligando: 'sistema.desligando',
+    reiniciando: 'sistema.reiniciando',
+}
+
+// Tela do sistema sobre o wallpaper atual desfocado. Muda conforme a etapa:
+// - 'boasVindas': avatar, nome, spinner + "Bem-vindo" (depois do boot)
+// - 'login': avatar, nome e botão "Entrar" (depois de tirar a tela de bloqueio)
+// - 'aguarde': avatar, nome, spinner + "Aguarde..." (depois do "Entrar")
+// - 'desligando' / 'reiniciando': só spinner + texto; no fim o conteúdo apaga até sobrar o preto
 // wallpaper: url da imagem de fundo (a mesma da área de trabalho); aoEntrar: clique no "Entrar"
 const TelaBoasVindas = ({ wallpaper, etapa = 'boasVindas', aoEntrar }) => {
     const { t } = useIdioma()
+    const encerrando = etapa === 'desligando' || etapa === 'reiniciando'
 
     return (
-        <div className='tela-boas-vindas'>
+        <div
+            className={`tela-boas-vindas ${encerrando ? 'encerrando' : ''}`}
+            // o conteúdo começa a apagar DURACAO_SUMINDO_MS antes do fim do "Desligando..."/"Reiniciando..."
+            style={encerrando ? {
+                '--atraso-sumindo': `${DURACAO_ENCERRANDO_MS - DURACAO_SUMINDO_MS}ms`,
+                '--duracao-sumindo': `${DURACAO_SUMINDO_MS}ms`,
+            } : undefined}
+        >
             <div className='tela-boas-vindas-fundo' style={{ backgroundImage: `url(${wallpaper})` }} />
 
-            <div className='tela-boas-vindas-avatar'>
-                {/* ícone de pessoa: cabeça + ombros */}
-                <svg viewBox='0 0 64 64' aria-hidden='true'>
-                    <circle cx='32' cy='22' r='12' />
-                    <path d='M10 56c2-12 11-18 22-18s20 6 22 18' />
-                </svg>
-            </div>
+            {!encerrando && (
+                <>
+                    <div className='tela-boas-vindas-avatar'>
+                        {/* ícone de pessoa: cabeça + ombros */}
+                        <svg viewBox='0 0 64 64' aria-hidden='true'>
+                            <circle cx='32' cy='22' r='12' />
+                            <path d='M10 56c2-12 11-18 22-18s20 6 22 18' />
+                        </svg>
+                    </div>
 
-            <p className='tela-boas-vindas-usuario'>{SISTEMA.usuario}</p>
+                    <p className='tela-boas-vindas-usuario'>{SISTEMA.usuario}</p>
+                </>
+            )}
 
             {etapa === 'login' ? (
                 <button type='button' className='tela-boas-vindas-entrar' onClick={aoEntrar}>
@@ -35,7 +56,7 @@ const TelaBoasVindas = ({ wallpaper, etapa = 'boasVindas', aoEntrar }) => {
                             <span key={indice} style={{ '--indice-ponto': indice }} />
                         ))}
                     </div>
-                    <span>{t(etapa === 'aguarde' ? 'sistema.aguarde' : 'sistema.boasVindas')}</span>
+                    <span>{t(TEXTO_DA_ETAPA[etapa])}</span>
                 </div>
             )}
         </div>

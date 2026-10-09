@@ -213,8 +213,18 @@ const limparTodosLembretes = () => {
 
 const [ligarTablet,setLigarTablet] = useState(false)
 const [modalAberto,setModalAberto] = useState(false)
-// sistema do tablet: desligado até o primeiro clique; aí roda boot → boas-vindas → área de trabalho
-const { estadoSistema, ligarSistema, bloquearSistema, desbloquearSistema, entrarSistema } = useSistemaTablet()
+// sistema do tablet (vem do SistemaTabletProvider, no index.js): desligado até o primeiro clique;
+// aí roda boot → boas-vindas → área de trabalho. O resto (bloquear, desligar...) o modal pega direto do contexto.
+const { sistemaDesligado, ligarSistema } = useSistemaTablet()
+
+// "Desligar" no menu iniciar terminou: fecha o modal e apaga a tela do tablet da mesa.
+// O próximo clique no tablet da mesa liga de novo (boot completo).
+useEffect(() => {
+  if (!sistemaDesligado) return
+
+  setModalAberto(false)
+  setLigarTablet(false)
+}, [sistemaDesligado])
 
 const gerenciarTablet = () => {
 
@@ -222,7 +232,6 @@ ligarSistema() // só faz algo se o tablet estiver desligado
 setModalAberto(ligado=> !ligado);
 setLigarTablet(ligado =>!ligado);
 setLigarTabletPrimeiraVez(true)
-console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
 }
 
   return (
@@ -308,10 +317,6 @@ console.log("foi ligado a primeira vez?",ligarTabletPrimeiraVez)
     <ModalTablet
       aoSubmeter={adicionarLembrete}
       validarLigadoDesligado={ligarTablet}
-      estadoSistema={estadoSistema}
-      aoBloquear={bloquearSistema}
-      aoDesbloquear={desbloquearSistema}
-      aoEntrar={entrarSistema}
       painelLigadoPermanente={painelLigadoPermanente}
       haLembretesSalvos={lembretes.length > 0}
       aoLigarMural={ligarMuralComAnimacao}
