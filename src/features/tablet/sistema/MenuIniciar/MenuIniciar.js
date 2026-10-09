@@ -1,5 +1,5 @@
 import './MenuIniciar.css'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useIdioma } from '../../../../shared/i18n/Idioma'
 import { APPS } from '../../apps.config'
 import { SISTEMA } from '../../tablet.config'
@@ -37,14 +37,22 @@ const IconeMenu = () => (
 
 // Menu iniciar no estilo do Windows 10 com a pele do CyberOS:
 // coluna de atalhos à esquerda, lista de apps no meio e blocos fixados à direita.
-// aoAbrirApp(idDoApp): abre um app do apps.config.js; aoBloquear: vai para a tela de bloqueio; aoFechar: fecha o menu.
+// aoAbrirApp(idDoApp): abre um app do apps.config.js; aoBloquear / aoDesligar / aoReiniciar: ações do sistema;
+// aoFechar: fecha o menu.
 // fechando: toca a animação de fechar; aoTerminarDeFechar: fim dela (aí a barra desmonta o menu).
-// Desligar e Reiniciar ainda não têm ação (próxima etapa: ligar no useSistemaTablet).
-const MenuIniciar = ({ aoAbrirApp, aoBloquear, aoFechar, fechando, aoTerminarDeFechar }) => {
+const MenuIniciar = ({ aoAbrirApp, aoBloquear, aoDesligar, aoReiniciar, aoFechar, fechando, aoTerminarDeFechar }) => {
     const { t } = useIdioma()
     // popup aberto na coluna da esquerda: 'usuario', 'energia' ou null
     const [popupAberto, setPopupAberto] = useState(null)
+    // ☰: coluna da esquerda expandida (ícones + nomes, por cima da lista de apps)
+    const [colunaExpandida, setColunaExpandida] = useState(false)
+    const colunaRef = useRef(null)
     const appsPorLetra = agruparAppsPorLetra()
+
+    // clicar em qualquer lugar do menu fora da coluna recolhe ela (como no Windows 10)
+    const recolherColunaAoClicarFora = (evento) => {
+        if (colunaExpandida && !colunaRef.current.contains(evento.target)) setColunaExpandida(false)
+    }
 
     const alternarPopup = (nomeDoPopup) =>
         setPopupAberto(popupAtual => (popupAtual === nomeDoPopup ? null : nomeDoPopup))
@@ -54,8 +62,9 @@ const MenuIniciar = ({ aoAbrirApp, aoBloquear, aoFechar, fechando, aoTerminarDeF
         aoFechar()
     }
 
-    const bloquear = () => {
-        aoBloquear()
+    // Bloquear, Desligar, Reiniciar: executa a ação do sistema e fecha o menu
+    const executarAcaoDoSistema = (acao) => {
+        acao()
         aoFechar()
     }
 
@@ -63,57 +72,72 @@ const MenuIniciar = ({ aoAbrirApp, aoBloquear, aoFechar, fechando, aoTerminarDeF
         <div
             className={`menu-iniciar ${fechando ? 'fechando' : ''}`}
             onAnimationEnd={(evento) => evento.animationName === 'menu-iniciar-descendo' && aoTerminarDeFechar()}
+            onPointerDown={recolherColunaAoClicarFora}
         >
-            <nav className='menu-iniciar-coluna'>
-                <button type='button' className='menu-iniciar-atalho' title={t('menuIniciar.abrir')}>
-                    <IconeMenu />
-                </button>
-
-                <div className='menu-iniciar-coluna-base'>
-                    <div className='menu-iniciar-com-popup'>
-                        <button
-                            type='button'
-                            className='menu-iniciar-atalho'
-                            title={SISTEMA.usuario}
-                            onClick={() => alternarPopup('usuario')}
-                        >
-                            <IconeUsuario />
-                        </button>
-                        {popupAberto === 'usuario' && (
-                            <div className='menu-iniciar-popup'>
-                                <span className='menu-iniciar-popup-titulo'>{SISTEMA.usuario}</span>
-                                <button type='button' onClick={bloquear}>{t('menuIniciar.bloquear')}</button>
-                            </div>
-                        )}
-                    </div>
-
+            {/* a coluna ocupa sempre 44px no layout; o painel dentro dela é que expande, por cima da lista */}
+            <div className='menu-iniciar-coluna'>
+                <nav ref={colunaRef} className={`menu-iniciar-coluna-painel ${colunaExpandida ? 'expandida' : ''}`}>
                     <button
                         type='button'
                         className='menu-iniciar-atalho'
-                        title={t('menuIniciar.configuracoes')}
-                        onClick={() => abrirApp('app_config')}
+                        title={t('menuIniciar.abrir')}
+                        onClick={() => setColunaExpandida(expandida => !expandida)}
                     >
-                        <img src={process.env.PUBLIC_URL + APPS.app_config.icone} alt='' draggable={false} />
+                        <span className='menu-iniciar-atalho-icone'><IconeMenu /></span>
+                        <span className='menu-iniciar-atalho-nome menu-iniciar-atalho-nome-titulo'>{t('menuIniciar.abrir')}</span>
                     </button>
 
-                    <div className='menu-iniciar-com-popup'>
+                    <div className='menu-iniciar-coluna-base'>
+                        <div className='menu-iniciar-com-popup'>
+                            <button
+                                type='button'
+                                className='menu-iniciar-atalho'
+                                title={SISTEMA.usuario}
+                                onClick={() => alternarPopup('usuario')}
+                            >
+                                <span className='menu-iniciar-atalho-icone'><IconeUsuario /></span>
+                                <span className='menu-iniciar-atalho-nome'>{SISTEMA.usuario}</span>
+                            </button>
+                            {popupAberto === 'usuario' && (
+                                <div className='menu-iniciar-popup'>
+                                    <span className='menu-iniciar-popup-titulo'>{SISTEMA.usuario}</span>
+                                    <button type='button' onClick={() => executarAcaoDoSistema(aoBloquear)}>{t('menuIniciar.bloquear')}</button>
+                                </div>
+                            )}
+                        </div>
+
                         <button
                             type='button'
                             className='menu-iniciar-atalho'
-                            title={t('menuIniciar.energia')}
-                            onClick={() => alternarPopup('energia')}
+                            title={t('menuIniciar.configuracoes')}
+                            onClick={() => abrirApp('app_config')}
                         >
-                            <IconeEnergia />
+                            <span className='menu-iniciar-atalho-icone'>
+                                <img src={process.env.PUBLIC_URL + APPS.app_config.icone} alt='' draggable={false} />
+                            </span>
+                            <span className='menu-iniciar-atalho-nome'>{t('menuIniciar.configuracoes')}</span>
                         </button>
-                        {popupAberto === 'energia' && (
-                            <div className='menu-iniciar-popup'>
-                                <button type='button'>{t('menuIniciar.desligar')}</button>
-                                <button type='button'>{t('menuIniciar.reiniciar')}</button>
-                            </div>
-                        )}
+
+                        <div className='menu-iniciar-com-popup'>
+                            <button
+                                type='button'
+                                className='menu-iniciar-atalho'
+                                title={t('menuIniciar.energia')}
+                                onClick={() => alternarPopup('energia')}
+                            >
+                                <span className='menu-iniciar-atalho-icone'><IconeEnergia /></span>
+                                <span className='menu-iniciar-atalho-nome'>{t('menuIniciar.energia')}</span>
+                            </button>
+                            {popupAberto === 'energia' && (
+                                <div className='menu-iniciar-popup'>
+                                    <button type='button' onClick={() => executarAcaoDoSistema(aoDesligar)}>{t('menuIniciar.desligar')}</button>
+                                    <button type='button' onClick={() => executarAcaoDoSistema(aoReiniciar)}>{t('menuIniciar.reiniciar')}</button>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
+            </div>
 
             <section className='menu-iniciar-lista'>
                 <span className='menu-iniciar-titulo-secao'>{t('menuIniciar.apps')}</span>

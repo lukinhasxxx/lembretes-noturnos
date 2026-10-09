@@ -6,36 +6,27 @@ import '../sistema/temaSistema.css'
 import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
 import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
-import { useEstadoPersistido } from '../../../shared/hooks/useEstadoPersistido'
 import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
 import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
 import { ESTADOS_SISTEMA } from '../tablet.config'
 import { APPS } from '../apps.config'
+import { useSistemaTablet } from '../contexts/SistemaTablet'
 
-// estadoSistema: em que ponto o sistema está (boot, boas-vindas, área de trabalho, bloqueado), vem do useSistemaTablet
-// aoBloquear / aoDesbloquear / aoEntrar: ações do useSistemaTablet (menu iniciar → Bloquear / tela de bloqueio saiu / "Entrar")
-const ModalTablet = ({aoSubmeter, validarLigadoDesligado, estadoSistema, aoBloquear, aoDesbloquear, aoEntrar, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
+// Modal do tablet: desenha o sistema (área de trabalho, apps, barra, telas do sistema).
+// O estado do sistema (ligado/bloqueado..., tela na frente, apps abertos, wallpaper) vem do SistemaTabletProvider,
+// o mesmo que o tablet da mesa lê; aqui fica só o que é da interface do modal (texto digitado, galeria aberta).
+const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
 
     //perto do fim do projeto ai componetiza, modulariza as coisas
-    const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)   
+    const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)
+    const {
+        estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
+        telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, voltarParaAreaDeTrabalho,
+        wallpaperAtual, previa, setPrevia, selecionarPreset, lidarComMudancas,
+    } = useSistemaTablet()
     const [nome, setNome] = useState('')
-    const [telaAtiva, setTelaAtiva] = useState('desktop')
-    const [appsAbertos,setAppsAbertos] = useState([])
-    const [ultimaTela,setUltimaTela] = useState({
-        app_lembrete:'about.exe',
-        app_config:'config.exe'
-    })
-    // só o wallpaper de exemplo (preset) é salvo; o de upload é uma imagem inteira e não cabe bem no localStorage.
-    // salva o caminho sem o PUBLIC_URL, para funcionar tanto no localhost quanto no GitHub Pages
-    const [wallpaperPresetSalvo, setWallpaperPresetSalvo] = useEstadoPersistido('wallpaper-preset', null)
-    const [previa, setPrevia] = useState(() =>
-        wallpaperPresetSalvo ? process.env.PUBLIC_URL + wallpaperPresetSalvo : null
-    )
-    const [mudarWallpaper, setMudarWallpaper] = useState(() => Boolean(wallpaperPresetSalvo))
     const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
-    // wallpaper que está na área de trabalho agora (também usado no fundo da tela de boas-vindas)
-    const wallpaperAtual = mudarWallpaper ? previa : `${process.env.PUBLIC_URL}/imagens/windows/windowsWallpaper.jpg`
 
     const wallpapersProntos = [
     { id: 1, src: "/imagens/windows/previasWallpaper/previa1.png", alt: "Previa 1" },
@@ -44,49 +35,12 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, estadoSistema, aoBloqu
     { id: 4, src: "/imagens/windows/previasWallpaper/previa4.png", alt: "Previa 4" } 
 ];
 
-const selecionarPreset = (caminhoDaImagem) => {
-    setPrevia(process.env.PUBLIC_URL + caminhoDaImagem);
-    setMudarWallpaper(true)
-    setWallpaperPresetSalvo(caminhoDaImagem)
-}
-
     const aoSalvar = (evento) => {
         evento.preventDefault()
         aoSubmeter(nome)
         setNome('')
 };
 
-    const abrirApp = (idDoApp, telaParaAbrir) => {
-        setTimeout(() => {
-        setTelaAtiva(telaParaAbrir);
-        setUltimaTela({...ultimaTela,[idDoApp]:telaParaAbrir})
-        if (!appsAbertos.includes(idDoApp)){
-            setAppsAbertos([...appsAbertos,idDoApp])
-        }},150)
-
-    }
-
-    const fecharApp = (idDoAppParaFechar) => {
-        setTimeout(() => {
-            const novosAppsAbertos = appsAbertos.filter(app => app !== idDoAppParaFechar);
-            setAppsAbertos(novosAppsAbertos);
-            if (novosAppsAbertos.length > 0) {
-                 setTelaAtiva(ultimaTela[novosAppsAbertos[novosAppsAbertos.length -1]])   
-            } else {
-                setTelaAtiva('desktop')} 
-            },300)
-}
-    
-        const lidarComMudancas = (evento) => {
-        const arquivo = evento.target.files[0]
-        
-        if (arquivo) {
-            setPrevia (URL.createObjectURL(arquivo));
-            console.log("teste arquivo",arquivo)
-            }
-            setMudarWallpaper(arquivo)
-        }
-        
         const abrirWrapperWallpaper = () => {
             setWrapperPreviaWallpaper( 
                 wrapperPreviaWallpaper => !wrapperPreviaWallpaper
@@ -97,12 +51,6 @@ const selecionarPreset = (caminhoDaImagem) => {
 
 
 
-    // depois adaptar direito essa funcao pra reciclar tudo
-    // const abrirLembretes = (nomeDoApp) =>{
-    // const proximaTela = 'nomeDoApp';
-    // setTelaAtiva(proximaTela);
-    // setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
-    // }
     return (
         <div>
             <section className='secao-tablet-modal'>
@@ -236,8 +184,7 @@ const selecionarPreset = (caminhoDaImagem) => {
                     <div className='janela-pro-about' onClick={
                         ()=> {
                            const proximaTela = 'about.exe';
-                            setTelaAtiva(proximaTela);
-                            setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
+                            mostrarTelaDoApp('app_lembretes', proximaTela)
                             }} >
                             <p>About</p>
                     </div>
@@ -298,8 +245,7 @@ const selecionarPreset = (caminhoDaImagem) => {
         onClick={
             ()=> {
                 const proximaTela = 'lembretes.exe';
-                setTelaAtiva(proximaTela);
-                    setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
+                mostrarTelaDoApp('app_lembretes', proximaTela)
                     }} >
                 <p>Lembretes</p> 
         </div>
@@ -310,8 +256,7 @@ const selecionarPreset = (caminhoDaImagem) => {
                             onClick={
                                 ()=> {
                                 const proximaTela = 'lembretes.exe';
-                                setTelaAtiva(proximaTela);
-                                 setUltimaTela({...ultimaTela,app_lembretes:proximaTela})
+                                mostrarTelaDoApp('app_lembretes', proximaTela)
                                  }} >
                                 <p>Lembretes</p> 
                             </div>
@@ -351,9 +296,7 @@ const selecionarPreset = (caminhoDaImagem) => {
                     <div className='abrir-lembrete' 
                     onClick={()=> {
                         const proximaTela = 'lembretes.exe';
-                        setTelaAtiva(proximaTela);
-                        setUltimaTela(
-                            {...ultimaTela,app_lembretes:proximaTela})
+                        mostrarTelaDoApp('app_lembretes', proximaTela)
                             }}> clicar aqui
                     </div>
                  </div>
@@ -363,10 +306,12 @@ const selecionarPreset = (caminhoDaImagem) => {
 
     <BarraDeTarefas
         appsAbertos={appsAbertos}
-        aoClicarNoApp={(idDoApp) => setTelaAtiva(ultimaTela[idDoApp])}
+        aoClicarNoApp={alternarAppPelaBarra}
         aoAbrirApp={(idDoApp) => abrirApp(idDoApp, APPS[idDoApp].telaInicial)}
-        aoBloquear={aoBloquear}
-        aoVoltarParaAreaDeTrabalho={() => setTelaAtiva('desktop')}
+        aoBloquear={bloquearSistema}
+        aoDesligar={desligarSistema}
+        aoReiniciar={reiniciarSistema}
+        aoVoltarParaAreaDeTrabalho={voltarParaAreaDeTrabalho}
     />
 
         {/* boot, tela do usuário e bloqueio cobrem a tela inteira (área de trabalho + barra de tarefas).
@@ -379,12 +324,15 @@ const selecionarPreset = (caminhoDaImagem) => {
             <TelaBoasVindas
                 wallpaper={wallpaperAtual}
                 etapa={estadoSistema === ESTADOS_SISTEMA.entrando ? 'aguarde' : 'login'}
-                aoEntrar={aoEntrar}
+                aoEntrar={entrarSistema}
             />
         )}
         {estadoSistema === ESTADOS_SISTEMA.bloqueado && (
-            <TelaBloqueio wallpaper={wallpaperAtual} aoDesbloquear={aoDesbloquear} />
+            <TelaBloqueio wallpaper={wallpaperAtual} aoDesbloquear={desbloquearSistema} />
         )}
+        {estadoSistema === ESTADOS_SISTEMA.desligando && <TelaBoasVindas wallpaper={wallpaperAtual} etapa='desligando' />}
+        {estadoSistema === ESTADOS_SISTEMA.reiniciando && <TelaBoasVindas wallpaper={wallpaperAtual} etapa='reiniciando' />}
+        {estadoSistema === ESTADOS_SISTEMA.apagado && <div className='tela-sistema-apagada' />}
 
     </div>
             </section>

@@ -5,6 +5,8 @@ const ptBR = {
     'sistema.boasVindas': 'Bem-vindo',
     'sistema.entrar': 'Entrar',
     'sistema.aguarde': 'Aguarde...',
+    'sistema.desligando': 'Desligando...',
+    'sistema.reiniciando': 'Reiniciando...',
 
     'menuIniciar.abrir': 'Iniciar',
     'menuIniciar.apps': 'Apps',
