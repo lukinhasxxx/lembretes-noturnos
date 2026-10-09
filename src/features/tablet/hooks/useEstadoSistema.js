@@ -26,7 +26,8 @@ const passosDoBoot = () => {
 
 // Controla em que ponto o sistema do tablet está (desligado, ligando, boas-vindas, área de trabalho, bloqueado,
 // login, desligando, reiniciando...). Não é salvo no navegador: depois do F5 o tablet volta desligado.
-export const useSistemaTablet = () => {
+// Usado pelo SistemaTabletProvider; de fora, use o useSistemaTablet (contexts/SistemaTablet.js).
+export const useEstadoSistema = () => {
     const [estadoSistema, setEstadoSistema] = useState(ESTADOS_SISTEMA.desligado)
     // guarda os timers da sequência atual para dar para cancelar quando outra ação começa
     const timersRef = useRef([])
