@@ -18,7 +18,6 @@ import { useSistemaTablet } from '../contexts/SistemaTablet'
 // o mesmo que o tablet da mesa lê; aqui fica só o que é da interface do modal (texto digitado, galeria aberta).
 const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
 
-    //perto do fim do projeto ai componetiza, modulariza as coisas
     const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)
     const {
         estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
@@ -252,21 +251,6 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 <p>Lembretes</p> 
         </div>
     </WindowBar>
-
-                     {/* <div className='window-bar' >
-                        <div className='tab-lembrete' 
-                            onClick={
-                                ()=> {
-                                const proximaTela = 'lembretes.exe';
-                                mostrarTelaDoApp('app_lembretes', proximaTela)
-                                 }} >
-                                <p>Lembretes</p> 
-                            </div>
-                            <img src={ process.env.PUBLIC_URL+ "/imagens/windows/iconeFechar.png"} alt="Icone de fechar"
-                            onClick={() => fecharApp('app_lembretes','about.exe')} />
-                        </div> */}
-
-            {/* <Componente as funcoes aqui,  /> */}
 
             <div className='tela-about'>
                         <h2>Sobre o projeto</h2>

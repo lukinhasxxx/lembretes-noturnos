@@ -48,12 +48,6 @@
     border-radius: calc(10 * var(--px-arte)) calc(10 * var(--px-arte)) 0px 0px;
 }
 
-/* .cards img {
-    width: 100px;
-    border-radius: 50%;
-    position: relative;
-} */
-
 .cards .card {
     background: #FFFFFF;
     box-shadow: calc(5 * var(--px-arte)) calc(5 * var(--px-arte)) calc(15 * var(--px-arte)) rgba(0, 0, 0, 0.08);
