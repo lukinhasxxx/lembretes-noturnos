@@ -39,3 +39,21 @@ export const DURACAO_ENCERRANDO_MS = 2500
 export const DURACAO_SUMINDO_MS = 500
 // tela preta entre desligar e fechar o modal / entre reiniciar e o boot
 export const DURACAO_TELA_APAGADA_MS = 800
+
+// ---------- espelho no tablet da mesa ----------
+
+// tamanho real da imagem do tablet da mesa (public/imagens/tabletPNG.png)
+export const IMAGEM_TABLET_MESA = { largura: 974, altura: 443 }
+
+// cantos da tela (o "vidro") dentro dessa imagem, em px da imagem, medidos no Paint.
+// O tablet está deitado em perspectiva, então a tela é um quadrilátero torto, não um retângulo.
+export const CANTOS_TELA_TABLET_MESA = {
+    cimaEsquerda: [331, 47],
+    cimaDireita: [875, 172],
+    baixoDireita: [669, 361],
+    baixoEsquerda: [92, 187],
+}
+
+// resolução "interna" do espelho, a mesma da tela do modal: o espelho é desenhado nesse tamanho
+// e depois entortado (corner pin) para caber nos cantos acima
+export const TELA_ESPELHO = { largura: 666, altura: 389 }
