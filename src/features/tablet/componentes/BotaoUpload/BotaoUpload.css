@@ -30,6 +30,27 @@ width: 180px;
 border-radius: 45px;
 }
 
+/* "↺ Padrão": botãozinho discreto de texto à direita da prévia; a borda só aparece no hover */
+.wrapper-upload .botao-wallpaper-padrao {
+position: absolute;
+left: 395px;
+top: 40px;
+padding: 3px 8px;
+border: 1px solid transparent;
+border-radius: 6px;
+background: none;
+color: #5b5f7a;
+font-size: 12px;
+white-space: nowrap;
+cursor: pointer;
+transition: border-color 0.15s ease-out, color 0.15s ease-out;
+}
+
+.wrapper-upload .botao-wallpaper-padrao:hover {
+border-color: #8a00ff;
+color: #3a1d6e;
+}
+
 .wrapper-upload .botao-upload {
 display: none; 
 width: 146px;

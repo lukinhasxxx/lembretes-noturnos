@@ -10,6 +10,7 @@ const en = {
     'menuIniciar.abrir': 'Start',
     'menuIniciar.apps': 'Apps',
     'menuIniciar.fixados': 'Pinned',
+    'config.wallpaperPadrao': 'Default',
     'menuIniciar.configuracoes': 'Settings',
     'menuIniciar.energia': 'Power',
     'menuIniciar.bloquear': 'Lock',

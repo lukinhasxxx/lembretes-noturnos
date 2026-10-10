@@ -55,8 +55,10 @@ const JanelaArrastavel = ({
                 largura={largura}
                 altura={altura}
                 escala={escala}
+                // escondida com visibility (e não display: none): continua "viva" por trás, então animações
+                // em andamento (ex.: boot do tablet) seguem de onde estão em vez de recomeçar ao reaparecer
                 style={{
-                    display: visivel ? 'block' : 'none',
+                    visibility: visivel ? 'visible' : 'hidden',
                     position: 'absolute',
                     top: 0,
                     left: 0,

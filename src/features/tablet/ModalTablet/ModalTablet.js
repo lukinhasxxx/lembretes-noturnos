@@ -18,22 +18,23 @@ import { useSistemaTablet } from '../contexts/SistemaTablet'
 // o mesmo que o tablet da mesa lê; aqui fica só o que é da interface do modal (texto digitado, galeria aberta).
 const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
 
-    //perto do fim do projeto ai componetiza, modulariza as coisas
     const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)
     const {
         estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
         telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, voltarParaAreaDeTrabalho,
-        wallpaperAtual, previa, setPrevia, selecionarPreset, lidarComMudancas,
+        wallpaperAtual, previa, setPrevia, selecionarPreset, lidarComMudancas, voltarParaWallpaperPadrao,
         registrarTelaDoModal,
     } = useSistemaTablet()
     const [nome, setNome] = useState('')
     const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
 
+    // miniatura: versão pequena (400×250) só para o quadradinho da galeria; ao clicar, aplica a imagem cheia (src).
+    // O GIF não tem miniatura: continua animado na galeria
     const wallpapersProntos = [
-    { id: 1, src: "/imagens/windows/previasWallpaper/previa1.png", alt: "Previa 1" },
-    { id: 2, src: "/imagens/windows/previasWallpaper/previa2.png", alt: "Previa 2" },
+    { id: 1, src: "/imagens/windows/previasWallpaper/previa1.png", miniatura: "/imagens/windows/previasWallpaper/miniaturas/previa1.webp", alt: "Previa 1" },
+    { id: 2, src: "/imagens/windows/previasWallpaper/previa2.png", miniatura: "/imagens/windows/previasWallpaper/miniaturas/previa2.webp", alt: "Previa 2" },
     { id: 3, src: "/imagens/windows/previasWallpaper/previa3.gif", alt: "Previa 3" },
-    { id: 4, src: "/imagens/windows/previasWallpaper/previa4.png", alt: "Previa 4" } 
+    { id: 4, src: "/imagens/windows/previasWallpaper/previa4.png", miniatura: "/imagens/windows/previasWallpaper/miniaturas/previa4.webp", alt: "Previa 4" }
 ];
 
     const aoSalvar = (evento) => {
@@ -54,7 +55,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
     return (
         <div>
-            <section className='secao-tablet-modal'>
+            <section className={`secao-tablet-modal${validarLigadoDesligado ? ' secao-tablet-modal-aberta' : ''}`}>
 
             <div className="handle"></div>
 
@@ -133,6 +134,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     previa={previa}
                     setPrevia={setPrevia}
                     lidarComMudancas={lidarComMudancas}
+                    aoVoltarParaPadrao={voltarParaWallpaperPadrao}
                     />
 
                 <h3>Wallpapers de exemplo</h3>
@@ -153,7 +155,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                                     onDragStart={(e) => e.preventDefault()}
                                     key={wallpaper.id}
                                     className='miniatura-preset'
-                                    src={process.env.PUBLIC_URL + wallpaper.src}
+                                    src={process.env.PUBLIC_URL + (wallpaper.miniatura ?? wallpaper.src)}
                                     alt={wallpaper.alt}
                                     onClick={()=> selecionarPreset(wallpaper.src)}
                                 />
@@ -252,21 +254,6 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 <p>Lembretes</p> 
         </div>
     </WindowBar>
-
-                     {/* <div className='window-bar' >
-                        <div className='tab-lembrete' 
-                            onClick={
-                                ()=> {
-                                const proximaTela = 'lembretes.exe';
-                                mostrarTelaDoApp('app_lembretes', proximaTela)
-                                 }} >
-                                <p>Lembretes</p> 
-                            </div>
-                            <img src={ process.env.PUBLIC_URL+ "/imagens/windows/iconeFechar.png"} alt="Icone de fechar"
-                            onClick={() => fecharApp('app_lembretes','about.exe')} />
-                        </div> */}
-
-            {/* <Componente as funcoes aqui,  /> */}
 
             <div className='tela-about'>
                         <h2>Sobre o projeto</h2>
