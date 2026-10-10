@@ -28,11 +28,13 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     const [nome, setNome] = useState('')
     const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
 
+    // miniatura: versão pequena (400×250) só para o quadradinho da galeria; ao clicar, aplica a imagem cheia (src).
+    // O GIF não tem miniatura: continua animado na galeria
     const wallpapersProntos = [
-    { id: 1, src: "/imagens/windows/previasWallpaper/previa1.png", alt: "Previa 1" },
-    { id: 2, src: "/imagens/windows/previasWallpaper/previa2.png", alt: "Previa 2" },
+    { id: 1, src: "/imagens/windows/previasWallpaper/previa1.png", miniatura: "/imagens/windows/previasWallpaper/miniaturas/previa1.webp", alt: "Previa 1" },
+    { id: 2, src: "/imagens/windows/previasWallpaper/previa2.png", miniatura: "/imagens/windows/previasWallpaper/miniaturas/previa2.webp", alt: "Previa 2" },
     { id: 3, src: "/imagens/windows/previasWallpaper/previa3.gif", alt: "Previa 3" },
-    { id: 4, src: "/imagens/windows/previasWallpaper/previa4.png", alt: "Previa 4" } 
+    { id: 4, src: "/imagens/windows/previasWallpaper/previa4.png", miniatura: "/imagens/windows/previasWallpaper/miniaturas/previa4.webp", alt: "Previa 4" }
 ];
 
     const aoSalvar = (evento) => {
@@ -152,7 +154,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                                     onDragStart={(e) => e.preventDefault()}
                                     key={wallpaper.id}
                                     className='miniatura-preset'
-                                    src={process.env.PUBLIC_URL + wallpaper.src}
+                                    src={process.env.PUBLIC_URL + (wallpaper.miniatura ?? wallpaper.src)}
                                     alt={wallpaper.alt}
                                     onClick={()=> selecionarPreset(wallpaper.src)}
                                 />
