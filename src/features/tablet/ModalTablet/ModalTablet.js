@@ -22,7 +22,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     const {
         estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
         telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, voltarParaAreaDeTrabalho,
-        wallpaperAtual, previa, setPrevia, selecionarPreset, lidarComMudancas,
+        wallpaperAtual, previa, setPrevia, selecionarPreset, lidarComMudancas, voltarParaWallpaperPadrao,
         registrarTelaDoModal,
     } = useSistemaTablet()
     const [nome, setNome] = useState('')
@@ -134,6 +134,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     previa={previa}
                     setPrevia={setPrevia}
                     lidarComMudancas={lidarComMudancas}
+                    aoVoltarParaPadrao={voltarParaWallpaperPadrao}
                     />
 
                 <h3>Wallpapers de exemplo</h3>
