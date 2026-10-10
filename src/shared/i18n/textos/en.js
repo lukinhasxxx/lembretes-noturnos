@@ -18,6 +18,9 @@ const en = {
     'menuIniciar.reiniciar': 'Restart',
 
     'bloqueio.desbloquear': 'Drag up to unlock',
+
+    'calendario.mesAnterior': 'Previous month',
+    'calendario.proximoMes': 'Next month',
 }
 
 export default en

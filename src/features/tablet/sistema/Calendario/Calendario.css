@@ -1,0 +1,135 @@
+/* Calendário: sobe da barra de tarefas, colado à direita (o menu iniciar sobe do lado esquerdo).
+   Mesmo vidro escuro e borda neon do menu iniciar. */
+.calendario {
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    z-index: 5;
+    box-sizing: border-box;
+    width: 214px;
+    padding: 12px 12px 10px;
+    background: var(--cor-fundo-menu-iniciar);
+    border: 1px solid var(--cor-borda-neon-sistema);
+    border-bottom: none;
+    color: var(--cor-texto-sistema);
+    font-family: var(--fonte-sistema);
+    font-size: var(--tamanho-fonte-sistema);
+    user-select: none;
+    animation: calendario-subindo 0.2s ease-out;
+}
+
+@keyframes calendario-subindo {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.calendario.fechando {
+    animation: calendario-descendo 0.2s ease-in forwards;
+    pointer-events: none;
+}
+
+@keyframes calendario-descendo {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(12px); }
+}
+
+.calendario-hora {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: var(--cor-destaque-sistema);
+    text-shadow: 0 0 8px rgba(110, 240, 255, 0.45);
+}
+
+.calendario-data-por-extenso {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    font-size: 11px;
+    opacity: 0.75;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.calendario-data-por-extenso::first-letter,
+.calendario-nome-do-mes::first-letter {
+    text-transform: uppercase;
+}
+
+.calendario-cabecalho {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.calendario-nome-do-mes {
+    flex: 1;
+    font-size: 12px;
+}
+
+.calendario-cabecalho button {
+    all: unset;
+    width: 22px;
+    height: 20px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 18px;
+    cursor: default;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.calendario-cabecalho button:hover {
+    background-color: var(--cor-hover-sistema);
+    color: var(--cor-destaque-sistema);
+}
+
+.calendario-grade {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+}
+
+.calendario-dia-da-semana {
+    padding: 2px 0;
+    font-size: 10px;
+    color: var(--cor-destaque-secundaria-sistema);
+}
+
+.calendario-dias {
+    overflow: hidden;
+}
+
+/* troca de mês: a grade nova desliza de leve pelo lado da seta clicada */
+.calendario-dias.vindo-da-direita { animation: calendario-dias-entrando-direita 0.18s ease-out; }
+.calendario-dias.vindo-da-esquerda { animation: calendario-dias-entrando-esquerda 0.18s ease-out; }
+
+@keyframes calendario-dias-entrando-direita {
+    from { opacity: 0; transform: translateX(10px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes calendario-dias-entrando-esquerda {
+    from { opacity: 0; transform: translateX(-10px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.calendario-dia {
+    margin: 1px;
+    padding: 3px 0;
+    font-size: 11px;
+    border: 1px solid transparent;
+}
+
+.calendario-dia.fora-do-mes {
+    opacity: 0.3;
+}
+
+/* hoje: contorno ciano com um brilho que respira devagar */
+.calendario-dia.hoje {
+    border-color: var(--cor-destaque-sistema);
+    color: var(--cor-destaque-sistema);
+    animation: calendario-hoje-respirando 2.4s ease-in-out infinite;
+}
+
+@keyframes calendario-hoje-respirando {
+    0%, 100% { box-shadow: 0 0 2px rgba(110, 240, 255, 0.3); }
+    50%      { box-shadow: 0 0 8px rgba(110, 240, 255, 0.7); }
+}
