@@ -24,6 +24,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
         telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, voltarParaAreaDeTrabalho,
         wallpaperAtual, previa, setPrevia, selecionarPreset, lidarComMudancas,
+        registrarTelaDoModal,
     } = useSistemaTablet()
     const [nome, setNome] = useState('')
     const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
@@ -61,7 +62,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 style={{display: validarLigadoDesligado ? "" : " none" }}
                 alt='Modal do tablet'
             />
-    <div className='tablet-tela' > 
+    {/* registrarTelaDoModal: o espelho do tablet da mesa copia o HTML desta tela */}
+    <div className='tablet-tela' ref={registrarTelaDoModal}>
             <div 
                 className='area-de-trabalho' 
                 style={{ backgroundImage: `url(${wallpaperAtual})` }}
@@ -273,24 +275,19 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                            No momento, é possível interagir com:    
                         </p>
                     <div className='listas-desordenadas-about' >
-                        <ui>
+                        <ul>
                             <li>
                                 O tablet em cima da mesa
                             </li>
-                            <br></br>
                             <li>
                                 Com as notas dentro painel, fixar, desfixar etc.
                             </li>
-                            <br></br>
                             <li>
                                 Parcialmente com o sistema do tablet
                             </li>
-                            <br></br>
                             <li>Interagir com o rádio e com o player</li>
-                            <br></br>
                             <li>Também é possível movimentar o tablet e o player de rádio livremente</li>
-                            <br></br>
-                        </ui>
+                        </ul>
                     </div>
                 <div>Para adicionar uma nota, você pode navegar na aba no canto superior esquerdo da página ou
                     <div className='abrir-lembrete' 

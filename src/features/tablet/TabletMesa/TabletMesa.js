@@ -1,10 +1,17 @@
 import './TabletMesa.css'
+import { useRef } from 'react'
+import EspelhoTablet from '../EspelhoTablet/EspelhoTablet'
+import RastroTablet from '../RastroTablet/RastroTablet'
 
 // Tablet desenhado sobre a mesinha da cena. Usado dentro de <Ancora ponto="tablet">.
 // Clicar abre/fecha o modal; quando ligado, ganha um brilho azul.
+// Por cima da imagem fica o espelho da tela do sistema, encaixado na telinha.
+// Ao abrir/fechar, um rastro de luz liga a telinha ao modal (ligado = modal aberto).
 const TabletMesa = ({ ligado, aoClicar }) => {
+    const zonaRef = useRef(null)
+
     return (
-        <div className='zona-interacao-tablet' onClick={aoClicar}>
+        <div ref={zonaRef} className='zona-interacao-tablet' onClick={aoClicar}>
             <img
                 className='tablet-img'
                 src={process.env.PUBLIC_URL + '/imagens/tabletPNG.png'}
@@ -15,6 +22,8 @@ const TabletMesa = ({ ligado, aoClicar }) => {
                         : 'none',
                 }}
             />
+            <EspelhoTablet />
+            <RastroTablet aberto={ligado} tabletRef={zonaRef} />
         </div>
     )
 }
