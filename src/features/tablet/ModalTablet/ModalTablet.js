@@ -54,7 +54,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
     return (
         <div>
-            <section className='secao-tablet-modal'>
+            <section className={`secao-tablet-modal${validarLigadoDesligado ? ' secao-tablet-modal-aberta' : ''}`}>
 
             <div className="handle"></div>
 
