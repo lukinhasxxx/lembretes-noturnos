@@ -510,10 +510,12 @@ transform: scale(0.95);
     width: 760px;
     height: 482px;
     position: absolute;
-    /* entrada leve ao abrir. Roda de novo a cada abertura: o modal fechado fica com display: none
-       (JanelaArrastavel) e, ao voltar a aparecer, o navegador reinicia a animação */
-    animation: tablet-abrindo 0.28s ease-out;
     transform-origin: center bottom;
+}
+
+/* entrada leve ao abrir. A classe só existe com o modal aberto, então a animação roda de novo a cada abertura */
+.App .secao-tablet-modal.secao-tablet-modal-aberta {
+    animation: tablet-abrindo 0.28s ease-out;
 }
 
 @keyframes tablet-abrindo {

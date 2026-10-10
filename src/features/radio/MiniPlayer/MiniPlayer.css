@@ -19,8 +19,6 @@
   box-shadow: 0 0 12px #1900ffe0;
   padding: clamp(6px, 0.6rem, 12px);
   cursor: auto;
-    /* position: absolute; */
-  /*  font-family: "Orbitron", sans-serif; */
 }
 
 .mini-player-container .botao-voltar:active, 

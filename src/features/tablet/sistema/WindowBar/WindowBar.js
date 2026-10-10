@@ -1,4 +1,3 @@
-// VER JEITO LEGAL DE ENCAIXAR IMAGEM NO DESKTOP E OPCAO DE FAZER UPLOAD DA IMAGEM NO FUTURO
 import "./WindowBar.css"
 
 const WindowBar = ({ children, fecharApp,idDoAppPraFechar}) => {

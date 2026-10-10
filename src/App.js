@@ -1,4 +1,3 @@
-//aqui eh pra eu importar o provider, sem o contexto
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -40,8 +39,6 @@ const [apagandoNotas, setApagandoNotas] = useState(false)
 
 
 
-// const [tabletJaIniciou,setTabletJaIniciou] = useState(false);
-// const [animacaoTabletDeveRodar, setAnimacaoTabletDeveRodar] = useState(false)
 
 const audioRef = useRef(null);
 const playlist = [

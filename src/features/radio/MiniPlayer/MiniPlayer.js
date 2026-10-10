@@ -1,7 +1,3 @@
-// aqui vai ficar o BOTAO pra desligar, o onclick nele e plin, altera a variavel que da true no radio
-// SE o radio estiver ligado, outro click nao funciona, clicou, ON pra sempre, o que da TURN OFF 
-
-
 import React from "react"
 import "./MiniPlayer.css"
 
