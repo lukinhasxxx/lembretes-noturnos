@@ -27,7 +27,6 @@ const [foiDesligadoComBotao, setfoiDesligadoComBotao] = useState(true)
 const [foiPausadoManualmente, setFoiPausadoManualmente] = useState(false);
 const [luzRadio, setLuzRadio] = useEstadoPersistido('luz-radio', '#00D7FF')
 const [volume, setVolume] = useEstadoPersistido('volume', 1)
-const [ligarPainelRadio, setLigarPainelRadio] = useState(false)
 const [ligarTabletPrimeiraVez, setLigarTabletPrimeiraVez] = useState(false)
 // enquanto o mural faz a animação de ligar, as notas (inclusive as salvas) ficam escondidas;
 // todas aparecem juntas na piscada final, no mesmo momento em que a nota nova entra
@@ -162,16 +161,8 @@ if(audioRef.current){
 }},[volume] )
 
 
-const painelRadio = () => {
-
-if (estaTocando) {
-   setLigarPainelRadio(true)
-} else {
-  setLigarPainelRadio(false)
-}
-
-return ligarPainelRadio
-}
+// painel do rádio aceso enquanto a música toca
+const painelRadio = () => estaTocando
 
 
 
