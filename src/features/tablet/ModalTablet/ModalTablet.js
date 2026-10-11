@@ -8,6 +8,7 @@ import WindowBar from '../sistema/WindowBar/WindowBar'
 import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
 import BotaoTema from '../componentes/BotaoTema/BotaoTema'
 import IconeAreaDeTrabalho from '../sistema/IconeAreaDeTrabalho/IconeAreaDeTrabalho'
+import { TEMAS } from '../hooks/useTemaSistema'
 import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
 import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
@@ -25,7 +26,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
         telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, minimizarApp, voltarParaAreaDeTrabalho,
         wallpaperAtual, previa, setPrevia, selecionarPreset, lidarComMudancas, voltarParaWallpaperPadrao,
-        registrarTelaDoModal,
+        registrarTelaDoModal, tema,
     } = useSistemaTablet()
     const [nome, setNome] = useState('')
     const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
@@ -66,7 +67,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 alt='Modal do tablet'
             />
     {/* registrarTelaDoModal: o espelho do tablet da mesa copia o HTML desta tela */}
-    <div className='tablet-tela' ref={registrarTelaDoModal}>
+    <div className='tablet-tela' data-tema={tema} ref={registrarTelaDoModal}>
             <div 
                 className='area-de-trabalho' 
                 style={{ backgroundImage: `url(${wallpaperAtual})` }}
@@ -98,11 +99,12 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 {telaAtiva ==='config.exe' && (
                    
 
-<div>
+<div className='janela-config'>
     <WindowBar
         fecharApp = {fecharApp}
         minimizarApp = {minimizarApp}
         idDoAppPraFechar='app_config'
+        escura={tema === TEMAS.noturno}
     />
         <div className='janela-configuracao-led' >
             <div className='wrapper-configuracao' >
@@ -194,6 +196,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 fecharApp = {fecharApp}
                 minimizarApp = {minimizarApp}
                 idDoAppPraFechar = 'app_lembretes'
+                escura={tema === TEMAS.noturno}
                 >
                     <div className='janela-pro-about' onClick={
                         ()=> {
@@ -255,6 +258,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     idDoAppPraFechar = 'app_lembretes'
     fecharApp = {fecharApp}
     minimizarApp = {minimizarApp}
+    escura={tema === TEMAS.noturno}
     >
     <div className= 'janela-pro-lembrete' 
         onClick={

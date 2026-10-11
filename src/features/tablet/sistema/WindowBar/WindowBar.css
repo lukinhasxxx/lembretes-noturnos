@@ -11,9 +11,55 @@ max-height: 40px;
 position: relative;
 }
 
+/* teste do tema noturno (por enquanto só no Config) */
+.window-bar.window-bar-escura {
+    background: linear-gradient(to right, #000000, #413385de);
+}
+
+/* estrelinhas: pontos de luz espalhados pela barra (::before, fixas) e algumas maiores piscando devagar (::after) */
+.window-bar.window-bar-escura::before,
+.window-bar.window-bar-escura::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* cada estrela: miolo nítido + um halo lilás curtinho (o "brilhozinho").
+   Como no céu de verdade: mais fortes no lado escuro (esquerda) e mais fracas conforme o fundo clareia (direita) */
+.window-bar.window-bar-escura::before {
+    background:
+        radial-gradient(circle at 4% 30%, rgba(255, 255, 255, 0.9) 0 0.6px, rgba(185, 140, 255, 0.16) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 11% 72%, rgba(220, 210, 255, 0.86) 0 0.6px, rgba(185, 140, 255, 0.15) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 19% 22%, rgba(255, 255, 255, 0.82) 0 0.6px, rgba(185, 140, 255, 0.14) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 27% 58%, rgba(255, 255, 255, 0.78) 0 0.6px, rgba(185, 140, 255, 0.14) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 34% 18%, rgba(220, 210, 255, 0.74) 0 0.6px, rgba(185, 140, 255, 0.13) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 42% 80%, rgba(255, 255, 255, 0.7) 0 0.6px, rgba(185, 140, 255, 0.12) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 49% 40%, rgba(255, 255, 255, 0.66) 0 0.6px, rgba(185, 140, 255, 0.11) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 57% 15%, rgba(220, 210, 255, 0.62) 0 0.6px, rgba(185, 140, 255, 0.1) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 63% 66%, rgba(255, 255, 255, 0.59) 0 0.6px, rgba(185, 140, 255, 0.1) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 70% 32%, rgba(255, 255, 255, 0.56) 0 0.6px, rgba(185, 140, 255, 0.09) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 77% 78%, rgba(220, 210, 255, 0.53) 0 0.6px, rgba(185, 140, 255, 0.08) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 83% 24%, rgba(255, 255, 255, 0.5) 0 0.6px, rgba(185, 140, 255, 0.08) 1.2px, transparent 1.7px);
+}
+
+.window-bar.window-bar-escura::after {
+    background:
+        radial-gradient(circle at 15% 45%, rgba(255, 255, 255, 1) 0 0.9px, rgba(185, 140, 255, 0.4) 1.4px, transparent 2.8px),
+        radial-gradient(circle at 46% 62%, rgba(255, 255, 255, 0.85) 0 0.9px, rgba(185, 140, 255, 0.32) 1.4px, transparent 2.8px),
+        radial-gradient(circle at 74% 50%, rgba(255, 255, 255, 0.7) 0 0.9px, rgba(185, 140, 255, 0.25) 1.4px, transparent 2.8px);
+    animation: window-bar-estrelas-piscando 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes window-bar-estrelas-piscando {
+    from { opacity: 0.3; }
+    to   { opacity: 0.9; }
+}
+
 /* minimizar e fechar, colados à direita (o fechar fica no mesmo lugar de antes) */
 .window-bar-botoes {
     position: absolute;
+    z-index: 1;
     top: 4px;
     right: 4px;
     display: flex;
