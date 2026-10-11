@@ -255,6 +255,12 @@ margin: 2% 4%;
 .janela-configuracao-led span {
   font-size: 26px;
 }
+/* lugar do botão de tema (teste): mesma margem do botão "Wallpapers" */
+.wrapper-configuracao .espaco-botao-tema {
+  margin-left: 3%;
+  min-height: 53px;
+}
+
 .wrapper-configuracao .botao-abrir-previa,
 .wrapper-configuracao .botao-abrir-previa:after {
   margin-left: 3%;

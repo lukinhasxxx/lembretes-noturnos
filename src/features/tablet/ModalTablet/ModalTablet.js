@@ -6,6 +6,7 @@ import '../sistema/temaSistema.css'
 import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
 import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
+import BotaoTema from '../componentes/BotaoTema/BotaoTema'
 import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
 import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
@@ -165,7 +166,14 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     </div>
                     )
                 }
-                
+
+                <h3>Temas</h3>
+
+                {/* espaço reservado para o botão de tema (teste) */}
+                <div className='espaco-botao-tema'>
+                    <BotaoTema />
+                </div>
+
 
 
                     

@@ -12,6 +12,7 @@ const ptBR = {
     'menuIniciar.apps': 'Apps',
     'menuIniciar.fixados': 'Fixados',
     'config.wallpaperPadrao': 'Padrão',
+    'config.temaOriginal': 'Original',
     'menuIniciar.configuracoes': 'Configurações',
     'menuIniciar.energia': 'Energia',
     'menuIniciar.bloquear': 'Bloquear',
