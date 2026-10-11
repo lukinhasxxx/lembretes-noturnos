@@ -11,10 +11,17 @@ max-height: 40px;
 position: relative;
 }
 
+/* minimizar e fechar, colados à direita (o fechar fica no mesmo lugar de antes) */
+.window-bar-botoes {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: flex;
+    gap: 6px;
+}
+
 .window-bar img {
-    margin-top: 4px;
-    margin-left: 625px;
-    padding-left: 9px;
+    display: block;
     cursor: pointer;
     transition: filter 0.4s ease;
 }

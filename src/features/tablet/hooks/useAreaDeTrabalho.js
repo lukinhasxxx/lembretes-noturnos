@@ -85,6 +85,12 @@ export const useAreaDeTrabalho = (estadoSistema) => {
             return
         }
 
+        minimizarApp(idDoApp)
+    }
+
+    // minimiza (pela barra de tarefas ou pelo botão da janela): o app continua aberto na barra
+    // e a tela volta para a de antes dele
+    const minimizarApp = (idDoApp) => {
         const minimizados = appsMinimizadosRef.current
         minimizados.add(idDoApp)
 
@@ -107,6 +113,7 @@ export const useAreaDeTrabalho = (estadoSistema) => {
         fecharApp,
         mostrarTelaDoApp,
         alternarAppPelaBarra,
+        minimizarApp,
         voltarParaAreaDeTrabalho,
     }
 }

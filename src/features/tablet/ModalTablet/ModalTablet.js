@@ -23,7 +23,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)
     const {
         estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
-        telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, voltarParaAreaDeTrabalho,
+        telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, minimizarApp, voltarParaAreaDeTrabalho,
         wallpaperAtual, previa, setPrevia, selecionarPreset, lidarComMudancas, voltarParaWallpaperPadrao,
         registrarTelaDoModal,
     } = useSistemaTablet()
@@ -99,8 +99,9 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                    
 
 <div>
-    <WindowBar 
+    <WindowBar
         fecharApp = {fecharApp}
+        minimizarApp = {minimizarApp}
         idDoAppPraFechar='app_config'
     />
         <div className='janela-configuracao-led' >
@@ -191,6 +192,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
                 <WindowBar
                 fecharApp = {fecharApp}
+                minimizarApp = {minimizarApp}
                 idDoAppPraFechar = 'app_lembretes'
                 >
                     <div className='janela-pro-about' onClick={
@@ -251,7 +253,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 {/* Janela superior */}
     <WindowBar 
     idDoAppPraFechar = 'app_lembretes'
-    fecharApp = {fecharApp} 
+    fecharApp = {fecharApp}
+    minimizarApp = {minimizarApp}
     >
     <div className= 'janela-pro-lembrete' 
         onClick={
