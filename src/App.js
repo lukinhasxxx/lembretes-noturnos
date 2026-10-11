@@ -203,7 +203,7 @@ const [ligarTablet,setLigarTablet] = useState(false)
 const [modalAberto,setModalAberto] = useState(false)
 // sistema do tablet (vem do SistemaTabletProvider, no index.js): desligado até o primeiro clique;
 // aí roda boot → boas-vindas → área de trabalho. O resto (bloquear, desligar...) o modal pega direto do contexto.
-const { sistemaDesligado, ligarSistema } = useSistemaTablet()
+const { sistemaDesligado, ligarSistema, tema } = useSistemaTablet()
 
 // "Desligar" no menu iniciar terminou: fecha o modal e apaga a tela do tablet da mesa.
 // O próximo clique no tablet da mesa liga de novo (boot completo).
@@ -255,6 +255,7 @@ setLigarTabletPrimeiraVez(true)
           painelLigadoPermanente={painelLigadoPermanente}
           animacaoDeveRodar={animacaoJaAtivada}
           conteudoVisivelPainel={primeiraMensagemPainel}
+          tema={tema}
         />
       </Ancora>
     </Palco>
