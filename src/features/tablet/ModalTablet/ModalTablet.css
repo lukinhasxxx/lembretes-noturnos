@@ -140,78 +140,16 @@ margin-top: 0px;
   transform: scale(0.9);
 }
 
-.tablet-tela .area-de-trabalho .icone-lembretes .selecionar-lembrete{
-    width: 150px;
-    height: 90px;
-    top: -21px;
-    left: -54px;
-    right: 0;
-    bottom: 0;
-    position: absolute;
-}
-
-.tablet-tela .area-de-trabalho .icone-lembretes .selecionar-lembrete:hover{
-    background-color: #87d8dd1a;
-    border-radius: 10px;
-    border: 1px solid #7b74ff5e;
-}
-
-.tablet-tela .area-de-trabalho .icone-lembretes {
-  position: relative;
-    user-select: none;
-    margin-left: 70px;
-    margin-top: 40px;
-    height: 35px;
-    width: 35px;
-}
-.tablet-tela .area-de-trabalho .icone-lembretes img {
-  height: 30px;
-}
-
-.tablet-tela .area-de-trabalho .icone-lembretes span{
-user-select: none;
-display: block;
-pointer-events: none;
-color: white;
-margin-left: -33px;
-}
-
-/* Icone led */
-.tablet-tela .area-de-trabalho .icone-led {
-position: relative;
-user-select: none;
-margin-top: 55px;
-margin-left: 62px;
-height: 35px;
-width: 35px;
-}
-
-.tablet-tela .area-de-trabalho .icone-led img {
-  height: 40px;
-}
-
-.tablet-tela .area-de-trabalho .icone-led span{
-display: block;
-pointer-events: none;
-color: white;
-margin-left: -29px;
-}
-
-.tablet-tela .area-de-trabalho .icone-led .selecionar-configuracao{
-    width: 150px;
-    height: 90px;
-    top: -16px;
-    left: -54px;
-    right: 0;
-    bottom: 0;
-    position: absolute;
-}
-
-.tablet-tela .area-de-trabalho .icone-led .selecionar-configuracao:hover{
-    background-color: #87d8dd1a;
-    border-radius: 10px;
-    border: 1px solid #7b74ff5e;
-
+/* Ícones da área de trabalho: grade que enche de cima para baixo (3 por coluna) e depois vai para a direita
+   (cabem 4 colunas). O visual de cada ícone fica no IconeAreaDeTrabalho.css. */
+.tablet-tela .area-de-trabalho .icones-area-de-trabalho {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(3, 90px);
+    grid-auto-columns: 150px;
+    gap: 6px 8px;
+    width: max-content;
+    padding: 19px 0 0 16px;
 }
 
 

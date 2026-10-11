@@ -1,0 +1,44 @@
+/* Caixa do ícone = área do hover; desenho e nome centralizados no mesmo eixo */
+.tablet-tela .area-de-trabalho .icone-area-de-trabalho {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    user-select: none;
+}
+
+.tablet-tela .area-de-trabalho .icone-area-de-trabalho:hover {
+    background-color: #87d8dd1a;
+    border-color: #7b74ff5e;
+}
+
+/* área fixa do desenho; a imagem é posicionada e escalada pelo JS (centro de massa no meio) */
+.tablet-tela .area-de-trabalho .icone-area-de-trabalho-desenho {
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+
+.tablet-tela .area-de-trabalho .icone-area-de-trabalho-desenho img {
+    position: absolute;
+    max-width: none;
+    pointer-events: none;
+}
+
+/* reserva: se não der para medir, a imagem inteira centralizada na área */
+.tablet-tela .area-de-trabalho .icone-area-de-trabalho-desenho img.sem-medida {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.tablet-tela .area-de-trabalho .icone-area-de-trabalho span {
+    color: white;
+    text-align: center;
+    pointer-events: none;
+}

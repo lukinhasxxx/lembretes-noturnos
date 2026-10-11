@@ -7,6 +7,7 @@ import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
 import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
 import BotaoTema from '../componentes/BotaoTema/BotaoTema'
+import IconeAreaDeTrabalho from '../sistema/IconeAreaDeTrabalho/IconeAreaDeTrabalho'
 import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
 import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
@@ -75,24 +76,23 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
             
                 {/* aqui manda a partir da area de trabalho */}
                 {/* icone */}
+                {/* ícones da área de trabalho: mesmo molde para todos, em grade (desce 3 e vai para a direita) */}
                 {telaAtiva === 'desktop' && (
-                    <div className='icone-lembretes'
-                   onClick={() => abrirApp('app_lembretes','about.exe') }>
-                    
-                    <img src={ process.env.PUBLIC_URL +'/imagens/windows/lembretesIcone.png'}
-                    alt='abrir lembretes' />
-                    <span>Lembretes.exe</span>
-                    <div className='selecionar-lembrete' ></div>
-                 </div>)}
-                {/* icone */}
-                {telaAtiva === 'desktop' && (<div className='icone-led'
-                   onClick={
-                    () => abrirApp('app_config','config.exe') }>
-                    <img src={ process.env.PUBLIC_URL+ '/imagens/windows/ledIcone.png'}
-                    alt='abrir lembretes' />
-                    <span>Config.exe</span>
-                    <div className='selecionar-configuracao' ></div>
-                </div>)}
+                    <div className='icones-area-de-trabalho'>
+                        <IconeAreaDeTrabalho
+                            icone='/imagens/windows/lembretesIcone.png'
+                            nome='Lembretes.exe'
+                            alt='abrir lembretes'
+                            aoAbrir={() => abrirApp('app_lembretes', 'about.exe')}
+                        />
+                        <IconeAreaDeTrabalho
+                            icone='/imagens/windows/ledIcone.png'
+                            nome='Config.exe'
+                            alt='abrir configurações'
+                            aoAbrir={() => abrirApp('app_config', 'config.exe')}
+                        />
+                    </div>
+                )}
 
                 {/* app de fato */}
                 {telaAtiva ==='config.exe' && (
