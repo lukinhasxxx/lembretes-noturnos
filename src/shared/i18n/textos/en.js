@@ -22,6 +22,17 @@ const en = {
 
     'calendario.mesAnterior': 'Previous month',
     'calendario.proximoMes': 'Next month',
+
+    'notificacoes.titulo': 'Notifications',
+    'notificacoes.vazio': 'No new notifications',
+    'notificacoes.limparTudo': 'Clear all',
+    'notificacoes.fechar': 'Close',
+    'notificacoes.agora': 'now',
+    'notificacoes.instalandoTemas': 'Installing your themes...',
+    'notificacoes.instalandoTemasTexto': 'Please wait, it only takes a few seconds.',
+    'notificacoes.temaInstalado': 'Night theme installed',
+    'notificacoes.temaInstaladoTexto': 'It changes the whole system: boot, sign-in, windows... Try it!',
+    'notificacoes.experimentar': 'Try it',
 }
 
 export default en

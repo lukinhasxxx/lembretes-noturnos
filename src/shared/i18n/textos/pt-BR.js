@@ -23,6 +23,17 @@ const ptBR = {
 
     'calendario.mesAnterior': 'Mês anterior',
     'calendario.proximoMes': 'Próximo mês',
+
+    'notificacoes.titulo': 'Notificações',
+    'notificacoes.vazio': 'Sem notificações no momento',
+    'notificacoes.limparTudo': 'Limpar tudo',
+    'notificacoes.fechar': 'Fechar',
+    'notificacoes.agora': 'agora',
+    'notificacoes.instalandoTemas': 'Instalando seus temas...',
+    'notificacoes.instalandoTemasTexto': 'Aguarde, leva só alguns segundos.',
+    'notificacoes.temaInstalado': 'Tema noturno instalado',
+    'notificacoes.temaInstaladoTexto': 'Ele muda o sistema inteiro: boot, login, janelas... Experimente!',
+    'notificacoes.experimentar': 'Experimentar',
 }
 
 export default ptBR

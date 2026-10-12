@@ -16,6 +16,16 @@
     cursor: pointer;
 }
 
+/* Config aberto pelo "Experimentar" da notificação: a lua pulsa um halo lilás algumas vezes */
+.espaco-botao-tema.destacada .lua-eclipse {
+    animation: lua-destacada 0.8s ease-in-out 3;
+}
+
+@keyframes lua-destacada {
+    0%, 100% { box-shadow: 0 0 3px rgba(220, 230, 255, 0.1); }
+    50%      { box-shadow: 0 0 16px 3px rgba(185, 140, 255, 0.85), 0 0 4px rgba(255, 255, 255, 0.6); }
+}
+
 /* "↺ Original": mesmo estilo discreto do "↺ Padrão" do wallpaper */
 .botao-tema-original {
     padding: 3px 8px;

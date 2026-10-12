@@ -34,8 +34,8 @@
     display: flex;
 }
 
-/* idem para o calendário, que se posiciona pela barra (colado à direita) */
-.barra-de-tarefas-area-calendario {
+/* idem para os pop-ups da bandeja (calendário, notificações), que se posicionam pela barra (colados à direita) */
+.barra-de-tarefas-area-painel {
     display: flex;
 }
 

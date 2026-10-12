@@ -1,0 +1,152 @@
+/* ---------- cartão de uma notificação (na central e no balão) ---------- */
+.cartao-notificacao {
+    padding: 7px 9px 9px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cartao-notificacao-origem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 9px;
+    opacity: 0.65;
+}
+
+.cartao-notificacao-fechar {
+    all: unset;
+    width: 14px;
+    height: 14px;
+    font-size: 13px;
+    line-height: 13px;
+    text-align: center;
+    cursor: default;
+}
+
+.cartao-notificacao-fechar:hover {
+    background-color: var(--cor-hover-sistema);
+    color: var(--cor-destaque-sistema);
+}
+
+.cartao-notificacao-titulo {
+    margin-top: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cor-destaque-sistema);
+}
+
+.cartao-notificacao-texto {
+    margin-top: 2px;
+    font-size: 10px;
+    line-height: 1.35;
+    opacity: 0.85;
+}
+
+/* barrinha "carregando" enquanto a notificação está em andamento: um brilho que corre da esquerda para a direita */
+.cartao-notificacao-progresso {
+    position: relative;
+    height: 3px;
+    margin-top: 7px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.cartao-notificacao-progresso::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40%;
+    background: var(--cor-destaque-sistema);
+    box-shadow: 0 0 6px var(--cor-destaque-sistema);
+    animation: notificacao-progresso 1.4s ease-in-out infinite;
+}
+
+@keyframes notificacao-progresso {
+    from { left: -40%; }
+    to   { left: 100%; }
+}
+
+.cartao-notificacao-acao {
+    all: unset;
+    margin-top: 7px;
+    padding: 2px 11px;
+    border: 1px solid var(--cor-borda-neon-sistema);
+    font-size: 10px;
+    cursor: default;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.cartao-notificacao-acao:hover {
+    background-color: var(--cor-hover-sistema);
+    border-color: var(--cor-destaque-sistema);
+}
+
+/* ---------- central de notificações ---------- */
+.painel-bandeja.central-notificacoes {
+    width: 225px;
+    padding: 11px;
+}
+
+.central-notificacoes-cabecalho {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.central-notificacoes-limpar {
+    all: unset;
+    font-size: 11px;
+    color: var(--cor-destaque-sistema);
+    cursor: default;
+}
+
+.central-notificacoes-limpar:hover {
+    text-decoration: underline;
+}
+
+.central-notificacoes-vazia {
+    padding: 16px 0 12px;
+    text-align: center;
+    font-size: 11px;
+    opacity: 0.6;
+}
+
+/* mais de uma notificação: a lista rola em vez de crescer para fora da tela */
+.central-notificacoes-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 180px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--cor-borda-neon-sistema) transparent;
+}
+
+/* ---------- balão (notificação nova subindo sozinha acima da bandeja) ---------- */
+.balao-notificacao {
+    position: absolute;
+    right: 8px;
+    bottom: calc(100% + 8px);
+    z-index: 4;
+    width: 216px;
+    background: var(--cor-fundo-menu-iniciar);
+    border: 1px solid var(--cor-borda-neon-sistema);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+    color: var(--cor-texto-sistema);
+    font-family: var(--fonte-sistema);
+    font-size: var(--tamanho-fonte-sistema);
+    text-align: left;
+    user-select: none;
+    animation: balao-notificacao-entrando 0.3s ease-out;
+}
+
+.balao-notificacao .cartao-notificacao {
+    background: none;
+    border: none;
+}
+
+@keyframes balao-notificacao-entrando {
+    from { opacity: 0; transform: translateX(30px); }
+    to   { opacity: 1; transform: translateX(0); }
+}

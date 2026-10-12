@@ -6,7 +6,7 @@ import '../sistema/temaSistema.css'
 import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
 import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
-import BotaoTema from '../componentes/BotaoTema/BotaoTema'
+import SecaoTemas from '../componentes/BotaoTema/SecaoTemas'
 import IconeAreaDeTrabalho from '../sistema/IconeAreaDeTrabalho/IconeAreaDeTrabalho'
 import { TEMAS } from '../hooks/useTemaSistema'
 import TelaBoot from '../sistema/TelaBoot/TelaBoot'
@@ -26,7 +26,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
         telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, minimizarApp, voltarParaAreaDeTrabalho,
         wallpaperAtual, previa, selecionarPreset, lidarComMudancas, voltarParaWallpaperPadrao,
-        registrarTelaDoModal, tema,
+        registrarTelaDoModal, tema, temasDisponiveis, destacarTemas, setDestacarTemas,
     } = useSistemaTablet()
     const [nome, setNome] = useState('')
     const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
@@ -169,12 +169,10 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     )
                 }
 
-                <h3>Temas</h3>
-
-                {/* espaço reservado para o botão de tema (teste) */}
-                <div className='espaco-botao-tema'>
-                    <BotaoTema />
-                </div>
+                {/* só aparece depois da "instalação" dos temas (notificação na barra de tarefas) */}
+                {temasDisponiveis && (
+                    <SecaoTemas destacada={destacarTemas} aoTerminarDestaque={() => setDestacarTemas(false)} />
+                )}
 
 
 

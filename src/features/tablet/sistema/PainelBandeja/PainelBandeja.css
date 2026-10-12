@@ -1,0 +1,43 @@
+/* Pop-ups da bandeja: mesma base do calendário (sobe da barra, colado à direita, vidro escuro e borda neon) */
+.painel-bandeja {
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    z-index: 5;
+    box-sizing: border-box;
+    width: 230px;
+    padding: 12px;
+    background: var(--cor-fundo-menu-iniciar);
+    border: 1px solid var(--cor-borda-neon-sistema);
+    border-bottom: none;
+    color: var(--cor-texto-sistema);
+    font-family: var(--fonte-sistema);
+    font-size: var(--tamanho-fonte-sistema);
+    text-align: left;
+    user-select: none;
+    animation: painel-bandeja-subindo 0.2s ease-out;
+}
+
+@keyframes painel-bandeja-subindo {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.painel-bandeja.fechando {
+    animation: painel-bandeja-descendo 0.2s ease-in forwards;
+    pointer-events: none;
+}
+
+@keyframes painel-bandeja-descendo {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(12px); }
+}
+
+/* título pequeno no topo do pop-up (ex.: "Idioma") */
+.painel-bandeja-titulo {
+    margin-bottom: 8px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--cor-destaque-secundaria-sistema);
+}
