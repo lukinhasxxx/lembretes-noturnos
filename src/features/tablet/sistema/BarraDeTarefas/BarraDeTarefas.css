@@ -8,6 +8,12 @@
     background-color: rgba(0, 0, 0, 0.01);
 }
 
+/* tema noturno: o "aero" transparente ganha um véu azul-noite leve (mais escuro embaixo), e o wallpaper
+   continua aparecendo por trás. Sem backdrop-filter: dentro do modal escalado ele dava problema (ver MenuIniciar.css) */
+.tablet-tela[data-tema='noturno'] .barra-de-tarefas {
+    background: linear-gradient(to top, rgba(7, 6, 26, 0.55), rgba(18, 15, 51, 0.32));
+}
+
 /* não é posicionada: o menu iniciar (absolute) se posiciona pela barra inteira */
 .barra-de-tarefas-area-menu-iniciar {
     display: flex;
