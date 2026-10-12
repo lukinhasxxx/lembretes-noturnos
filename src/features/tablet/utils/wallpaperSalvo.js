@@ -24,11 +24,12 @@ const naTabela = async (modo, operacao) => {
     })
 }
 
-export const salvarWallpaperUpload = (arquivo) =>
-    naTabela('readwrite', (tabela) => tabela.put(arquivo, CHAVE_UPLOAD)).catch(() => {})
+// chave: cada tema guarda o seu upload (sem chave = o do tema padrão, como sempre foi)
+export const salvarWallpaperUpload = (arquivo, chave = CHAVE_UPLOAD) =>
+    naTabela('readwrite', (tabela) => tabela.put(arquivo, chave)).catch(() => {})
 
-export const lerWallpaperUpload = () =>
-    naTabela('readonly', (tabela) => tabela.get(CHAVE_UPLOAD)).catch(() => undefined)
+export const lerWallpaperUpload = (chave = CHAVE_UPLOAD) =>
+    naTabela('readonly', (tabela) => tabela.get(chave)).catch(() => undefined)
 
-export const apagarWallpaperUpload = () =>
-    naTabela('readwrite', (tabela) => tabela.delete(CHAVE_UPLOAD)).catch(() => {})
+export const apagarWallpaperUpload = (chave = CHAVE_UPLOAD) =>
+    naTabela('readwrite', (tabela) => tabela.delete(chave)).catch(() => {})

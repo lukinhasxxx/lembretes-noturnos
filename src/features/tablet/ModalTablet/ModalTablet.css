@@ -9,6 +9,16 @@
     width: 666px;
     top: 9.7%;
     left: 6.35%;
+    /* nada do sistema é selecionável (boot, boas-vindas, reiniciando, bloqueio, janelas...), como num sistema de verdade */
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* exceção: onde a pessoa digita (caixa do lembrete, campo de hora do calendário) continua selecionável */
+.tablet-tela textarea,
+.tablet-tela input {
+    -webkit-user-select: text;
+    user-select: text;
 }
 
 /* wallpaper */
@@ -122,96 +132,16 @@ margin-top: 0px;
   transform: scale(1.05);
 }
 
-.tablet-tela .janela-lembretes img {
-    margin-top: 4px;
-    margin-left: 625px;
-    padding-left: 9px;
-    cursor: pointer;
-    transition: filter 0.4s ease;
-}
-
-.tablet-tela .janela-lembretes img:hover {
-  filter: brightness(1.6);
-  transform: scale(1.1);
-  transition: transform 0.4s ease;
-}
-
-.tablet-tela .janela-lembretes img:active {
-  transform: scale(0.9);
-}
-
-.tablet-tela .area-de-trabalho .icone-lembretes .selecionar-lembrete{
-    width: 150px;
-    height: 90px;
-    top: -21px;
-    left: -54px;
-    right: 0;
-    bottom: 0;
-    position: absolute;
-}
-
-.tablet-tela .area-de-trabalho .icone-lembretes .selecionar-lembrete:hover{
-    background-color: #87d8dd1a;
-    border-radius: 10px;
-    border: 1px solid #7b74ff5e;
-}
-
-.tablet-tela .area-de-trabalho .icone-lembretes {
-  position: relative;
-    user-select: none;
-    margin-left: 70px;
-    margin-top: 40px;
-    height: 35px;
-    width: 35px;
-}
-.tablet-tela .area-de-trabalho .icone-lembretes img {
-  height: 30px;
-}
-
-.tablet-tela .area-de-trabalho .icone-lembretes span{
-user-select: none;
-display: block;
-pointer-events: none;
-color: white;
-margin-left: -33px;
-}
-
-/* Icone led */
-.tablet-tela .area-de-trabalho .icone-led {
-position: relative;
-user-select: none;
-margin-top: 55px;
-margin-left: 62px;
-height: 35px;
-width: 35px;
-}
-
-.tablet-tela .area-de-trabalho .icone-led img {
-  height: 40px;
-}
-
-.tablet-tela .area-de-trabalho .icone-led span{
-display: block;
-pointer-events: none;
-color: white;
-margin-left: -29px;
-}
-
-.tablet-tela .area-de-trabalho .icone-led .selecionar-configuracao{
-    width: 150px;
-    height: 90px;
-    top: -16px;
-    left: -54px;
-    right: 0;
-    bottom: 0;
-    position: absolute;
-}
-
-.tablet-tela .area-de-trabalho .icone-led .selecionar-configuracao:hover{
-    background-color: #87d8dd1a;
-    border-radius: 10px;
-    border: 1px solid #7b74ff5e;
-
+/* Ícones da área de trabalho: grade que enche de cima para baixo (3 por coluna) e depois vai para a direita
+   (cabem 4 colunas). O visual de cada ícone fica no IconeAreaDeTrabalho.css. */
+.tablet-tela .area-de-trabalho .icones-area-de-trabalho {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(3, 90px);
+    grid-auto-columns: 150px;
+    gap: 6px 8px;
+    width: max-content;
+    padding: 19px 0 0 16px;
 }
 
 
@@ -225,6 +155,203 @@ margin-left: -29px;
     height: 319px;
     width: 665px;
     background-color: rgb(215, 218, 243);
+}
+
+/* tema noturno — barra de rolagem do Config: trilho preto → roxo, como a barra de cima */
+.tablet-tela[data-tema='noturno'] .janela-configuracao-led::-webkit-scrollbar-track {
+    background: linear-gradient(to bottom, #000000, #413385de);
+    box-shadow: none;
+}
+
+.tablet-tela[data-tema='noturno'] .janela-configuracao-led::-webkit-scrollbar-thumb {
+    background: #8a78ff;
+    background-clip: content-box;
+    border: solid 3px rgba(0, 0, 0, 0);
+}
+
+.tablet-tela[data-tema='noturno'] .janela-configuracao-led::-webkit-scrollbar-thumb:hover {
+    background: #a99bff;
+    background-clip: content-box;
+    border: solid 3px rgba(0, 0, 0, 0);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    .tablet-tela[data-tema='noturno'] .janela-configuracao-led {
+        scrollbar-color: #8a78ff #120b3a;
+    }
+}
+
+/* tema noturno — moldura das janelas (barra + corpo) com fundo escuro, passando 1px para fora: com o modal
+   escalado, o navegador desenha as emendas em "meio pixel" e deixava vazar um fio do wallpaper colorido */
+.tablet-tela[data-tema='noturno'] .janela-config,
+.tablet-tela[data-tema='noturno'] .janela-lembretes,
+.tablet-tela[data-tema='noturno'] .about {
+    background: #07061a;
+    box-shadow: 0 0 0 1px #07061a;
+}
+
+/* tema noturno — Lembretes (formulário) e About: o mesmo céu noturno do Config */
+.tablet-tela[data-tema='noturno'] form,
+.tablet-tela[data-tema='noturno'] .area-de-trabalho .about .tela-about {
+    background: linear-gradient(160deg, #07061a 0%, #120f33 55%, #1d1652 100%);
+    color: #e6e3ff;
+}
+
+.tablet-tela[data-tema='noturno'] form h2,
+.tablet-tela[data-tema='noturno'] .area-de-trabalho .about .tela-about h2 {
+    color: #e6e3ff;
+    text-shadow: 0 0 8px rgba(185, 140, 255, 0.7);
+}
+
+/* abas (About ↔ Lembretes) na barra escura: o mesmo lilás de antes, mas sólido (transparente, as estrelinhas
+   da barra apareciam através do botão) */
+.tablet-tela[data-tema='noturno'] .area-de-trabalho .about .window-bar .janela-pro-lembrete,
+.tablet-tela[data-tema='noturno'] .janela-lembretes .janela-pro-about {
+    z-index: 2;
+    background-color: #221d47;
+    border-color: rgba(185, 140, 255, 0.6);
+    box-shadow: none;
+    opacity: 1;
+}
+
+.tablet-tela[data-tema='noturno'] .area-de-trabalho .about .window-bar .janela-pro-lembrete:hover,
+.tablet-tela[data-tema='noturno'] .janela-lembretes .janela-pro-about:hover {
+    background-color: #3a3275;
+}
+
+.tablet-tela[data-tema='noturno'] .area-de-trabalho .about .window-bar .janela-pro-lembrete p,
+.tablet-tela[data-tema='noturno'] .janela-lembretes .janela-pro-about p {
+    color: #e6e3ff;
+    text-shadow: none;
+}
+
+/* caixa de texto do lembrete */
+.tablet-tela[data-tema='noturno'] .area-texto {
+    background: #0d0b26;
+    border-color: #6a5cff;
+    color: #e6e3ff;
+}
+
+.tablet-tela[data-tema='noturno'] .area-texto::placeholder {
+    color: #8a85b8;
+}
+
+/* botão "Mostrar/Esconder painel" */
+.tablet-tela[data-tema='noturno'] .botao-mostrar-esconder-painel {
+    background: linear-gradient(to right, rgba(138, 120, 255, 0.28), rgba(90, 25, 255, 0.08));
+    color: #c9bfff;
+}
+
+.tablet-tela[data-tema='noturno'] .botao-mostrar-esconder-painel:hover {
+    background: rgba(138, 120, 255, 0.4);
+    color: #ffffff;
+    text-shadow: none;
+    box-shadow: 0 0 8px rgba(138, 120, 255, 0.6);
+}
+
+/* botão "Enviar lembrete": roxo-noite no lugar do azul (o hover preto com glitch continua igual) */
+.tablet-tela[data-tema='noturno'] form .botao-lembrete {
+    background-color: #3d2f99;
+    box-shadow: 0 0 10px rgba(65, 51, 133, 0.6);
+}
+
+.tablet-tela[data-tema='noturno'] form .botao-lembrete:hover {
+    background: #050808;
+    box-shadow: 1px 1px 13px #12e2ff;
+}
+
+/* barras de rolagem do Lembretes e do About no mesmo estilo da do Config */
+.tablet-tela[data-tema='noturno'] form::-webkit-scrollbar-track,
+.tablet-tela[data-tema='noturno'] .tela-about::-webkit-scrollbar-track {
+    background: linear-gradient(to bottom, #000000, #413385de);
+    box-shadow: none;
+}
+
+.tablet-tela[data-tema='noturno'] form::-webkit-scrollbar-thumb,
+.tablet-tela[data-tema='noturno'] .tela-about::-webkit-scrollbar-thumb {
+    background: #8a78ff;
+    background-clip: content-box;
+    border: solid 3px rgba(0, 0, 0, 0);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    .tablet-tela[data-tema='noturno'] form,
+    .tablet-tela[data-tema='noturno'] .tela-about {
+        scrollbar-color: #8a78ff #120b3a;
+    }
+}
+
+/* tema noturno — conteúdo do Config: céu noturno (azul-noite → roxo, na mesma família da barra de cima),
+   textos em branco-lavanda, títulos em lilás e o título principal com um brilho lilás no lugar do verde */
+.tablet-tela[data-tema='noturno'] .janela-configuracao-led {
+    background: linear-gradient(160deg, #07061a 0%, #120f33 55%, #1d1652 100%);
+    color: #e6e3ff;
+}
+
+.tablet-tela[data-tema='noturno'] .janela-configuracao-led .texto-configuracao {
+    text-shadow: 0 0 8px rgba(185, 140, 255, 0.7);
+}
+
+.tablet-tela[data-tema='noturno'] .janela-configuracao-led p {
+    color: #b3aee0;
+}
+
+.tablet-tela[data-tema='noturno'] .janela-configuracao-led h3 {
+    color: #c9bfff;
+}
+
+.tablet-tela[data-tema='noturno'] .janela-configuracao-led strong {
+    color: #ff9ec4;
+}
+
+/* botõezinhos de texto ("↺ Padrão", "↺ Original") */
+.tablet-tela[data-tema='noturno'] .wrapper-upload .botao-wallpaper-padrao,
+.tablet-tela[data-tema='noturno'] .botao-tema-original {
+    color: #9d97cf;
+}
+
+.tablet-tela[data-tema='noturno'] .wrapper-upload .botao-wallpaper-padrao:hover,
+.tablet-tela[data-tema='noturno'] .botao-tema-original:hover {
+    border-color: #8a78ff;
+    color: #ffffff;
+}
+
+/* botão "Wallpapers" (preto) ganha um contorno lilás fino para não sumir no fundo escuro */
+.tablet-tela[data-tema='noturno'] .wrapper-configuracao .botao-abrir-previa {
+    box-shadow: 0 0 0 1px rgba(138, 120, 255, 0.45);
+}
+
+/* mantém o brilho roxo do hover (a regra de cima, mais específica, apagaria ele) */
+.tablet-tela[data-tema='noturno'] .wrapper-configuracao .botao-abrir-previa:hover {
+    box-shadow: 0 0 0 1px rgba(138, 120, 255, 0.45), 1px 1px 11px #8a00ff;
+}
+
+/* galeria de wallpapers: o fundo continua o original (cada cor combina com um wallpaper, feita à mão);
+   no noturno muda só a moldura, no tom do céu, e o brilho lilás */
+.tablet-tela[data-tema='noturno'] .wrapper-configuracao .container-galeria-presets {
+    border-color: #07061a;
+    box-shadow: 0 0 0 1px rgba(138, 120, 255, 0.45), 0 0 12px rgba(138, 120, 255, 0.5);
+}
+
+.tablet-tela[data-tema='noturno'] .wrapper-configuracao .container-galeria-presets:hover {
+    border-color: #07061a;
+    box-shadow: 0 0 0 1px rgba(185, 140, 255, 0.6), 0 0 22px rgba(138, 120, 255, 0.7);
+}
+
+.tablet-tela[data-tema='noturno'] .container-galeria-presets .miniatura-preset:hover {
+    box-shadow: 0 0 8px #b98cff;
+}
+
+/* seletor de cor do LED: vidro escuro com borda lilás no lugar do cinza do navegador */
+.tablet-tela[data-tema='noturno'] .input-cor {
+    background-color: #0d0b26;
+    border: 1px solid rgba(185, 140, 255, 0.6);
+}
+
+.tablet-tela[data-tema='noturno'] .input-cor:hover,
+.tablet-tela[data-tema='noturno'] .input-cor:active {
+    background-color: rgba(138, 120, 255, 0.3);
+    box-shadow: 0 0 8px rgba(138, 120, 255, 0.6);
 }
 
 
@@ -255,6 +382,12 @@ margin: 2% 4%;
 .janela-configuracao-led span {
   font-size: 26px;
 }
+/* lugar do botão de tema (teste): mesma margem do botão "Wallpapers" */
+.wrapper-configuracao .espaco-botao-tema {
+  margin-left: 3%;
+  min-height: 53px;
+}
+
 .wrapper-configuracao .botao-abrir-previa,
 .wrapper-configuracao .botao-abrir-previa:after {
   margin-left: 3%;
@@ -511,6 +644,43 @@ transform: scale(0.95);
     height: 482px;
     position: absolute;
     transform-origin: center bottom;
+}
+
+/* minimizar / restaurar pela barra: a janela encolhe até o ícone dela na barra de tarefas (e volta de lá).
+   --origem-janela-x (centro do ícone) vem do ModalTablet.js; o "100% + 18px" é a altura do meio da barra.
+   A duração acompanha DURACAO_ANIMACAO_JANELA_MS (useAreaDeTrabalho.js) */
+.tablet-tela .janela-minimizando,
+.tablet-tela .janela-restaurando {
+    transform-origin: var(--origem-janela-x, 50%) calc(100% + 18px);
+    pointer-events: none;
+}
+
+/* a janela animando fica por cima da outra tela, que continua desenhada embaixo durante a animação:
+   minimizando = a que vai aparecer; restaurando = a que estava na frente */
+.tablet-tela .janela-minimizando,
+.tablet-tela .janela-restaurando {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+
+.tablet-tela .janela-minimizando {
+    animation: janela-minimizando 0.15s ease-in forwards;
+}
+
+.tablet-tela .janela-restaurando {
+    animation: janela-restaurando 0.15s ease-out;
+}
+
+@keyframes janela-minimizando {
+    from { transform: scale(1);    opacity: 1; }
+    to   { transform: scale(0.06); opacity: 0; }
+}
+
+@keyframes janela-restaurando {
+    from { transform: scale(0.06); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
 }
 
 /* entrada leve ao abrir. A classe só existe com o modal aberto, então a animação roda de novo a cada abertura */

@@ -1,0 +1,30 @@
+/* posição do centro do "recorte" que apaga a lua: registrada para o navegador conseguir animar a máscara */
+@property --lua-iniciar-recorte {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 17px;
+}
+
+/* lua de 21px; o recorte é um círculo um pouco maior que ela, com a borda esfumada (a divisa entre dia e noite).
+   Parada: o recorte cobre a lua quase toda e sobra a minguante do lado esquerdo.
+   Cheia: o recorte sai inteiro pela direita (a luz enche da esquerda para a direita), no mesmo tempo do menu abrindo,
+   e a lua esquenta para um tom levemente alaranjado */
+.lua-iniciar {
+    display: block;
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    --lua-iniciar-recorte: 17px;
+    -webkit-mask-image: radial-gradient(circle 11.5px at var(--lua-iniciar-recorte) 50%, transparent 82%, #000 100%);
+    mask-image: radial-gradient(circle 11.5px at var(--lua-iniciar-recorte) 50%, transparent 82%, #000 100%);
+    filter: drop-shadow(0 0 2px rgba(220, 230, 255, 0.35));
+    transition: --lua-iniciar-recorte 0.25s ease-in, filter 0.25s ease-in;
+}
+
+.lua-iniciar.cheia {
+    --lua-iniciar-recorte: 36px;
+    filter: sepia(0.45) saturate(1.6) hue-rotate(-8deg) brightness(1.05) drop-shadow(0 0 3px rgba(255, 170, 90, 0.5));
+    transition: --lua-iniciar-recorte 0.25s ease-out, filter 0.25s ease-out;
+}

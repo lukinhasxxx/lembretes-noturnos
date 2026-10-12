@@ -27,7 +27,6 @@ const [foiDesligadoComBotao, setfoiDesligadoComBotao] = useState(true)
 const [foiPausadoManualmente, setFoiPausadoManualmente] = useState(false);
 const [luzRadio, setLuzRadio] = useEstadoPersistido('luz-radio', '#00D7FF')
 const [volume, setVolume] = useEstadoPersistido('volume', 1)
-const [ligarPainelRadio, setLigarPainelRadio] = useState(false)
 const [ligarTabletPrimeiraVez, setLigarTabletPrimeiraVez] = useState(false)
 // enquanto o mural faz a animação de ligar, as notas (inclusive as salvas) ficam escondidas;
 // todas aparecem juntas na piscada final, no mesmo momento em que a nota nova entra
@@ -162,16 +161,8 @@ if(audioRef.current){
 }},[volume] )
 
 
-const painelRadio = () => {
-
-if (estaTocando) {
-   setLigarPainelRadio(true)
-} else {
-  setLigarPainelRadio(false)
-}
-
-return ligarPainelRadio
-}
+// painel do rádio aceso enquanto a música toca
+const painelRadio = () => estaTocando
 
 
 
@@ -212,7 +203,7 @@ const [ligarTablet,setLigarTablet] = useState(false)
 const [modalAberto,setModalAberto] = useState(false)
 // sistema do tablet (vem do SistemaTabletProvider, no index.js): desligado até o primeiro clique;
 // aí roda boot → boas-vindas → área de trabalho. O resto (bloquear, desligar...) o modal pega direto do contexto.
-const { sistemaDesligado, ligarSistema } = useSistemaTablet()
+const { sistemaDesligado, ligarSistema, tema } = useSistemaTablet()
 
 // "Desligar" no menu iniciar terminou: fecha o modal e apaga a tela do tablet da mesa.
 // O próximo clique no tablet da mesa liga de novo (boot completo).
@@ -264,6 +255,7 @@ setLigarTabletPrimeiraVez(true)
           painelLigadoPermanente={painelLigadoPermanente}
           animacaoDeveRodar={animacaoJaAtivada}
           conteudoVisivelPainel={primeiraMensagemPainel}
+          tema={tema}
         />
       </Ancora>
     </Palco>

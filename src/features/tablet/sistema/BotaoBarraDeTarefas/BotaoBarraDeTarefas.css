@@ -23,3 +23,17 @@
 .botao-barra-de-tarefas img {
     width: auto;
 }
+
+/* clique: o conteúdo "afunda" o mínimo e o hover clareia de leve, só para ver que clicou */
+.botao-barra-de-tarefas > * {
+    transition: transform 0.08s ease-out;
+}
+
+.botao-barra-de-tarefas:active {
+    background-color: var(--cor-hover-sistema);
+    box-shadow: inset 0 0 0 100px rgba(255, 255, 255, 0.06);
+}
+
+.botao-barra-de-tarefas:active > * {
+    transform: scale(0.99);
+}

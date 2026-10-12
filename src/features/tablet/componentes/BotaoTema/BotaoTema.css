@@ -1,0 +1,221 @@
+/* ---------- a lua e o "↺ Original" ao lado ---------- */
+.botao-tema-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.botao-tema {
+    all: unset;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 53px;
+    height: 53px;
+    cursor: pointer;
+}
+
+/* Config aberto pelo "Experimentar" da notificação: a lua pulsa um halo lilás algumas vezes */
+.espaco-botao-tema.destacada .lua-eclipse {
+    animation: lua-destacada 0.8s ease-in-out 3;
+}
+
+@keyframes lua-destacada {
+    0%, 100% { box-shadow: 0 0 3px rgba(220, 230, 255, 0.1); }
+    50%      { box-shadow: 0 0 16px 3px rgba(185, 140, 255, 0.85), 0 0 4px rgba(255, 255, 255, 0.6); }
+}
+
+/* "↺ Original": mesmo estilo discreto do "↺ Padrão" do wallpaper */
+.botao-tema-original {
+    padding: 3px 8px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: none;
+    color: #5b5f7a;
+    font-size: 12px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: border-color 0.15s ease-out, color 0.15s ease-out;
+}
+
+.botao-tema-original:hover {
+    border-color: #8a00ff;
+    color: #3a1d6e;
+}
+
+/* ---------- Choquezinho na lua: raios que pulam de lugar durante os 2 s do hover ---------- */
+
+.choque-lua {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+}
+
+.choque-lua-arco {
+    fill: none;
+    stroke: #c99dff;
+    stroke-width: 1.9;
+    stroke-linejoin: bevel;
+    /* roxo forte, puxado da cor secundária do CyberOS */
+    filter: drop-shadow(0 0 1.5px #9b5cff) drop-shadow(0 0 3px rgba(140, 70, 255, 0.95));
+}
+/* o liga/desliga e as posições sorteadas ficam no ChoqueLua.js */
+
+/* ---------- Ideia 1: eclipse ao contrário ---------- */
+
+/* a lua: a foto real (a imagem vem pelo style, no LuaEclipse.js) */
+.lua-eclipse {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-position: center;
+    background-size: cover;
+    box-shadow: 0 0 3px rgba(220, 230, 255, 0.1);
+    transition: box-shadow 2s ease-in-out;
+}
+
+/* sombra do eclipse: preta, com a borda esfumada (como a divisa entre dia e noite na lua) e um pouco
+   transparente, para a lua aparecer bem fraca na parte escura (o "brilho da Terra" de uma lua nova real).
+   É maior que a lua para a borda esfumada caber; parada, deixa só um fio do lado direito */
+.lua-eclipse-sombra {
+    position: absolute;
+    top: -20%;
+    left: -32%;
+    width: 140%;
+    height: 140%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(2, 3, 8, 0.93) 0 52%, rgba(2, 3, 8, 0) 66%);
+    transform: translateX(0);
+    transition: transform 2s ease-in-out;
+}
+
+.botao-tema:hover .lua-eclipse,
+.botao-tema.ligado .lua-eclipse {
+    box-shadow: 0 0 14px rgba(220, 230, 255, 0.55), 0 0 4px rgba(255, 255, 255, 0.6);
+}
+
+/* hover (ou ligado pelo clique): a sombra sai pela esquerda e a lua "enche" */
+.botao-tema:hover .lua-eclipse-sombra,
+.botao-tema.ligado .lua-eclipse-sombra {
+    transform: translateX(-75%);
+}
+
+/* glitch: uma fatia da lua deslocada que aparece em 3 momentos rápidos durante os 2 s */
+.lua-eclipse::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: inherit;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.botao-tema:hover .lua-eclipse::after {
+    animation: lua-eclipse-glitch 2s steps(1) 1;
+}
+
+@keyframes lua-eclipse-glitch {
+    0%   { opacity: 0; }
+    18%  { opacity: 1; clip-path: inset(30% 0 55% 0); transform: translateX(4px); filter: hue-rotate(160deg); }
+    22%  { opacity: 0; }
+    48%  { opacity: 1; clip-path: inset(60% 0 22% 0); transform: translateX(-5px); }
+    52%  { opacity: 0; }
+    78%  { opacity: 1; clip-path: inset(12% 0 75% 0); transform: translateX(3px); filter: hue-rotate(160deg); }
+    81%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+/* ---------- Passagem para o noturno na tela toda (ver TransicaoTema.js) ---------- */
+
+/* cobre a tela do tablet inteira (como as telas de boot/boas-vindas, passa ~4px junto com a barra de tarefas),
+   por cima das janelas e abaixo do boot/bloqueio; nunca pega clique */
+.transicao-tema {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 101%;
+    z-index: 9;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* penumbra: a noite chegando pelas bordas, o meio continua quase limpo. Não é o tema ainda */
+.transicao-tema-penumbra {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(18, 15, 51, 0) 30%, rgba(18, 15, 51, 0.38) 70%, rgba(7, 6, 26, 0.72) 100%);
+    opacity: 0;
+    /* sem mouse: volta mais rápido do que veio */
+    transition: opacity 0.8s ease-out;
+}
+
+/* mouse em cima: chega junto com a lua (~2 s) */
+.transicao-tema.fase-penumbra .transicao-tema-penumbra {
+    opacity: 1;
+    transition: opacity 2s ease-in-out;
+}
+
+/* clicou: a penumbra segura os 0.4 s (se o clique veio antes dos 2 s, termina de chegar nesse tempo) */
+.transicao-tema.fase-carregando .transicao-tema-penumbra {
+    opacity: 1;
+    transition: opacity 0.4s ease-in;
+}
+
+/* raio: o tema já trocou por baixo, a penumbra se desfaz */
+.transicao-tema.fase-raio .transicao-tema-penumbra {
+    opacity: 0;
+    transition: opacity 0.7s ease-out;
+}
+
+/* clarão leve, lilás, só um instante */
+.transicao-tema-clarao {
+    position: absolute;
+    inset: 0;
+    background: rgba(185, 140, 255, 0.22);
+    animation: transicao-tema-clarao 0.45s ease-out forwards;
+}
+
+@keyframes transicao-tema-clarao {
+    0%   { opacity: 0; }
+    12%  { opacity: 1; }
+    30%  { opacity: 0.35; }
+    42%  { opacity: 0.8; }
+    100% { opacity: 0; }
+}
+
+/* o raio: mesmo roxo do choquezinho da lua, um pouco mais grosso; pisca duas vezes e apaga */
+.transicao-tema-raio {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    animation: transicao-tema-raio 0.55s ease-out forwards;
+}
+
+.transicao-tema-raio polyline {
+    fill: none;
+    stroke: #e2ccff;
+    stroke-width: 2.2;
+    stroke-linejoin: bevel;
+    filter: drop-shadow(0 0 2px #9b5cff) drop-shadow(0 0 6px rgba(140, 70, 255, 0.95));
+}
+
+.transicao-tema-raio .transicao-tema-raio-galho {
+    stroke-width: 1.4;
+}
+
+@keyframes transicao-tema-raio {
+    0%   { opacity: 0; }
+    8%   { opacity: 1; }
+    22%  { opacity: 0.25; }
+    34%  { opacity: 1; }
+    100% { opacity: 0; }
+}

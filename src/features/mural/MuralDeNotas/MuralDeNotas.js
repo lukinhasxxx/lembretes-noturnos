@@ -18,7 +18,8 @@ const sortearForcaDoVento = (evento) => {
 }
 
 // apagandoNotas: o "limpar tudo" está rodando o glitch das notas sumindo
-const MuralDeNotas = ({lembretes, aoDeletar, aoFixar, aoLimparTudo, apagandoNotas, painelLigadoPermanente, animacaoDeveRodar, conteudoVisivelPainel}) => {
+// tema: tema escolhido no tablet ('padrao' / 'noturno'); vira data-tema no painel e o CSS troca as cores
+const MuralDeNotas = ({lembretes, aoDeletar, aoFixar, aoLimparTudo, apagandoNotas, painelLigadoPermanente, animacaoDeveRodar, conteudoVisivelPainel, tema}) => {
     const {mostrarPainel} = useContext(VisibilidadePainelContext)
     // aba "Deletar tudo": aparece no hover da faixa da esquerda; clicar na faixa fixa/solta a aba
     const [abaFixada, setAbaFixada] = useState(false)
@@ -30,7 +31,7 @@ const MuralDeNotas = ({lembretes, aoDeletar, aoFixar, aoLimparTudo, apagandoNota
 
     return (
 
-        painelLigadoPermanente === true && (<section className={`painel ${animacaoDeveRodar ? 'painel-surgindo' : ''} ${apagandoNotas ? 'apagando-notas' : ''} ${bordaEmGlitch && podeLimpar ? 'borda-em-glitch' : ''}`} style={{opacity:mostrarPainel?'1':'0'}} onAnimationIteration={sortearForcaDoVento} >
+        painelLigadoPermanente === true && (<section className={`painel ${animacaoDeveRodar ? 'painel-surgindo' : ''} ${apagandoNotas ? 'apagando-notas' : ''} ${bordaEmGlitch && podeLimpar ? 'borda-em-glitch' : ''}`} style={{opacity:mostrarPainel?'1':'0'}} data-tema={tema} onAnimationIteration={sortearForcaDoVento} >
 
             {podeLimpar && (
                 <>
