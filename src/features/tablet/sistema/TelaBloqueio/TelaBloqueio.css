@@ -149,3 +149,12 @@
     0%, 100% { opacity: 0.35; }
     50%      { opacity: 0.85; }
 }
+
+/* ---------- Tema noturno: dica em lilás no lugar do ciano e um brilho lilás bem leve no relógio ---------- */
+.tablet-tela[data-tema='noturno'] .tela-bloqueio {
+    --cor-destaque-sistema: #c9bfff;
+}
+
+.tablet-tela[data-tema='noturno'] .tela-bloqueio-relogio {
+    text-shadow: 0 0 12px rgba(0, 0, 0, 0.4), 0 0 18px rgba(185, 140, 255, 0.35);
+}
