@@ -15,8 +15,9 @@ const PARTICULAS = [
     { id: 4, anguloFinal: '43deg', raioFinal: '22px', escalaFinal: 3.1, cor: '#ffe45c' },  // embaixo/direita → cima/esquerda
 ]
 
-// Tela de boot do sistema do tablet. Os tempos das animações são frações de --duracao-boot (vem do config).
-const TelaBoot = () => {
+// Boot do tema padrão (CyberOS): partículas que viram o logo. Os tempos das animações são frações de
+// --duracao-boot (vem do config).
+const TelaBootCyber = () => {
     const { t } = useIdioma()
 
     return (
@@ -46,4 +47,4 @@ const TelaBoot = () => {
     )
 }
 
-export default TelaBoot
+export default TelaBootCyber

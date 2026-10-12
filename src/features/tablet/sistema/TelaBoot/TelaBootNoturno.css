@@ -1,0 +1,200 @@
+/* Boot do NightOS (eclipse). Usa a base do TelaBoot.css (.tela-boot, .tela-boot-centro, texto, barra e o
+   @keyframes glitch-logo-boot) e troca o que é do CyberOS. Fases (frações de --duracao-boot):
+   1. lua aparece (0–20%)  2. sombra cobre a lua (20–70%)  3. anel de luz acende (70%)
+   4. anel pisca com glitch + texto e barrinha (78.6%) */
+
+/* preto quase puro, só um brilho mínimo no centro */
+.tela-boot.tela-boot-noturno {
+    background: radial-gradient(circle at center, #07061a 0%, #000 45%);
+}
+
+/* órbita (anel de progresso + satélite): o arco fecha de 3% a 70% do boot; aí a órbita inteira encolhe
+   até o tamanho do anel do eclipse (raio 48 → 38, escala 0.79) e some enquanto ele acende no mesmo lugar */
+.tela-boot-orbita {
+    position: absolute;
+    inset: 0;
+    animation: boot-noturno-orbita-encolhendo calc(var(--duracao-boot) * 0.12) ease-in-out calc(var(--duracao-boot) * 0.7) forwards;
+}
+
+@keyframes boot-noturno-orbita-encolhendo {
+    0%   { transform: scale(1);    opacity: 1; }
+    65%  { transform: scale(0.79); opacity: 1; }
+    100% { transform: scale(0.79); opacity: 0; }
+}
+
+.tela-boot-progresso {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    fill: none;
+}
+
+.tela-boot-progresso-trilho {
+    stroke: rgba(138, 120, 255, 0.12);
+    stroke-width: 1;
+}
+
+.tela-boot-progresso-arco {
+    stroke: #b9a8ff;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    filter: drop-shadow(0 0 2px #8a78ff);
+    animation: boot-noturno-progresso var(--duracao-boot) linear forwards;
+}
+
+@keyframes boot-noturno-progresso {
+    0%, 3%   { stroke-dashoffset: 100; animation-timing-function: cubic-bezier(0.3, 0, 0.6, 1); }
+    70%, 100% { stroke-dashoffset: 0; }
+}
+
+/* satélite: gira junto com a ponta do arco (mesmo tempo e mesma curva) */
+.tela-boot-satelite {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    margin: -2px 0 0 -2px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 6px 2px #b9a8ff;
+    transform: rotate(-90deg) translateX(48px);
+    animation: boot-noturno-satelite var(--duracao-boot) linear forwards;
+}
+
+@keyframes boot-noturno-satelite {
+    0%, 3%   { transform: rotate(-90deg) translateX(48px); animation-timing-function: cubic-bezier(0.3, 0, 0.6, 1); }
+    70%, 100% { transform: rotate(270deg) translateX(48px); }
+}
+
+/* estrelinhas no fundo, piscando devagar */
+.tela-boot-noturno::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.8) 0 0.7px, transparent 1.6px),
+        radial-gradient(circle at 27% 72%, rgba(220, 210, 255, 0.7) 0 0.7px, transparent 1.6px),
+        radial-gradient(circle at 38% 30%, rgba(255, 255, 255, 0.55) 0 0.6px, transparent 1.4px),
+        radial-gradient(circle at 63% 14%, rgba(255, 255, 255, 0.75) 0 0.7px, transparent 1.6px),
+        radial-gradient(circle at 74% 64%, rgba(220, 210, 255, 0.65) 0 0.7px, transparent 1.6px),
+        radial-gradient(circle at 86% 26%, rgba(255, 255, 255, 0.7) 0 0.7px, transparent 1.6px),
+        radial-gradient(circle at 91% 82%, rgba(255, 255, 255, 0.5) 0 0.6px, transparent 1.4px),
+        radial-gradient(circle at 8% 88%, rgba(220, 210, 255, 0.55) 0 0.6px, transparent 1.4px),
+        radial-gradient(circle at 52% 88%, rgba(255, 255, 255, 0.45) 0 0.6px, transparent 1.4px);
+    animation: boot-noturno-estrelas 2.4s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+/* estrelas discretas: no preto mais fundo, mais fracas */
+@keyframes boot-noturno-estrelas {
+    from { opacity: 0.25; }
+    to   { opacity: 0.6; }
+}
+
+/* a lua (foto real), no centro */
+.tela-boot-lua {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 72px;
+    height: 72px;
+    margin: -36px 0 0 -36px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 0 18px rgba(220, 230, 255, 0.35);
+    opacity: 0;
+    animation: boot-noturno-lua var(--duracao-boot) linear forwards;
+}
+
+@keyframes boot-noturno-lua {
+    0%    { opacity: 0; transform: scale(0.9); box-shadow: 0 0 18px rgba(220, 230, 255, 0.35); }
+    20%   { opacity: 1; transform: scale(1);   box-shadow: 0 0 18px rgba(220, 230, 255, 0.35); }
+    /* conforme a sombra cobre, o brilho em volta da lua vai sumindo */
+    70%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 rgba(220, 230, 255, 0); }
+}
+
+/* sombra do eclipse: preta, borda esfumada, um pouco transparente (no eclipse total a lua ainda aparece
+   bem fraquinha). Começa fora da lua, à direita, e termina centrada nela */
+.tela-boot-sombra {
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(2, 3, 8, 0.94) 0 52%, rgba(2, 3, 8, 0) 66%);
+    transform: translateX(80%);
+    animation: boot-noturno-sombra var(--duracao-boot) linear forwards;
+}
+
+@keyframes boot-noturno-sombra {
+    0%, 20% { transform: translateX(80%); animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); }
+    70%, 100% { transform: translateX(0); }
+}
+
+/* anel de luz do eclipse total (a "coroa"), em volta da lua */
+.tela-boot-anel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 76px;
+    height: 76px;
+    margin: -38px 0 0 -38px;
+    border-radius: 50%;
+    box-shadow:
+        0 0 0 1.5px #f1edff,
+        0 0 10px 2px #b98cff,
+        0 0 26px 7px rgba(138, 120, 255, 0.55);
+    opacity: 0;
+    /* acende quando a órbita termina de encolher (no mesmo tamanho dela), enquanto ela some: troca sem corte */
+    animation:
+        boot-noturno-anel-acendendo calc(var(--duracao-boot) * 0.05) ease-out calc(var(--duracao-boot) * 0.775) forwards,
+        logo-piscando calc(var(--duracao-boot) * 0.14) linear calc(var(--duracao-boot) * 0.83);
+}
+
+@keyframes boot-noturno-anel-acendendo {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* glitch do anel: mesmas fatias do glitch do logo do CyberOS (@keyframes glitch-logo-boot no TelaBoot.css) */
+.tela-boot-anel.tela-boot-anel-glitch {
+    --slice-0: inset(50% 50% 50% 50%);
+    --slice-1: inset(80% -6px 0 0);
+    --slice-2: inset(50% -6px 30% 0);
+    --slice-3: inset(10% -6px 85% 0);
+    --slice-4: inset(40% -6px 43% 0);
+    --slice-5: inset(80% -6px 5% 0);
+
+    z-index: 2;
+    opacity: 1;
+    clip-path: var(--slice-0);
+    box-shadow: 0 0 0 2px #c9bfff, -3px -3px 0 1px #000000;
+    animation: glitch-logo-boot calc(var(--duracao-boot) * 0.2) steps(2, end) calc(var(--duracao-boot) * 0.786);
+}
+
+.tela-boot-anel.tela-boot-anel-glitch-reverso {
+    box-shadow: 0 0 0 2px #6a4dff;
+    animation-direction: reverse;
+}
+
+/* texto e barrinha: os mesmos do CyberOS, nas cores do noturno */
+.tela-boot-noturno .tela-boot-texto {
+    color: #e6e3ff;
+    text-shadow: 0 0 6px #8a78ff;
+}
+
+.tela-boot-noturno .tela-boot-barra {
+    background: rgba(138, 120, 255, 0.15);
+}
+
+.tela-boot-noturno .tela-boot-barra::before {
+    background: linear-gradient(to right, transparent, #8a78ff, #f1edff, transparent);
+}

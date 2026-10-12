@@ -6,6 +6,12 @@ export const SISTEMA = {
     usuario: 'Visitor',
 }
 
+// nome do sistema em cada tema: o padrão é o CyberOS; com o tema noturno ele vira NightOS
+export const NOME_SISTEMA_POR_TEMA = {
+    padrao: SISTEMA.nome,
+    noturno: 'NightOS',
+}
+
 // por onde o tablet passa: desligado → ligando (boot) → boasVindas → areaDeTrabalho
 // bloquear (menu iniciar): areaDeTrabalho → bloqueado → (arrastar/clicar) login → (Entrar) entrando → areaDeTrabalho
 // desligar (menu iniciar): areaDeTrabalho → desligando → apagado → desligado (o modal fecha)
