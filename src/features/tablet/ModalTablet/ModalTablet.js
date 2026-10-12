@@ -245,8 +245,9 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             >
                         </textarea>
                         
-                    { //aqui vai a funcao de estado
-                        painelLigadoPermanente === true && (
+                    { // mural ligado: mostrar/esconder o painel — só quando existe algum lembrete
+                      // (sem nenhum, ex.: depois de reiniciar o tablet com o mural vazio, o botão não aparece)
+                        painelLigadoPermanente === true && haLembretesSalvos && (
                         <div className='mostrar-e-esconder'
                             onClick={()=>{alterarVisibilidadePainel()}
                                     }>

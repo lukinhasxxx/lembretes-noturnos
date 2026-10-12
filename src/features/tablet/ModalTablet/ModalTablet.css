@@ -9,6 +9,16 @@
     width: 666px;
     top: 9.7%;
     left: 6.35%;
+    /* nada do sistema é selecionável (boot, boas-vindas, reiniciando, bloqueio, janelas...), como num sistema de verdade */
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* exceção: onde a pessoa digita (caixa do lembrete, campo de hora do calendário) continua selecionável */
+.tablet-tela textarea,
+.tablet-tela input {
+    -webkit-user-select: text;
+    user-select: text;
 }
 
 /* wallpaper */
