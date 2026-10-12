@@ -22,6 +22,18 @@ const en = {
 
     'calendario.mesAnterior': 'Previous month',
     'calendario.proximoMes': 'Next month',
+    'calendario.mudarHora': 'Click to change the time',
+    'calendario.mudarDia': 'Click to change the date',
+    'calendario.sincronizar': 'Sync with Brasília time',
+    'calendario.sincronizando': 'Syncing...',
+
+    'bandeja.bateriaConectada': 'Plugged in, fully charged',
+    'bandeja.wifiConectado': 'Connected, secured',
+    'bandeja.semDriversDeSom': 'No audio drivers found',
+    'bandeja.semDriversDeSomTexto': 'No audio device was found on this system.',
+    'bandeja.idioma': 'Language',
+    'bandeja.portuguesBrasil': 'Portuguese (Brazil)',
+    'bandeja.tecladoPtb2': 'Portuguese (Brazil ABNT2) keyboard',
 
     'notificacoes.titulo': 'Notifications',
     'notificacoes.vazio': 'No new notifications',

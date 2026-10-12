@@ -23,6 +23,18 @@ const ptBR = {
 
     'calendario.mesAnterior': 'Mês anterior',
     'calendario.proximoMes': 'Próximo mês',
+    'calendario.mudarHora': 'Clique para mudar a hora',
+    'calendario.mudarDia': 'Clique para mudar o dia',
+    'calendario.sincronizar': 'Sincronizar horário de Brasília',
+    'calendario.sincronizando': 'Sincronizando...',
+
+    'bandeja.bateriaConectada': 'Conectado, totalmente carregada',
+    'bandeja.wifiConectado': 'Conectado, protegido',
+    'bandeja.semDriversDeSom': 'Drivers de som não encontrados',
+    'bandeja.semDriversDeSomTexto': 'Não foi encontrado nenhum dispositivo de áudio no sistema.',
+    'bandeja.idioma': 'Idioma',
+    'bandeja.portuguesBrasil': 'Português (Brasil)',
+    'bandeja.tecladoPtb2': 'Teclado Português (Brasil ABNT2)',
 
     'notificacoes.titulo': 'Notificações',
     'notificacoes.vazio': 'Sem notificações no momento',

@@ -33,12 +33,76 @@
     to   { opacity: 0; transform: translateY(12px); }
 }
 
+/* hora grande (clicável para editar) e, ao lado, o "Sincronizar horário de Brasília" */
+.calendario-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+
 .calendario-hora {
+    all: unset;
     font-size: 22px;
     font-weight: 300;
     letter-spacing: 1px;
     color: var(--cor-destaque-sistema);
     text-shadow: 0 0 8px rgba(110, 240, 255, 0.45);
+    cursor: default;
+}
+
+.calendario-hora:hover {
+    text-shadow: 0 0 12px rgba(110, 240, 255, 0.75);
+}
+
+/* editando: o mesmo tamanho, num campo de hora com sublinhado no destaque do sistema */
+.calendario-hora.calendario-hora-editando {
+    width: 112px;
+    border-bottom: 1px solid var(--cor-destaque-sistema);
+    font-family: inherit;
+    color-scheme: dark;
+}
+
+.calendario-sincronizar {
+    all: unset;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 88px;
+    padding: 3px 5px;
+    border: 1px solid var(--cor-borda-neon-sistema);
+    font-size: 9px;
+    line-height: 1.2;
+    cursor: default;
+    transition: background-color 0.15s, border-color 0.15s, transform 0.08s;
+}
+
+.calendario-sincronizar:hover {
+    background-color: var(--cor-hover-sistema);
+    border-color: var(--cor-destaque-sistema);
+}
+
+.calendario-sincronizar:active {
+    transform: scale(0.96);
+}
+
+.calendario-sincronizar-icone {
+    font-size: 13px;
+    color: var(--cor-destaque-sistema);
+}
+
+/* carregando: o ícone gira até acertar a hora */
+.calendario-sincronizar.sincronizando {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.calendario-sincronizar.sincronizando .calendario-sincronizar-icone {
+    animation: calendario-sincronizando 0.8s linear infinite;
+}
+
+@keyframes calendario-sincronizando {
+    to { transform: rotate(360deg); }
 }
 
 .calendario-data-por-extenso {
@@ -111,11 +175,24 @@
     to   { opacity: 1; transform: translateX(0); }
 }
 
+/* cada dia é um botão: clicar muda o dia do tablet */
 .calendario-dia {
+    all: unset;
     margin: 1px;
     padding: 3px 0;
     font-size: 11px;
+    text-align: center;
     border: 1px solid transparent;
+    cursor: default;
+    transition: background-color 0.12s;
+}
+
+.calendario-dia:hover {
+    background-color: var(--cor-hover-sistema);
+}
+
+.calendario-dia:active {
+    background-color: var(--cor-borda-neon-sistema);
 }
 
 .calendario-dia.fora-do-mes {

@@ -4,8 +4,11 @@ import BotaoBarraDeTarefas from '../BotaoBarraDeTarefas/BotaoBarraDeTarefas'
 import MenuIniciar from '../MenuIniciar/MenuIniciar'
 import Relogio from '../Relogio/Relogio'
 import Calendario from '../Calendario/Calendario'
+import LuaIniciar from '../LuaIniciar/LuaIniciar'
+import { PainelBateria, PainelIdioma, PainelVolume, PainelWifi, sortearNomeDeWifi } from '../PainelBandeja/PaineisDaBandeja'
 import { BalaoNotificacao, CentralDeNotificacoes } from '../Notificacoes/Notificacoes'
 import { APPS } from '../../apps.config'
+import { ESTADOS_SISTEMA } from '../../tablet.config'
 import { useSistemaTablet } from '../../contexts/SistemaTablet'
 
 // fecha um painel da barra (menu iniciar, calendário...) ao clicar fora dele e do botão que o abre, ou com Esc
@@ -55,15 +58,25 @@ const usePainelDaBarra = () => {
 
 // Barra de tarefas do sistema: à esquerda iniciar, voltar e apps abertos; à direita a bandeja (ícones de status,
 // idioma, relógio e notificações). A bandeja vai para a direita sozinha (margin-left: auto), sem medida fixa.
-// O relógio abre o calendário e o ícone do canto, a central de notificações.
+// Cada item da bandeja abre um pop-up (bateria, wi-fi, volume, idioma, calendário e a central de notificações).
 // appsAbertos: ids do apps.config.js, na ordem em que foram abertos
 // aoAbrirApp(idDoApp): abre um app pelo menu iniciar; aoBloquear / aoDesligar / aoReiniciar: ações do menu iniciar
 const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, aoDesligar, aoReiniciar, aoVoltarParaAreaDeTrabalho }) => {
-    const { notificacoes, esconderBalao, setDestacarTemas } = useSistemaTablet()
+    const { estadoSistema, notificacoes, esconderBalao, setDestacarTemas } = useSistemaTablet()
 
     const menuIniciar = usePainelDaBarra()
     const calendario = usePainelDaBarra()
+    const bateria = usePainelDaBarra()
+    const wifi = usePainelDaBarra()
+    const volume = usePainelDaBarra()
+    const idioma = usePainelDaBarra()
     const central = usePainelDaBarra()
+
+    // nome da rede "conectada": sorteado de novo cada vez que o sistema liga
+    const [nomeDaRede, setNomeDaRede] = useState(sortearNomeDeWifi)
+    useEffect(() => {
+        if (estadoSistema === ESTADOS_SISTEMA.ligando) setNomeDaRede(sortearNomeDeWifi())
+    }, [estadoSistema])
 
     // abrir a central esconde o balão (a notificação já está na lista)
     const alternarCentral = () => {
@@ -83,13 +96,9 @@ const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, ao
     return (
         <div className='barra-de-tarefas'>
             <div ref={menuIniciar.areaRef} className='barra-de-tarefas-area-menu-iniciar'>
-                <BotaoBarraDeTarefas
-                    icone='/imagens/windows/menuIniciar.png'
-                    alt='Menu iniciar'
-                    tamanhoIcone={18}
-                    ativo={menuIniciar.aberto}
-                    aoClicar={menuIniciar.alternar}
-                />
+                <BotaoBarraDeTarefas ativo={menuIniciar.aberto} aoClicar={menuIniciar.alternar} aria-label='Menu iniciar'>
+                    <LuaIniciar cheia={menuIniciar.aberto} />
+                </BotaoBarraDeTarefas>
                 {menuIniciar.montado && (
                     <MenuIniciar
                         aoAbrirApp={aoAbrirApp}
@@ -124,13 +133,28 @@ const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, ao
             </div>
 
             <div className='barra-de-tarefas-bandeja'>
-                <BotaoBarraDeTarefas icone='/imagens/windows/bateriaIcone.png' alt='Bateria carregando' tamanhoIcone={12} largura={24} />
-                <BotaoBarraDeTarefas icone='/imagens/windows/wifiIcone.png' alt='Wi-Fi' tamanhoIcone={15} largura={20} />
-                <BotaoBarraDeTarefas icone='/imagens/windows/semSomIcone.png' alt='Sem som' tamanhoIcone={26} largura={26} />
-                <BotaoBarraDeTarefas largura={35}>
-                    <span>POR</span>
-                    <span>PTB2</span>
-                </BotaoBarraDeTarefas>
+                <div ref={bateria.areaRef} className='barra-de-tarefas-area-painel'>
+                    <BotaoBarraDeTarefas icone='/imagens/windows/bateriaIcone.png' alt='Bateria carregando' tamanhoIcone={12} largura={24}
+                        ativo={bateria.aberto} aoClicar={bateria.alternar} />
+                    {bateria.montado && <PainelBateria {...bateria.propsDoPainel} />}
+                </div>
+                <div ref={wifi.areaRef} className='barra-de-tarefas-area-painel'>
+                    <BotaoBarraDeTarefas icone='/imagens/windows/wifiIcone.png' alt='Wi-Fi' tamanhoIcone={15} largura={20}
+                        ativo={wifi.aberto} aoClicar={wifi.alternar} />
+                    {wifi.montado && <PainelWifi nomeDaRede={nomeDaRede} {...wifi.propsDoPainel} />}
+                </div>
+                <div ref={volume.areaRef} className='barra-de-tarefas-area-painel'>
+                    <BotaoBarraDeTarefas icone='/imagens/windows/semSomIcone.png' alt='Sem som' tamanhoIcone={26} largura={26}
+                        ativo={volume.aberto} aoClicar={volume.alternar} />
+                    {volume.montado && <PainelVolume {...volume.propsDoPainel} />}
+                </div>
+                <div ref={idioma.areaRef} className='barra-de-tarefas-area-painel'>
+                    <BotaoBarraDeTarefas largura={35} ativo={idioma.aberto} aoClicar={idioma.alternar}>
+                        <span>POR</span>
+                        <span>PTB2</span>
+                    </BotaoBarraDeTarefas>
+                    {idioma.montado && <PainelIdioma {...idioma.propsDoPainel} />}
+                </div>
                 <div ref={calendario.areaRef} className='barra-de-tarefas-area-painel'>
                     <BotaoBarraDeTarefas largura={86} ativo={calendario.aberto} aoClicar={calendario.alternar}>
                         <Relogio />
