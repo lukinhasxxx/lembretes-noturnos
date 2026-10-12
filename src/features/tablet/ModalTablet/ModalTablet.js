@@ -9,6 +9,7 @@ import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
 import SecaoTemas from '../componentes/BotaoTema/SecaoTemas'
 import IconeAreaDeTrabalho from '../sistema/IconeAreaDeTrabalho/IconeAreaDeTrabalho'
 import { TEMAS } from '../hooks/useTemaSistema'
+import { useWallpaperBloqueio } from '../hooks/useWallpaperBloqueio'
 import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
 import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
@@ -30,6 +31,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     } = useSistemaTablet()
     const [nome, setNome] = useState('')
     const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
+    // bloqueio e o login embaixo dele: imagem sorteada do tema (ou o wallpaper da área de trabalho)
+    const wallpaperBloqueio = useWallpaperBloqueio(tema, estadoSistema, wallpaperAtual)
     // centro do ícone do app na barra (em px da tela): a janela minimiza "para dentro" dele e restaura "saindo" dele
     const [origemJanelaX, setOrigemJanelaX] = useState(null)
 
@@ -345,13 +348,13 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
             || estadoSistema === ESTADOS_SISTEMA.login
             || estadoSistema === ESTADOS_SISTEMA.entrando) && (
             <TelaBoasVindas
-                wallpaper={wallpaperAtual}
+                wallpaper={wallpaperBloqueio}
                 etapa={estadoSistema === ESTADOS_SISTEMA.entrando ? 'aguarde' : 'login'}
                 aoEntrar={entrarSistema}
             />
         )}
         {estadoSistema === ESTADOS_SISTEMA.bloqueado && (
-            <TelaBloqueio wallpaper={wallpaperAtual} aoDesbloquear={desbloquearSistema} />
+            <TelaBloqueio wallpaper={wallpaperBloqueio} aoDesbloquear={desbloquearSistema} />
         )}
         {estadoSistema === ESTADOS_SISTEMA.desligando && <TelaBoasVindas wallpaper={wallpaperAtual} etapa='desligando' />}
         {estadoSistema === ESTADOS_SISTEMA.reiniciando && <TelaBoasVindas wallpaper={wallpaperAtual} etapa='reiniciando' />}
