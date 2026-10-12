@@ -1,0 +1,179 @@
+/* Pop-ups da bandeja: mesma base do calendário (sobe da barra, colado à direita, vidro escuro e borda neon) */
+.painel-bandeja {
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    z-index: 5;
+    box-sizing: border-box;
+    width: 230px;
+    padding: 12px;
+    background: var(--cor-fundo-menu-iniciar);
+    border: 1px solid var(--cor-borda-neon-sistema);
+    border-bottom: none;
+    color: var(--cor-texto-sistema);
+    font-family: var(--fonte-sistema);
+    font-size: var(--tamanho-fonte-sistema);
+    text-align: left;
+    user-select: none;
+    animation: painel-bandeja-subindo 0.2s ease-out;
+}
+
+/* pop-up pequeno que sobe em cima do próprio ícone (bateria, wi-fi, volume, idioma) em vez de colado à direita:
+   o elemento em volta do botão vira a referência e o pop-up fica centralizado nele.
+   --largura-painel: cada um define a sua */
+.barra-de-tarefas-area-painel:has(> .painel-bandeja.no-icone) {
+    position: relative;
+}
+
+.painel-bandeja.no-icone {
+    --largura-painel: 160px;
+    right: auto;
+    left: 50%;
+    width: var(--largura-painel);
+    margin-left: calc(var(--largura-painel) / -2);
+    padding: 6px;
+}
+
+.painel-bandeja.no-icone .painel-bandeja-item {
+    gap: 8px;
+    padding: 5px 6px;
+}
+
+.painel-bandeja.no-icone .painel-bandeja-item img {
+    width: 18px;
+    height: 18px;
+}
+
+/* pop-up estreito: nome comprido (ex.: rede "Não entrem no meu wifi") quebra a linha em vez de cortar */
+.painel-bandeja.no-icone .painel-bandeja-item-nome {
+    white-space: normal;
+}
+
+@keyframes painel-bandeja-subindo {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.painel-bandeja.fechando {
+    animation: painel-bandeja-descendo 0.2s ease-in forwards;
+    pointer-events: none;
+}
+
+@keyframes painel-bandeja-descendo {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(12px); }
+}
+
+/* título pequeno no topo do pop-up (ex.: "Idioma") */
+.painel-bandeja-titulo {
+    margin-bottom: 8px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--cor-destaque-secundaria-sistema);
+}
+
+/* linha com ícone à esquerda e dois textos (nome + detalhe), usada no wi-fi, volume e idioma */
+.painel-bandeja-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+}
+
+.painel-bandeja-item img {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.painel-bandeja-item-textos {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.painel-bandeja-item-nome {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.painel-bandeja-item-detalhe {
+    font-size: 11px;
+    opacity: 0.7;
+}
+
+/* hover e clique dentro dos pop-ups (bateria, wi-fi, som, idioma), com o mesmo hover da barra
+   e o mesmo "afundar" mínimo dos botões dela */
+.painel-bandeja-item {
+    transition: background-color 0.15s, box-shadow 0.15s, transform 0.08s ease-out;
+}
+
+.painel-bandeja-item:hover {
+    background-color: var(--cor-hover-sistema);
+}
+
+.painel-bandeja-item:active {
+    box-shadow: inset 0 0 0 100px rgba(255, 255, 255, 0.06);
+    transform: scale(0.99);
+}
+
+/* item escolhido (rede conectada, idioma em uso): fundo de hover e um filete no destaque do sistema;
+   no hover/clique ele clareia um pouco mais, mantendo o filete */
+.painel-bandeja-item.selecionado {
+    background-color: var(--cor-hover-sistema);
+    box-shadow: inset 3px 0 0 var(--cor-destaque-sistema);
+}
+
+.painel-bandeja-item.selecionado:hover {
+    box-shadow: inset 3px 0 0 var(--cor-destaque-sistema), inset 0 0 0 100px rgba(255, 255, 255, 0.04);
+}
+
+.painel-bandeja-item.selecionado:active {
+    box-shadow: inset 3px 0 0 var(--cor-destaque-sistema), inset 0 0 0 100px rgba(255, 255, 255, 0.08);
+}
+
+/* volume ("drivers não encontrados"): mais compacto que os outros */
+.painel-bandeja.no-icone.painel-volume {
+    --largura-painel: 210px;
+}
+
+/* o ícone fica na altura do título (e não no meio das 3 linhas) */
+.painel-volume .painel-bandeja-item {
+    align-items: flex-start;
+    gap: 8px;
+    padding: 4px;
+    font-size: 11px;
+}
+
+.painel-bandeja.no-icone.painel-volume .painel-bandeja-item img {
+    width: 16px;
+    height: 16px;
+}
+
+.painel-bandeja.no-icone.painel-idioma {
+    --largura-painel: 225px;
+}
+
+.painel-volume .painel-bandeja-item-detalhe {
+    font-size: 9.5px;
+}
+
+/* bateria: porcentagem grande ao lado do ícone, como no notebook */
+.painel-bateria-porcentagem {
+    font-size: 20px;
+    font-weight: 300;
+}
+
+/* sigla do idioma no lugar do ícone ("POR") */
+.painel-bandeja-sigla {
+    flex-shrink: 0;
+    width: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--cor-destaque-sistema);
+}

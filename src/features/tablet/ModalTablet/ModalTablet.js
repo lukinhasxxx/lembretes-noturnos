@@ -1,11 +1,14 @@
 import { VisibilidadePainelContext } from '../../mural'
 import './ModalTablet.css'
 import Botao from '../componentes/Botao/Botao'
-import { useState,useContext } from 'react'
+import { useState, useContext, useLayoutEffect } from 'react'
 import '../sistema/temaSistema.css'
 import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
 import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
+import SecaoTemas from '../componentes/BotaoTema/SecaoTemas'
+import IconeAreaDeTrabalho from '../sistema/IconeAreaDeTrabalho/IconeAreaDeTrabalho'
+import { TEMAS } from '../hooks/useTemaSistema'
 import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
 import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
@@ -21,12 +24,32 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)
     const {
         estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
-        telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, voltarParaAreaDeTrabalho,
-        wallpaperAtual, previa, setPrevia, selecionarPreset, lidarComMudancas, voltarParaWallpaperPadrao,
-        registrarTelaDoModal,
+        telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, minimizarApp, minimizarTudo, voltarParaAreaDeTrabalho,
+        wallpaperAtual, previa, selecionarPreset, lidarComMudancas, voltarParaWallpaperPadrao,
+        registrarTelaDoModal, telaDoModal, tema, temasDisponiveis, destacarTemas, setDestacarTemas, animacaoJanela,
     } = useSistemaTablet()
     const [nome, setNome] = useState('')
     const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
+    // centro do ícone do app na barra (em px da tela): a janela minimiza "para dentro" dele e restaura "saindo" dele
+    const [origemJanelaX, setOrigemJanelaX] = useState(null)
+
+    useLayoutEffect(() => {
+        if (!animacaoJanela || !telaDoModal) return
+        const botao = telaDoModal.querySelector(`[data-app="${animacaoJanela.idDoApp}"]`)
+        if (!botao) return
+        // o modal pode estar escalado: converte de px da página para px da tela
+        const caixaTela = telaDoModal.getBoundingClientRect()
+        const escala = caixaTela.width / telaDoModal.offsetWidth || 1
+        const caixaBotao = botao.getBoundingClientRect()
+        setOrigemJanelaX((caixaBotao.left + caixaBotao.width / 2 - caixaTela.left) / escala)
+    }, [animacaoJanela, telaDoModal])
+
+    // classe da animação de minimizar/restaurar da janela de um app (vazia quando ela não está animando)
+    const classeAnimacaoJanela = (idDoApp) =>
+        animacaoJanela?.idDoApp === idDoApp ? `janela-${animacaoJanela.tipo}` : ''
+
+    // tela desenhada: a da frente e, durante a animação, também a outra (ver animacaoJanela no useAreaDeTrabalho)
+    const telaVisivel = (tela) => telaAtiva === tela || animacaoJanela?.tela === tela
 
     // miniatura: versão pequena (400×250) só para o quadradinho da galeria; ao clicar, aplica a imagem cheia (src).
     // O GIF não tem miniatura: continua animado na galeria
@@ -64,7 +87,12 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 alt='Modal do tablet'
             />
     {/* registrarTelaDoModal: o espelho do tablet da mesa copia o HTML desta tela */}
-    <div className='tablet-tela' ref={registrarTelaDoModal}>
+    <div
+        className='tablet-tela'
+        data-tema={tema}
+        ref={registrarTelaDoModal}
+        style={origemJanelaX !== null ? { '--origem-janela-x': `${origemJanelaX}px` } : undefined}
+    >
             <div 
                 className='area-de-trabalho' 
                 style={{ backgroundImage: `url(${wallpaperAtual})` }}
@@ -74,33 +102,34 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
             
                 {/* aqui manda a partir da area de trabalho */}
                 {/* icone */}
-                {telaAtiva === 'desktop' && (
-                    <div className='icone-lembretes'
-                   onClick={() => abrirApp('app_lembretes','about.exe') }>
-                    
-                    <img src={ process.env.PUBLIC_URL +'/imagens/windows/lembretesIcone.png'}
-                    alt='abrir lembretes' />
-                    <span>Lembretes.exe</span>
-                    <div className='selecionar-lembrete' ></div>
-                 </div>)}
-                {/* icone */}
-                {telaAtiva === 'desktop' && (<div className='icone-led'
-                   onClick={
-                    () => abrirApp('app_config','config.exe') }>
-                    <img src={ process.env.PUBLIC_URL+ '/imagens/windows/ledIcone.png'}
-                    alt='abrir lembretes' />
-                    <span>Config.exe</span>
-                    <div className='selecionar-configuracao' ></div>
-                </div>)}
+                {/* ícones da área de trabalho: mesmo molde para todos, em grade (desce 3 e vai para a direita) */}
+                {telaVisivel('desktop') && (
+                    <div className='icones-area-de-trabalho'>
+                        <IconeAreaDeTrabalho
+                            icone='/imagens/windows/lembretesIcone.png'
+                            nome='Lembretes.exe'
+                            alt='abrir lembretes'
+                            aoAbrir={() => abrirApp('app_lembretes', 'about.exe')}
+                        />
+                        <IconeAreaDeTrabalho
+                            icone='/imagens/windows/ledIcone.png'
+                            nome='Config.exe'
+                            alt='abrir configurações'
+                            aoAbrir={() => abrirApp('app_config', 'config.exe')}
+                        />
+                    </div>
+                )}
 
                 {/* app de fato */}
-                {telaAtiva ==='config.exe' && (
+                {telaVisivel('config.exe') && (
                    
 
-<div>
-    <WindowBar 
+<div className={`janela-config ${classeAnimacaoJanela('app_config')}`}>
+    <WindowBar
         fecharApp = {fecharApp}
+        minimizarApp = {minimizarApp}
         idDoAppPraFechar='app_config'
+        escura={tema === TEMAS.noturno}
     />
         <div className='janela-configuracao-led' >
             <div className='wrapper-configuracao' >
@@ -132,7 +161,6 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
                     <BotaoUpload 
                     previa={previa}
-                    setPrevia={setPrevia}
                     lidarComMudancas={lidarComMudancas}
                     aoVoltarParaPadrao={voltarParaWallpaperPadrao}
                     />
@@ -165,7 +193,12 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     </div>
                     )
                 }
-                
+
+                {/* só aparece depois da "instalação" dos temas (notificação na barra de tarefas) */}
+                {temasDisponiveis && (
+                    <SecaoTemas destacada={destacarTemas} aoTerminarDestaque={() => setDestacarTemas(false)} />
+                )}
+
 
 
                     
@@ -177,13 +210,15 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                  )}
                 
                 {/* APP de fato */}
-                { telaAtiva === 'lembretes.exe' && (
+                { telaVisivel('lembretes.exe') && (
 
-        <div className='janela-lembretes' >
+        <div className={`janela-lembretes ${classeAnimacaoJanela('app_lembretes')}`} >
 
                 <WindowBar
                 fecharApp = {fecharApp}
+                minimizarApp = {minimizarApp}
                 idDoAppPraFechar = 'app_lembretes'
+                escura={tema === TEMAS.noturno}
                 >
                     <div className='janela-pro-about' onClick={
                         ()=> {
@@ -210,8 +245,9 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             >
                         </textarea>
                         
-                    { //aqui vai a funcao de estado
-                        painelLigadoPermanente === true && (
+                    { // mural ligado: mostrar/esconder o painel — só quando existe algum lembrete
+                      // (sem nenhum, ex.: depois de reiniciar o tablet com o mural vazio, o botão não aparece)
+                        painelLigadoPermanente === true && haLembretesSalvos && (
                         <div className='mostrar-e-esconder'
                             onClick={()=>{alterarVisibilidadePainel()}
                                     }>
@@ -237,13 +273,15 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         </div>
 
             )}
-            {telaAtiva ==='about.exe' && (
-                 <div className='about' >
+            {telaVisivel('about.exe') && (
+                 <div className={`about ${classeAnimacaoJanela('app_lembretes')}`} >
 
                 {/* Janela superior */}
     <WindowBar 
     idDoAppPraFechar = 'app_lembretes'
-    fecharApp = {fecharApp} 
+    fecharApp = {fecharApp}
+    minimizarApp = {minimizarApp}
+    escura={tema === TEMAS.noturno}
     >
     <div className= 'janela-pro-lembrete' 
         onClick={
@@ -296,6 +334,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         aoDesligar={desligarSistema}
         aoReiniciar={reiniciarSistema}
         aoVoltarParaAreaDeTrabalho={voltarParaAreaDeTrabalho}
+        aoMostrarAreaDeTrabalho={minimizarTudo}
     />
 
         {/* boot, tela do usuário e bloqueio cobrem a tela inteira (área de trabalho + barra de tarefas).

@@ -18,8 +18,6 @@
   background-clip: content-box;
   /* aqui eh a cor ao REDOR da barrinha */
   border: solid 4px #a0c3cb96;
-  /* atenção: @keyframes neonPulse não existe no projeto, então essa animação não faz nada (criar se quiser o pulso) */
-  animation: neonPulse 1.5s ease-in-out infinite;
 }
 ::-webkit-scrollbar-thumb:hover {
 

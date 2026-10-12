@@ -258,3 +258,38 @@
 .menu-iniciar-bloco span {
     font-size: 11px;
 }
+
+/* ---------- Tema noturno: céu noturno com estrelinhas, destaque lilás no lugar do ciano ---------- */
+/* as variáveis valem só dentro do menu (a barra de tarefas e o login continuam como estão) */
+.tablet-tela[data-tema='noturno'] .menu-iniciar {
+    --cor-destaque-sistema: #b9a8ff;
+    --cor-destaque-secundaria-sistema: #c9bfff;
+    --cor-borda-neon-sistema: rgba(138, 120, 255, 0.45);
+    --cor-hover-sistema: rgba(138, 120, 255, 0.18);
+    background:
+        radial-gradient(circle at 18% 6%, rgba(255, 255, 255, 0.8) 0 0.6px, rgba(185, 140, 255, 0.14) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 42% 12%, rgba(220, 210, 255, 0.7) 0 0.6px, rgba(185, 140, 255, 0.12) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 63% 4%, rgba(255, 255, 255, 0.75) 0 0.6px, rgba(185, 140, 255, 0.12) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 81% 15%, rgba(255, 255, 255, 0.6) 0 0.6px, rgba(185, 140, 255, 0.1) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 92% 7%, rgba(220, 210, 255, 0.65) 0 0.6px, rgba(185, 140, 255, 0.1) 1.2px, transparent 1.7px),
+        radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.5) 0 0.5px, transparent 1.3px),
+        radial-gradient(circle at 71% 26%, rgba(255, 255, 255, 0.45) 0 0.5px, transparent 1.3px),
+        linear-gradient(160deg, #07061a 0%, #120f33 55%, #1d1652 100%);
+}
+
+.tablet-tela[data-tema='noturno'] .menu-iniciar-coluna-painel.expandida {
+    background-color: rgba(10, 8, 30, 0.98);
+}
+
+.tablet-tela[data-tema='noturno'] .menu-iniciar-popup {
+    background: rgba(14, 11, 38, 0.97);
+}
+
+/* blocos: roxo profundo → lilás, com brilho lilás no hover */
+.tablet-tela[data-tema='noturno'] .menu-iniciar .menu-iniciar-bloco {
+    background: linear-gradient(135deg, rgba(65, 51, 133, 0.6), rgba(138, 120, 255, 0.3));
+}
+
+.tablet-tela[data-tema='noturno'] .menu-iniciar .menu-iniciar-bloco:hover {
+    box-shadow: 0 0 8px rgba(138, 120, 255, 0.55);
+}

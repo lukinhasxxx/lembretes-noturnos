@@ -102,23 +102,23 @@
 
   41%, 41.1% {
     box-shadow:
-      0 0 calc(4 * var(--px-arte)) rgba(0, 255, 255, 0.342),
-      0 calc(2 * var(--px-arte)) calc(10 * var(--px-arte)) rgba(0, 255, 255, 0.438),
-      0 calc(3 * var(--px-arte)) calc(15 * var(--px-arte)) rgba(0, 255, 255, 0.411);
+      0 0 calc(4 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 34.2%, transparent),
+      0 calc(2 * var(--px-arte)) calc(10 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 43.8%, transparent),
+      0 calc(3 * var(--px-arte)) calc(15 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 41.1%, transparent);
   }
 
   59%, 60% {
     box-shadow:
-      0 0 calc(4 * var(--px-arte)) rgba(0, 255, 255, 0.555),
-      0 calc(2 * var(--px-arte)) calc(10 * var(--px-arte)) rgba(0, 255, 255, 0.719),
-      0 calc(3 * var(--px-arte)) calc(15 * var(--px-arte)) rgba(0,255,255,0.6);
+      0 0 calc(4 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 55.5%, transparent),
+      0 calc(2 * var(--px-arte)) calc(10 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 71.9%, transparent),
+      0 calc(3 * var(--px-arte)) calc(15 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 60%, transparent);
   }
 
   61%, 100% {
     box-shadow:
-      0 0 calc(4 * var(--px-arte)) rgba(0,255,255,0.5),
-      0 calc(2 * var(--px-arte)) calc(10 * var(--px-arte)) rgba(0,255,255,0.55),
-      0 calc(3 * var(--px-arte)) calc(15 * var(--px-arte)) rgba(0,255,255,0.6);
+      0 0 calc(4 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 50%, transparent),
+      0 calc(2 * var(--px-arte)) calc(10 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 55%, transparent),
+      0 calc(3 * var(--px-arte)) calc(15 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 60%, transparent);
   }
 
   /* 
@@ -135,16 +135,16 @@
 @keyframes neonGlow {
   0%, 100% {
     box-shadow:
-      0 0 calc(2 * var(--px-arte)) rgba(0,255,255,0.35),
-      0 calc(1 * var(--px-arte)) calc(7 * var(--px-arte)) rgba(0, 255, 255, 0.521),
-      0 calc(2 * var(--px-arte)) calc(10 * var(--px-arte)) rgb(0, 255, 255);
+      0 0 calc(2 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 35%, transparent),
+      0 calc(1 * var(--px-arte)) calc(7 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 52.1%, transparent),
+      0 calc(2 * var(--px-arte)) calc(10 * var(--px-arte)) var(--cor-neon-mural);
   }
 
   50% {
     box-shadow:
-      0 0 calc(3 * var(--px-arte)) rgba(0,255,255,0.38),
-      0 calc(1 * var(--px-arte)) calc(7 * var(--px-arte)) rgba(0, 255, 255, 0.589),
-      0 calc(2 * var(--px-arte)) calc(14 * var(--px-arte)) rgba(0, 255, 255, 0.699);
+      0 0 calc(3 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 38%, transparent),
+      0 calc(1 * var(--px-arte)) calc(7 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 58.9%, transparent),
+      0 calc(2 * var(--px-arte)) calc(14 * var(--px-arte)) color-mix(in srgb, var(--cor-neon-mural) 69.9%, transparent);
   }
 }
 .painel.painel-surgindo {
@@ -164,6 +164,8 @@
     /* força do vento no ciclo atual (1 = balanço original); o MuralDeNotas.js sorteia novos valores a cada ciclo */
     --forca-rajada-vento: 1;
     --forca-brisa-vento: 1;
+    /* cor do brilho neon da borda (usada nas animações de ligar e no brilho contínuo); o tema noturno troca */
+    --cor-neon-mural: #00ffff;
 
     text-align: center;
     padding: 1.6cqw;
@@ -520,4 +522,110 @@
     0%, 68%, 70%, 72%, 100% { opacity: 0; transform: translateY(0); }
     69%                     { opacity: 0.9; transform: translateY(calc(-6 * var(--px-arte))); }
     71%                     { opacity: 0.5; transform: translateY(calc(4 * var(--px-arte))); }
+}
+
+/* ---------------------------------------------------------------- */
+/* TEMA NOTURNO (escolhido no tablet): bordas em preto puro, efeito de vidro escuro */
+/* ---------------------------------------------------------------- */
+.painel[data-tema='noturno'] {
+    --cor-neon-mural: #000000;
+}
+
+.painel[data-tema='noturno'] p {
+    color: #e6e3ff;
+    text-shadow: calc(4 * var(--px-arte)) calc(1 * var(--px-arte)) 0px #413385;
+}
+
+.painel[data-tema='noturno'] .lembrete-vazio {
+    color: #c9bfff;
+    text-shadow: calc(3 * var(--px-arte)) calc(2 * var(--px-arte)) 0px #2a1f6b;
+}
+
+/* quadro em volta das notas */
+.painel[data-tema='noturno'] .zona-dos-cards {
+    box-shadow: 0px 0px calc(7 * var(--px-arte)) #000000;
+}
+
+.painel[data-tema='noturno'] .zona-dos-cards .card {
+    background-color: rgba(138, 120, 255, 0.14);
+    box-shadow: calc(1 * var(--px-arte)) calc(1 * var(--px-arte)) calc(8 * var(--px-arte)) #000000;
+}
+
+/* cantos das notas */
+.painel[data-tema='noturno'] .zona-dos-cards .card::before,
+.painel[data-tema='noturno'] .zona-dos-cards .card::after {
+    border-color: #000000;
+}
+
+.painel[data-tema='noturno'] .cards .card h4 {
+    color: #e6e3ff;
+    text-shadow: calc(1 * var(--px-arte)) 0px calc(4 * var(--px-arte)) #8a00ff;
+}
+
+/* faixa do "Deletar tudo" (esquerda): no noturno fica um brilho lilás claro, em vez da mancha escura */
+.painel[data-tema='noturno'] .zona-hover-limpar {
+    background: linear-gradient(to right, rgba(201, 191, 255, 0.35), rgba(201, 191, 255, 0.12) 55%, transparent);
+}
+
+.painel[data-tema='noturno'] .zona-hover-limpar:hover,
+.painel[data-tema='noturno'] .zona-hover-limpar.ativa {
+    background: linear-gradient(to right, rgba(220, 212, 255, 0.5), rgba(185, 140, 255, 0.18) 55%, transparent);
+}
+
+/* "Deletar tudo" no noturno: o glitch da borda (hover em "Deletar tudo"/"Sim") sai do ciano + amarelo e vira
+   lilás + roxo profundo com sombra preta; o raio da faixa, os botões e a pergunta acompanham */
+.painel[data-tema='noturno'].borda-em-glitch::before {
+    border-color: #c9bfff;
+    box-shadow: calc(-3 * var(--px-arte)) calc(-3 * var(--px-arte)) 0 #000000, 0 0 calc(10 * var(--px-arte)) #8a78ff;
+}
+
+.painel[data-tema='noturno'].borda-em-glitch::after {
+    border-color: #5b3fd9;
+}
+
+.painel[data-tema='noturno'] .zona-hover-limpar::after {
+    background: linear-gradient(to bottom, transparent, #ece8ff 30%, #b9a8ff 50%, #ece8ff 70%, transparent);
+}
+
+.painel[data-tema='noturno'] .botao-aba-limpar {
+    color: #e6e3ff;
+    background: rgba(8, 6, 26, 0.9);
+    border-color: rgba(138, 120, 255, 0.55);
+}
+
+.painel[data-tema='noturno'] .botao-aba-limpar-sim:hover {
+    border-color: #c9bfff;
+    box-shadow: 0 0 calc(10 * var(--px-arte)) rgba(185, 160, 255, 0.6);
+}
+
+.painel[data-tema='noturno'] .pergunta-aba-limpar {
+    color: #c9bfff;
+    text-shadow: 0 0 calc(8 * var(--px-arte)) rgba(138, 120, 255, 0.8);
+}
+
+/* barras de rolagem do painel (lista de notas e cada nota) no noturno: sai o ciano global, entra o lilás */
+.painel[data-tema='noturno'] .zona-dos-cards::-webkit-scrollbar-track,
+.painel[data-tema='noturno'] .card::-webkit-scrollbar-track {
+    box-shadow: none;
+}
+
+.painel[data-tema='noturno'] .zona-dos-cards::-webkit-scrollbar-thumb,
+.painel[data-tema='noturno'] .card::-webkit-scrollbar-thumb {
+    background: #8a78ff;
+    background-clip: content-box;
+    border: solid 4px rgba(0, 0, 0, 0.55);
+}
+
+.painel[data-tema='noturno'] .zona-dos-cards::-webkit-scrollbar-thumb:hover,
+.painel[data-tema='noturno'] .card::-webkit-scrollbar-thumb:hover {
+    background: #a99bff;
+    background-clip: content-box;
+    border: solid 4px rgba(0, 0, 0, 0.7);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    .painel[data-tema='noturno'] .zona-dos-cards,
+    .painel[data-tema='noturno'] .card {
+        scrollbar-color: #8a78ff transparent;
+    }
 }

@@ -9,6 +9,10 @@ const ULTIMA_TELA_INICIAL = Object.fromEntries(Object.values(APPS).map(app => [a
 // quantas telas o histórico guarda (só serve para o "minimizar" achar a tela de antes)
 const LIMITE_HISTORICO_TELAS = 20
 
+// minimizar: a janela desce até o ícone dela na barra nesse tempo, e só então sai da frente.
+// Restaurar pela barra: o caminho contrário, no mesmo tempo (as animações do CSS acompanham)
+export const DURACAO_ANIMACAO_JANELA_MS = 150
+
 // Estado da área de trabalho do sistema do tablet: qual tela está na frente, quais apps estão abertos,
 // em que tela cada app parou e o "minimizar" da barra de tarefas.
 // Fica no contexto do tablet (e não dentro do modal) para o espelho do tablet da mesa ler a mesma coisa.
@@ -22,6 +26,11 @@ export const useAreaDeTrabalho = (estadoSistema) => {
     // apps minimizados pela barra: ficam de fora quando outro app é minimizado, então minimizar um por um
     // acaba na área de trabalho (sem ficar pulando entre dois apps)
     const appsMinimizadosRef = useRef(new Set())
+    // janela animando agora: { idDoApp, tipo: 'minimizando' | 'restaurando', tela } (null = nenhuma).
+    // tela: a que continua desenhada junto até a animação acabar (sem ela, o fundo "pisca" no meio):
+    // - minimizando: a própria janela que está descendo (por cima da tela de baixo, que já aparece)
+    // - restaurando: a tela que estava na frente antes (por baixo da janela que está subindo)
+    const [animacaoJanela, setAnimacaoJanela] = useState(null)
 
     useEffect(() => {
         // app que voltou para a frente (por qualquer caminho) deixa de estar minimizado
@@ -80,11 +89,43 @@ export const useAreaDeTrabalho = (estadoSistema) => {
     // - app já na frente → "minimiza": volta para a tela de antes dele (outro app aberto e não minimizado,
     //   ou a área de trabalho quando não sobrar nenhum)
     const alternarAppPelaBarra = (idDoApp) => {
+        if (animacaoJanela) return
+
         if (appDaTela(telaAtiva) !== idDoApp) {
             setTelaAtiva(ultimaTela[idDoApp])
+            setAnimacaoJanela({ idDoApp, tipo: 'restaurando', tela: telaAtiva })
+            setTimeout(() => setAnimacaoJanela(null), DURACAO_ANIMACAO_JANELA_MS)
             return
         }
 
+        minimizarApp(idDoApp)
+    }
+
+    // minimiza (pela barra de tarefas ou pelo botão da janela): o app continua aberto na barra e a tela volta
+    // na hora para a de antes dele (outro app ou a área de trabalho), enquanto a janela desce até o ícone por cima
+    const minimizarApp = (idDoApp) => {
+        if (animacaoJanela) return
+
+        setAnimacaoJanela({ idDoApp, tipo: 'minimizando', tela: telaAtiva })
+        sairDaFrente(idDoApp)
+        setTimeout(() => setAnimacaoJanela(null), DURACAO_ANIMACAO_JANELA_MS)
+    }
+
+    // "mostrar área de trabalho" (canto direito da barra, como no Windows): minimiza todos os apps abertos;
+    // a janela da frente desce até o ícone dela e a área de trabalho já aparece embaixo
+    const minimizarTudo = () => {
+        if (animacaoJanela) return
+
+        appsAbertos.forEach(app => appsMinimizadosRef.current.add(app))
+        const donoDaFrente = appDaTela(telaAtiva)
+        if (donoDaFrente) {
+            setAnimacaoJanela({ idDoApp: donoDaFrente, tipo: 'minimizando', tela: telaAtiva })
+            setTimeout(() => setAnimacaoJanela(null), DURACAO_ANIMACAO_JANELA_MS)
+        }
+        setTelaAtiva('desktop')
+    }
+
+    const sairDaFrente = (idDoApp) => {
         const minimizados = appsMinimizadosRef.current
         minimizados.add(idDoApp)
 
@@ -107,6 +148,9 @@ export const useAreaDeTrabalho = (estadoSistema) => {
         fecharApp,
         mostrarTelaDoApp,
         alternarAppPelaBarra,
+        minimizarApp,
+        minimizarTudo,
         voltarParaAreaDeTrabalho,
+        animacaoJanela,
     }
 }
