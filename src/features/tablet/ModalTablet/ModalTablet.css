@@ -636,6 +636,43 @@ transform: scale(0.95);
     transform-origin: center bottom;
 }
 
+/* minimizar / restaurar pela barra: a janela encolhe até o ícone dela na barra de tarefas (e volta de lá).
+   --origem-janela-x (centro do ícone) vem do ModalTablet.js; o "100% + 18px" é a altura do meio da barra.
+   A duração acompanha DURACAO_ANIMACAO_JANELA_MS (useAreaDeTrabalho.js) */
+.tablet-tela .janela-minimizando,
+.tablet-tela .janela-restaurando {
+    transform-origin: var(--origem-janela-x, 50%) calc(100% + 18px);
+    pointer-events: none;
+}
+
+/* a janela animando fica por cima da outra tela, que continua desenhada embaixo durante a animação:
+   minimizando = a que vai aparecer; restaurando = a que estava na frente */
+.tablet-tela .janela-minimizando,
+.tablet-tela .janela-restaurando {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+
+.tablet-tela .janela-minimizando {
+    animation: janela-minimizando 0.15s ease-in forwards;
+}
+
+.tablet-tela .janela-restaurando {
+    animation: janela-restaurando 0.15s ease-out;
+}
+
+@keyframes janela-minimizando {
+    from { transform: scale(1);    opacity: 1; }
+    to   { transform: scale(0.06); opacity: 0; }
+}
+
+@keyframes janela-restaurando {
+    from { transform: scale(0.06); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+}
+
 /* entrada leve ao abrir. A classe só existe com o modal aberto, então a animação roda de novo a cada abertura */
 .App .secao-tablet-modal.secao-tablet-modal-aberta {
     animation: tablet-abrindo 0.28s ease-out;

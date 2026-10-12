@@ -61,7 +61,8 @@ const usePainelDaBarra = () => {
 // Cada item da bandeja abre um pop-up (bateria, wi-fi, volume, idioma, calendário e a central de notificações).
 // appsAbertos: ids do apps.config.js, na ordem em que foram abertos
 // aoAbrirApp(idDoApp): abre um app pelo menu iniciar; aoBloquear / aoDesligar / aoReiniciar: ações do menu iniciar
-const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, aoDesligar, aoReiniciar, aoVoltarParaAreaDeTrabalho }) => {
+// aoMostrarAreaDeTrabalho: faixinha do canto direito (minimiza todos os apps)
+const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, aoDesligar, aoReiniciar, aoVoltarParaAreaDeTrabalho, aoMostrarAreaDeTrabalho }) => {
     const { estadoSistema, notificacoes, esconderBalao, setDestacarTemas } = useSistemaTablet()
 
     const menuIniciar = usePainelDaBarra()
@@ -128,6 +129,7 @@ const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, ao
                         alt={`Abrir ${APPS[idDoApp].nome}`}
                         tamanhoIcone={APPS[idDoApp].tamanhoIconeBarra}
                         aoClicar={() => aoClicarNoApp(idDoApp)}
+                        data-app={idDoApp}
                     />
                 ))}
             </div>
@@ -174,6 +176,13 @@ const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, ao
                     />
                     {central.montado && <CentralDeNotificacoes aoAgir={agirNaNotificacao} {...central.propsDoPainel} />}
                 </div>
+                {/* faixinha no canto direito, como no Windows: clique minimiza tudo e mostra a área de trabalho */}
+                <button
+                    type='button'
+                    className='botao-mostrar-area-de-trabalho'
+                    aria-label='Mostrar área de trabalho'
+                    onClick={aoMostrarAreaDeTrabalho}
+                />
             </div>
 
             {!central.montado && <BalaoNotificacao aoAgir={agirNaNotificacao} />}

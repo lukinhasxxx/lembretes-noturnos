@@ -1,7 +1,7 @@
 import { VisibilidadePainelContext } from '../../mural'
 import './ModalTablet.css'
 import Botao from '../componentes/Botao/Botao'
-import { useState,useContext } from 'react'
+import { useState, useContext, useLayoutEffect } from 'react'
 import '../sistema/temaSistema.css'
 import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
@@ -24,12 +24,32 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)
     const {
         estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
-        telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, minimizarApp, voltarParaAreaDeTrabalho,
+        telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, minimizarApp, minimizarTudo, voltarParaAreaDeTrabalho,
         wallpaperAtual, previa, selecionarPreset, lidarComMudancas, voltarParaWallpaperPadrao,
-        registrarTelaDoModal, tema, temasDisponiveis, destacarTemas, setDestacarTemas,
+        registrarTelaDoModal, telaDoModal, tema, temasDisponiveis, destacarTemas, setDestacarTemas, animacaoJanela,
     } = useSistemaTablet()
     const [nome, setNome] = useState('')
     const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
+    // centro do ícone do app na barra (em px da tela): a janela minimiza "para dentro" dele e restaura "saindo" dele
+    const [origemJanelaX, setOrigemJanelaX] = useState(null)
+
+    useLayoutEffect(() => {
+        if (!animacaoJanela || !telaDoModal) return
+        const botao = telaDoModal.querySelector(`[data-app="${animacaoJanela.idDoApp}"]`)
+        if (!botao) return
+        // o modal pode estar escalado: converte de px da página para px da tela
+        const caixaTela = telaDoModal.getBoundingClientRect()
+        const escala = caixaTela.width / telaDoModal.offsetWidth || 1
+        const caixaBotao = botao.getBoundingClientRect()
+        setOrigemJanelaX((caixaBotao.left + caixaBotao.width / 2 - caixaTela.left) / escala)
+    }, [animacaoJanela, telaDoModal])
+
+    // classe da animação de minimizar/restaurar da janela de um app (vazia quando ela não está animando)
+    const classeAnimacaoJanela = (idDoApp) =>
+        animacaoJanela?.idDoApp === idDoApp ? `janela-${animacaoJanela.tipo}` : ''
+
+    // tela desenhada: a da frente e, durante a animação, também a outra (ver animacaoJanela no useAreaDeTrabalho)
+    const telaVisivel = (tela) => telaAtiva === tela || animacaoJanela?.tela === tela
 
     // miniatura: versão pequena (400×250) só para o quadradinho da galeria; ao clicar, aplica a imagem cheia (src).
     // O GIF não tem miniatura: continua animado na galeria
@@ -67,7 +87,12 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 alt='Modal do tablet'
             />
     {/* registrarTelaDoModal: o espelho do tablet da mesa copia o HTML desta tela */}
-    <div className='tablet-tela' data-tema={tema} ref={registrarTelaDoModal}>
+    <div
+        className='tablet-tela'
+        data-tema={tema}
+        ref={registrarTelaDoModal}
+        style={origemJanelaX !== null ? { '--origem-janela-x': `${origemJanelaX}px` } : undefined}
+    >
             <div 
                 className='area-de-trabalho' 
                 style={{ backgroundImage: `url(${wallpaperAtual})` }}
@@ -78,7 +103,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 {/* aqui manda a partir da area de trabalho */}
                 {/* icone */}
                 {/* ícones da área de trabalho: mesmo molde para todos, em grade (desce 3 e vai para a direita) */}
-                {telaAtiva === 'desktop' && (
+                {telaVisivel('desktop') && (
                     <div className='icones-area-de-trabalho'>
                         <IconeAreaDeTrabalho
                             icone='/imagens/windows/lembretesIcone.png'
@@ -96,10 +121,10 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 )}
 
                 {/* app de fato */}
-                {telaAtiva ==='config.exe' && (
+                {telaVisivel('config.exe') && (
                    
 
-<div className='janela-config'>
+<div className={`janela-config ${classeAnimacaoJanela('app_config')}`}>
     <WindowBar
         fecharApp = {fecharApp}
         minimizarApp = {minimizarApp}
@@ -185,9 +210,9 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                  )}
                 
                 {/* APP de fato */}
-                { telaAtiva === 'lembretes.exe' && (
+                { telaVisivel('lembretes.exe') && (
 
-        <div className='janela-lembretes' >
+        <div className={`janela-lembretes ${classeAnimacaoJanela('app_lembretes')}`} >
 
                 <WindowBar
                 fecharApp = {fecharApp}
@@ -247,8 +272,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         </div>
 
             )}
-            {telaAtiva ==='about.exe' && (
-                 <div className='about' >
+            {telaVisivel('about.exe') && (
+                 <div className={`about ${classeAnimacaoJanela('app_lembretes')}`} >
 
                 {/* Janela superior */}
     <WindowBar 
@@ -308,6 +333,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         aoDesligar={desligarSistema}
         aoReiniciar={reiniciarSistema}
         aoVoltarParaAreaDeTrabalho={voltarParaAreaDeTrabalho}
+        aoMostrarAreaDeTrabalho={minimizarTudo}
     />
 
         {/* boot, tela do usuário e bloqueio cobrem a tela inteira (área de trabalho + barra de tarefas).
