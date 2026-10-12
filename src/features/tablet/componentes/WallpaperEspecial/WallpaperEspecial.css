@@ -1,0 +1,124 @@
+/* fica no espaço vazio à esquerda da galeria, embaixo do botão "Wallpapers": mesma margem (3%) e mesma largura
+   (110px) dele, então o botãozinho fica centralizado com o "Wallpapers" */
+.wallpaper-especial {
+    position: absolute;
+    top: 10px;
+    left: 3%;
+    z-index: 1;
+    width: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* botãozinho de vidro, quase uma brisa: translúcido, até meio difícil de enxergar (o fio da borda, um reflexo
+   leve em cima e o wallpaper embaçado atrás). No hover o vidro desembaça, sobe um pouquinho e um reflexo
+   passa por ele uma vez */
+.wallpaper-especial-botao {
+    all: unset;
+    position: relative;
+    box-sizing: border-box;
+    width: 56px;
+    height: 27px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.015) 55%, rgba(255, 255, 255, 0.03) 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s, transform 0.3s ease-out, box-shadow 0.3s;
+}
+
+/* o wallpaper escondido: bem desfocado e apagado (vidro embaçado); no hover entra em foco devagar */
+.wallpaper-especial-espiada {
+    position: absolute;
+    inset: -4px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(4px) saturate(0.8);
+    opacity: 0.22;
+    transform: scale(1.1);
+    transition: filter 0.6s ease-out, opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.wallpaper-especial-botao:hover .wallpaper-especial-espiada,
+.wallpaper-especial-botao.aberto .wallpaper-especial-espiada {
+    filter: blur(0) saturate(1);
+    opacity: 0.85;
+    transform: scale(1);
+}
+
+/* reflexo do vidro: fica fora do botão e atravessa só no hover (por cima da imagem) */
+.wallpaper-especial-botao::before {
+    z-index: 1;
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -60%;
+    width: 40%;
+    background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    pointer-events: none;
+}
+
+.wallpaper-especial-botao:hover,
+.wallpaper-especial-botao.aberto {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(185, 140, 255, 0.06));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 8px rgba(185, 140, 255, 0.2);
+}
+
+.wallpaper-especial-botao:hover {
+    transform: translateY(-1px);
+}
+
+.wallpaper-especial-botao:hover::before {
+    animation: wallpaper-especial-reflexo 0.7s ease-out;
+}
+
+@keyframes wallpaper-especial-reflexo {
+    from { left: -60%; }
+    to   { left: 120%; }
+}
+
+.wallpaper-especial-botao:active {
+    transform: scale(0.97);
+}
+
+/* mini-modal com a miniatura: mesma moldura da galeria (borda escura, cantos redondos, brilho lilás).
+   Puxado para a esquerda, para longe das miniaturas da galeria */
+.wallpaper-especial-modal {
+    align-self: flex-start;
+    margin-left: -14px;
+    padding: 5px;
+    border: 2px solid #07061a;
+    border-radius: 14px;
+    background: linear-gradient(160deg, #120f33, #1d1652);
+    box-shadow: 0 0 0 1px rgba(138, 120, 255, 0.45), 0 0 12px rgba(138, 120, 255, 0.5);
+    animation: wallpaper-especial-aparecendo 0.35s ease-out;
+}
+
+@keyframes wallpaper-especial-aparecendo {
+    from { opacity: 0; transform: translateY(-6px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.wallpaper-especial-miniatura {
+    display: block;
+    width: 136px;
+    height: 85px;
+    border-radius: 10px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.wallpaper-especial-miniatura:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 10px #b98cff;
+}
+
+.wallpaper-especial-miniatura:active {
+    transform: scale(0.98);
+}

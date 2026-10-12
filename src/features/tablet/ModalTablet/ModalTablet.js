@@ -7,6 +7,7 @@ import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
 import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
 import SecaoTemas from '../componentes/BotaoTema/SecaoTemas'
+import WallpaperEspecial from '../componentes/WallpaperEspecial/WallpaperEspecial'
 import IconeAreaDeTrabalho from '../sistema/IconeAreaDeTrabalho/IconeAreaDeTrabalho'
 import { TEMAS } from '../hooks/useTemaSistema'
 import { useWallpaperBloqueio } from '../hooks/useWallpaperBloqueio'
@@ -179,6 +180,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
                 {
                     wrapperPreviaWallpaper === true && (
+                    // área da galeria: no noturno, o wallpaper especial aparece no espaço vazio à esquerda dela
+                    <div className='area-galeria-presets'>
                     <div className='container-galeria-presets'>
                         {
                             wallpapersProntos.map((wallpaper)=>(
@@ -193,6 +196,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             ))
                         }
 
+                    </div>
+                    {tema === TEMAS.noturno && <WallpaperEspecial aoEscolher={selecionarPreset} />}
                     </div>
                     )
                 }
