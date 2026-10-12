@@ -19,6 +19,9 @@ const ptBR = {
     'menuIniciar.reiniciar': 'Reiniciar',
 
     'bloqueio.desbloquear': 'Arraste para desbloquear',
+
+    'calendario.mesAnterior': 'Mês anterior',
+    'calendario.proximoMes': 'Próximo mês',
 }
 
 export default ptBR

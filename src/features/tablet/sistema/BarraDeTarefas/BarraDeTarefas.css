@@ -13,6 +13,11 @@
     display: flex;
 }
 
+/* idem para o calendário, que se posiciona pela barra (colado à direita) */
+.barra-de-tarefas-area-calendario {
+    display: flex;
+}
+
 .barra-de-tarefas-apps-abertos {
     display: flex;
     margin-left: 10px;
