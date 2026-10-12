@@ -3,7 +3,30 @@ import { useEffect, useRef, useState } from 'react'
 import BotaoBarraDeTarefas from '../BotaoBarraDeTarefas/BotaoBarraDeTarefas'
 import MenuIniciar from '../MenuIniciar/MenuIniciar'
 import Relogio from '../Relogio/Relogio'
+import Calendario from '../Calendario/Calendario'
 import { APPS } from '../../apps.config'
+
+// fecha um painel da barra (menu iniciar, calendário) ao clicar fora dele e do botão que o abre, ou com Esc
+// fechar: só troca o estado ('aberto' → 'fechando'), então pode ser recriado a cada render
+const useFecharAoClicarFora = (aberto, areaRef, fechar) => {
+    useEffect(() => {
+        if (!aberto) return
+
+        const fecharAoClicarFora = (evento) => {
+            if (!areaRef.current.contains(evento.target)) fechar()
+        }
+        const fecharComEsc = (evento) => {
+            if (evento.key === 'Escape') fechar()
+        }
+
+        document.addEventListener('mousedown', fecharAoClicarFora)
+        document.addEventListener('keydown', fecharComEsc)
+        return () => {
+            document.removeEventListener('mousedown', fecharAoClicarFora)
+            document.removeEventListener('keydown', fecharComEsc)
+        }
+    }, [aberto]) // eslint-disable-line react-hooks/exhaustive-deps
+}
 
 // Barra de tarefas do sistema: à esquerda iniciar, voltar e apps abertos; à direita a bandeja (ícones de status,
 // idioma, relógio e notificações). A bandeja vai para a direita sozinha (margin-left: auto), sem medida fixa.
@@ -16,26 +39,18 @@ const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, ao
     // botão iniciar + menu: clicar fora dos dois fecha o menu
     const areaMenuIniciarRef = useRef(null)
 
+    // calendário (clique no relógio): mesmo ciclo do menu iniciar
+    const [estadoCalendario, setEstadoCalendario] = useState('fechado')
+    const calendarioAberto = estadoCalendario === 'aberto'
+    const areaCalendarioRef = useRef(null)
+
     const fecharMenuIniciar = () => setEstadoMenuIniciar(estado => (estado === 'aberto' ? 'fechando' : estado))
     const alternarMenuIniciar = () => setEstadoMenuIniciar(estado => (estado === 'aberto' ? 'fechando' : 'aberto'))
+    const fecharCalendario = () => setEstadoCalendario(estado => (estado === 'aberto' ? 'fechando' : estado))
+    const alternarCalendario = () => setEstadoCalendario(estado => (estado === 'aberto' ? 'fechando' : 'aberto'))
 
-    useEffect(() => {
-        if (!menuIniciarAberto) return
-
-        const fecharAoClicarFora = (evento) => {
-            if (!areaMenuIniciarRef.current.contains(evento.target)) fecharMenuIniciar()
-        }
-        const fecharComEsc = (evento) => {
-            if (evento.key === 'Escape') fecharMenuIniciar()
-        }
-
-        document.addEventListener('mousedown', fecharAoClicarFora)
-        document.addEventListener('keydown', fecharComEsc)
-        return () => {
-            document.removeEventListener('mousedown', fecharAoClicarFora)
-            document.removeEventListener('keydown', fecharComEsc)
-        }
-    }, [menuIniciarAberto])
+    useFecharAoClicarFora(menuIniciarAberto, areaMenuIniciarRef, fecharMenuIniciar)
+    useFecharAoClicarFora(calendarioAberto, areaCalendarioRef, fecharCalendario)
 
     return (
         <div className='barra-de-tarefas'>
@@ -88,9 +103,17 @@ const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, ao
                     <span>POR</span>
                     <span>PTB2</span>
                 </BotaoBarraDeTarefas>
-                <BotaoBarraDeTarefas largura={86}>
-                    <Relogio />
-                </BotaoBarraDeTarefas>
+                <div ref={areaCalendarioRef} className='barra-de-tarefas-area-calendario'>
+                    <BotaoBarraDeTarefas largura={86} ativo={calendarioAberto} aoClicar={alternarCalendario}>
+                        <Relogio />
+                    </BotaoBarraDeTarefas>
+                    {estadoCalendario !== 'fechado' && (
+                        <Calendario
+                            fechando={estadoCalendario === 'fechando'}
+                            aoTerminarDeFechar={() => setEstadoCalendario('fechado')}
+                        />
+                    )}
+                </div>
                 <BotaoBarraDeTarefas
                     className='botao-notificacoes'
                     icone='/imagens/windows/iconeNotificacoes.png'
