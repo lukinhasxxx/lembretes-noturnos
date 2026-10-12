@@ -42,3 +42,18 @@
     text-align: center;
     pointer-events: none;
 }
+
+/* tema noturno: hover em vidro lilás, desenho com um brilho lilás e o nome em branco-lavanda */
+.tablet-tela[data-tema='noturno'] .area-de-trabalho .icone-area-de-trabalho:hover {
+    background-color: rgba(138, 120, 255, 0.16);
+    border-color: rgba(185, 140, 255, 0.5);
+}
+
+.tablet-tela[data-tema='noturno'] .area-de-trabalho .icone-area-de-trabalho-desenho img {
+    filter: drop-shadow(0 0 4px rgba(185, 140, 255, 0.6));
+}
+
+.tablet-tela[data-tema='noturno'] .area-de-trabalho .icone-area-de-trabalho span {
+    color: #e6e3ff;
+    text-shadow: 0 0 6px rgba(185, 140, 255, 0.7);
+}

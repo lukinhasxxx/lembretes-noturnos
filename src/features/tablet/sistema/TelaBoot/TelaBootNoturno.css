@@ -120,8 +120,8 @@
     70%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 rgba(220, 230, 255, 0); }
 }
 
-/* sombra do eclipse: preta, borda esfumada, um pouco transparente (no eclipse total a lua ainda aparece
-   bem fraquinha). Começa fora da lua, à direita, e termina centrada nela */
+/* sombra do eclipse: preto sólido com a borda esfumada (no eclipse total a lua some e fica só o anel).
+   Começa fora da lua, à direita, e termina centrada nela */
 .tela-boot-sombra {
     position: absolute;
     top: -20%;
@@ -129,7 +129,7 @@
     width: 140%;
     height: 140%;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(2, 3, 8, 0.94) 0 52%, rgba(2, 3, 8, 0) 66%);
+    background: radial-gradient(circle, #000 0 52%, rgba(0, 0, 0, 0) 66%);
     transform: translateX(80%);
     animation: boot-noturno-sombra var(--duracao-boot) linear forwards;
 }

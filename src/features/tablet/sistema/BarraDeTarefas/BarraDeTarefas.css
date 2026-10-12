@@ -11,7 +11,22 @@
 /* tema noturno: o "aero" transparente ganha um véu azul-noite leve (mais escuro embaixo), e o wallpaper
    continua aparecendo por trás. Sem backdrop-filter: dentro do modal escalado ele dava problema (ver MenuIniciar.css) */
 .tablet-tela[data-tema='noturno'] .barra-de-tarefas {
+    --cor-hover-sistema: rgba(138, 120, 255, 0.22);
+    --cor-texto-sistema: #e6e3ff;
     background: linear-gradient(to top, rgba(7, 6, 26, 0.55), rgba(18, 15, 51, 0.32));
+}
+
+/* ícones brancos da barra (iniciar, voltar e bandeja) pintados de lilás, com um brilho leve.
+   Os ícones dos apps abertos ficam com as cores deles */
+.tablet-tela[data-tema='noturno'] .barra-de-tarefas-area-menu-iniciar > .botao-barra-de-tarefas img,
+.tablet-tela[data-tema='noturno'] .barra-de-tarefas > .botao-barra-de-tarefas img,
+.tablet-tela[data-tema='noturno'] .barra-de-tarefas-bandeja img {
+    filter: brightness(0) invert(78%) sepia(38%) saturate(1400%) hue-rotate(203deg) brightness(104%)
+        drop-shadow(0 0 3px rgba(185, 140, 255, 0.55));
+}
+
+.tablet-tela[data-tema='noturno'] .barra-de-tarefas-bandeja {
+    text-shadow: 0 0 6px rgba(185, 140, 255, 0.45);
 }
 
 /* não é posicionada: o menu iniciar (absolute) se posiciona pela barra inteira */

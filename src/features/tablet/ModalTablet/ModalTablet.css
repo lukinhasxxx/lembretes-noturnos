@@ -193,10 +193,12 @@ margin-top: 0px;
     text-shadow: 0 0 8px rgba(185, 140, 255, 0.7);
 }
 
-/* abas (About ↔ Lembretes) na barra escura: vidro lilás em vez do azul */
+/* abas (About ↔ Lembretes) na barra escura: o mesmo lilás de antes, mas sólido (transparente, as estrelinhas
+   da barra apareciam através do botão) */
 .tablet-tela[data-tema='noturno'] .area-de-trabalho .about .window-bar .janela-pro-lembrete,
 .tablet-tela[data-tema='noturno'] .janela-lembretes .janela-pro-about {
-    background-color: rgba(138, 120, 255, 0.22);
+    z-index: 2;
+    background-color: #221d47;
     border-color: rgba(185, 140, 255, 0.6);
     box-shadow: none;
     opacity: 1;
@@ -204,7 +206,7 @@ margin-top: 0px;
 
 .tablet-tela[data-tema='noturno'] .area-de-trabalho .about .window-bar .janela-pro-lembrete:hover,
 .tablet-tela[data-tema='noturno'] .janela-lembretes .janela-pro-about:hover {
-    background-color: rgba(138, 120, 255, 0.4);
+    background-color: #3a3275;
 }
 
 .tablet-tela[data-tema='noturno'] .area-de-trabalho .about .window-bar .janela-pro-lembrete p,
@@ -292,10 +294,9 @@ margin-top: 0px;
     color: #ff9ec4;
 }
 
-/* botõezinhos de texto ("↺ Padrão", "↺ Original") e os números das luas */
+/* botõezinhos de texto ("↺ Padrão", "↺ Original") */
 .tablet-tela[data-tema='noturno'] .wrapper-upload .botao-wallpaper-padrao,
-.tablet-tela[data-tema='noturno'] .botao-tema-original,
-.tablet-tela[data-tema='noturno'] .botao-tema-numero {
+.tablet-tela[data-tema='noturno'] .botao-tema-original {
     color: #9d97cf;
 }
 
@@ -313,6 +314,34 @@ margin-top: 0px;
 /* mantém o brilho roxo do hover (a regra de cima, mais específica, apagaria ele) */
 .tablet-tela[data-tema='noturno'] .wrapper-configuracao .botao-abrir-previa:hover {
     box-shadow: 0 0 0 1px rgba(138, 120, 255, 0.45), 1px 1px 11px #8a00ff;
+}
+
+/* galeria de wallpapers: o fundo continua o original (cada cor combina com um wallpaper, feita à mão);
+   no noturno muda só a moldura, no tom do céu, e o brilho lilás */
+.tablet-tela[data-tema='noturno'] .wrapper-configuracao .container-galeria-presets {
+    border-color: #07061a;
+    box-shadow: 0 0 0 1px rgba(138, 120, 255, 0.45), 0 0 12px rgba(138, 120, 255, 0.5);
+}
+
+.tablet-tela[data-tema='noturno'] .wrapper-configuracao .container-galeria-presets:hover {
+    border-color: #07061a;
+    box-shadow: 0 0 0 1px rgba(185, 140, 255, 0.6), 0 0 22px rgba(138, 120, 255, 0.7);
+}
+
+.tablet-tela[data-tema='noturno'] .container-galeria-presets .miniatura-preset:hover {
+    box-shadow: 0 0 8px #b98cff;
+}
+
+/* seletor de cor do LED: vidro escuro com borda lilás no lugar do cinza do navegador */
+.tablet-tela[data-tema='noturno'] .input-cor {
+    background-color: #0d0b26;
+    border: 1px solid rgba(185, 140, 255, 0.6);
+}
+
+.tablet-tela[data-tema='noturno'] .input-cor:hover,
+.tablet-tela[data-tema='noturno'] .input-cor:active {
+    background-color: rgba(138, 120, 255, 0.3);
+    box-shadow: 0 0 8px rgba(138, 120, 255, 0.6);
 }
 
 
