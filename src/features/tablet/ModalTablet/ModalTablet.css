@@ -442,6 +442,11 @@ margin: 2% 4%;
   animation-timing-function: steps(2, end);
 }
 
+/* envolve a galeria só para o wallpaper especial do noturno se posicionar ao lado dela */
+.wrapper-configuracao .area-galeria-presets {
+  position: relative;
+}
+
 .wrapper-configuracao .container-galeria-presets {
   display: grid;
   grid-template-columns: repeat(2,1fr);
