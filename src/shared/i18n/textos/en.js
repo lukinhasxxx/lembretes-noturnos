@@ -27,6 +27,13 @@ const en = {
     'calendario.sincronizar': 'Sync with Brasília time',
     'calendario.sincronizando': 'Syncing...',
 
+    'modoCelular.titulo': 'Phone mode',
+    'modoCelular.texto': 'Turn your phone sideways and see everything in full screen.',
+    'modoCelular.textoGirar': 'Turn your phone sideways to see everything better.',
+    'modoCelular.ativar': 'Turn on',
+    'modoCelular.agoraNao': 'Not now',
+    'modoCelular.sair': 'Exit phone mode',
+
     'bandeja.bateriaConectada': 'Plugged in, fully charged',
     'bandeja.wifiConectado': 'Connected, secured',
     'bandeja.semDriversDeSom': 'No audio drivers found',

@@ -27,6 +27,58 @@
     user-select: none;
 }
 
+/* celular em pé: o arraste é tratado no JS (useArrastoCena); o navegador não faz gesto próprio na cena */
+.palco.palco-arrastavel {
+    touch-action: none;
+}
+
+/* luzinha nas bordas que ainda têm cena (celular em pé): uma luz quente bem leve vazando pela lateral,
+   respirando devagar. É um botão: tocar leva para a próxima parada daquele lado */
+.palco-borda {
+    all: unset;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    width: 34px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease-out;
+}
+
+.palco-borda::before {
+    content: '';
+    position: absolute;
+    inset: 12% 0;
+    animation: palco-borda-respirando 3.2s ease-in-out infinite;
+}
+
+.palco-borda-esquerda {
+    left: 0;
+}
+
+.palco-borda-esquerda::before {
+    background: radial-gradient(ellipse 100% 50% at 0% 50%, rgba(255, 210, 150, 0.32), rgba(255, 210, 150, 0) 70%);
+}
+
+.palco-borda-direita {
+    right: 0;
+}
+
+.palco-borda-direita::before {
+    background: radial-gradient(ellipse 100% 50% at 100% 50%, rgba(255, 210, 150, 0.32), rgba(255, 210, 150, 0) 70%);
+}
+
+.palco-borda.visivel {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+@keyframes palco-borda-respirando {
+    0%, 100% { opacity: 0.45; }
+    50%      { opacity: 1; }
+}
+
 .palco-video {
     position: absolute;
     inset: 0;

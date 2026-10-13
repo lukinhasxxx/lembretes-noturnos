@@ -16,3 +16,15 @@ export const PONTOS = {
     tablet: { x: 1174, y: 875, largura: 110, altura: 50 },
     mural: { x: 1139, y: 234, largura: 522, altura: 510 },
 }
+
+// Celular em pé: a cena não cabe na largura, então dá para arrastar para os lados.
+// Paradas = onde o meio da tela "gruda" num arraste rápido ou num toque na luzinha da borda (x em px da arte).
+// A cena começa na parada inicial.
+export const PARADAS_CELULAR = [
+    { nome: 'radio', x: 475 },
+    { nome: 'mesa', x: 1060 },
+    // um pouco à direita do meio do mural: ele é inclinado (a borda direita fica mais longe) e a aba
+    // "Deletar tudo" sai pela esquerda dele — assim os dois cabem em pé
+    { nome: 'mural', x: 1440 },
+]
+export const PARADA_INICIAL_CELULAR = 'mesa'
