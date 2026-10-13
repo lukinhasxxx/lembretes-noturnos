@@ -117,6 +117,7 @@ audioRef.current.pause();
 // Liga o mural pela primeira vez (com a animação de inicialização) e fecha o tablet para a pessoa ver.
 // Usado ao mandar o primeiro lembrete e pelo botão "Mostrar painel" quando já existem lembretes salvos.
 const ligarMuralComAnimacao = () => {
+    focarNoPainel()
     setPainelLigadoPermanente(true)
     setAnimacaoJaAtivada(true);
     setModalAberto(false);
@@ -147,6 +148,7 @@ if(!painelLigadoPermanente){
         setLembretes(lembretesAnteriores => [...lembretesAnteriores, novoLembrete])
         } ,5000)
       } else {
+          focarNoPainel()
           setLembretes( lembretesAnteriores => [...lembretesAnteriores, novoLembrete]);
           if(!primeiraMensagemPainel){
             setPrimeiraMensagemPainel(true)
@@ -208,6 +210,9 @@ const [modalAberto,setModalAberto] = useState(false)
 const { sistemaDesligado, ligarSistema, tema } = useSistemaTablet()
 // celular (toque, sem mouse) e se está em pé: o celular ganha tamanhos e posições próprios
 const { celular, emPe } = useDispositivo()
+// celular em pé: pedido para a cena deslizar até uma parada (ex.: o painel ao mandar um lembrete)
+const [focoCena, setFocoCena] = useState(null)
+const focarNoPainel = () => setFocoCena({ parada: 'mural', vez: Date.now() })
 
 // "Desligar" no menu iniciar terminou: fecha o modal e apaga a tela do tablet da mesa.
 // O próximo clique no tablet da mesa liga de novo (boot completo).
@@ -235,6 +240,9 @@ setLigarTabletPrimeiraVez(true)
     <Palco
       videoSrc={process.env.PUBLIC_URL + '/videos/video-background.mp4'}
       posterSrc={process.env.PUBLIC_URL + '/imagens/poster-cena.jpg'}
+      // celular em pé: a cena fica mais larga que a tela e dá para arrastar para os lados
+      arrastavel={celular && emPe}
+      foco={focoCena}
     >
       <Ancora ponto='radio'>
         <PlayerRadio
@@ -320,6 +328,7 @@ setLigarTabletPrimeiraVez(true)
       painelLigadoPermanente={painelLigadoPermanente}
       haLembretesSalvos={lembretes.length > 0}
       aoLigarMural={ligarMuralComAnimacao}
+      aoMostrarPainel={focarNoPainel}
       corNeon={setLuzRadio}
       radioLigado={radioLigado}
     />

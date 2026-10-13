@@ -6,8 +6,10 @@ const AREA_FOCAL = calcularAreaFocal(PONTOS, MARGEM_FOCAL)
 
 // Desloca o palco (em vez de sempre centralizar) para manter os pontos de interesse visíveis
 // quando a tela corta a arte. Escreve direto no style do palco: não causa re-render.
-export const usePontoFocal = (palcoRef) => {
+// ativo: desligado no celular em pé, onde quem posiciona o palco é o arrasto (useArrastoCena)
+export const usePontoFocal = (palcoRef, ativo = true) => {
     useEffect(() => {
+        if (!ativo) return
         const palco = palcoRef.current
         let frame
 
@@ -36,5 +38,5 @@ export const usePontoFocal = (palcoRef) => {
             window.removeEventListener('resize', agendar)
             cancelAnimationFrame(frame)
         }
-    }, [palcoRef])
+    }, [palcoRef, ativo])
 }
