@@ -1,3 +1,13 @@
 .ancora {
     position: absolute;
 }
+
+/* celular: o que se toca na cena fica um pouco maior (o tablet da mesa ~15%, o painel ~10%),
+   crescendo a partir do centro para continuar no mesmo lugar da arte */
+.App[data-celular] .ancora[data-ponto='tablet'] {
+    transform: scale(1.15);
+}
+
+.App[data-celular] .ancora[data-ponto='mural'] {
+    transform: scale(1.1);
+}

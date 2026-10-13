@@ -28,6 +28,13 @@ const ptBR = {
     'calendario.sincronizar': 'Sincronizar horário de Brasília',
     'calendario.sincronizando': 'Sincronizando...',
 
+    'modoCelular.titulo': 'Modo celular',
+    'modoCelular.texto': 'Deite o celular e veja tudo em tela cheia.',
+    'modoCelular.textoGirar': 'Gire o celular para ver tudo melhor.',
+    'modoCelular.ativar': 'Ativar',
+    'modoCelular.agoraNao': 'Agora não',
+    'modoCelular.sair': 'Sair do modo celular',
+
     'bandeja.bateriaConectada': 'Conectado, totalmente carregada',
     'bandeja.wifiConectado': 'Conectado, protegido',
     'bandeja.semDriversDeSom': 'Drivers de som não encontrados',

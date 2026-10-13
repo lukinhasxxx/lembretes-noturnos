@@ -21,9 +21,9 @@ import { useSistemaTablet } from '../contexts/SistemaTablet'
 // Modal do tablet: desenha o sistema (área de trabalho, apps, barra, telas do sistema).
 // O estado do sistema (ligado/bloqueado..., tela na frente, apps abertos, wallpaper) vem do SistemaTabletProvider,
 // o mesmo que o tablet da mesa lê; aqui fica só o que é da interface do modal (texto digitado, galeria aberta).
-const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, corNeon, radioLigado}) => {
+const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, aoMostrarPainel, corNeon, radioLigado}) => {
 
-    const {alterarVisibilidadePainel, textoBotao} = useContext(VisibilidadePainelContext)
+    const {alterarVisibilidadePainel, textoBotao, mostrarPainel} = useContext(VisibilidadePainelContext)
     const {
         estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
         telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, minimizarApp, minimizarTudo, voltarParaAreaDeTrabalho,
@@ -257,7 +257,10 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                       // (sem nenhum, ex.: depois de reiniciar o tablet com o mural vazio, o botão não aparece)
                         painelLigadoPermanente === true && haLembretesSalvos && (
                         <div className='mostrar-e-esconder'
-                            onClick={()=>{alterarVisibilidadePainel()}
+                            onClick={()=>{
+                                // reexibindo o painel escondido: no celular em pé a cena vai até ele
+                                if (!mostrarPainel) aoMostrarPainel()
+                                alterarVisibilidadePainel()}
                                     }>
                             <div className='botao-mostrar-esconder-painel' ><p>{textoBotao}</p>
                             </div>
