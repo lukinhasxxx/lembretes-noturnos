@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { CENA, PARADAS_CELULAR, PARADA_INICIAL_CELULAR } from '../cena.config'
+import { vibrar } from '../../../shared/utils/vibrar'
 
 // movimento mínimo (px da tela) para o toque virar arraste (abaixo disso continua sendo um toque/clique)
 const LIMIAR_ARRASTE_PX = 8
@@ -58,6 +59,8 @@ export const useArrastoCena = (palcoRef, ativo, foco) => {
         const destino = candidatas.length
             ? (direcao > 0 ? Math.min(...candidatas) : Math.max(...candidatas))
             : (direcao > 0 ? CENA.largura : 0)
+        // vibraçãozinha ao grudar numa parada
+        if (Math.abs(limitar(destino) - centro) > FOLGA_BORDA) vibrar()
         aplicar(destino, true)
     }, [aplicar, limitar])
 

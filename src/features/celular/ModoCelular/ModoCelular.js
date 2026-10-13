@@ -2,6 +2,7 @@ import './ModoCelular.css'
 import { useEffect, useState } from 'react'
 import { useIdioma } from '../../../shared/i18n/Idioma'
 import { suportaTelaCheia, useTelaCheia } from '../hooks/useTelaCheia'
+import { useVibracaoNosToques } from '../hooks/useVibracaoNosToques'
 
 // quanto tempo depois de abrir o site o card aparece (deixa a cena respirar primeiro)
 const ATRASO_CARD_MS = 2500
@@ -10,7 +11,9 @@ const ATRASO_CARD_MS = 2500
 // - card flutuante embaixo oferecendo o modo; "Ativar" deixa o site em tela cheia e deitado; o X do card dispensa
 // - em tela cheia: um X numa bolinha no topo, no meio, volta ao normal (em pé, com a barra do navegador)
 // - iPhone (sem tela cheia): o card vira só a dica de girar o celular
+// - vibraçãozinha leve em cada toque em algo clicável (só Android)
 const ModoCelular = () => {
+    useVibracaoNosToques()
     const { t } = useIdioma()
     const telaCheia = useTelaCheia()
     const [cardVisivel, setCardVisivel] = useState(false)
