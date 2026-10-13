@@ -7,6 +7,7 @@ import { PlayerRadio, MiniPlayer } from './features/radio';
 import { Palco, Ancora } from './features/cena';
 import { JanelaArrastavel, MINI_PLAYER, MODAL_TABLET } from './features/hud';
 import { useEstadoPersistido } from './shared/hooks/useEstadoPersistido';
+import { useDispositivo } from './shared/hooks/useDispositivo';
 
 // momento em que a borda neon definitiva do mural acende (neonGlow começa com 6s de atraso em .painel-surgindo,
 // no MuralDeNotas.css). As notas só aparecem aqui, no fim da animação de ligar.
@@ -204,6 +205,8 @@ const [modalAberto,setModalAberto] = useState(false)
 // sistema do tablet (vem do SistemaTabletProvider, no index.js): desligado até o primeiro clique;
 // aí roda boot → boas-vindas → área de trabalho. O resto (bloquear, desligar...) o modal pega direto do contexto.
 const { sistemaDesligado, ligarSistema, tema } = useSistemaTablet()
+// celular (toque, sem mouse) e se está em pé: o celular ganha tamanhos e posições próprios
+const { celular, emPe } = useDispositivo()
 
 // "Desligar" no menu iniciar terminou: fecha o modal e apaga a tela do tablet da mesa.
 // O próximo clique no tablet da mesa liga de novo (boot completo).
@@ -225,7 +228,8 @@ setLigarTabletPrimeiraVez(true)
   return (
     <VisibilidadePainelProvider>
     
-    <div className="App">
+    {/* data-celular / data-orientacao: o CSS ajusta tamanhos só no celular (ver Ancora.css) */}
+    <div className="App" data-celular={celular || undefined} data-orientacao={emPe ? 'em-pe' : 'deitado'}>
 
     <Palco
       videoSrc={process.env.PUBLIC_URL + '/videos/video-background.mp4'}
@@ -298,7 +302,10 @@ setLigarTabletPrimeiraVez(true)
 <JanelaArrastavel
   largura={MODAL_TABLET.largura}
   altura={MODAL_TABLET.altura}
-  posicaoInicial={({ larguraTela, alturaTela }) => ({ x: larguraTela * 0.2, y: alturaTela * 0.09 })}
+  // celular: centralizado (ele ocupa quase a tela toda); PC: no lugar de sempre
+  posicaoInicial={({ larguraTela, alturaTela, larguraJanela, alturaJanela }) => (celular
+    ? { x: (larguraTela - larguraJanela) / 2, y: (alturaTela - alturaJanela) / 2 }
+    : { x: larguraTela * 0.2, y: alturaTela * 0.09 })}
   visivel={modalAberto}
   handle=".handle"
   cancel="button, input, textarea, select, option, a, .no-drag"

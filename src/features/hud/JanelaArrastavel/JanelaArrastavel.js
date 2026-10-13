@@ -5,7 +5,8 @@ import JanelaHud from '../JanelaHud/JanelaHud'
 
 // Janela do HUD arrastável, escalada conforme a tela e sempre mantida dentro dela.
 // largura/altura: tamanho base (escala 1) do conteúdo.
-// posicaoInicial: ({ larguraTela, alturaTela }) => ({ x, y }), em px da janela do navegador.
+// posicaoInicial: ({ larguraTela, alturaTela, larguraJanela, alturaJanela }) => ({ x, y }), em px da janela
+// do navegador (larguraJanela/alturaJanela: o tamanho dela já escalado, para dar para centralizar).
 const JanelaArrastavel = ({
     largura,
     altura,
@@ -28,7 +29,12 @@ const JanelaArrastavel = ({
     }), [larguraNaTela, alturaNaTela])
 
     const [posicao, setPosicao] = useState(() =>
-        posicaoInicial({ larguraTela: window.innerWidth, alturaTela: window.innerHeight })
+        posicaoInicial({
+            larguraTela: window.innerWidth,
+            alturaTela: window.innerHeight,
+            larguraJanela: larguraNaTela,
+            alturaJanela: alturaNaTela,
+        })
     )
 
     // reaplica o limite no resize e sempre que a escala muda

@@ -7,6 +7,16 @@ export const ESCALA_HUD = {
     maxima: 1,
 }
 
+// No celular a regra do PC (~40% da tela) deixa o tablet pequeno demais para o dedo: lá a escala é a maior que
+// faz o modal do tablet caber nesta fração da largura e da altura da tela (em pé fica quase da largura toda;
+// deitado, quase da altura toda — com uma folguinha para ainda dar para tocar no tablet da mesa embaixo).
+// O mini player usa a mesma escala.
+export const ESCALA_HUD_CELULAR = {
+    fracaoLargura: 0.96,
+    fracaoAltura: 0.87,
+    maxima: 1.2,
+}
+
 // Tamanho base (escala 1) do modal do tablet, o mesmo do .secao-tablet-modal.
 export const MODAL_TABLET = {
     largura: 760,
