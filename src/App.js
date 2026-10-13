@@ -9,6 +9,7 @@ import { JanelaArrastavel, MINI_PLAYER, MODAL_TABLET } from './features/hud';
 import { ModoCelular } from './features/celular';
 import { useEstadoPersistido } from './shared/hooks/useEstadoPersistido';
 import { useDispositivo } from './shared/hooks/useDispositivo';
+import { vibrar } from './shared/utils/vibrar';
 
 // momento em que a borda neon definitiva do mural acende (neonGlow começa com 6s de atraso em .painel-surgindo,
 // no MuralDeNotas.css). As notas só aparecem aqui, no fim da animação de ligar.
@@ -93,6 +94,7 @@ useEffect( () => {
 const gerenciarEstadoRadio = () => {
 
   if (!radioLigado) {
+    vibrar()
     if (!foiPausadoManualmente || !foiDesligadoComBotao) {
       audioRef.current.play();
       setEstaTocando(true);
@@ -171,6 +173,7 @@ const painelRadio = () => estaTocando
 
 
 function fixarLembrete(id) {
+  vibrar()
   setLembretes(lembretes.map(lembrete => {
     if (lembrete.id === id) {
       return { ...lembrete, fixar: !lembrete.fixar
@@ -183,6 +186,7 @@ function fixarLembrete(id) {
 
 }
    function deletarLembrete(id) {
+      vibrar()
       setTimeout(()=>{
         setLembretes(lembretes.filter(lembrete => lembrete.id !== id))}
         ,200)
@@ -238,7 +242,8 @@ setLigarTabletPrimeiraVez(true)
     <div className="App" data-celular={celular || undefined} data-orientacao={emPe ? 'em-pe' : 'deitado'}>
 
     <Palco
-      videoSrc={process.env.PUBLIC_URL + '/videos/video-background.mp4'}
+      // celular: versão menor do vídeo (o Full HD nem chega a ser baixado)
+      videoSrc={process.env.PUBLIC_URL + (celular ? '/videos/video-background-hd-mobile.mp4' : '/videos/video-background.mp4')}
       posterSrc={process.env.PUBLIC_URL + '/imagens/poster-cena.jpg'}
       // celular em pé: a cena fica mais larga que a tela e dá para arrastar para os lados
       arrastavel={celular && emPe}
