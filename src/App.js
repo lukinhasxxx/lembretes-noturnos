@@ -324,6 +324,9 @@ setLigarTabletPrimeiraVez(true)
     ? { x: (larguraTela - larguraJanela) / 2, y: (alturaTela - alturaJanela) / 2 }
     : { x: larguraTela * 0.2, y: alturaTela * 0.09 })}
   visivel={modalAberto}
+  // celular: com o teclado aberto o tablet encolhe e sobe, para a caixa de texto não ficar atrás dele
+  // (só deitado: em pé encolher deixava o tablet pequeno demais)
+  subirComTeclado={!emPe}
   handle=".handle"
   cancel="button, input, textarea, select, option, a, .no-drag"
 >
