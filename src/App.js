@@ -6,6 +6,7 @@ import { MuralDeNotas, VisibilidadePainelProvider } from './features/mural';
 import { PlayerRadio, MiniPlayer } from './features/radio';
 import { Palco, Ancora } from './features/cena';
 import { JanelaArrastavel, MINI_PLAYER, MODAL_TABLET } from './features/hud';
+import { ModoCelular } from './features/celular';
 import { useEstadoPersistido } from './shared/hooks/useEstadoPersistido';
 import { useDispositivo } from './shared/hooks/useDispositivo';
 
@@ -263,6 +264,9 @@ setLigarTabletPrimeiraVez(true)
         />
       </Ancora>
     </Palco>
+    {/* celular: card oferecendo tela cheia deitado, e o X para voltar */}
+    {celular && <ModoCelular />}
+
     <audio
     ref={audioRef}
     // não baixa nada de áudio ao abrir o site; a faixa só carrega quando o rádio der play
