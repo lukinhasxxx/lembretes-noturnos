@@ -10,6 +10,7 @@ import { BalaoNotificacao, CentralDeNotificacoes } from '../Notificacoes/Notific
 import { APPS } from '../../apps.config'
 import { ESTADOS_SISTEMA } from '../../tablet.config'
 import { useSistemaTablet } from '../../contexts/SistemaTablet'
+import { TEMAS } from '../../hooks/useTemaSistema'
 
 // fecha um painel da barra (menu iniciar, calendário...) ao clicar fora dele e do botão que o abre, ou com Esc
 // fechar: só troca o estado ('aberto' → 'fechando'), então pode ser recriado a cada render
@@ -63,7 +64,7 @@ const usePainelDaBarra = () => {
 // aoAbrirApp(idDoApp): abre um app pelo menu iniciar; aoBloquear / aoDesligar / aoReiniciar: ações do menu iniciar
 // aoMostrarAreaDeTrabalho: faixinha do canto direito (minimiza todos os apps)
 const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, aoDesligar, aoReiniciar, aoVoltarParaAreaDeTrabalho, aoMostrarAreaDeTrabalho }) => {
-    const { estadoSistema, notificacoes, esconderBalao, setDestacarTemas } = useSistemaTablet()
+    const { estadoSistema, notificacoes, esconderBalao, setDestacarTemas, tema } = useSistemaTablet()
 
     const menuIniciar = usePainelDaBarra()
     const calendario = usePainelDaBarra()
@@ -97,9 +98,20 @@ const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, ao
     return (
         <div className='barra-de-tarefas'>
             <div ref={menuIniciar.areaRef} className='barra-de-tarefas-area-menu-iniciar'>
-                <BotaoBarraDeTarefas ativo={menuIniciar.aberto} aoClicar={menuIniciar.alternar} aria-label='Menu iniciar'>
-                    <LuaIniciar cheia={menuIniciar.aberto} />
-                </BotaoBarraDeTarefas>
+                {/* a lua é a logo do tema noturno; no original fica o ícone de sempre */}
+                {tema === TEMAS.noturno ? (
+                    <BotaoBarraDeTarefas ativo={menuIniciar.aberto} aoClicar={menuIniciar.alternar} aria-label='Menu iniciar'>
+                        <LuaIniciar cheia={menuIniciar.aberto} />
+                    </BotaoBarraDeTarefas>
+                ) : (
+                    <BotaoBarraDeTarefas
+                        icone='/imagens/windows/menuIniciar.png'
+                        alt='Menu iniciar'
+                        tamanhoIcone={18}
+                        ativo={menuIniciar.aberto}
+                        aoClicar={menuIniciar.alternar}
+                    />
+                )}
                 {menuIniciar.montado && (
                     <MenuIniciar
                         aoAbrirApp={aoAbrirApp}

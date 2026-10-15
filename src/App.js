@@ -294,7 +294,10 @@ setLigarTabletPrimeiraVez(true)
    <JanelaArrastavel
    largura={MINI_PLAYER.largura}
    altura={MINI_PLAYER.altura}
-   posicaoInicial={({ larguraTela, alturaTela }) => ({ x: larguraTela * 0.09, y: alturaTela * 0.57 })}
+   // celular: embaixo e centralizado, no alcance do dedo; PC: no lugar de sempre
+   posicaoInicial={({ larguraTela, alturaTela, larguraJanela, alturaJanela }) => (celular
+     ? { x: (larguraTela - larguraJanela) / 2, y: alturaTela - alturaJanela - 16 }
+     : { x: larguraTela * 0.09, y: alturaTela * 0.57 })}
    cancel="button, input, textarea, select, option, a, img"
    zIndex={1}
    >
