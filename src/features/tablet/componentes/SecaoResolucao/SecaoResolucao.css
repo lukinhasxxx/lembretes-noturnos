@@ -1,0 +1,109 @@
+/* "Resolução da tela" no Config: caixa de seleção no estilo da do Windows (atual + seta; abre a lista embaixo).
+   Cores do tema original; o noturno troca logo abaixo. */
+.seletor-resolucao {
+    --resolucao-fundo: #ffffff;
+    --resolucao-borda: #9aa0c8;
+    --resolucao-texto: #1f2240;
+    --resolucao-hover: #e8e6ff;
+    --resolucao-destaque: #6a4cff;
+
+    position: relative;
+    width: 260px;
+    margin: 4px 0 6px 3%;
+    font-family: var(--fonte-sistema);
+    font-size: 13px;
+}
+
+.tablet-tela[data-tema='noturno'] .seletor-resolucao {
+    --resolucao-fundo: #0d0b26;
+    --resolucao-borda: rgba(185, 140, 255, 0.6);
+    --resolucao-texto: #e6e3ff;
+    --resolucao-hover: rgba(138, 120, 255, 0.22);
+    --resolucao-destaque: #b98cff;
+}
+
+/* respiro em cima: a galeria de wallpapers logo acima cresce no hover e encostava no título */
+.secao-resolucao {
+    margin-top: 28px;
+}
+
+.seletor-resolucao-atual {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid var(--resolucao-borda);
+    border-radius: 6px;
+    font: inherit;
+    color: var(--resolucao-texto);
+    background: var(--resolucao-fundo);
+    cursor: pointer;
+    transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.seletor-resolucao-atual:hover,
+.seletor-resolucao.aberto .seletor-resolucao-atual {
+    border-color: var(--resolucao-destaque);
+    box-shadow: 0 0 6px color-mix(in srgb, var(--resolucao-destaque) 45%, transparent);
+}
+
+/* setinha feita com borda (sem imagem): vira para cima com a lista aberta */
+.seletor-resolucao-seta {
+    width: 6px;
+    height: 6px;
+    margin-left: 10px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 0.15s ease-out;
+}
+
+.seletor-resolucao.aberto .seletor-resolucao-seta {
+    transform: translateY(2px) rotate(-135deg);
+}
+
+.seletor-resolucao-lista {
+    position: absolute;
+    z-index: 5;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    border: 1px solid var(--resolucao-borda);
+    border-radius: 6px;
+    background: var(--resolucao-fundo);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    animation: seletor-resolucao-abrindo 0.12s ease-out;
+}
+
+.seletor-resolucao-lista button {
+    display: block;
+    width: 100%;
+    padding: 6px 8px;
+    border: 0;
+    border-radius: 4px;
+    font: inherit;
+    text-align: left;
+    color: var(--resolucao-texto);
+    background: none;
+    cursor: pointer;
+}
+
+.seletor-resolucao-lista button:hover {
+    background: var(--resolucao-hover);
+}
+
+/* a escolhida: risquinho na esquerda, como no Windows */
+.seletor-resolucao-lista button.escolhida {
+    background: var(--resolucao-hover);
+    box-shadow: inset 3px 0 0 var(--resolucao-destaque);
+    font-weight: 600;
+}
+
+@keyframes seletor-resolucao-abrindo {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}

@@ -8,6 +8,7 @@ import WindowBar from '../sistema/WindowBar/WindowBar'
 import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
 import SecaoTemas from '../componentes/BotaoTema/SecaoTemas'
 import WallpaperEspecial from '../componentes/WallpaperEspecial/WallpaperEspecial'
+import SecaoResolucao from '../componentes/SecaoResolucao/SecaoResolucao'
 import IconeAreaDeTrabalho from '../sistema/IconeAreaDeTrabalho/IconeAreaDeTrabalho'
 import { TEMAS } from '../hooks/useTemaSistema'
 import { useWallpaperBloqueio } from '../hooks/useWallpaperBloqueio'
@@ -201,6 +202,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     </div>
                     )
                 }
+
+                <SecaoResolucao />
 
                 {/* só aparece depois da "instalação" dos temas (notificação na barra de tarefas) */}
                 {temasDisponiveis && (
