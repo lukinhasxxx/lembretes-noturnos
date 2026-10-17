@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 // prefixo para não misturar com dados de outros sites no mesmo domínio (github.io)
-const PREFIXO_CHAVE = 'lembretes-noturnos:'
+export const PREFIXO_CHAVE = 'lembretes-noturnos:'
 
 const lerValorSalvo = (chave, valorInicial) => {
     try {

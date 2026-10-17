@@ -1,0 +1,210 @@
+/* Seção "Idioma" do Config e a caixinha de instalação. Usa as cores do Config (variáveis do .config-corpo),
+   então segue o tema sozinha. */
+.lista-idiomas {
+    margin: 0 0 0 3%;
+    padding: 0;
+    list-style: none;
+    max-width: 440px;
+    border-radius: 8px;
+    transition: box-shadow 0.4s ease;
+}
+
+/* aberto pela bandeja: a lista acende por um instante */
+.lista-idiomas.destacada {
+    box-shadow: 0 0 0 1px var(--config-destaque), 0 0 16px color-mix(in srgb, var(--config-brilho) 55%, transparent);
+}
+
+.lista-idiomas li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    border: 1px solid var(--config-borda);
+    border-radius: 8px;
+    background: var(--config-cartao);
+    font-family: var(--fonte-sistema);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.lista-idiomas li + li {
+    margin-top: 6px;
+}
+
+/* hover bem leve: a borda clareia e a linha "respira" 1px para o lado */
+.lista-idiomas li:hover {
+    border-color: color-mix(in srgb, var(--config-destaque) 45%, transparent);
+    transform: translateX(1px);
+}
+
+.lista-idiomas li.em-uso {
+    box-shadow: inset 3px 0 0 var(--config-destaque);
+}
+
+/* no idioma em uso, o risquinho escurece um pouco no hover */
+.lista-idiomas li.em-uso:hover {
+    box-shadow: inset 3px 0 0 color-mix(in srgb, var(--config-destaque) 75%, #000);
+}
+
+.lista-idiomas-sigla {
+    min-width: 34px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-align: center;
+    color: var(--config-destaque);
+}
+
+.lista-idiomas-textos {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+}
+
+.lista-idiomas-textos small {
+    font-size: 11px;
+    color: var(--config-texto-suave);
+}
+
+/* "Aplicando..." / "Desinstalando...": respira bem de leve, para não parecer travado */
+.lista-idiomas-trabalhando {
+    animation: lista-idiomas-respirando 1s ease-in-out infinite alternate;
+}
+
+@keyframes lista-idiomas-respirando {
+    from { opacity: 1; }
+    to   { opacity: 0.55; }
+}
+
+/* botão secundário (ex.: Desinstalar): sem fundo, só aparece a borda no hover */
+.config-botao.config-botao-discreto {
+    border-color: transparent;
+    background: none;
+    color: var(--config-texto-suave);
+}
+
+.config-botao.config-botao-discreto:hover:not(:disabled) {
+    border-color: var(--config-borda);
+    color: inherit;
+}
+
+.config-botao:disabled {
+    opacity: 0.5;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* ---------- caixinha de instalação (por cima do Config inteiro) ---------- */
+
+/* o conteúdo deixa de ser a "caixa de referência": a caixinha cobre o Config todo (menu + conteúdo),
+   e não só a parte rolável */
+.config-corpo .janela-configuracao-led {
+    position: static;
+}
+
+.instalador-fundo {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    background: rgba(5, 4, 20, 0.45);
+    animation: instalador-aparecendo 0.18s ease-out;
+}
+
+.instalador {
+    width: 330px;
+    padding: 14px 16px;
+    border: 1px solid var(--config-borda);
+    border-radius: 10px;
+    font-family: var(--fonte-sistema);
+    font-size: 13px;
+    color: inherit;
+    background: rgb(232, 233, 250);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 14px color-mix(in srgb, var(--config-brilho) 30%, transparent);
+}
+
+.tablet-tela[data-tema='noturno'] .instalador {
+    background: #120f33;
+}
+
+.instalador-titulo {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.janela-configuracao-led .wrapper-configuracao .instalador p {
+    margin: 0 0 6px;
+}
+
+.instalador-arquivo {
+    display: flex;
+    flex-direction: column;
+    min-height: 34px;
+    margin: 8px 0 6px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+}
+
+.instalador-arquivo b {
+    font-weight: 400;
+}
+
+.instalador-barra {
+    height: 8px;
+    overflow: hidden;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--config-destaque) 15%, transparent);
+}
+
+/* sem transição: cada arquivo copiado é um "degrau" seco na barra */
+.instalador-barra-cheia {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--config-destaque), #6ef0ff);
+    box-shadow: 0 0 8px var(--config-brilho);
+}
+
+/* "Mostrar detalhes": terminalzinho com o log da instalação */
+.instalador-terminal {
+    height: 92px;
+    margin: 8px 0 0;
+    padding: 6px 8px;
+    overflow-y: auto;
+    border-radius: 6px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9.5px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    color: #3dff6e;
+    background: #05050c;
+    box-shadow: inset 0 0 0 1px rgba(61, 255, 110, 0.18);
+    animation: instalador-aparecendo 0.15s ease-out;
+}
+
+.instalador-botoes.instalador-botoes-espalhados {
+    justify-content: space-between;
+}
+
+.instalador-contagem {
+    margin-top: 3px;
+    font-size: 11px;
+    text-align: right;
+    color: var(--config-texto-suave);
+}
+
+.instalador-botoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.config-botao.instalador-principal:not(:disabled) {
+    border-color: var(--config-destaque);
+}
+
+@keyframes instalador-aparecendo {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}

@@ -10,7 +10,7 @@ export const APPS = {
         icone: '/imagens/windows/lembretesIcone.png',
         telas: ['about.exe', 'lembretes.exe'],
         telaInicial: 'about.exe',
-        tamanhoIconeBarra: 28,
+        tamanhoIconeBarra: 25,
     },
     app_config: {
         id: 'app_config',
@@ -18,7 +18,7 @@ export const APPS = {
         icone: '/imagens/windows/ledIcone.png',
         telas: ['config.exe'],
         telaInicial: 'config.exe',
-        tamanhoIconeBarra: 35,
+        tamanhoIconeBarra: 30,
     },
 }
 

@@ -36,6 +36,12 @@ const [ligarTabletPrimeiraVez, setLigarTabletPrimeiraVez] = useState(false)
 const [notasVisiveisNoMural, setNotasVisiveisNoMural] = useState(true)
 // glitch das notas sumindo no mural enquanto o "limpar tudo" acontece
 const [apagandoNotas, setApagandoNotas] = useState(false)
+// o mural ligado já mostrou algum lembrete nesta sessão: mesmo se todos forem apagados, o botão
+// mostrar/esconder painel continua no tablet
+const [muralJaTeveLembretes, setMuralJaTeveLembretes] = useState(false)
+useEffect(() => {
+  if (painelLigadoPermanente && lembretes.length > 0) setMuralJaTeveLembretes(true)
+}, [painelLigadoPermanente, lembretes.length])
 
 
 
@@ -340,10 +346,15 @@ setLigarTabletPrimeiraVez(true)
       validarLigadoDesligado={ligarTablet}
       painelLigadoPermanente={painelLigadoPermanente}
       haLembretesSalvos={lembretes.length > 0}
+      muralJaTeveLembretes={muralJaTeveLembretes}
       aoLigarMural={ligarMuralComAnimacao}
       aoMostrarPainel={focarNoPainel}
       corNeon={setLuzRadio}
       radioLigado={radioLigado}
+      volume={volume}
+      aoMudarVolume={setVolume}
+      musicaTocando={estaTocando}
+      aoDesligarRadio={gerenciarDesligamentoRadio}
     />
 </JanelaArrastavel>
  }

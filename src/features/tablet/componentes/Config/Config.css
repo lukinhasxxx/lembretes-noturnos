@@ -1,0 +1,384 @@
+/* Config.exe com categorias: trilho de ícones na esquerda + conteúdo (o .janela-configuracao-led de sempre,
+   que guarda as cores de cada tema no ModalTablet.css) na direita. */
+
+/* a janela "prende" os z-index de dentro dela (menu, calendário, instalador): sem isso o menu (z-index 6)
+   passava por cima de outra janela animando na frente do Config (que usa z-index 3) */
+.janela-config {
+    isolation: isolate;
+}
+.config-corpo {
+    --config-menu-largura: 52px;
+    --config-menu-fundo: linear-gradient(180deg, #c9c3f0 0%, #b9eef0 100%);
+    --config-icone: #4a3fa0;
+    --config-icone-ativo: #2a1d80;
+    --config-brilho: #6a4cff;
+    --config-destaque: #6a4cff;
+    --config-texto-suave: #5d5778;
+    --config-cartao: rgba(255, 255, 255, 0.55);
+    --config-borda: rgba(75, 47, 214, 0.25);
+    --config-espaco-secao: 30px;
+
+    position: relative;
+    display: flex;
+    height: 319px;
+}
+
+.tablet-tela[data-tema='noturno'] .config-corpo {
+    --config-menu-fundo: linear-gradient(180deg, #0d0b26 0%, #1a1446 100%);
+    --config-icone: #9d97cf;
+    --config-icone-ativo: #e6e3ff;
+    --config-brilho: #b98cff;
+    --config-destaque: #b98cff;
+    --config-texto-suave: #9d97cf;
+    --config-cartao: rgba(138, 120, 255, 0.1);
+    --config-borda: rgba(185, 140, 255, 0.35);
+}
+
+/* o conteúdo agora divide a largura com o menu */
+.config-corpo .janela-configuracao-led {
+    flex: 1;
+    width: auto;
+    height: 100%;
+}
+
+/* ---------- menu (trilho de ícones; o nome aparece ao lado no hover) ---------- */
+
+.config-menu {
+    position: relative;
+    z-index: 6;
+    flex: 0 0 var(--config-menu-largura);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 10px;
+    background: var(--config-menu-fundo);
+    border-right: 1px solid var(--config-borda);
+}
+
+.config-menu button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    border: 0;
+    padding: 0;
+    color: var(--config-icone);
+    background: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.config-menu button svg {
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.config-menu button:hover {
+    color: var(--config-icone-ativo);
+}
+
+.config-menu button:hover svg {
+    filter: drop-shadow(0 0 4px var(--config-brilho));
+    transform: scale(1.08);
+}
+
+/* categoria aberta: ícone aceso e um risco de luz na borda esquerda */
+.config-menu button.ativa {
+    color: var(--config-icone-ativo);
+}
+
+.config-menu button.ativa svg {
+    filter: drop-shadow(0 0 5px var(--config-brilho));
+}
+
+.config-menu button.ativa::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    bottom: 9px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: var(--config-destaque);
+    box-shadow: 0 0 8px var(--config-brilho);
+}
+
+/* nome da categoria: etiqueta que sai do ícone no hover */
+.config-menu em {
+    position: absolute;
+    left: calc(100% + 6px);
+    top: 50%;
+    padding: 4px 10px;
+    border: 1px solid var(--config-borda);
+    border-radius: 6px;
+    font-family: var(--fonte-sistema);
+    font-size: 12px;
+    font-style: normal;
+    white-space: nowrap;
+    color: var(--config-icone-ativo);
+    background: var(--config-menu-fundo);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--config-brilho) 35%, transparent);
+    opacity: 0;
+    transform: translate(-6px, -50%);
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.config-menu button:hover em {
+    opacity: 1;
+    transform: translate(0, -50%);
+}
+
+/* ---------- conteúdo ---------- */
+
+.config-corpo .wrapper-configuracao {
+    animation: config-categoria-entrando 0.22s ease-out;
+}
+
+.config-cabecalho {
+    margin-bottom: 6px;
+}
+
+/* espaço padrão entre uma seção e outra (cada título h3 abre uma seção): coisa nova que entrar no Config
+   já nasce com o mesmo respiro */
+.config-corpo .wrapper-configuracao h3 {
+    margin: var(--config-espaco-secao) 0 10px;
+}
+
+.config-corpo .wrapper-configuracao .config-cabecalho + h3,
+.config-corpo .wrapper-configuracao .config-previa + h3 {
+    margin-top: 18px;
+}
+
+.config-cabecalho h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.janela-configuracao-led .wrapper-configuracao .config-cabecalho p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--config-texto-suave);
+}
+
+/* item com controle ao lado (cor do LED, volume, relógio + botão) */
+.config-linha {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: 3%;
+}
+
+.janela-configuracao-led .wrapper-configuracao .config-linha p {
+    margin: 0;
+}
+
+/* seletor de cor do LED: aqui fica na linha do texto (não mais solto pela janela) */
+.config-corpo .input-cor {
+    position: static;
+    width: 44px;
+    height: 28px;
+}
+
+.config-volume {
+    width: 200px;
+    accent-color: var(--config-destaque);
+    cursor: pointer;
+}
+
+.config-valor {
+    min-width: 40px;
+    font-weight: 600;
+}
+
+.config-relogio {
+    font-size: 13px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.config-botao {
+    padding: 5px 10px;
+    border: 1px solid var(--config-borda);
+    border-radius: 6px;
+    font-family: var(--fonte-sistema);
+    font-size: 12px;
+    color: inherit;
+    background: var(--config-cartao);
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.config-botao:hover {
+    border-color: var(--config-destaque);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--config-brilho) 45%, transparent);
+}
+
+.config-botao:active {
+    transform: scale(0.97);
+}
+
+.config-botao.ativo {
+    border-color: var(--config-destaque);
+}
+
+/* "Alterar" data e hora: o calendário da barra de tarefas, 15% menor, flutuando no canto direito do Config
+   (preso ao Config inteiro, e não à parte que rola: assim ele nunca fica cortado embaixo) */
+.config-calendario {
+    position: absolute;
+    z-index: 7;
+    top: 50%;
+    right: 18px;
+    translate: 0 -50%;
+    zoom: 0.85;
+}
+
+/* lá na barra ele "sobe" colado nela (sem borda embaixo); aqui ele fica solto, então ganha a borda toda */
+.config-calendario .calendario {
+    position: static;
+    border-bottom: 1px solid var(--cor-borda-neon-sistema);
+    border-radius: 8px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+}
+
+/* o Config antigo tem uma regra "span = 26px" (do título); dentro do calendário os spans voltam aos
+   tamanhos dele (os mesmos do Calendario.css) */
+.janela-configuracao-led .config-calendario .calendario-sincronizar-icone { font-size: 13px; }
+.janela-configuracao-led .config-calendario .calendario-nome-do-mes { font-size: 12px; }
+.janela-configuracao-led .config-calendario .calendario-dia-da-semana { font-size: 10px; }
+
+/* botão de ação perigosa já confirmando (ex.: apagar tudo) */
+.config-botao.config-botao-perigo {
+    border-color: #e0506a;
+    color: #e0506a;
+}
+
+/* o circulozinho do "Sincronizar": gira enquanto acerta a hora. Caixa quadrada com o centro no meio do
+   símbolo (senão ele "balança" ao girar) e um giro que acelera e desacelera, mais macio que o linear */
+.config-botao-giro {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    text-align: center;
+    font-style: normal;
+    transform-origin: 50% 50%;
+}
+
+.config-botao.sincronizando {
+    cursor: progress;
+}
+
+.config-botao.sincronizando .config-botao-giro {
+    animation: config-girando 1s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+
+@keyframes config-girando {
+    to { transform: rotate(360deg); }
+}
+
+/* prévia ao vivo do tablet (Personalização) */
+.config-previa {
+    margin: 10px 0 4px 3%;
+    padding: 6px;
+    width: 176px;
+    border-radius: 10px;
+    background: #111;
+    box-shadow: 0 0 0 1px var(--config-borda), 0 0 12px color-mix(in srgb, var(--config-brilho) 30%, transparent);
+}
+
+.config-previa-tela {
+    position: relative;
+    height: 98px;
+    overflow: hidden;
+    border-radius: 4px;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 0.3s ease;
+}
+
+.config-previa-janela {
+    position: absolute;
+    top: 14px;
+    left: 26px;
+    width: 76px;
+    height: 46px;
+    border-radius: 3px;
+    background: rgba(215, 218, 243, 0.85);
+    box-shadow: inset 0 7px 0 #bcabff;
+}
+
+.tablet-tela[data-tema='noturno'] .config-previa-janela {
+    background: rgba(18, 15, 51, 0.9);
+    box-shadow: inset 0 7px 0 #413385;
+}
+
+.config-previa-barra {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 9px;
+    background: rgba(10, 14, 30, 0.85);
+}
+
+/* a galeria de wallpapers era centralizada numa janela mais larga: aqui ela encosta mais à esquerda
+   (ainda deixando o espaço do wallpaper especial do noturno) para não sobrar barra de rolagem de lado */
+.config-corpo .wrapper-configuracao .container-galeria-presets {
+    margin-left: 26%;
+    /* 3% menor que a original (400 × 250) */
+    width: 388px;
+    height: 243px;
+}
+
+.config-corpo .wrapper-configuracao .container-galeria-presets img {
+    width: 194px;
+    height: 121.5px;
+}
+
+/* prévia do wallpaper especial (aberta pelo botão de vidro): um pouco mais para baixo, longe da galeria */
+.config-corpo .wallpaper-especial-modal {
+    margin-top: 30px;
+}
+
+/* ficha do "Sobre" */
+.config-ficha {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 12px 3% 0;
+}
+
+.config-ficha div {
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--config-cartao);
+    border: 1px solid var(--config-borda);
+}
+
+.config-ficha dt {
+    font-size: 11px;
+    color: var(--config-texto-suave);
+}
+
+.config-ficha dd {
+    margin: 2px 0 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.janela-configuracao-led .wrapper-configuracao .config-assinatura {
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--config-texto-suave);
+}
+
+.config-assinatura a {
+    color: var(--config-destaque);
+}
+
+@keyframes config-categoria-entrando {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}

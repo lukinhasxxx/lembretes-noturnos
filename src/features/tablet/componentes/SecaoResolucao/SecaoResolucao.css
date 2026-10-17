@@ -22,11 +22,6 @@
     --resolucao-destaque: #b98cff;
 }
 
-/* respiro em cima: a galeria de wallpapers logo acima cresce no hover e encostava no título */
-.secao-resolucao {
-    margin-top: 28px;
-}
-
 .seletor-resolucao-atual {
     display: flex;
     align-items: center;
