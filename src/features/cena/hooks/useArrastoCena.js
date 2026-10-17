@@ -10,6 +10,11 @@ const VELOCIDADE_FLICK = 0.35
 const TRANSICAO_PARADA = 'transform 0.5s cubic-bezier(0.2, 0.7, 0.3, 1)'
 // margem (px da arte) para considerar que ainda tem cena para um lado
 const FOLGA_BORDA = 4
+// dica da primeira visita: a cena "cutuca" sozinha para um lado e volta, de tempos em tempos
+const CUTUCADA_PX = 90
+const PRIMEIRA_CUTUCADA_MS = 2500
+const INTERVALO_CUTUCADAS_MS = 6000
+const VOLTA_DA_CUTUCADA_MS = 550
 
 const xInicial = PARADAS_CELULAR.find(parada => parada.nome === PARADA_INICIAL_CELULAR).x
 
@@ -19,10 +24,16 @@ const xInicial = PARADAS_CELULAR.find(parada => parada.nome === PARADA_INICIAL_C
 // Devolve quais lados ainda têm cena (para as luzinhas das bordas) e irPara(direção): -1 esquerda, 1 direita.
 // foco: { parada, vez } — quando muda, a cena desliza sozinha até essa parada (ex.: o painel, ao mandar um lembrete);
 // "vez" só serve para o mesmo pedido poder se repetir.
-export const useArrastoCena = (palcoRef, ativo, foco) => {
+// dica: primeira visita — a cena cutuca sozinha para mostrar que dá para arrastar (cutucadas conta quantas já foram);
+// aoArrastar: chamado quando a pessoa arrasta de verdade (aí a dica pode sair)
+export const useArrastoCena = (palcoRef, ativo, foco, { dica = false, aoArrastar } = {}) => {
     // meio da tela, em px da arte
     const centroRef = useRef(xInicial)
     const [lados, setLados] = useState({ esquerda: false, direita: false })
+    const [cutucadas, setCutucadas] = useState(0)
+    const tocandoRef = useRef(false)
+    const aoArrastarRef = useRef(aoArrastar)
+    aoArrastarRef.current = aoArrastar
 
     // px da tela por px da arte, e quanto da arte cabe na largura da tela
     const medir = useCallback(() => {
@@ -73,6 +84,7 @@ export const useArrastoCena = (palcoRef, ativo, foco) => {
 
         const aoTocar = (evento) => {
             if (evento.pointerType === 'mouse') return
+            tocandoRef.current = true
             toque = {
                 inicioX: evento.clientX,
                 centroInicial: centroRef.current,
@@ -87,12 +99,14 @@ export const useArrastoCena = (palcoRef, ativo, foco) => {
             const deslocamento = evento.clientX - toque.inicioX
             if (!toque.arrastando && Math.abs(deslocamento) < LIMIAR_ARRASTE_PX) return
 
+            if (!toque.arrastando) aoArrastarRef.current?.()
             toque.arrastando = true
             toque.amostras = [...toque.amostras.slice(-4), { x: evento.clientX, t: evento.timeStamp }]
             aplicar(toque.centroInicial - deslocamento / medir().escala)
         }
 
         const aoSoltar = (evento) => {
+            tocandoRef.current = false
             if (!toque) return
             const { arrastando, amostras } = toque
             toque = null
@@ -127,6 +141,30 @@ export const useArrastoCena = (palcoRef, ativo, foco) => {
         }
     }, [ativo, palcoRef, aplicar, irPara, medir])
 
+    // dica da primeira visita: de tempos em tempos a cena desliza um pouco para um lado e volta
+    // (para a direita; se já estiver na borda direita, para a esquerda). Não cutuca com o dedo na tela
+    useEffect(() => {
+        if (!ativo || !dica) return
+        let timerVolta
+        const cutucar = () => {
+            if (tocandoRef.current) return
+            const de = centroRef.current
+            const lado = limitar(de + CUTUCADA_PX) - de > FOLGA_BORDA ? 1 : -1
+            aplicar(de + CUTUCADA_PX * lado, true)
+            setCutucadas(total => total + 1)
+            timerVolta = setTimeout(() => {
+                if (!tocandoRef.current) aplicar(de, true)
+            }, VOLTA_DA_CUTUCADA_MS)
+        }
+        const timerPrimeira = setTimeout(cutucar, PRIMEIRA_CUTUCADA_MS)
+        const intervalo = setInterval(cutucar, INTERVALO_CUTUCADAS_MS)
+        return () => {
+            clearTimeout(timerPrimeira)
+            clearInterval(intervalo)
+            clearTimeout(timerVolta)
+        }
+    }, [ativo, dica, aplicar, limitar])
+
     // pedido de foco vindo de fora: desliza até a parada pedida
     useEffect(() => {
         if (!ativo || !foco) return
@@ -136,5 +174,5 @@ export const useArrastoCena = (palcoRef, ativo, foco) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [foco])
 
-    return { lados: ativo ? lados : { esquerda: false, direita: false }, irPara }
+    return { lados: ativo ? lados : { esquerda: false, direita: false }, irPara, cutucadas }
 }
