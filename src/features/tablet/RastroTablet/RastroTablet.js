@@ -4,7 +4,9 @@ import { createPortal } from 'react-dom'
 import { CANTOS_TELA_TABLET_MESA, IMAGEM_TABLET_MESA } from '../tablet.config'
 import { useSistemaTablet } from '../contexts/SistemaTablet'
 
-const DURACAO_RASTRO_MS = 420
+// a projeção (holograma com a "pane") é um pouco mais curta que o raio, para o falhar ficar mais seco
+const DURACAO_RASTRO_MS = 340
+const DURACAO_DISPARO_MS = 420
 // cópias atrasadas do holograma, cada vez mais fracas: formam o rastro ("alma") no caminho
 const ECOS_DO_RASTRO = [0, 1, 2]
 const ATRASO_ENTRE_ECOS_MS = 45
@@ -68,6 +70,12 @@ const TELA_NA_IMAGEM = {
     altura: Math.max(...ys) - Math.min(...ys),
 }
 
+// a imagem do tablet tem a tela vazada (é onde aparece o espelho): a máscara da projeção soma a imagem com
+// este quadrilátero da tela (os mesmos 4 cantos, num SVG do tamanho da imagem), senão ela sairia só a moldura
+const MASCARA_TELA_TABLET = `url("data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${IMAGEM_TABLET_MESA.largura} ${IMAGEM_TABLET_MESA.altura}' preserveAspectRatio='none'><polygon points='${cantos.map((ponto) => ponto.join(',')).join(' ')}'/></svg>`
+)}")`
+
 const caixaDaTelaNaMesa = (tabletNaTela) => {
     const caixa = tabletNaTela.getBoundingClientRect()
     return {
@@ -76,6 +84,12 @@ const caixaDaTelaNaMesa = (tabletNaTela) => {
         width: caixa.width * TELA_NA_IMAGEM.largura,
         height: caixa.height * TELA_NA_IMAGEM.altura,
     }
+}
+
+// caixa do tablet inteiro na mesa (a imagem toda): de onde a projeção sai com o formato dele
+const caixaDoTabletNaMesa = (tabletNaTela) => {
+    const { left, top, width, height } = (tabletNaTela.querySelector('.tablet-img') ?? tabletNaTela).getBoundingClientRect()
+    return { left, top, width, height }
 }
 
 // caixa da tela do modal; null quando ela está escondida (display: none mede 0)
@@ -88,12 +102,13 @@ const caixaDoModal = (telaDoModal) => {
 // "Alma" da tela viajando entre o tablet da mesa e o modal (ao abrir; ao fechar, o caminho de volta):
 // 1. um disparo largo em zigue-zague pixelado e quadriculado (3 tons de verde) atravessa o caminho,
 //    com fatias de glitch como o botão "Wallpapers";
-// 2. perto do destino, aparece um holograma transparente que chega com o formato da tela,
+// 2. perto do destino, aparece um holograma transparente: do lado da mesa ele tem a silhueta do tablet
+//    inteiro (a própria imagem dele como máscara) e vira o retângulo da tela do modal no caminho,
 //    com o glitch de fatias ciano/roxo do logo do boot e duas cópias atrasadas que deixam um rastro.
 // O elemento fica no lugar/tamanho do destino; a animação parte da origem (posição/tamanho vindos do JS).
 // Fica num portal no <body> para não herdar o transform do palco (as contas são em px da janela).
 const RastroTablet = ({ aberto, tabletRef }) => {
-    const { telaDoModal } = useSistemaTablet()
+    const { telaDoModal, tema } = useSistemaTablet()
     const telaDoModalRef = useRef(telaDoModal)
     const ultimaCaixaDoModal = useRef(null)
     const abertoAnterior = useRef(aberto)
@@ -128,15 +143,18 @@ const RastroTablet = ({ aberto, tabletRef }) => {
             if (!modal) return
             ultimaCaixaDoModal.current = modal
 
-            const mesa = caixaDaTelaNaMesa(tabletRef.current)
+            // o raio sai da telinha; a projeção sai do tablet inteiro
+            const telaNaMesa = caixaDaTelaNaMesa(tabletRef.current)
+            const tabletNaMesa = caixaDoTabletNaMesa(tabletRef.current)
             // abrindo: da mesa para o modal; fechando: do modal para a mesa
-            const [origem, destino] = aberto ? [mesa, modal] : [modal, mesa]
+            const [origem, destino] = aberto ? [tabletNaMesa, modal] : [modal, tabletNaMesa]
+            const disparo = aberto ? calcularDisparo(telaNaMesa, modal) : calcularDisparo(modal, telaNaMesa)
 
-            setRastro({ id: Date.now(), origem, destino, disparo: calcularDisparo(origem, destino) })
+            setRastro({ id: Date.now(), aberto, origem, destino, disparo })
             clearTimeout(timerRef.current)
             timerRef.current = setTimeout(
                 () => setRastro(null),
-                DURACAO_RASTRO_MS + ATRASO_ENTRE_ECOS_MS * (ECOS_DO_RASTRO.length - 1)
+                Math.max(DURACAO_RASTRO_MS + ATRASO_ENTRE_ECOS_MS * (ECOS_DO_RASTRO.length - 1), DURACAO_DISPARO_MS)
             )
         })
 
@@ -146,11 +164,13 @@ const RastroTablet = ({ aberto, tabletRef }) => {
     useEffect(() => () => clearTimeout(timerRef.current), [])
 
     if (!rastro) return null
-    const { origem, destino, disparo } = rastro
+    const { aberto: abrindo, origem, destino, disparo } = rastro
     const duracao = { '--duracao-rastro-tablet': `${DURACAO_RASTRO_MS}ms` }
+    const duracaoDisparo = { '--duracao-rastro-tablet': `${DURACAO_DISPARO_MS}ms` }
 
     return createPortal(
-        <div key={rastro.id}>
+        // data-tema: no noturno o raio fica mais escuro (RastroTablet.css)
+        <div key={rastro.id} data-tema={tema}>
             {disparo && (
                 <div
                     className='rastro-tablet-disparo'
@@ -161,7 +181,7 @@ const RastroTablet = ({ aberto, tabletRef }) => {
                         height: ALTURA_DISPARO_PX,
                         marginTop: -ALTURA_DISPARO_PX / 2,
                         transform: `rotate(${disparo.angulo}rad)`,
-                        ...duracao,
+                        ...duracaoDisparo,
                     }}
                 >
                     <svg width={disparo.comprimento} height={ALTURA_DISPARO_PX}>
@@ -169,8 +189,9 @@ const RastroTablet = ({ aberto, tabletRef }) => {
                         <polyline className='rastro-tablet-disparo-base' points={disparo.pontos} />
                         <polyline className='rastro-tablet-disparo-xadrez' points={disparo.pontos} />
                         <polyline className='rastro-tablet-disparo-brilho' points={disparo.pontos} />
-                        {/* cópia deslocada que pisca em fatias, como o hover do "Wallpapers" */}
+                        {/* cópias (ciano e amarela) que pulam em faixas, como o hover do "Wallpapers" */}
                         <polyline className='rastro-tablet-disparo-glitch' points={disparo.pontos} />
+                        <polyline className='rastro-tablet-disparo-glitch rastro-tablet-disparo-glitch-reverso' points={disparo.pontos} />
                     </svg>
                 </div>
             )}
@@ -185,6 +206,10 @@ const RastroTablet = ({ aberto, tabletRef }) => {
                     '--rastro-desloca-y': `${origem.top - destino.top}px`,
                     '--rastro-largura-origem': `${origem.width}px`,
                     '--rastro-altura-origem': `${origem.height}px`,
+                    // formato: 0 = silhueta do tablet (lado da mesa), 1 = retângulo (lado do modal)
+                    '--rastro-retangulo-origem': abrindo ? 0 : 1,
+                    '--rastro-retangulo-destino': abrindo ? 1 : 0,
+                    '--mascara-tablet': `url(${process.env.PUBLIC_URL}/imagens/tabletPNG.png), ${MASCARA_TELA_TABLET}`,
                     ...duracao,
                 }}
             >

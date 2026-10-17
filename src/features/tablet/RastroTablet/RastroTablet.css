@@ -9,12 +9,20 @@
    --forca-eco: 1 no da frente, mais fraco nos ecos atrasados que formam o rastro */
 .rastro-tablet-holograma {
     position: absolute;
-    border: 1px solid rgba(110, 240, 255, 0.5);
+    border: 1px solid rgba(110, 240, 255, 0.65);
     border-radius: 6px;
     background:
-        repeating-linear-gradient(0deg, rgba(110, 240, 255, 0.18) 0 1px, transparent 1px 4px),
-        linear-gradient(135deg, rgba(110, 240, 255, 0.16), rgba(185, 140, 255, 0.12));
-    box-shadow: 0 0 14px rgba(110, 240, 255, 0.25);
+        repeating-linear-gradient(0deg, rgba(110, 240, 255, 0.24) 0 1px, transparent 1px 4px),
+        linear-gradient(135deg, rgba(110, 240, 255, 0.2), rgba(185, 140, 255, 0.16));
+    box-shadow: 0 0 18px rgba(110, 240, 255, 0.35);
+    /* formato: a silhueta do tablet (a imagem dele) somada a um retângulo que vai acendendo
+       (--rastro-retangulo 0 → 1): do lado da mesa é o tablet, do lado do modal é a tela */
+    -webkit-mask-image: var(--mascara-tablet), linear-gradient(rgb(0 0 0 / var(--rastro-retangulo)) 0 0);
+    mask-image: var(--mascara-tablet), linear-gradient(rgb(0 0 0 / var(--rastro-retangulo)) 0 0);
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
     opacity: 0;
     animation:
         rastro-tablet-voando var(--duracao-rastro-tablet) cubic-bezier(0.5, 0, 0.3, 1) both,
@@ -36,7 +44,7 @@
 }
 
 /* falha de energia: pisca em saltos, como luz com mau contato. filter: opacity só apaga (nunca passa de 1)
-   e se multiplica com o opacity do voo, então o máximo de 20% continua valendo */
+   e se multiplica com o opacity do voo, então o máximo do voo continua valendo */
 @keyframes rastro-tablet-falha-energia {
     0%   { filter: opacity(1); }
     35%  { filter: opacity(0); }
@@ -56,14 +64,21 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: rgba(110, 240, 255, 0.35);
+    background: rgba(110, 240, 255, 0.5);
     animation: rastro-tablet-fatias var(--duracao-rastro-tablet) steps(1, end) both;
     animation-delay: inherit;
 }
 
 .rastro-tablet-holograma::after {
-    background: rgba(185, 140, 255, 0.35);
+    background: rgba(185, 140, 255, 0.5);
     animation-direction: reverse;
+}
+
+/* registrada como número para poder ser animada (uma variável comum só "pularia" de um valor para o outro) */
+@property --rastro-retangulo {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 1;
 }
 
 /* voa da origem até o destino, aparecendo e sumindo. Anima posição e tamanho de verdade (não scale),
@@ -75,14 +90,15 @@
         width: var(--rastro-largura-origem);
         height: var(--rastro-altura-origem);
         opacity: 0;
+        --rastro-retangulo: var(--rastro-retangulo-origem);
     }
-    /* "teleporte": sai do tablet com 20%, some no meio do caminho (2%) e reaparece com 20% na chegada */
-    10%  { opacity: calc(0.2 * var(--forca-eco)); }
-    25%  { opacity: calc(0.02 * var(--forca-eco)); }
-    65%  { opacity: calc(0.02 * var(--forca-eco)); }
+    /* "teleporte": sai do tablet com 28%, some no meio do caminho (3%) e reaparece com 31% na chegada */
+    10%  { opacity: calc(0.28 * var(--forca-eco)); }
+    25%  { opacity: calc(0.03 * var(--forca-eco)); }
+    65%  { opacity: calc(0.03 * var(--forca-eco)); }
     /* chegada 10% mais forte que a saída */
-    82%  { opacity: calc(0.22 * var(--forca-eco)); }
-    100% { left: 0; top: 0; width: 100%; height: 100%; opacity: 0; }
+    82%  { opacity: calc(0.31 * var(--forca-eco)); }
+    100% { left: 0; top: 0; width: 100%; height: 100%; opacity: 0; --rastro-retangulo: var(--rastro-retangulo-destino); }
 }
 
 /* disparo em zigue-zague pixelado da borda da origem até a borda do destino:
@@ -133,10 +149,18 @@
     stroke-dasharray: 3 12;
 }
 
+/* o glitch do hover do "Wallpapers" (@keyframes glitch no ModalTablet.css): as mesmas cores (ciano #00E6F6 e
+   amarelo #F8F005), uma faixa do raio por vez, pulando para os lados em saltos de steps(2, end).
+   A amarela faz o caminho ao contrário, então as duas "brigam" */
 .rastro-tablet-disparo-glitch {
-    stroke: #dcff8a;
+    stroke: #00e6f6;
     stroke-dasharray: 3 6;
-    animation: rastro-tablet-disparo-fatias calc(var(--duracao-rastro-tablet) * 0.6) steps(1, end) both;
+    animation: rastro-tablet-disparo-fatias calc(var(--duracao-rastro-tablet) * 0.6) steps(2, end) both;
+}
+
+.rastro-tablet-disparo-glitch-reverso {
+    stroke: #f8f005;
+    animation-direction: reverse;
 }
 
 /* aparece da origem até o destino e some a partir da origem, em saltos (steps): cara de glitch, não de laser */
@@ -146,18 +170,32 @@
     100% { clip-path: inset(-20px 0 -20px 100%);  opacity: 0.1; }
 }
 
-/* pedaços amarelos do disparo pulando para os lados (fatias ao longo do comprimento) */
+/* tema noturno: o raio mais escuro, puxado para o verde-azulado da noite, com brilho mais fraco;
+   o glitch troca o ciano/amarelo por um ciano fechado e o lilás do sistema */
+[data-tema='noturno'] .rastro-tablet-disparo svg {
+    filter: drop-shadow(0 0 3px rgba(40, 150, 140, 0.45));
+}
+
+[data-tema='noturno'] .rastro-tablet-disparo-base { stroke: #2f8f78; }
+[data-tema='noturno'] .rastro-tablet-disparo-xadrez { stroke: #4fb39a; }
+[data-tema='noturno'] .rastro-tablet-disparo-brilho { stroke: #a9dccd; }
+[data-tema='noturno'] .rastro-tablet-disparo-glitch { stroke: #1aa3b0; }
+[data-tema='noturno'] .rastro-tablet-disparo-glitch-reverso { stroke: #9d7fe0; }
+
+/* as mesmas fatias (faixas de cima a baixo) e a mesma sequência de saltos do glitch do "Wallpapers",
+   com os saltos na metade do tamanho (o raio é fino) */
 @keyframes rastro-tablet-disparo-fatias {
-    0%   { clip-path: inset(0 75% 0 5%);   transform: translate(-6px, -5px); }
-    10%  { clip-path: inset(0 88% 0 0);    transform: translate(3px, 6px); }
-    20%  { clip-path: inset(0 40% 0 35%);  transform: translate(4px, 4px); }
-    30%  { clip-path: inset(0 70% 0 2%);   transform: translate(-7px, -2px); }
-    40%  { clip-path: inset(0 60% 0 15%);  transform: translate(-3px, 3px); }
-    60%  { clip-path: inset(0 15% 0 60%);  transform: translate(5px, -4px); }
-    70%  { clip-path: inset(0 3% 0 82%);   transform: translate(-6px, 5px); }
-    80%  { clip-path: inset(0 0 0 80%);    transform: translate(-4px, 2px); }
-    90%  { clip-path: inset(0 0 0 90%);    transform: translate(6px, -3px); }
-    100% { clip-path: inset(0 0 0 100%);   transform: none; }
+    0%   { clip-path: inset(80% -6px 0 0);    transform: translate(-10px, -5px); }
+    10%  { clip-path: inset(10% -6px 85% 0);  transform: translate(5px, 5px); }
+    20%  { clip-path: inset(80% -6px 0 0);    transform: translate(-5px, 5px); }
+    30%  { clip-path: inset(10% -6px 85% 0);  transform: translate(0, 3px); }
+    40%  { clip-path: inset(50% -6px 30% 0);  transform: translate(-3px, 0); }
+    50%  { clip-path: inset(10% -6px 85% 0);  transform: translate(3px, 0); }
+    60%  { clip-path: inset(40% -6px 43% 0);  transform: translate(3px, 5px); }
+    70%  { clip-path: inset(50% -6px 30% 0);  transform: translate(-5px, 5px); }
+    80%  { clip-path: inset(80% -6px 5% 0);   transform: translate(10px, -5px); }
+    90%  { clip-path: inset(80% -6px 0 0);    transform: translate(-10px, 0); }
+    100% { clip-path: inset(50% 50% 50% 50%); transform: none; }
 }
 
 /* mesmas fatias e saltos do glitch do logo do boot / botão "Wallpapers" */
