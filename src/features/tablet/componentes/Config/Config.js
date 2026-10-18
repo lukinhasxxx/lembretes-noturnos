@@ -6,12 +6,12 @@ import SecaoTemas from '../BotaoTema/SecaoTemas'
 import WallpaperEspecial from '../WallpaperEspecial/WallpaperEspecial'
 import SecaoResolucao from '../SecaoResolucao/SecaoResolucao'
 import SecaoIdioma from '../SecaoIdioma/SecaoIdioma'
+import SobreSistema from '../SobreSistema/SobreSistema'
 import Calendario from '../../sistema/Calendario/Calendario'
 import { IconeCena, IconePersonalizacao, IconeSistema, IconeSobre } from './IconesConfig'
 import { TEMAS } from '../../hooks/useTemaSistema'
 import { useDataAtual } from '../../hooks/useDataAtual'
 import { useSistemaTablet } from '../../contexts/SistemaTablet'
-import { NOME_SISTEMA_POR_TEMA, SISTEMA } from '../../tablet.config'
 import { useIdioma } from '../../../../shared/i18n/Idioma'
 import { aleatorioEntre } from '../../../../shared/utils/aleatorio'
 import { PREFIXO_CHAVE } from '../../../../shared/hooks/useEstadoPersistido'
@@ -31,9 +31,6 @@ const WALLPAPERS_PRONTOS = [
     { id: 3, src: '/imagens/windows/previasWallpaper/previa3.gif', alt: 'Previa 3' },
     { id: 4, src: '/imagens/windows/previasWallpaper/previa4.png', miniatura: '/imagens/windows/previasWallpaper/miniaturas/previa4.webp', alt: 'Previa 4' },
 ]
-
-// quando a página abriu: o "Ligado há" do Sobre conta a partir daqui
-const ABERTO_EM = Date.now()
 
 // cabeçalho de cada categoria: nome e uma frase (a página nunca começa "vazia")
 const Cabecalho = ({ categoria }) => (
@@ -278,38 +275,6 @@ const Sistema = () => {
     )
 }
 
-const Sobre = () => {
-    const { tema } = useSistemaTablet()
-    // só para redesenhar a cada segundo (o tempo ligado é pelo relógio real, não pela hora mudada no calendário)
-    useDataAtual()
-    const minutosLigado = Math.floor((Date.now() - ABERTO_EM) / 60000)
-    const ligadoHa = minutosLigado < 1 ? 'menos de 1 minuto' : `${minutosLigado} min`
-
-    const ficha = [
-        ['Sistema', NOME_SISTEMA_POR_TEMA[tema] ?? SISTEMA.nome],
-        ['Versão', '1.0'],
-        ['Usuário', SISTEMA.usuario],
-        ['Feito com', 'React e CSS'],
-        ['Ligado há', ligadoHa],
-    ]
-
-    return (
-        <>
-            <dl className='config-ficha'>
-                {ficha.map(([rotulo, valor]) => (
-                    <div key={rotulo}>
-                        <dt>{rotulo}</dt>
-                        <dd>{valor}</dd>
-                    </div>
-                ))}
-            </dl>
-            <p className='config-assinatura'>
-                Desenvolvido por <a href='https://github.com/lukinhasxxx' target='_blank' rel='noreferrer'>Lucas da Silva</a>
-            </p>
-        </>
-    )
-}
-
 // Config.exe: menu de ícones na esquerda (o nome aparece no hover) e a categoria escolhida na direita,
 // sempre com um cabeçalho. Vindo do "Experimentar" da notificação de temas, abre direto em Personalização.
 const Config = ({ fecharApp, minimizarApp, classeAnimacao, radioLigado, musicaTocando, corNeon, volume, aoMudarVolume, aoDesligarRadio }) => {
@@ -367,7 +332,7 @@ const Config = ({ fecharApp, minimizarApp, classeAnimacao, radioLigado, musicaTo
                             />
                         )}
                         {idCategoria === 'sistema' && <Sistema />}
-                        {idCategoria === 'sobre' && <Sobre />}
+                        {idCategoria === 'sobre' && <SobreSistema />}
                     </div>
                 </div>
             </div>

@@ -54,7 +54,8 @@ const sortearPiscada = () => {
     )
 }
 
-const ChoqueLua = ({ semente }) => {
+// duracaoMs: quanto tempo cada choque dura (o hover da lua usa os 2 s; o emblema do Sobre, um choque curtinho)
+const ChoqueLua = ({ semente, duracaoMs = DURACAO_MS }) => {
     const [raios, setRaios] = useState([])
 
     useEffect(() => {
@@ -68,7 +69,7 @@ const ChoqueLua = ({ semente }) => {
 
         // alterna: piscada (raios em lugares novos) → pausa (nada) → piscada... até dar os 2 s
         const piscar = () => {
-            if (performance.now() - inicio > DURACAO_MS) {
+            if (performance.now() - inicio > duracaoMs) {
                 setRaios([])
                 return
             }
@@ -81,7 +82,7 @@ const ChoqueLua = ({ semente }) => {
 
         timer = setTimeout(piscar, sortearEntre(PAUSA_MS))
         return () => clearTimeout(timer)
-    }, [semente])
+    }, [semente, duracaoMs])
 
     return (
         <svg className='choque-lua' viewBox={`0 0 ${TAMANHO} ${TAMANHO}`} aria-hidden='true'>
