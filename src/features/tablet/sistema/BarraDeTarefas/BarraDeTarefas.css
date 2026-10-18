@@ -1,4 +1,7 @@
 .tablet-tela .barra-de-tarefas {
+    /* a barra começa a 91,7% da tela e tem 36px, então passa 4px do fim da tela (é o lugar original dela,
+       com os ícones na altura certa). Os botões só pintam o hover na parte que aparece (ver BotaoBarraDeTarefas.css) */
+    --sobra-barra-de-tarefas: 4px;
     position: absolute;
     top: 91.7%;
     left: 0;
@@ -48,9 +51,11 @@
     margin-left: 10px;
 }
 
-/* respiro de 5px de cada lado em cada app aberto (10px entre um ícone e outro) */
+/* apps abertos: hover 34px de largura (3px menor de cada lado que o padrão de 40px) e 2px de respiro de cada
+   lado (4px entre um ícone e outro) */
 .barra-de-tarefas-apps-abertos .botao-barra-de-tarefas {
-    margin: 0 5px;
+    width: calc(var(--largura-padrao-botao-barra-de-tarefas) - 6px);
+    margin: 0 2px;
 }
 
 .barra-de-tarefas-bandeja {
@@ -65,7 +70,8 @@
     all: unset;
     box-sizing: border-box;
     width: 9px;
-    height: var(--altura-barra-de-tarefas);
+    /* só a parte da barra que aparece na tela */
+    height: calc(var(--altura-barra-de-tarefas) - var(--sobra-barra-de-tarefas, 0px));
     margin-left: -8px;
     border-left: 1px solid rgba(255, 255, 255, 0.18);
     transition: background-color 0.15s;
