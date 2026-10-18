@@ -1,7 +1,7 @@
 import { VisibilidadePainelContext } from '../../mural'
 import './ModalTablet.css'
 import Botao from '../componentes/Botao/Botao'
-import { useState, useContext, useLayoutEffect, useRef } from 'react'
+import { useState, useContext, useLayoutEffect, useRef, Suspense } from 'react'
 import '../sistema/temaSistema.css'
 import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
@@ -13,7 +13,7 @@ import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
 import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
 import { ESTADOS_SISTEMA } from '../tablet.config'
-import { APPS } from '../apps.config'
+import { APPS, appDaTela } from '../apps.config'
 import { useSistemaTablet } from '../contexts/SistemaTablet'
 
 // Modal do tablet: desenha o sistema (área de trabalho, apps, barra, telas do sistema).
@@ -24,7 +24,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     const {alterarVisibilidadePainel, textoBotao, mostrarPainel} = useContext(VisibilidadePainelContext)
     const {
         estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
-        telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, minimizarApp, minimizarTudo, voltarParaAreaDeTrabalho,
+        telaAtiva, appsAbertos, ultimaTela, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, minimizarApp, minimizarTudo, voltarParaAreaDeTrabalho,
         wallpaperAtual, registrarTelaDoModal, telaDoModal, tema, animacaoJanela,
     } = useSistemaTablet()
     const [nome, setNome] = useState('')
@@ -72,6 +72,20 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
     // tela desenhada: a da frente e, durante a animação, também a outra (ver animacaoJanela no useAreaDeTrabalho)
     const telaVisivel = (tela) => telaAtiva === tela || animacaoJanela?.tela === tela
+
+    // janela de app aberto que não está na frente (minimizada ou atrás de outra): continua montada, só escondida.
+    // Assim ela volta como estava — rolagem, texto digitado, partida dos jogos. Fechar o app desmonta (começa do zero)
+    const telaGuardada = (tela) => {
+        const dono = appDaTela(tela)
+        return Boolean(dono) && appsAbertos.includes(dono) && ultimaTela[dono] === tela
+    }
+    // Suspense: enquanto o arquivo de um jogo ainda está baixando (só na 1ª vez), não mostra nada no lugar
+    const guardar = (tela, janela) => (telaVisivel(tela) || telaGuardada(tela)) && (
+        // "contents": a caixa em volta não existe para o layout; escondida, sai da tela sem desmontar
+        <div key={tela} style={{ display: telaVisivel(tela) ? 'contents' : 'none' }}>
+            <Suspense fallback={null}>{janela}</Suspense>
+        </div>
+    )
 
     const aoSalvar = (evento) => {
         evento.preventDefault()
@@ -135,8 +149,9 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     </div>
                 )}
 
+                {/* janelas dos apps: guardar() deixa a janela montada (escondida) enquanto o app está aberto */}
                 {/* app de fato */}
-                {telaVisivel('config.exe') && (
+                {guardar('config.exe', (
                     <Config
                         fecharApp={fecharApp}
                         minimizarApp={minimizarApp}
@@ -148,10 +163,10 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                         musicaTocando={musicaTocando}
                         aoDesligarRadio={aoDesligarRadio}
                     />
-                )}
-                
+                ))}
+
                 {/* APP de fato */}
-                { telaVisivel('lembretes.exe') && (
+                { guardar('lembretes.exe', (
 
         <div className={`janela-lembretes ${classeAnimacaoJanela('app_lembretes')}`} >
 
@@ -217,8 +232,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 </form>
         </div>
 
-            )}
-            {telaVisivel('about.exe') && (
+            ))}
+            {guardar('about.exe', (
                  <div className={`about ${classeAnimacaoJanela('app_lembretes')}`} >
 
                 {/* Janela superior */}
@@ -268,7 +283,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     </div>
                  </div>
             </div>
-        </div>)}
+        </div>))}
     </div>
 
     <BarraDeTarefas
