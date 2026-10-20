@@ -12,15 +12,22 @@ import { useWallpaperBloqueio } from '../hooks/useWallpaperBloqueio'
 import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
 import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
+import CarregandoApp from '../sistema/CarregandoApp/CarregandoApp'
 import { ESTADOS_SISTEMA } from '../tablet.config'
 import { APPS, appDaTela } from '../apps.config'
 import { useSistemaTablet } from '../contexts/SistemaTablet'
 
 // jogos: cada um vira um arquivo à parte, baixado só quando a pessoa abre o jogo pela primeira vez
-// (o código deles e o chess.js não pesam na abertura do site)
-const Jogo2048 = lazy(() => import('../componentes/Jogo2048/Jogo2048'))
-const JogoSudoku = lazy(() => import('../componentes/JogoSudoku/JogoSudoku'))
-const JogoXadrez = lazy(() => import('../componentes/JogoXadrez/JogoXadrez'))
+// (o código deles e o chess.js não pesam na abertura do site). Na 1ª abertura o "Abrindo..." (CarregandoApp)
+// fica pelo menos ESPERA_MINIMA_CARREGANDO_MS na tela, mesmo se o arquivo chegar antes: assim ele não vira um pisco
+const ESPERA_MINIMA_CARREGANDO_MS = 450
+const comEsperaMinima = (importar) => () => Promise.all([
+    importar(),
+    new Promise((resolver) => setTimeout(resolver, ESPERA_MINIMA_CARREGANDO_MS)),
+]).then(([modulo]) => modulo)
+const Jogo2048 = lazy(comEsperaMinima(() => import('../componentes/Jogo2048/Jogo2048')))
+const JogoSudoku = lazy(comEsperaMinima(() => import('../componentes/JogoSudoku/JogoSudoku')))
+const JogoXadrez = lazy(comEsperaMinima(() => import('../componentes/JogoXadrez/JogoXadrez')))
 
 // Modal do tablet: desenha o sistema (área de trabalho, apps, barra, telas do sistema).
 // O estado do sistema (ligado/bloqueado..., tela na frente, apps abertos, wallpaper) vem do SistemaTabletProvider,
@@ -85,11 +92,11 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         const dono = appDaTela(tela)
         return Boolean(dono) && appsAbertos.includes(dono) && ultimaTela[dono] === tela
     }
-    // Suspense: enquanto o arquivo de um jogo ainda está baixando (só na 1ª vez), não mostra nada no lugar
+    // Suspense: enquanto o arquivo de um jogo ainda está baixando (só na 1ª vez), mostra o "Abrindo..." no lugar
     const guardar = (tela, janela) => (telaVisivel(tela) || telaGuardada(tela)) && (
         // "contents": a caixa em volta não existe para o layout; escondida, sai da tela sem desmontar
         <div key={tela} style={{ display: telaVisivel(tela) ? 'contents' : 'none' }}>
-            <Suspense fallback={null}>{janela}</Suspense>
+            <Suspense fallback={<CarregandoApp app={APPS[appDaTela(tela)]} />}>{janela}</Suspense>
         </div>
     )
 

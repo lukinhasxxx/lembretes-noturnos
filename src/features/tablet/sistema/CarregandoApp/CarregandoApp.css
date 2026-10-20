@@ -1,0 +1,82 @@
+/* ocupa o lugar da janela (barra da janela 34px + corpo 319px) */
+.carregando-app {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 665px;
+    height: 353px;
+    font-family: var(--fonte-sistema);
+}
+
+/* aparece na hora (sem atraso): os ícones da área de trabalho saem no mesmo instante e não pode sobrar um
+   momento com a tela vazia. O tempo mínimo na tela fica no ModalTablet (comEsperaMinima) */
+.carregando-app-cartao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 26px;
+    border: 1px solid var(--cor-borda-neon-sistema);
+    border-radius: 12px;
+    background: var(--cor-fundo-menu-iniciar);
+    color: var(--cor-texto-sistema);
+    font-size: 13px;
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+    animation: carregando-app-aparecendo 0.18s ease-out both;
+}
+
+.carregando-app-cartao img {
+    width: 36px;
+    height: 36px;
+    animation: carregando-app-pulso 1s ease-in-out infinite;
+}
+
+/* barrinha "indo e voltando" (não dá para saber quanto falta) */
+.carregando-app-barra {
+    position: relative;
+    width: 120px;
+    height: 3px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--cor-destaque-sistema) 20%, transparent);
+}
+
+.carregando-app-barra::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--cor-destaque-sistema);
+    animation: carregando-app-indo 1s ease-in-out infinite;
+}
+
+.tablet-tela[data-tema='noturno'] .carregando-app-cartao {
+    border-color: rgba(138, 120, 255, 0.45);
+    background: rgba(14, 11, 38, 0.97);
+    color: #e6e3ff;
+}
+
+.tablet-tela[data-tema='noturno'] .carregando-app-barra {
+    background: rgba(185, 140, 255, 0.18);
+}
+
+.tablet-tela[data-tema='noturno'] .carregando-app-barra::after {
+    background: #b98cff;
+}
+
+@keyframes carregando-app-aparecendo {
+    from { opacity: 0.85; scale: 0.97; }
+    to   { opacity: 1; scale: 1; }
+}
+
+@keyframes carregando-app-pulso {
+    50% { scale: 1.08; opacity: 0.8; }
+}
+
+@keyframes carregando-app-indo {
+    from { translate: -100% 0; }
+    to   { translate: 250% 0; }
+}
