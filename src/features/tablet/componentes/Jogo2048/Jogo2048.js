@@ -5,6 +5,7 @@ import { useSistemaTablet } from '../../contexts/SistemaTablet'
 import { TEMAS } from '../../hooks/useTemaSistema'
 import { useEstadoPersistido } from '../../../../shared/hooks/useEstadoPersistido'
 import { TAMANHO_GRADE, limparRemovidas, mover, nascerPeca, novoJogo, temJogada, venceu } from './logica2048'
+import { ControlesModoJogo, useModoJogo } from '../ModoJogo/ModoJogo'
 
 // tempo da peça deslizando (igual à transição do .jogo2048-peca no CSS): só depois dele a peça nova nasce
 const DURACAO_DESLIZE_MS = 110
@@ -28,6 +29,8 @@ const Jogo2048 = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     // conta as jogadas: o pulso de "juntou" alterna entre duas animações iguais (par/ímpar), senão uma peça que
     // junta duas jogadas seguidas não pulsaria de novo (a classe continuaria a mesma)
     const [jogadas, setJogadas] = useState(0)
+    // modo jogo (tela cheia dentro do tablet); Esc sai
+    const [modoJogo, alternarModoJogo] = useModoJogo('2048')
     const animandoRef = useRef(false)
     const toqueRef = useRef(null)
     const timerRef = useRef(null)
@@ -94,10 +97,19 @@ const Jogo2048 = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     }
 
     return (
-        <div className={`janela-jogo2048 ${classeAnimacao}`}>
-            <WindowBar fecharApp={fecharApp} minimizarApp={minimizarApp} idDoAppPraFechar='app_2048' escura={tema === TEMAS.noturno} />
+        <div className={`janela-jogo2048${modoJogo ? ' janela-modo-jogo' : ''} ${classeAnimacao}`}>
+            {!modoJogo && (
+                <WindowBar fecharApp={fecharApp} minimizarApp={minimizarApp} idDoAppPraFechar='app_2048' escura={tema === TEMAS.noturno} />
+            )}
 
             <div className='jogo2048-corpo'>
+                <ControlesModoJogo
+                    modoJogo={modoJogo}
+                    alternar={alternarModoJogo}
+                    idDoApp='app_2048'
+                    minimizarApp={minimizarApp}
+                    fecharApp={fecharApp}
+                />
                 <div
                     className='jogo2048-tabuleiro'
                     onPointerDown={aoTocar}

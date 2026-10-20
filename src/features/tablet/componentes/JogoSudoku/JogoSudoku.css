@@ -24,6 +24,7 @@
     --texto-escrito: #3d7bff;
     --texto-conflito: #e0506a;
 
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -34,6 +35,17 @@
     color: #2a1d80;
     font-family: var(--fonte-sistema);
     user-select: none;
+}
+
+/* modo jogo (ver ModoJogo.css): casas de 36px (tabuleiro de ~328px) e números maiores; a lateral com os
+   botões ocupa ~310px, então o vão fica menor para os dois caberem com folga nas bordas */
+.janela-modo-jogo .sudoku-corpo {
+    --casa: 36px;
+    gap: 24px;
+}
+
+.janela-modo-jogo .sudoku-casa {
+    font-size: 20px;
 }
 
 .tablet-tela[data-tema='noturno'] .sudoku-corpo {

@@ -1,0 +1,37 @@
+/* modo jogo: a janela do jogo cobre a tela inteira do tablet, por cima da barra de tarefas.
+   O corpo de cada jogo ocupa tudo; o tamanho das casas de cada um fica no CSS do jogo */
+.janela-modo-jogo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 15;
+    width: 666px;
+    height: 385px;
+    background-color: rgb(215, 218, 243);
+}
+
+.janela-modo-jogo > div:last-child {
+    width: 100%;
+    height: 100%;
+}
+
+/* botões do canto (modo jogo / minimizar / fechar) */
+.controles-modo-jogo {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    z-index: 7;
+    display: flex;
+    gap: 5px;
+}
+
+.config-botao.botao-modo-jogo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 26px;
+    padding: 0;
+    font-size: 13px;
+    line-height: 1;
+}

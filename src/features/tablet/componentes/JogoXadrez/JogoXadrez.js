@@ -7,6 +7,7 @@ import { TEMAS } from '../../hooks/useTemaSistema'
 import { useEstadoPersistido } from '../../../../shared/hooks/useEstadoPersistido'
 import { NIVEIS_XADREZ, jogarLance, sugerirLance } from './motorXadrez'
 import { SISTEMA } from '../../tablet.config'
+import { BotaoModoJogo, ControlesModoJogo, useModoJogo } from '../ModoJogo/ModoJogo'
 
 const COLUNAS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 const CORES = [
@@ -198,6 +199,8 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     const [verHistorico, setVerHistorico] = useState(false)
     // tela de início: lista suspensa dos níveis aberta
     const [listaNiveisAberta, setListaNiveisAberta] = useState(false)
+    // modo jogo (tela cheia dentro do tablet), lembrado para a próxima vez; Esc sai
+    const [modoJogo, alternarModoJogo] = useModoJogo('xadrez')
     // última mudança de elo (para o quadro de fim): { antes, depois, revelado }
     const [ultimoElo, setUltimoElo] = useState(null)
     const listaRef = useRef(null)
@@ -418,8 +421,11 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
             : pensando ? 'Pensando…'
                 : vezDaPessoa ? (xadrez.inCheck() ? 'Xeque! Sua vez.' : 'Sua vez.') : '')
 
-    const classeJanela = `janela-xadrez ${classeAnimacao}`
-    const barraDaJanela = <WindowBar fecharApp={fecharApp} minimizarApp={minimizarApp} idDoAppPraFechar='app_xadrez' escura={tema === TEMAS.noturno} />
+    // modo jogo: a janela cobre a tela inteira do tablet (sem a barra da janela nem a barra de tarefas)
+    const classeJanela = `janela-xadrez${modoJogo ? ' janela-modo-jogo' : ''} ${classeAnimacao}`
+    const barraDaJanela = !modoJogo && (
+        <WindowBar fecharApp={fecharApp} minimizarApp={minimizarApp} idDoAppPraFechar='app_xadrez' escura={tema === TEMAS.noturno} />
+    )
 
     // tela de início: só o cartão no meio da janela (sem tabuleiro atrás)
     if (naTelaDeInicio) {
@@ -428,6 +434,13 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                 {barraDaJanela}
 
                 <div className='xadrez-corpo xadrez-corpo-inicio'>
+                    <ControlesModoJogo
+                        modoJogo={modoJogo}
+                        alternar={alternarModoJogo}
+                        idDoApp='app_xadrez'
+                        minimizarApp={minimizarApp}
+                        fecharApp={fecharApp}
+                    />
                     <section className='xadrez-inicio'>
                         <h2 className='xadrez-titulo'>
                             <img src={imagemDaPeca('w', 'n')} alt='' />
@@ -686,12 +699,26 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                         >
                             ☰
                         </button>
+                        <BotaoModoJogo modoJogo={modoJogo} alternar={alternarModoJogo} />
                         {menuAberto && (
                             <div className='xadrez-menu' role='menu'>
                                 <button type='button' role='menuitem' onClick={voltarAoInicio}>
                                     {fim ? 'Nova partida' : 'Voltar ao início'}
                                     {!fim && <small>a partida fica salva</small>}
                                 </button>
+                                {/* no modo jogo não tem a barra da janela: minimizar e fechar ficam aqui */}
+                                {modoJogo && (
+                                    <>
+                                        <button type='button' role='menuitem' onClick={() => minimizarApp('app_xadrez')}>
+                                            Minimizar
+                                            <small>a partida continua de onde parou</small>
+                                        </button>
+                                        <button type='button' role='menuitem' onClick={() => fecharApp('app_xadrez')}>
+                                            Fechar o xadrez
+                                            <small>a partida fica salva</small>
+                                        </button>
+                                    </>
+                                )}
                                 {!fim && (
                                     <button
                                         type='button'

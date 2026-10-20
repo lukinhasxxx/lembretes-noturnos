@@ -20,6 +20,7 @@
     --fundo-tabuleiro: rgba(75, 47, 214, 0.18);
     --fundo-casa: rgba(255, 255, 255, 0.45);
 
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -31,6 +32,21 @@
     font-family: var(--fonte-sistema);
     user-select: none;
 }
+
+/* modo jogo (ver ModoJogo.css): casas de 76px (tabuleiro de 349px) e números maiores */
+.janela-modo-jogo .jogo2048-corpo {
+    --casa: 76px;
+    --vao: 9px;
+    gap: 44px;
+}
+
+.janela-modo-jogo .jogo2048-peca { font-size: 30px; }
+.janela-modo-jogo .jogo2048-peca[data-valor='128'],
+.janela-modo-jogo .jogo2048-peca[data-valor='256'],
+.janela-modo-jogo .jogo2048-peca[data-valor='512'] { font-size: 26px; }
+.janela-modo-jogo .jogo2048-peca[data-valor='1024'],
+.janela-modo-jogo .jogo2048-peca[data-valor='2048'],
+.janela-modo-jogo .jogo2048-peca[data-valor='maior'] { font-size: 21px; }
 
 .tablet-tela[data-tema='noturno'] .jogo2048-corpo {
     --config-cartao: rgba(138, 120, 255, 0.1);

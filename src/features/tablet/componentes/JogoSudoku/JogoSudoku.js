@@ -6,6 +6,7 @@ import { TEMAS } from '../../hooks/useTemaSistema'
 import { useEstadoPersistido } from '../../../../shared/hooks/useEstadoPersistido'
 import { DIFICULDADES, LADO, colunaDe, gerarJogo, linhaDe, quadradoDe, resolvido, temConflito } from './logicaSudoku'
 import { SISTEMA } from '../../tablet.config'
+import { ControlesModoJogo, useModoJogo } from '../ModoJogo/ModoJogo'
 
 // quantos tempos o ranking guarda por nível
 const TAMANHO_RANKING = 5
@@ -48,6 +49,8 @@ const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     // recorde da versão anterior (só o melhor tempo, sem data): vira a primeira linha do ranking uma vez
     const [recordesAntigos] = useEstadoPersistido('recordes-sudoku', {})
     const [rankingAberto, setRankingAberto] = useState(false)
+    // modo jogo (tela cheia dentro do tablet); Esc sai
+    const [modoJogo, alternarModoJogo] = useModoJogo('sudoku')
     const [nivelDoRanking, setNivelDoRanking] = useState(null)
     // jogo salvo a cada mudança: { jogo, segundos } (ao reabrir, dá para continuar de onde parou)
     const [salvo, setSalvo] = useEstadoPersistido('sudoku-partida', null)
@@ -182,10 +185,19 @@ const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     }
 
     return (
-        <div className={`janela-sudoku ${classeAnimacao}`}>
-            <WindowBar fecharApp={fecharApp} minimizarApp={minimizarApp} idDoAppPraFechar='app_sudoku' escura={tema === TEMAS.noturno} />
+        <div className={`janela-sudoku${modoJogo ? ' janela-modo-jogo' : ''} ${classeAnimacao}`}>
+            {!modoJogo && (
+                <WindowBar fecharApp={fecharApp} minimizarApp={minimizarApp} idDoAppPraFechar='app_sudoku' escura={tema === TEMAS.noturno} />
+            )}
 
             <div className='sudoku-corpo'>
+                <ControlesModoJogo
+                    modoJogo={modoJogo}
+                    alternar={alternarModoJogo}
+                    idDoApp='app_sudoku'
+                    minimizarApp={minimizarApp}
+                    fecharApp={fecharApp}
+                />
                 <div className='sudoku-tabuleiro'>
                     {jogo.grade.map((numero, indice) => (
                         <button key={indice} type='button' className={classeDaCasa(indice)} onClick={() => setSelecionada(indice)}>

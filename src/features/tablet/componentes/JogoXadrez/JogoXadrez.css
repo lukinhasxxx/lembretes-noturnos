@@ -55,6 +55,27 @@
     color: #e6e3ff;
 }
 
+/* ---------- modo jogo (ver ModoJogo.css): casas maiores ---------- */
+.janela-modo-jogo .xadrez-corpo {
+    /* 44px por casa: tabuleiro de 352px, quase a altura da tela */
+    --casa: 44px;
+    gap: 22px;
+    padding-left: 16px;
+}
+
+.janela-modo-jogo .xadrez-lateral {
+    width: 260px;
+}
+
+/* os botões do canto (modo jogo / minimizar / fechar) ficam presos ao corpo */
+.xadrez-corpo-inicio {
+    position: relative;
+}
+
+.xadrez-lateral .config-botao.botao-modo-jogo {
+    align-self: center;
+}
+
 /* ---------- tabuleiro ---------- */
 .xadrez-tabuleiro {
     position: relative;
