@@ -1,0 +1,660 @@
+/* xadrez.exe: tabuleiro 8×8 na esquerda; status, opções, histórico e navegação na direita.
+   Mesmas cores do Config (--config-*) para os botões, como os outros jogos */
+
+.tablet-tela[data-tema='noturno'] .janela-xadrez {
+    background: #07061a;
+    box-shadow: 0 0 0 1px #07061a;
+}
+
+.xadrez-corpo {
+    --config-cartao: rgba(255, 255, 255, 0.55);
+    --config-borda: rgba(75, 47, 214, 0.25);
+    --config-destaque: #6a4cff;
+    --config-brilho: #6a4cff;
+    --config-texto-suave: #5d5778;
+
+    /* 36px por casa: o tabuleiro ocupa quase a altura toda (os jogadores ficam na lateral) */
+    --casa: 36px;
+    --casa-clara: #eceefb;
+    --casa-escura: #9a8fe0;
+    --cor-selecionada: rgba(110, 240, 255, 0.65);
+    --cor-ultimo-lance: rgba(255, 214, 102, 0.45);
+    --cor-dica: #18c99a;
+    --cor-xeque: rgba(255, 60, 90, 0.85);
+    --cor-marca-lance: rgba(42, 29, 128, 0.35);
+
+    display: flex;
+    align-items: center;
+    /* tabuleiro encostado à esquerda (com folga) e a lateral logo depois */
+    justify-content: flex-start;
+    gap: 24px;
+    padding-left: 22px;
+    box-sizing: border-box;
+    width: 665px;
+    height: 319px;
+    background-color: rgb(215, 218, 243);
+    color: #2a1d80;
+    font-family: var(--fonte-sistema);
+    user-select: none;
+}
+
+.tablet-tela[data-tema='noturno'] .xadrez-corpo {
+    --config-cartao: rgba(138, 120, 255, 0.1);
+    --config-borda: rgba(185, 140, 255, 0.35);
+    --config-destaque: #b98cff;
+    --config-brilho: #b98cff;
+    --config-texto-suave: #9d97cf;
+
+    --casa-clara: #8d80d4;
+    --casa-escura: #4b3f96;
+    --cor-selecionada: rgba(185, 140, 255, 0.75);
+    --cor-ultimo-lance: rgba(255, 214, 102, 0.35);
+    --cor-marca-lance: rgba(7, 6, 26, 0.45);
+
+    background: linear-gradient(160deg, #07061a 0%, #120f33 55%, #1d1652 100%);
+    color: #e6e3ff;
+}
+
+/* ---------- tabuleiro ---------- */
+.xadrez-tabuleiro {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(8, var(--casa));
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 0 0 2px var(--config-borda), 0 0 16px color-mix(in srgb, var(--config-brilho) 30%, transparent);
+}
+
+.xadrez-casa {
+    all: unset;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--casa);
+    height: var(--casa);
+    cursor: pointer;
+}
+
+.xadrez-casa.clara { background: var(--casa-clara); }
+.xadrez-casa.escura { background: var(--casa-escura); }
+
+.xadrez-casa img {
+    position: relative;
+    z-index: 1;
+    width: 32px;
+    height: 32px;
+    pointer-events: none;
+}
+
+/* peça do último lance escorregando da casa de origem até a dela (--de-coluna/--de-linha vêm do JS);
+   por cima das outras casas enquanto passa */
+.xadrez-casa img.deslizando {
+    z-index: 4;
+    animation: xadrez-deslize 0.2s ease-out;
+}
+
+@keyframes xadrez-deslize {
+    from { translate: calc(var(--de-coluna) * var(--casa)) calc(var(--de-linha) * var(--casa)); }
+    to   { translate: 0 0; }
+}
+
+/* ---------- jogadores (no alto e no pé da lateral) ---------- */
+/* altura e largura fixas, sem quebrar linha: nada que apareça aqui (peças tomadas, +N) mexe no tabuleiro */
+.xadrez-jogador {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 6px;
+    height: 18px;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.xadrez-jogador-nome {
+    font-weight: 700;
+}
+
+.xadrez-jogador-rating {
+    color: var(--config-texto-suave);
+}
+
+/* computador pensando: a bolinha da vez pulsa */
+.xadrez-jogador.pensando .xadrez-jogador-vez {
+    animation: xadrez-pensando 0.8s ease-in-out infinite;
+}
+
+@keyframes xadrez-pensando {
+    50% { transform: scale(1.6); opacity: 0.5; }
+}
+
+/* placar de material: miniaturas das peças tomadas (encavaladas, como no Lichess) e o +N de vantagem */
+.xadrez-material {
+    display: flex;
+    align-items: center;
+}
+
+.xadrez-material img {
+    width: 15px;
+    height: 15px;
+    margin-right: -5px;
+}
+
+.tablet-tela[data-tema='noturno'] .xadrez-material img {
+    filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.6));
+}
+
+.xadrez-material b {
+    margin-left: 9px;
+    font-size: 11px;
+    color: var(--config-texto-suave);
+}
+
+/* bolinha de "é a vez dele": apagada, acende (com brilho) em quem tem que jogar */
+.xadrez-jogador-vez {
+    flex: 0 0 auto;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--config-borda);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.xadrez-jogador.na-vez .xadrez-jogador-vez {
+    background: var(--config-destaque);
+    box-shadow: 0 0 6px var(--config-brilho);
+}
+
+/* no noturno as casas são escuras: um contorno claro nas peças para as pretas não sumirem */
+.tablet-tela[data-tema='noturno'] .xadrez-casa img {
+    filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.55));
+}
+
+/* marcas por cima da cor da casa (inset: não mexem no tamanho) */
+.xadrez-casa.ultimo-lance { box-shadow: inset 0 0 0 100px var(--cor-ultimo-lance); }
+.xadrez-casa.selecionada { box-shadow: inset 0 0 0 100px var(--cor-selecionada); }
+.xadrez-casa.dica { box-shadow: inset 0 0 0 3px var(--cor-dica); }
+.xadrez-casa.xeque { background-image: radial-gradient(circle, var(--cor-xeque) 0%, transparent 72%); }
+
+/* para onde a peça escolhida pode ir: bolinha (casa vazia) ou anel (captura) */
+.xadrez-casa.pode-ir::after,
+.xadrez-casa.pode-capturar::after {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.xadrez-casa.pode-ir::after {
+    width: 10px;
+    height: 10px;
+    background: var(--cor-marca-lance);
+}
+
+.xadrez-casa.pode-capturar::after {
+    inset: 2px;
+    border: 3px solid var(--cor-marca-lance);
+}
+
+.xadrez-casa:hover {
+    filter: brightness(1.06);
+}
+
+/* modo leitura: o tabuleiro fica levemente "apagado" (é só para ver, não para jogar) */
+.xadrez-tabuleiro.lendo .xadrez-casa {
+    cursor: default;
+    filter: saturate(0.6);
+}
+
+.xadrez-coordenada {
+    position: absolute;
+    z-index: 1;
+    font-size: 8px;
+    font-weight: 700;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.xadrez-casa.clara .xadrez-coordenada { color: var(--casa-escura); }
+.xadrez-casa.escura .xadrez-coordenada { color: var(--casa-clara); }
+.xadrez-coordenada.linha { top: 1px; left: 2px; }
+.xadrez-coordenada.coluna { right: 2px; bottom: 0; }
+
+/* avisos por cima do tabuleiro (promoção, continuar partida, abandonar) */
+.xadrez-aviso {
+    position: absolute;
+    inset: 0;
+    /* acima da peça que acabou de deslizar (z-index 4) */
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 16px;
+    text-align: center;
+    background: color-mix(in srgb, rgb(215, 218, 243) 86%, transparent);
+    animation: config-categoria-entrando 0.25s ease-out;
+}
+
+.tablet-tela[data-tema='noturno'] .xadrez-aviso {
+    background: rgba(7, 6, 26, 0.86);
+}
+
+.xadrez-aviso strong {
+    font-size: 16px;
+}
+
+.tablet-tela .xadrez-aviso p {
+    margin: -4px 0 0;
+    font-size: 12px;
+    color: var(--config-texto-suave);
+}
+
+.xadrez-aviso-botoes,
+.xadrez-promocao {
+    display: flex;
+    gap: 8px;
+}
+
+/* ---------- fim de partida ---------- */
+.xadrez-fim .xadrez-fim-titulo {
+    font-size: 22px;
+}
+
+.xadrez-fim.vitoria .xadrez-fim-titulo {
+    color: var(--config-destaque);
+    text-shadow: 0 0 14px color-mix(in srgb, var(--config-brilho) 60%, transparent);
+}
+
+.xadrez-fim.derrota .xadrez-fim-titulo {
+    color: #e0506a;
+}
+
+.xadrez-estatisticas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    width: 100%;
+    margin: 0;
+}
+
+.xadrez-estatisticas div {
+    padding: 4px 8px;
+    border: 1px solid var(--config-borda);
+    border-radius: 6px;
+    background: var(--config-cartao);
+    text-align: left;
+}
+
+.xadrez-estatisticas dt {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--config-texto-suave);
+}
+
+.xadrez-estatisticas .xadrez-estatistica-elo {
+    grid-column: 1 / -1;
+}
+
+.xadrez-estatisticas dd {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.xadrez-promocao button {
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--config-borda);
+    border-radius: 8px;
+    background: var(--config-cartao);
+    cursor: pointer;
+}
+
+.xadrez-promocao button:hover {
+    border-color: var(--config-destaque);
+}
+
+.xadrez-promocao img {
+    width: 36px;
+    height: 36px;
+}
+
+/* ---------- lateral ---------- */
+/* mesma altura do tabuleiro: o computador alinha com o topo dele e a pessoa com o pé */
+.xadrez-lateral {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 250px;
+    height: calc(var(--casa) * 8);
+}
+
+.xadrez-topo {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+/* ---------- tela de início: um cartão sozinho no meio da janela ---------- */
+.xadrez-corpo.xadrez-corpo-inicio {
+    justify-content: center;
+    padding-left: 0;
+}
+
+.xadrez-inicio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 340px;
+    padding: 18px 22px;
+    border: 1px solid var(--config-borda);
+    border-radius: 12px;
+    background: var(--config-cartao);
+    box-shadow: 0 0 22px color-mix(in srgb, var(--config-brilho) 18%, transparent);
+    text-align: center;
+    animation: config-categoria-entrando 0.25s ease-out;
+}
+
+.tablet-tela .xadrez-inicio .xadrez-titulo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 4px;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--config-destaque);
+    text-shadow: 0 0 12px color-mix(in srgb, var(--config-brilho) 45%, transparent);
+}
+
+.xadrez-inicio .xadrez-titulo img {
+    width: 30px;
+    height: 30px;
+}
+
+.tablet-tela[data-tema='noturno'] .xadrez-inicio .xadrez-titulo img {
+    filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.55));
+}
+
+.xadrez-inicio .xadrez-acoes,
+.xadrez-inicio .xadrez-opcoes {
+    justify-content: center;
+}
+
+.xadrez-inicio .xadrez-ultimas {
+    width: 100%;
+}
+
+.xadrez-inicio .xadrez-ultimas ul {
+    max-height: 170px;
+    overflow-y: auto;
+    text-align: left;
+}
+
+.xadrez-inicio .config-botao:disabled {
+    opacity: 0.4;
+    cursor: default;
+    box-shadow: none;
+}
+
+.tablet-tela .xadrez-passo {
+    margin: 4px 0 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--config-texto-suave);
+}
+
+.xadrez-acoes {
+    margin-top: 8px;
+}
+
+.xadrez-inicio .config-botao.xadrez-botao-principal {
+    padding: 6px 16px;
+    font-weight: 700;
+    color: #fff;
+    border-color: var(--config-destaque);
+    background: var(--config-destaque);
+}
+
+.xadrez-salva {
+    font-size: 10px;
+    color: var(--config-texto-suave);
+}
+
+.xadrez-ultimas ul {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.xadrez-ultimas li {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 3px 8px;
+    border: 1px solid var(--config-borda);
+    border-left-width: 3px;
+    border-radius: 5px;
+    background: var(--config-cartao);
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.xadrez-ultimas li b {
+    width: 44px;
+}
+
+.xadrez-ultimas li span {
+    color: var(--config-texto-suave);
+}
+
+.xadrez-ultimas li.vitoria { border-left-color: #18c99a; }
+.xadrez-ultimas li.derrota { border-left-color: #e0506a; }
+.xadrez-ultimas li.empate { border-left-color: var(--config-texto-suave); }
+
+/* ---------- menu ☰ (no canto do topo) ---------- */
+.xadrez-lateral .config-botao.xadrez-botao-menu {
+    margin-left: auto;
+    align-self: center;
+    padding: 2px 9px;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+.xadrez-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    z-index: 8;
+    display: flex;
+    flex-direction: column;
+    min-width: 170px;
+    padding: 4px;
+    border: 1px solid var(--config-borda);
+    border-radius: 8px;
+    background: rgb(229, 231, 250);
+    box-shadow: 0 8px 22px rgba(20, 10, 70, 0.25);
+    animation: config-categoria-entrando 0.15s ease-out;
+}
+
+.tablet-tela[data-tema='noturno'] .xadrez-menu {
+    background: #120f33;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+}
+
+.xadrez-menu button {
+    all: unset;
+    display: flex;
+    flex-direction: column;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.xadrez-menu button:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--config-destaque) 18%, transparent);
+}
+
+.xadrez-menu button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.xadrez-menu button.perigo {
+    color: #e0506a;
+}
+
+.xadrez-menu small {
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--config-texto-suave);
+}
+
+/* 💡: só o ícone; enquanto "acende" (antes de mostrar a dica) ela brilha */
+.xadrez-lateral .config-botao.xadrez-botao-dica {
+    margin-left: auto;
+}
+
+.xadrez-botao-dica.acendendo {
+    animation: xadrez-dica-acendendo 0.45s ease-in-out;
+}
+
+@keyframes xadrez-dica-acendendo {
+    50% { box-shadow: 0 0 14px #ffd666; border-color: #ffd666; }
+}
+
+/* cor sorteada: aviso rápido por cima do tabuleiro, some sozinho */
+.xadrez-sorteio {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid var(--config-borda);
+    border-radius: 8px;
+    background: color-mix(in srgb, rgb(215, 218, 243) 92%, transparent);
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    pointer-events: none;
+    translate: -50% -50%;
+    animation: xadrez-sorteio 1.6s ease-in-out forwards;
+}
+
+.tablet-tela[data-tema='noturno'] .xadrez-sorteio {
+    background: rgba(7, 6, 26, 0.92);
+}
+
+.xadrez-sorteio img {
+    width: 24px;
+    height: 24px;
+}
+
+@keyframes xadrez-sorteio {
+    0%   { opacity: 0; scale: 0.9; }
+    12%  { opacity: 1; scale: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.tablet-tela .xadrez-lateral .xadrez-titulo {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--config-destaque);
+    text-shadow: 0 0 12px color-mix(in srgb, var(--config-brilho) 45%, transparent);
+}
+
+/* uma linha só: trocar o texto (sua vez / pensando / xeque) nunca empurra o resto da lateral */
+.xadrez-status {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--config-texto-suave);
+}
+
+.xadrez-status.fim {
+    font-weight: 700;
+    color: var(--config-destaque);
+}
+
+.xadrez-opcoes,
+.xadrez-acoes,
+.xadrez-navegacao {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.xadrez-lateral .config-botao:disabled {
+    opacity: 0.4;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* histórico em notação, quebrando em pares (1. e4 e5  2. Cf3 ...) */
+.xadrez-historico {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 2px 4px;
+    /* ocupa o que sobra da lateral */
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 5px 6px;
+    overflow-y: auto;
+    list-style: none;
+    border: 1px solid var(--config-borda);
+    border-radius: 6px;
+    background: var(--config-cartao);
+    font-size: 12px;
+}
+
+.xadrez-historico li {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.xadrez-numero {
+    color: var(--config-texto-suave);
+}
+
+.xadrez-lance {
+    padding: 0 3px;
+    font-weight: 600;
+}
+
+.xadrez-historico button {
+    all: unset;
+    padding: 0 3px;
+    border-radius: 3px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.xadrez-historico button:hover {
+    background: color-mix(in srgb, var(--config-destaque) 20%, transparent);
+}
+
+.xadrez-historico li.visto button {
+    color: #fff;
+    background: var(--config-destaque);
+}

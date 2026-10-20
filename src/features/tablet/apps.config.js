@@ -36,6 +36,14 @@ export const APPS = {
         telaInicial: 'sudoku.exe',
         tamanhoIconeBarra: 26,
     },
+    app_xadrez: {
+        id: 'app_xadrez',
+        nome: 'Xadrez',
+        icone: '/imagens/windows/jogos/iconeXadrez.svg',
+        telas: ['xadrez.exe'],
+        telaInicial: 'xadrez.exe',
+        tamanhoIconeBarra: 26,
+    },
 }
 
 // id do app dono de uma tela ('desktop' e telas do sistema não têm dono → undefined)

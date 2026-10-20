@@ -17,9 +17,10 @@ import { APPS, appDaTela } from '../apps.config'
 import { useSistemaTablet } from '../contexts/SistemaTablet'
 
 // jogos: cada um vira um arquivo à parte, baixado só quando a pessoa abre o jogo pela primeira vez
-// (o código deles não pesa na abertura do site)
+// (o código deles e o chess.js não pesam na abertura do site)
 const Jogo2048 = lazy(() => import('../componentes/Jogo2048/Jogo2048'))
 const JogoSudoku = lazy(() => import('../componentes/JogoSudoku/JogoSudoku'))
+const JogoXadrez = lazy(() => import('../componentes/JogoXadrez/JogoXadrez'))
 
 // Modal do tablet: desenha o sistema (área de trabalho, apps, barra, telas do sistema).
 // O estado do sistema (ligado/bloqueado..., tela na frente, apps abertos, wallpaper) vem do SistemaTabletProvider,
@@ -163,10 +164,24 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             alt='abrir o Sudoku'
                             aoAbrir={() => abrirApp('app_sudoku', 'sudoku.exe')}
                         />
+                        <IconeAreaDeTrabalho
+                            icone='/imagens/windows/jogos/iconeXadrez.svg'
+                            nome='Xadrez.exe'
+                            alt='abrir o xadrez'
+                            aoAbrir={() => abrirApp('app_xadrez', 'xadrez.exe')}
+                        />
                     </div>
                 )}
 
                 {/* janelas dos apps: guardar() deixa a janela montada (escondida) enquanto o app está aberto */}
+                {guardar('xadrez.exe', (
+                    <JogoXadrez
+                        fecharApp={fecharApp}
+                        minimizarApp={minimizarApp}
+                        classeAnimacao={classeAnimacaoJanela('app_xadrez')}
+                    />
+                ))}
+
                 {guardar('sudoku.exe', (
                     <JogoSudoku
                         fecharApp={fecharApp}
