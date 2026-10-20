@@ -5,7 +5,7 @@ import WindowBar from '../../sistema/WindowBar/WindowBar'
 import { useSistemaTablet } from '../../contexts/SistemaTablet'
 import { TEMAS } from '../../hooks/useTemaSistema'
 import { useEstadoPersistido } from '../../../../shared/hooks/useEstadoPersistido'
-import { NIVEIS_XADREZ, escolherLance, sugerirLance } from './motorXadrez'
+import { NIVEIS_XADREZ, jogarLance, sugerirLance } from './motorXadrez'
 import { SISTEMA } from '../../tablet.config'
 
 const COLUNAS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
@@ -23,7 +23,7 @@ const DURACAO_AVISO_SORTEIO_MS = 1600
 const ESPERA_DICA_MS = 450
 
 // elo da pessoa (fórmula do Elo, a mesma da FIDE): começa em 200 "por baixo dos panos" e só aparece depois
-// da primeira vitória (antes disso fica "??"). O computador conta com o elo do nível (300/600/900)
+// da primeira vitória (antes disso fica "??"). O computador conta com o elo do nível (300 a 2000)
 const ELO_INICIAL = 200
 const ELO_MINIMO = 100
 // quanto o elo anda por partida (40 é o que a FIDE usa para quem está começando)
@@ -191,6 +191,8 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     const [avisoSorteio, setAvisoSorteio] = useState(false)
     // tela de início: lista das últimas partidas aberta (botão "Histórico")
     const [verHistorico, setVerHistorico] = useState(false)
+    // tela de início: lista suspensa dos níveis aberta
+    const [listaNiveisAberta, setListaNiveisAberta] = useState(false)
     // última mudança de elo (para o quadro de fim): { antes, depois, revelado }
     const [ultimoElo, setUltimoElo] = useState(null)
     const listaRef = useRef(null)
@@ -214,12 +216,17 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         if (naTelaDeInicio || fim || xadrez.turn() === partida.corJogador) return
         const pausa = partida.sorteada && !partida.lances.length ? DURACAO_AVISO_SORTEIO_MS : PAUSA_COMPUTADOR_MS
         setPensando(true)
-        const timer = setTimeout(() => {
-            const lance = escolherLance(xadrez.fen(), partida.nivel)
+        // o Stockfish responde depois (Promise): se nesse meio-tempo a partida mudou (voltou ao início,
+        // abandonou, partida nova), a resposta é ignorada
+        let cancelado = false
+        const timer = setTimeout(async () => {
+            const lance = await jogarLance(xadrez.fen(), partida.nivel)
+            if (cancelado) return
             setPensando(false)
             if (lance) setPartida((atual) => ({ ...atual, lances: [...atual.lances, lance] }))
         }, pausa)
         return () => {
+            cancelado = true
             clearTimeout(timer)
             setPensando(false)
         }
@@ -307,6 +314,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         setConfirmar(null)
         setMenuAberto(false)
         setVerHistorico(false)
+        setListaNiveisAberta(false)
     }
 
     const comecarNova = () => {
@@ -399,11 +407,14 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
             : pensando ? 'Pensando…'
                 : vezDaPessoa ? (xadrez.inCheck() ? 'Xeque! Sua vez.' : 'Sua vez.') : '')
 
+    const classeJanela = `janela-xadrez ${classeAnimacao}`
+    const barraDaJanela = <WindowBar fecharApp={fecharApp} minimizarApp={minimizarApp} idDoAppPraFechar='app_xadrez' escura={tema === TEMAS.noturno} />
+
     // tela de início: só o cartão no meio da janela (sem tabuleiro atrás)
     if (naTelaDeInicio) {
         return (
-            <div className={`janela-xadrez ${classeAnimacao}`}>
-                <WindowBar fecharApp={fecharApp} minimizarApp={minimizarApp} idDoAppPraFechar='app_xadrez' escura={tema === TEMAS.noturno} />
+            <div className={classeJanela}>
+                {barraDaJanela}
 
                 <div className='xadrez-corpo xadrez-corpo-inicio'>
                     <section className='xadrez-inicio'>
@@ -443,17 +454,41 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                         ) : (
                             <>
                                 <p className='xadrez-passo'>Escolha o nível do seu oponente</p>
-                                <div className='xadrez-opcoes'>
-                                    {NIVEIS_XADREZ.map((nivel) => (
-                                        <button
-                                            key={nivel.id}
-                                            type='button'
-                                            className={`config-botao${nivel.id === nivelEscolhido ? ' ativo' : ''}`}
-                                            onClick={() => setNivelEscolhido(nivel.id)}
-                                        >
-                                            {nivel.nome}
-                                        </button>
-                                    ))}
+                                {/* lista suspensa: clica e abre os níveis embaixo; clicar fora fecha */}
+                                <div
+                                    className='xadrez-lista-niveis'
+                                    onBlur={(evento) => {
+                                        if (!evento.currentTarget.contains(evento.relatedTarget)) setListaNiveisAberta(false)
+                                    }}
+                                >
+                                    <button
+                                        type='button'
+                                        className={`config-botao xadrez-lista-botao${listaNiveisAberta ? ' ativo' : ''}`}
+                                        aria-haspopup='listbox'
+                                        aria-expanded={listaNiveisAberta}
+                                        onClick={() => setListaNiveisAberta((aberta) => !aberta)}
+                                    >
+                                        Elo {nivelDe(nivelEscolhido)?.nome}
+                                        <span className='xadrez-lista-seta' aria-hidden='true'>▾</span>
+                                    </button>
+                                    {listaNiveisAberta && (
+                                        <ul className='xadrez-lista-opcoes' role='listbox'>
+                                            {NIVEIS_XADREZ.map((nivel) => (
+                                                <li key={nivel.id} role='option' aria-selected={nivel.id === nivelEscolhido}>
+                                                    <button
+                                                        type='button'
+                                                        className={nivel.id === nivelEscolhido ? 'ativo' : ''}
+                                                        onClick={() => {
+                                                            setNivelEscolhido(nivel.id)
+                                                            setListaNiveisAberta(false)
+                                                        }}
+                                                    >
+                                                        Elo {nivel.nome}
+                                                    </button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
                                 </div>
 
                                 <p className='xadrez-passo'>Escolha sua cor</p>
@@ -495,8 +530,8 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     }
 
     return (
-        <div className={`janela-xadrez ${classeAnimacao}`}>
-            <WindowBar fecharApp={fecharApp} minimizarApp={minimizarApp} idDoAppPraFechar='app_xadrez' escura={tema === TEMAS.noturno} />
+        <div className={classeJanela}>
+            {barraDaJanela}
 
             <div className='xadrez-corpo'>
                 <div className={`xadrez-tabuleiro${lendo ? ' lendo' : ''}`}>

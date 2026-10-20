@@ -6,7 +6,7 @@
 // - profundidade: quantos lances ele olha à frente;
 // - ruído: um erro sorteado somado à nota de cada lance (ele "acha" que um lance ruim é bom);
 // - chance de lance aleatório: de vez em quando joga qualquer coisa (o "deixei a dama de graça" do iniciante).
-// Os Elos são aproximados (calibrados a olho); acima de ~1300 a ideia é usar o Stockfish.
+// Os Elos são aproximados (calibrados a olho); de 1400 para cima joga o Stockfish (jogarLance).
 import { Chess } from 'chess.js'
 
 export const NIVEIS_XADREZ = [
@@ -14,7 +14,26 @@ export const NIVEIS_XADREZ = [
     { id: 'elo400', nome: '400', profundidade: 1, ruido: 170, chanceAleatorio: 0.3 },
     { id: 'elo600', nome: '600', profundidade: 1, ruido: 90, chanceAleatorio: 0.15 },
     { id: 'elo900', nome: '900', profundidade: 2, ruido: 35, chanceAleatorio: 0.04 },
+    // do 1400 para cima quem joga é o Stockfish (ver stockfishXadrez.js), limitado ao elo do nível;
+    // tempoMs = quanto ele pensa por lance
+    { id: 'sf1400', nome: '1400', stockfish: true, elo: 1400, tempoMs: 500 },
+    { id: 'sf1700', nome: '1700', stockfish: true, elo: 1700, tempoMs: 700 },
+    { id: 'sf2000', nome: '2000', stockfish: true, elo: 2000, tempoMs: 900 },
 ]
+
+// lance do computador para qualquer nível (Promise): os fracos usam este motor; os fortes, o Stockfish.
+// Se o Stockfish não carregar (sem internet, navegador antigo...), joga este motor no nível mais forte dele
+export const jogarLance = async (fen, idNivel) => {
+    const nivel = NIVEIS_XADREZ.find((item) => item.id === idNivel)
+    if (!nivel?.stockfish) return escolherLance(fen, idNivel)
+    try {
+        const { lanceDoStockfish } = await import('./stockfishXadrez')
+        return await lanceDoStockfish(fen, nivel.elo, nivel.tempoMs)
+    } catch (erro) {
+        console.warn('Stockfish não carregou; jogando com o motor simples.', erro)
+        return escolherLance(fen, 'elo900')
+    }
+}
 
 // profundidade da "dica" (sem ruído): o melhor lance que esse motor consegue achar
 const PROFUNDIDADE_DICA = 2

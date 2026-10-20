@@ -82,8 +82,9 @@
 .xadrez-casa img {
     position: relative;
     z-index: 1;
-    width: 32px;
-    height: 32px;
+    /* acompanha o tamanho da casa (36px normal, 44px no modo jogo) */
+    width: calc(var(--casa) - 4px);
+    height: calc(var(--casa) - 4px);
     pointer-events: none;
 }
 
@@ -385,6 +386,76 @@
 .xadrez-inicio .xadrez-acoes,
 .xadrez-inicio .xadrez-opcoes {
     justify-content: center;
+}
+
+/* níveis: lista suspensa que abre por cima do resto do cartão (não empurra nada) */
+.xadrez-lista-niveis {
+    position: relative;
+}
+
+.xadrez-inicio .config-botao.xadrez-lista-botao {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 170px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.xadrez-lista-seta {
+    margin-left: auto;
+    transition: rotate 0.15s ease;
+}
+
+.xadrez-lista-botao.ativo .xadrez-lista-seta {
+    rotate: 180deg;
+}
+
+.xadrez-lista-opcoes {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 8;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    border: 1px solid var(--config-borda);
+    border-radius: 8px;
+    background: rgb(229, 231, 250);
+    box-shadow: 0 8px 22px rgba(20, 10, 70, 0.25);
+    animation: config-categoria-entrando 0.15s ease-out;
+}
+
+.tablet-tela[data-tema='noturno'] .xadrez-lista-opcoes {
+    background: #120f33;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+}
+
+.xadrez-lista-opcoes button {
+    all: unset;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    /* compacta: os 7 níveis cabem embaixo do botão sem passar do fim da janela */
+    padding: 2px 10px;
+    line-height: 16px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.xadrez-lista-opcoes button:hover {
+    background: color-mix(in srgb, var(--config-destaque) 18%, transparent);
+}
+
+.xadrez-lista-opcoes button.ativo {
+    color: #fff;
+    background: var(--config-destaque);
 }
 
 .xadrez-inicio .xadrez-ultimas {
