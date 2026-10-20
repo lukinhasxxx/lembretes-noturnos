@@ -1,0 +1,328 @@
+/* sudoku.exe: tabuleiro 9×9 na esquerda; nível, tempo e teclado de números na direita.
+   Mesmas cores do Config (--config-*) para os botões, como no 2048 */
+
+.tablet-tela[data-tema='noturno'] .janela-sudoku {
+    background: #07061a;
+    box-shadow: 0 0 0 1px #07061a;
+}
+
+.sudoku-corpo {
+    --config-cartao: rgba(255, 255, 255, 0.55);
+    --config-borda: rgba(75, 47, 214, 0.25);
+    --config-destaque: #6a4cff;
+    --config-brilho: #6a4cff;
+    --config-texto-suave: #5d5778;
+
+    --casa: 30px;
+    --linha-fina: rgba(75, 47, 214, 0.18);
+    --linha-grossa: rgba(75, 47, 214, 0.55);
+    --fundo-casa: rgba(255, 255, 255, 0.7);
+    --fundo-vizinha: rgba(110, 240, 255, 0.22);
+    --fundo-selecionada: rgba(110, 240, 255, 0.6);
+    --fundo-mesmo-numero: rgba(185, 140, 255, 0.35);
+    --texto-dado: #2a1d80;
+    --texto-escrito: #3d7bff;
+    --texto-conflito: #e0506a;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+    width: 665px;
+    height: 319px;
+    background-color: rgb(215, 218, 243);
+    color: #2a1d80;
+    font-family: var(--fonte-sistema);
+    user-select: none;
+}
+
+.tablet-tela[data-tema='noturno'] .sudoku-corpo {
+    --config-cartao: rgba(138, 120, 255, 0.1);
+    --config-borda: rgba(185, 140, 255, 0.35);
+    --config-destaque: #b98cff;
+    --config-brilho: #b98cff;
+    --config-texto-suave: #9d97cf;
+
+    --linha-fina: rgba(185, 140, 255, 0.14);
+    --linha-grossa: rgba(185, 140, 255, 0.5);
+    --fundo-casa: rgba(255, 255, 255, 0.04);
+    --fundo-vizinha: rgba(138, 120, 255, 0.14);
+    --fundo-selecionada: rgba(185, 140, 255, 0.45);
+    --fundo-mesmo-numero: rgba(185, 140, 255, 0.25);
+    --texto-dado: #e6e3ff;
+    --texto-escrito: #b98cff;
+    --texto-conflito: #ff7c9c;
+
+    background: linear-gradient(160deg, #07061a 0%, #120f33 55%, #1d1652 100%);
+    color: #e6e3ff;
+}
+
+/* ---------- tabuleiro ---------- */
+.sudoku-tabuleiro {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(9, var(--casa));
+    border: 2px solid var(--linha-grossa);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 0 14px color-mix(in srgb, var(--config-brilho) 25%, transparent);
+}
+
+.sudoku-casa {
+    all: unset;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--casa);
+    height: var(--casa);
+    border-right: 1px solid var(--linha-fina);
+    border-bottom: 1px solid var(--linha-fina);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--texto-escrito);
+    background: var(--fundo-casa);
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+}
+
+/* linhas grossas entre os quadrados 3×3 */
+.sudoku-casa.borda-direita { border-right: 2px solid var(--linha-grossa); }
+.sudoku-casa.borda-baixo { border-bottom: 2px solid var(--linha-grossa); }
+
+/* números que já vieram no desafio: mais fortes e fixos */
+.sudoku-casa.dada {
+    font-weight: 700;
+    color: var(--texto-dado);
+}
+
+.sudoku-casa.vizinha { background: var(--fundo-vizinha); }
+.sudoku-casa.mesmo-numero { background: var(--fundo-mesmo-numero); }
+.sudoku-casa.selecionada { background: var(--fundo-selecionada); }
+
+.sudoku-casa.conflito {
+    color: var(--texto-conflito);
+}
+
+.sudoku-casa:hover:not(.selecionada) {
+    box-shadow: inset 0 0 0 1px var(--config-destaque);
+}
+
+/* resolvido: véu por cima do tabuleiro */
+.sudoku-aviso {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: color-mix(in srgb, rgb(215, 218, 243) 85%, transparent);
+    animation: config-categoria-entrando 0.25s ease-out;
+}
+
+.tablet-tela[data-tema='noturno'] .sudoku-aviso {
+    background: rgba(7, 6, 26, 0.85);
+}
+
+.sudoku-aviso strong {
+    font-size: 18px;
+}
+
+.tablet-tela .sudoku-aviso p {
+    margin: -6px 0 0;
+    font-size: 12px;
+    color: var(--config-texto-suave);
+}
+
+.sudoku-aviso-botoes {
+    display: flex;
+    gap: 8px;
+}
+
+/* botão do modo desafio: ocupa a linha toda, embaixo dos níveis */
+.sudoku-modo {
+    align-self: flex-start;
+}
+
+/* último minuto do desafio: o relógio fica vermelho e pulsa */
+.sudoku-placar .urgente {
+    border-color: #e0506a;
+}
+
+.sudoku-placar .urgente b {
+    color: #e0506a;
+    animation: sudoku-urgente 1s ease-in-out infinite;
+}
+
+@keyframes sudoku-urgente {
+    50% { opacity: 0.45; }
+}
+
+/* ---------- lateral ---------- */
+.sudoku-lateral {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 262px;
+}
+
+/* ---------- ranking (por cima do tabuleiro, como os outros avisos) ---------- */
+.sudoku-aviso.sudoku-ranking {
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 12px 10px;
+    box-sizing: border-box;
+}
+
+.sudoku-ranking-niveis {
+    display: flex;
+    gap: 2px;
+}
+
+.sudoku-ranking-niveis button {
+    padding: 3px 10px;
+    border: 1px solid var(--config-borda);
+    border-radius: 6px;
+    font-family: var(--fonte-sistema);
+    font-size: 11px;
+    color: var(--config-texto-suave);
+    background: transparent;
+    cursor: pointer;
+}
+
+.sudoku-ranking-niveis button.ativa {
+    color: inherit;
+    background: var(--config-cartao);
+    box-shadow: inset 0 -2px 0 var(--config-destaque);
+}
+
+.sudoku-ranking-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sudoku-ranking-lista li {
+    display: grid;
+    grid-template-columns: 26px 1fr auto 62px;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border: 1px solid var(--config-borda);
+    border-radius: 6px;
+    font-size: 12px;
+    background: var(--config-cartao);
+}
+
+/* o 1º lugar ganha destaque */
+.sudoku-ranking-lista li:first-child {
+    border-color: var(--config-destaque);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--config-brilho) 35%, transparent);
+}
+
+.sudoku-ranking-posicao {
+    font-weight: 700;
+    color: var(--config-destaque);
+}
+
+.sudoku-ranking-usuario {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sudoku-ranking-data {
+    font-size: 11px;
+    color: var(--config-texto-suave);
+}
+
+.sudoku-ranking-tempo {
+    text-align: right;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.tablet-tela .sudoku-lateral .sudoku-titulo {
+    margin: 0;
+    font-size: 30px;
+    line-height: 1;
+    color: var(--config-destaque);
+    text-shadow: 0 0 12px color-mix(in srgb, var(--config-brilho) 45%, transparent);
+}
+
+.sudoku-niveis {
+    display: flex;
+    gap: 6px;
+}
+
+.sudoku-placar {
+    display: flex;
+    gap: 8px;
+}
+
+.sudoku-placar div {
+    display: flex;
+    flex-direction: column;
+    min-width: 72px;
+    padding: 4px 10px;
+    border: 1px solid var(--config-borda);
+    border-radius: 8px;
+    background: var(--config-cartao);
+}
+
+.sudoku-placar small {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--config-texto-suave);
+}
+
+.sudoku-placar b {
+    font-size: 17px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* teclado de números: 5 por linha (1–9 e apagar) */
+.sudoku-numeros {
+    display: grid;
+    grid-template-columns: repeat(5, 36px);
+    gap: 6px;
+}
+
+.sudoku-numero {
+    height: 36px;
+    border: 1px solid var(--config-borda);
+    border-radius: 8px;
+    font-family: var(--fonte-sistema);
+    font-size: 17px;
+    font-weight: 600;
+    color: inherit;
+    background: var(--config-cartao);
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sudoku-numero:hover:not(:disabled) {
+    border-color: var(--config-destaque);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--config-brilho) 45%, transparent);
+}
+
+.sudoku-numero:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+/* os 9 daquele número já estão no tabuleiro */
+.sudoku-numero:disabled {
+    opacity: 0.25;
+    cursor: default;
+}
+
+.sudoku-apagar {
+    font-size: 15px;
+}

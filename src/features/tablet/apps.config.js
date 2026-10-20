@@ -28,6 +28,14 @@ export const APPS = {
         telaInicial: '2048.exe',
         tamanhoIconeBarra: 26,
     },
+    app_sudoku: {
+        id: 'app_sudoku',
+        nome: 'Sudoku',
+        icone: '/imagens/windows/jogos/iconeSudoku.svg',
+        telas: ['sudoku.exe'],
+        telaInicial: 'sudoku.exe',
+        tamanhoIconeBarra: 26,
+    },
 }
 
 // id do app dono de uma tela ('desktop' e telas do sistema não têm dono → undefined)

@@ -19,6 +19,7 @@ import { useSistemaTablet } from '../contexts/SistemaTablet'
 // jogos: cada um vira um arquivo à parte, baixado só quando a pessoa abre o jogo pela primeira vez
 // (o código deles não pesa na abertura do site)
 const Jogo2048 = lazy(() => import('../componentes/Jogo2048/Jogo2048'))
+const JogoSudoku = lazy(() => import('../componentes/JogoSudoku/JogoSudoku'))
 
 // Modal do tablet: desenha o sistema (área de trabalho, apps, barra, telas do sistema).
 // O estado do sistema (ligado/bloqueado..., tela na frente, apps abertos, wallpaper) vem do SistemaTabletProvider,
@@ -156,10 +157,24 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             alt='abrir o jogo 2048'
                             aoAbrir={() => abrirApp('app_2048', '2048.exe')}
                         />
+                        <IconeAreaDeTrabalho
+                            icone='/imagens/windows/jogos/iconeSudoku.svg'
+                            nome='Sudoku.exe'
+                            alt='abrir o Sudoku'
+                            aoAbrir={() => abrirApp('app_sudoku', 'sudoku.exe')}
+                        />
                     </div>
                 )}
 
                 {/* janelas dos apps: guardar() deixa a janela montada (escondida) enquanto o app está aberto */}
+                {guardar('sudoku.exe', (
+                    <JogoSudoku
+                        fecharApp={fecharApp}
+                        minimizarApp={minimizarApp}
+                        classeAnimacao={classeAnimacaoJanela('app_sudoku')}
+                    />
+                ))}
+
                 {guardar('2048.exe', (
                     <Jogo2048
                         fecharApp={fecharApp}
