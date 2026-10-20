@@ -29,9 +29,14 @@ const ELO_MINIMO = 100
 // quanto o elo anda por partida (40 é o que a FIDE usa para quem está começando)
 const FATOR_K = 40
 const PONTOS_DO_RESULTADO = { vitoria: 1, empate: 0.5, derrota: 0 }
-const calcularElo = (elo, eloAdversario, resultado) => {
+// cada dica tira 10% do resultado (vitória com 2 dicas vale 0,8; com 5, vale um empate). Na derrota o
+// resultado fica abaixo de zero, então perder com dicas também custa mais (4 pontos por dica, com K = 40).
+// Os sites grandes deixam a partida sem rating quando tem ajuda; aqui ela conta, mas pesa
+const PENALIDADE_POR_DICA = 0.1
+const calcularElo = (elo, eloAdversario, resultado, dicas = 0) => {
     const chanceEsperada = 1 / (1 + 10 ** ((eloAdversario - elo) / 400))
-    return Math.max(ELO_MINIMO, Math.round(elo + FATOR_K * (PONTOS_DO_RESULTADO[resultado] - chanceEsperada)))
+    const pontos = PONTOS_DO_RESULTADO[resultado] - dicas * PENALIDADE_POR_DICA
+    return Math.max(ELO_MINIMO, Math.round(elo + FATOR_K * (pontos - chanceEsperada)))
 }
 // últimas partidas guardadas (a tela de início mostra as mais recentes)
 const TAMANHO_HISTORICO = 20
@@ -245,10 +250,13 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     const registrarFim = (partidaQueAcabou, fimDela) => {
         const eloAdversario = Number(nivelDe(partidaQueAcabou.nivel)?.nome) || ELO_INICIAL
         const antes = elo.valor
-        const depois = calcularElo(antes, eloAdversario, fimDela.resultado)
+        const dicas = partidaQueAcabou.dicas ?? 0
+        const depois = calcularElo(antes, eloAdversario, fimDela.resultado, dicas)
+        // quanto as dicas custaram (para mostrar no quadro de fim)
+        const custoDasDicas = calcularElo(antes, eloAdversario, fimDela.resultado) - depois
         const revelado = elo.revelado || fimDela.resultado === 'vitoria'
         setElo({ valor: depois, revelado })
-        setUltimoElo({ antes, depois, revelado })
+        setUltimoElo({ antes, depois, revelado, dicas, custoDasDicas })
         setPartidasJogadas((atuais) => [
             {
                 data: Date.now(),
@@ -259,6 +267,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                 lances: Math.ceil(partidaQueAcabou.lances.length / 2),
                 eloAntes: antes,
                 eloDepois: depois,
+                dicas,
             },
             ...atuais,
         ].slice(0, TAMANHO_HISTORICO))
@@ -353,13 +362,15 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         setNaTelaDeInicio(true)
     }
 
+    // cada dica conta (partida.dicas) e pesa no elo do fim; a mesma dica na tela não conta de novo
     const pedirDica = () => {
-        if (!vezDaPessoa || lendo || acendendoDica) return
+        if (!vezDaPessoa || lendo || acendendoDica || dica) return
         setAcendendoDica(true)
         const fen = xadrez.fen()
         timerDicaRef.current = setTimeout(() => {
             setAcendendoDica(false)
             setDica(sugerirLance(fen))
+            setPartida((atual) => ({ ...atual, dicas: (atual.dicas ?? 0) + 1 }))
         }, ESPERA_DICA_MS)
     }
 
@@ -603,6 +614,12 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                                             {ultimoElo.revelado
                                                 ? `${ultimoElo.antes} → ${ultimoElo.depois} (${ultimoElo.depois >= ultimoElo.antes ? '+' : ''}${ultimoElo.depois - ultimoElo.antes})`
                                                 : '?? (aparece na sua primeira vitória)'}
+                                            {ultimoElo.dicas > 0 && (
+                                                <small className='xadrez-custo-dicas'>
+                                                    {ultimoElo.dicas} {ultimoElo.dicas === 1 ? 'dica' : 'dicas'}
+                                                    {ultimoElo.revelado && ultimoElo.custoDasDicas > 0 ? `: −${ultimoElo.custoDasDicas}` : ''}
+                                                </small>
+                                            )}
                                         </dd>
                                     </div>
                                 )}
@@ -737,7 +754,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                                 type='button'
                                 className={`config-botao xadrez-botao-dica${acendendoDica ? ' acendendo' : ''}`}
                                 aria-label='Dica'
-                                title='Dica'
+                                title={`Dica (cada uma tira 10% do resultado)${partida.dicas ? ` · usadas: ${partida.dicas}` : ''}`}
                                 onClick={pedirDica}
                                 disabled={!vezDaPessoa || lendo}
                             >

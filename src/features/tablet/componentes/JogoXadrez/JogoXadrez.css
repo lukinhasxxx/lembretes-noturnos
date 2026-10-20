@@ -301,6 +301,14 @@
     grid-column: 1 / -1;
 }
 
+/* "2 dicas: −8" ao lado do elo */
+.xadrez-custo-dicas {
+    margin-left: 8px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #d9a300;
+}
+
 .xadrez-estatisticas dd {
     margin: 0;
     font-size: 12px;
