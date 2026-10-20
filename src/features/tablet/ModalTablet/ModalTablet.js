@@ -1,7 +1,7 @@
 import { VisibilidadePainelContext } from '../../mural'
 import './ModalTablet.css'
 import Botao from '../componentes/Botao/Botao'
-import { useState, useContext, useLayoutEffect, useRef, Suspense } from 'react'
+import { useState, useContext, useLayoutEffect, useRef, lazy, Suspense } from 'react'
 import '../sistema/temaSistema.css'
 import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
@@ -15,6 +15,10 @@ import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
 import { ESTADOS_SISTEMA } from '../tablet.config'
 import { APPS, appDaTela } from '../apps.config'
 import { useSistemaTablet } from '../contexts/SistemaTablet'
+
+// jogos: cada um vira um arquivo à parte, baixado só quando a pessoa abre o jogo pela primeira vez
+// (o código deles não pesa na abertura do site)
+const Jogo2048 = lazy(() => import('../componentes/Jogo2048/Jogo2048'))
 
 // Modal do tablet: desenha o sistema (área de trabalho, apps, barra, telas do sistema).
 // O estado do sistema (ligado/bloqueado..., tela na frente, apps abertos, wallpaper) vem do SistemaTabletProvider,
@@ -146,10 +150,24 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             alt='abrir configurações'
                             aoAbrir={() => abrirApp('app_config', 'config.exe')}
                         />
+                        <IconeAreaDeTrabalho
+                            icone='/imagens/windows/jogos/icone2048.svg'
+                            nome='2048.exe'
+                            alt='abrir o jogo 2048'
+                            aoAbrir={() => abrirApp('app_2048', '2048.exe')}
+                        />
                     </div>
                 )}
 
                 {/* janelas dos apps: guardar() deixa a janela montada (escondida) enquanto o app está aberto */}
+                {guardar('2048.exe', (
+                    <Jogo2048
+                        fecharApp={fecharApp}
+                        minimizarApp={minimizarApp}
+                        classeAnimacao={classeAnimacaoJanela('app_2048')}
+                    />
+                ))}
+
                 {/* app de fato */}
                 {guardar('config.exe', (
                     <Config

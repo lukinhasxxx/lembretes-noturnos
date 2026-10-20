@@ -20,6 +20,14 @@ export const APPS = {
         telaInicial: 'config.exe',
         tamanhoIconeBarra: 30,
     },
+    app_2048: {
+        id: 'app_2048',
+        nome: '2048',
+        icone: '/imagens/windows/jogos/icone2048.svg',
+        telas: ['2048.exe'],
+        telaInicial: '2048.exe',
+        tamanhoIconeBarra: 26,
+    },
 }
 
 // id do app dono de uma tela ('desktop' e telas do sistema não têm dono → undefined)
