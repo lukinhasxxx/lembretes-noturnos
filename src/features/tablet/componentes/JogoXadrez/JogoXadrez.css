@@ -67,6 +67,13 @@
     width: 260px;
 }
 
+/* lado a lado no modo jogo: dois tabuleiros de 304px (44px não caberia duas vezes) */
+.janela-modo-jogo .xadrez-corpo.xadrez-corpo-espelhado {
+    --casa: 38px;
+    gap: 8px;
+    padding-left: 0;
+}
+
 /* os botões do canto (modo jogo / minimizar / fechar) ficam presos ao corpo */
 .xadrez-corpo-inicio {
     position: relative;
@@ -74,6 +81,73 @@
 
 .xadrez-lateral .config-botao.botao-modo-jogo {
     align-self: center;
+}
+
+/* ☰ e modo jogo nunca encolhem (quem encolhe é o texto do status, com reticências) */
+.xadrez-topo .config-botao {
+    flex-shrink: 0;
+}
+
+/* ---------- 2 jogadores lado a lado: um tabuleiro para cada um, o ☰ no meio ---------- */
+.xadrez-corpo.xadrez-corpo-espelhado {
+    position: relative;
+    justify-content: center;
+    gap: 10px;
+    padding-left: 0;
+}
+
+.xadrez-lado {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: calc(var(--casa) * 8);
+    transition: opacity 0.25s ease, filter 0.25s ease;
+}
+
+/* o lado de quem não tem a vez fica apagado (e não aceita clique) */
+.xadrez-lado.apagado {
+    opacity: 0.55;
+    filter: saturate(0.6);
+}
+
+/* os dois lados ficam em ordem (brancas na esquerda); o meio fica entre eles */
+.xadrez-lado:nth-child(2) {
+    order: 3;
+}
+
+/* ☰ e modo jogo: lá em cima, na altura dos nomes */
+.xadrez-centro {
+    z-index: 8;
+    order: 2;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* o menu abre no meio da tela, por cima dos dois tabuleiros (o centro não é "position", então ele se
+   posiciona pelo corpo inteiro) */
+.xadrez-centro .xadrez-menu {
+    top: 50%;
+    right: auto;
+    left: 50%;
+    translate: -50% -50%;
+}
+
+/* fim, promoção e abandonar: por cima dos dois tabuleiros (só o que aparece aceita clique) */
+.xadrez-camada-avisos {
+    position: absolute;
+    inset: 0;
+    z-index: 9;
+    pointer-events: none;
+}
+
+.xadrez-camada-avisos > * {
+    pointer-events: auto;
+}
+
+.xadrez-camada-avisos .xadrez-estatisticas {
+    max-width: 320px;
 }
 
 /* ---------- tabuleiro ---------- */
@@ -281,6 +355,12 @@
     gap: 8px;
 }
 
+/* até 3 botões (Nova partida, Ver a partida, Analisar) numa linha só, mesmo no tabuleiro de 288px */
+.xadrez-aviso-botoes .config-botao {
+    padding: 5px 9px;
+    white-space: nowrap;
+}
+
 /* ---------- fim de partida ---------- */
 .xadrez-fim .xadrez-fim-titulo {
     font-size: 22px;
@@ -417,6 +497,54 @@
     justify-content: center;
 }
 
+/* contra quem (computador / 2 jogadores): fica no alto do cartão, um pouco separado do resto */
+.xadrez-inicio .xadrez-oponente {
+    margin-bottom: 2px;
+}
+
+/* 2 jogadores: os dois nomes lado a lado, com o rei de cada cor */
+.xadrez-nomes {
+    display: flex;
+    gap: 8px;
+}
+
+.xadrez-nomes label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.xadrez-nomes img {
+    width: 22px;
+    height: 22px;
+}
+
+.tablet-tela[data-tema='noturno'] .xadrez-nomes img {
+    filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.55));
+}
+
+.xadrez-nomes input {
+    box-sizing: border-box;
+    width: 118px;
+    padding: 5px 8px;
+    border: 1px solid var(--config-borda);
+    border-radius: 6px;
+    outline: none;
+    font-family: var(--fonte-sistema);
+    font-size: 12px;
+    color: inherit;
+    background: var(--config-cartao);
+}
+
+.xadrez-nomes input:focus {
+    border-color: var(--config-destaque);
+    box-shadow: 0 0 6px color-mix(in srgb, var(--config-brilho) 40%, transparent);
+}
+
+.xadrez-nomes input::placeholder {
+    color: var(--config-texto-suave);
+}
+
 /* níveis: lista suspensa que abre por cima do resto do cartão (não empurra nada) */
 .xadrez-lista-niveis {
     position: relative;
@@ -514,7 +642,7 @@
     margin-top: 8px;
 }
 
-.xadrez-inicio .config-botao.xadrez-botao-principal {
+.janela-xadrez .config-botao.xadrez-botao-principal {
     padding: 6px 16px;
     font-weight: 700;
     color: #fff;
@@ -557,6 +685,14 @@
     color: var(--config-texto-suave);
 }
 
+.xadrez-ultimas li.dois b {
+    width: auto;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.xadrez-ultimas li.dois { border-left-color: var(--config-destaque); }
 .xadrez-ultimas li.vitoria { border-left-color: #18c99a; }
 .xadrez-ultimas li.derrota { border-left-color: #e0506a; }
 .xadrez-ultimas li.empate { border-left-color: var(--config-texto-suave); }

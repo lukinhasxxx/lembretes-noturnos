@@ -23,8 +23,18 @@ const DURACAO_AVISO_SORTEIO_MS = 1600
 // a lâmpada "acende" um pouquinho antes de mostrar a dica
 const ESPERA_DICA_MS = 450
 
+// 2 jogadores (no mesmo aparelho): nomes quando a pessoa não escreve nenhum, e o tamanho máximo do nome
+const NOMES_PADRAO = { w: 'Brancas', b: 'Pretas' }
+const TAMANHO_MAXIMO_NOME = 14
+// como os 2 jogadores veem: um tabuleiro só (passando o aparelho) ou dois lado a lado (frente a frente)
+const VISUALIZACOES = [
+    { id: 'padrao', nome: 'Um tabuleiro' },
+    { id: 'espelhado', nome: 'Lado a lado' },
+]
+
 // elo da pessoa (fórmula do Elo, a mesma da FIDE): começa em 200 "por baixo dos panos" e só aparece depois
-// da primeira vitória (antes disso fica "??"). O computador conta com o elo do nível (300 a 2000)
+// da primeira vitória (antes disso fica "??"). O computador conta com o elo do nível (300 a 2000).
+// Partida de 2 jogadores não mexe no elo
 const ELO_INICIAL = 200
 const ELO_MINIMO = 100
 // quanto o elo anda por partida (40 é o que a FIDE usa para quem está começando)
@@ -49,6 +59,9 @@ const emPortugues = (san) => san.replace(/[KQRN]/g, (letra) => LETRA_EM_PORTUGUE
 
 const imagemDaPeca = (cor, tipo) => `${process.env.PUBLIC_URL}/imagens/xadrez/${cor}${tipo}.svg`
 const nomeDaCor = (cor) => (cor === 'w' ? 'brancas' : 'pretas')
+const outraCor = (cor) => (cor === 'w' ? 'b' : 'w')
+// "Ana venceu", mas "Pretas venceram": os nomes padrão (as cores) pedem o verbo no plural
+const frase = (nome, singular, plural) => `${nome} ${nome === NOMES_PADRAO.w || nome === NOMES_PADRAO.b ? plural : singular}`
 const nivelDe = (id) => NIVEIS_XADREZ.find((nivel) => nivel.id === id)
 
 // refaz a partida a partir da lista de lances: a instância do chess.js precisa do histórico inteiro para
@@ -63,13 +76,23 @@ const montarPartida = (lances) => {
     return { xadrez, posicoes }
 }
 
-// fim de partida: { resultado: 'vitoria' | 'derrota' | 'empate', texto (curto, para o status), motivo } ou null
+// fim de partida: { resultado: 'vitoria' | 'derrota' | 'empate', texto (curto, para o status), motivo } ou null.
+// Com 2 jogadores, quem ganhou vem em "vencedor" (cor) e resultado é 'vitoria' (para o quadro de fim);
+// lá o "abandonou" guarda a cor de quem desistiu (contra o computador é só true)
 const descreverFim = (xadrez, partida) => {
-    if (partida.abandonou) return { resultado: 'derrota', texto: 'Você abandonou.', motivo: 'abandono' }
+    const nomes = partida.nomes ?? NOMES_PADRAO
+    const dois = partida.modo === 'dois'
+    if (partida.abandonou) {
+        return dois
+            ? { resultado: 'vitoria', vencedor: outraCor(partida.abandonou), texto: `${frase(nomes[partida.abandonou], 'abandonou', 'abandonaram')}.`, motivo: 'abandono' }
+            : { resultado: 'derrota', texto: 'Você abandonou.', motivo: 'abandono' }
+    }
     if (xadrez.isCheckmate()) {
-        return xadrez.turn() === partida.corJogador
-            ? { resultado: 'derrota', texto: 'Xeque-mate. Você perdeu.', motivo: 'xeque-mate' }
-            : { resultado: 'vitoria', texto: 'Xeque-mate! Você venceu!', motivo: 'xeque-mate' }
+        const vencedor = outraCor(xadrez.turn())
+        if (dois) return { resultado: 'vitoria', vencedor, texto: `Xeque-mate! ${frase(nomes[vencedor], 'venceu', 'venceram')}!`, motivo: 'xeque-mate' }
+        return vencedor === partida.corJogador
+            ? { resultado: 'vitoria', texto: 'Xeque-mate! Você venceu!', motivo: 'xeque-mate' }
+            : { resultado: 'derrota', texto: 'Xeque-mate. Você perdeu.', motivo: 'xeque-mate' }
     }
     if (xadrez.isStalemate()) return { resultado: 'empate', texto: 'Empate por afogamento.', motivo: 'afogamento' }
     if (xadrez.isThreefoldRepetition()) return { resultado: 'empate', texto: 'Empate por repetição.', motivo: 'repetição de posição' }
@@ -77,6 +100,7 @@ const descreverFim = (xadrez, partida) => {
     if (xadrez.isDraw()) return { resultado: 'empate', texto: 'Empate (regra dos 50 lances).', motivo: 'regra dos 50 lances' }
     return null
 }
+
 
 // partida salva que dá para continuar: tem lances e não acabou
 const emAndamento = (partida) => Boolean(partida?.lances?.length) && !descreverFim(montarPartida(partida.lances).xadrez, partida)
@@ -160,30 +184,49 @@ const pecasQueAndaram = (lance) => {
     return andaram
 }
 
+
 const RESULTADO_CURTO = { vitoria: 'Venceu', derrota: 'Perdeu', empate: 'Empate' }
 
-// xadrez.exe: contra o computador (níveis 300/600/900 por enquanto).
-// - Tela de início: só um cartão no meio da janela; escolhe o nível e a cor; "Continuar partida" se tiver uma
-//   salva; "Histórico" mostra as últimas partidas.
+// xadrez.exe: contra o computador (níveis 300 a 2000) ou 2 jogadores no mesmo aparelho.
+// - Tela de início: só um cartão no meio da janela. Contra o computador: nível e cor. 2 jogadores: os nomes e
+//   como jogar (um tabuleiro, com as brancas embaixo, ou dois lado a lado). Cada modo tem a sua partida salva
+//   ("Continuar partida"); "Histórico" mostra as últimas partidas.
 // - Partida: clicar numa peça mostra os lances possíveis; clicar no destino joga. Do lado, os jogadores, os
-//   lances, ◀ ▶ (rever lances sem mexer na partida) e a 💡; o resto (voltar ao início, abandonar) fica no menu ☰.
-// - Fim: quadro com as estatísticas e o elo; aí libera rever a partida inteira (⏮ e clicar nos lances).
+//   lances, ◀ ▶ (rever lances sem mexer na partida) e a 💡 (só contra o computador); o resto (voltar ao
+//   início, abandonar) fica no menu ☰. Lado a lado não tem lateral: o ☰ fica em cima, entre os tabuleiros,
+//   e o menu abre no meio da tela.
+// - Fim: quadro com as estatísticas e o elo (só contra o computador); aí libera rever a partida inteira.
 const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     const { tema } = useSistemaTablet()
-    // partida salva: { lances: [{ from, to, promotion }], nivel, corJogador, sorteada, inicio, fimEm, abandonou }
-    const [salva, setSalva] = useEstadoPersistido('xadrez-partida', null)
+    // partidas salvas, uma por modo (assim "Continuar" de 2 jogadores nunca abre uma contra o computador e
+    // trocar de modo não perde a outra): { lances: [{ from, to, promotion }], inicio, fimEm, abandonou, e
+    //   contra o computador: nivel, corJogador, sorteada, dicas
+    //   2 jogadores: modo: 'dois', nomes: { w, b }, visualizacao: 'padrao' | 'espelhado' }
+    const [salvaComputador, setSalvaComputador] = useEstadoPersistido('xadrez-partida', null)
+    const [salvaDois, setSalvaDois] = useEstadoPersistido('xadrez-partida-dois', null)
+    // escolhas da tela de início (lembradas para a próxima vez)
+    const [oponenteEscolhido, setOponenteEscolhido] = useEstadoPersistido('xadrez-oponente', 'computador')
     const [nivelEscolhido, setNivelEscolhido] = useEstadoPersistido('xadrez-nivel', NIVEIS_XADREZ[0].id)
     const [corEscolhida, setCorEscolhida] = useEstadoPersistido('xadrez-cor', 'w')
+    const [nomesEscolhidos, setNomesEscolhidos] = useEstadoPersistido('xadrez-nomes', { w: '', b: '' })
+    const [visualizacaoEscolhida, setVisualizacaoEscolhida] = useEstadoPersistido('xadrez-visualizacao', 'padrao')
+    // partida do modo escolhido: a salva dele ou uma vazia (que ainda não começou). Uma de 2 jogadores que
+    // tenha ficado no lugar antigo (antes de cada modo ter o seu) conta como de 2 jogadores
+    const antigaDeDois = salvaComputador?.modo === 'dois' ? salvaComputador : null
+    const partidaDoModo = (oponente) => (oponente === 'dois'
+        ? salvaDois ?? antigaDeDois ?? { modo: 'dois', lances: [], corJogador: 'w', nomes: NOMES_PADRAO, visualizacao: visualizacaoEscolhida, inicio: Date.now() }
+        : (antigaDeDois ? null : salvaComputador) ?? { lances: [], nivel: nivelEscolhido, corJogador: 'w', inicio: Date.now() })
     // elo: { valor, revelado } (revelado = já venceu alguma vez; antes disso aparece "??")
     const [elo, setElo] = useEstadoPersistido('xadrez-elo', { valor: ELO_INICIAL, revelado: false })
-    // últimas partidas, da mais nova para a mais velha: { data, nivel, cor, resultado, motivo, lances, eloAntes, eloDepois }
+    // últimas partidas, da mais nova para a mais velha. Contra o computador: { data, nivel, cor, resultado,
+    // motivo, lances, eloAntes, eloDepois, dicas }; 2 jogadores: { data, modo: 'dois', nomes, vencedor, resultado, motivo, lances }
     const [partidasJogadas, setPartidasJogadas] = useEstadoPersistido('xadrez-historico', [])
 
     // abre sempre na tela de início
     const [naTelaDeInicio, setNaTelaDeInicio] = useState(true)
-    const [partida, setPartida] = useState(() => salva ?? { lances: [], nivel: nivelEscolhido, corJogador: 'w', inicio: Date.now() })
+    const [partida, setPartida] = useState(() => partidaDoModo(oponenteEscolhido))
     // quadro de fim de partida fechado ("Ver a partida"); uma partida salva que já tinha acabado abre sem ele
-    const [fimFechado, setFimFechado] = useState(() => Boolean(salva?.fimEm))
+    const [fimFechado, setFimFechado] = useState(() => Boolean(partidaDoModo(oponenteEscolhido).fimEm))
     const [selecionada, setSelecionada] = useState(null)
     const [promocaoPendente, setPromocaoPendente] = useState(null)
     const [dica, setDica] = useState(null)
@@ -201,27 +244,44 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     const [listaNiveisAberta, setListaNiveisAberta] = useState(false)
     // modo jogo (tela cheia dentro do tablet), lembrado para a próxima vez; Esc sai
     const [modoJogo, alternarModoJogo] = useModoJogo('xadrez')
-    // última mudança de elo (para o quadro de fim): { antes, depois, revelado }
+    // última mudança de elo (para o quadro de fim): { antes, depois, revelado, dicas, custoDasDicas }
     const [ultimoElo, setUltimoElo] = useState(null)
+    // número do último pedido de dica: muda ao jogar/sair, e aí uma resposta atrasada é ignorada
+    const pedidoDicaRef = useRef(0)
     const listaRef = useRef(null)
-    const timerDicaRef = useRef(null)
 
+    const dois = partida.modo === 'dois'
+    const nomes = partida.nomes ?? NOMES_PADRAO
+    const espelhado = dois && partida.visualizacao === 'espelhado'
     const { xadrez, posicoes } = useMemo(() => montarPartida(partida.lances), [partida.lances])
     const fim = descreverFim(xadrez, partida)
-    const vezDaPessoa = !fim && xadrez.turn() === partida.corJogador
+    // com 2 jogadores, quem tem a vez é sempre uma pessoa
+    const vezDaPessoa = !fim && (dois || xadrez.turn() === partida.corJogador)
     const lendo = posicaoVista !== null && posicaoVista < posicoes.length - 1
     const historico = xadrez.history()
     const partidaSalvaEmAndamento = emAndamento(partida)
 
-    // salva a cada lance (e ao começar partida nova)
+    // salva a cada lance (e ao começar partida nova), no lugar do modo dela
     useEffect(() => {
-        setSalva(partida)
+        if (partida.modo === 'dois') setSalvaDois(partida)
+        else setSalvaComputador(partida)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [partida])
 
-    // vez do computador: pensa um pouco e joga (na tela de início ele espera)
+    // tela de início: trocar entre "contra o computador" e "2 jogadores" traz a partida salva daquele modo
+    const escolherOponente = (oponente) => {
+        if (oponente === oponenteEscolhido) return
+        const daquele = partidaDoModo(oponente)
+        setOponenteEscolhido(oponente)
+        setPartida(daquele)
+        setFimFechado(Boolean(daquele.fimEm))
+        setConfirmar(null)
+        setListaNiveisAberta(false)
+    }
+
+    // vez do computador: pensa um pouco e joga (na tela de início ele espera; com 2 jogadores não tem computador)
     useEffect(() => {
-        if (naTelaDeInicio || fim || xadrez.turn() === partida.corJogador) return
+        if (dois || naTelaDeInicio || fim || xadrez.turn() === partida.corJogador) return
         const pausa = partida.sorteada && !partida.lances.length ? DURACAO_AVISO_SORTEIO_MS : PAUSA_COMPUTADOR_MS
         setPensando(true)
         // o Stockfish responde depois (Promise): se nesse meio-tempo a partida mudou (voltou ao início,
@@ -238,7 +298,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
             clearTimeout(timer)
             setPensando(false)
         }
-    }, [xadrez, partida.corJogador, partida.nivel, partida.sorteada, partida.lances.length, fim, naTelaDeInicio])
+    }, [dois, xadrez, partida.corJogador, partida.nivel, partida.sorteada, partida.lances.length, fim, naTelaDeInicio])
 
     // aviso da cor sorteada: some sozinho
     useEffect(() => {
@@ -247,10 +307,27 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         return () => clearTimeout(timer)
     }, [avisoSorteio])
 
-    useEffect(() => () => clearTimeout(timerDicaRef.current), [])
-
-    // guarda a partida que acabou: elo novo e uma linha no histórico
+    // guarda a partida que acabou: uma linha no histórico e, contra o computador, o elo novo
     const registrarFim = (partidaQueAcabou, fimDela) => {
+        const lances = Math.ceil(partidaQueAcabou.lances.length / 2)
+        if (partidaQueAcabou.modo === 'dois') {
+            const nomesDela = partidaQueAcabou.nomes ?? NOMES_PADRAO
+            setUltimoElo(null)
+            setPartidasJogadas((atuais) => [
+                {
+                    data: Date.now(),
+                    inicio: partidaQueAcabou.inicio,
+                    modo: 'dois',
+                    nomes: nomesDela,
+                    vencedor: fimDela.vencedor ? nomesDela[fimDela.vencedor] : null,
+                    resultado: fimDela.resultado,
+                    motivo: fimDela.motivo,
+                    lances,
+                },
+                ...atuais,
+            ].slice(0, TAMANHO_HISTORICO))
+            return
+        }
         const eloAdversario = Number(nivelDe(partidaQueAcabou.nivel)?.nome) || ELO_INICIAL
         const antes = elo.valor
         const dicas = partidaQueAcabou.dicas ?? 0
@@ -263,11 +340,12 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         setPartidasJogadas((atuais) => [
             {
                 data: Date.now(),
+                inicio: partidaQueAcabou.inicio,
                 nivel: partidaQueAcabou.nivel,
                 cor: partidaQueAcabou.corJogador,
                 resultado: fimDela.resultado,
                 motivo: fimDela.motivo,
-                lances: Math.ceil(partidaQueAcabou.lances.length / 2),
+                lances,
                 eloAntes: antes,
                 eloDepois: depois,
                 dicas,
@@ -293,14 +371,19 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         setPartida((atual) => ({ ...atual, lances: [...atual.lances, lance] }))
         setSelecionada(null)
         setDica(null)
+        pedidoDicaRef.current += 1
+        setAcendendoDica(false)
         setPosicaoVista(null)
     }
+
+    // quem pode mexer agora: contra o computador, só a cor da pessoa; com 2 jogadores, a cor da vez
+    const corQueMexe = dois ? xadrez.turn() : partida.corJogador
 
     const clicarNaCasa = (casa) => {
         if (!vezDaPessoa || lendo || promocaoPendente) return
         const peca = xadrez.get(casa)
         // clicou numa peça sua: seleciona (ou troca a seleção)
-        if (peca && peca.color === partida.corJogador) {
+        if (peca && peca.color === corQueMexe) {
             setSelecionada(casa === selecionada ? null : casa)
             return
         }
@@ -316,7 +399,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     }
 
     const limparTabuleiro = () => {
-        clearTimeout(timerDicaRef.current)
+        pedidoDicaRef.current += 1
         setAcendendoDica(false)
         setFimFechado(false)
         setSelecionada(null)
@@ -330,6 +413,23 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     }
 
     const comecarNova = () => {
+        if (oponenteEscolhido === 'dois') {
+            setPartida({
+                modo: 'dois',
+                lances: [],
+                corJogador: 'w',
+                nomes: {
+                    w: nomesEscolhidos.w.trim() || NOMES_PADRAO.w,
+                    b: nomesEscolhidos.b.trim() || NOMES_PADRAO.b,
+                },
+                visualizacao: visualizacaoEscolhida,
+                inicio: Date.now(),
+            })
+            limparTabuleiro()
+            setAvisoSorteio(false)
+            setNaTelaDeInicio(false)
+            return
+        }
         const sorteada = corEscolhida === 'sorteio'
         const cor = sorteada ? (Math.random() < 0.5 ? 'w' : 'b') : corEscolhida
         setPartida({ lances: [], nivel: nivelEscolhido, corJogador: cor, sorteada, inicio: Date.now() })
@@ -344,18 +444,23 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         else comecarNova()
     }
 
+    // quem abandona: contra o computador, a pessoa (true); com 2 jogadores, quem tem a vez
+    const quemAbandona = dois ? xadrez.turn() : true
+
     const abandonarENova = () => {
-        registrarFim(partida, descreverFim(xadrez, { ...partida, abandonou: true }))
+        registrarFim(partida, descreverFim(xadrez, { ...partida, abandonou: quemAbandona }))
         comecarNova()
     }
 
     const abandonar = () => {
-        setPartida((atual) => ({ ...atual, abandonou: true }))
+        setPartida((atual) => ({ ...atual, abandonou: quemAbandona }))
         setConfirmar(null)
         setMenuAberto(false)
     }
 
+    // continuar: com 2 jogadores, vale o "como vocês vão jogar" escolhido agora (dá para trocar no meio)
     const continuar = () => {
+        if (dois) setPartida((atual) => ({ ...atual, visualizacao: visualizacaoEscolhida }))
         limparTabuleiro()
         setNaTelaDeInicio(false)
     }
@@ -365,16 +470,21 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         setNaTelaDeInicio(true)
     }
 
-    // cada dica conta (partida.dicas) e pesa no elo do fim; a mesma dica na tela não conta de novo
+    // cada dica conta (partida.dicas) e pesa no elo do fim; a mesma dica na tela não conta de novo.
+    // Se a pessoa sair da partida nesse meio-tempo, a resposta é ignorada
     const pedirDica = () => {
-        if (!vezDaPessoa || lendo || acendendoDica || dica) return
+        if (dois || !vezDaPessoa || lendo || acendendoDica || dica) return
         setAcendendoDica(true)
+        const pedido = ++pedidoDicaRef.current
+        const espera = new Promise((resolver) => setTimeout(resolver, ESPERA_DICA_MS))
         const fen = xadrez.fen()
-        timerDicaRef.current = setTimeout(() => {
+        espera.then(() => {
+            const lance = sugerirLance(fen)
+            if (pedido !== pedidoDicaRef.current) return
             setAcendendoDica(false)
-            setDica(sugerirLance(fen))
+            setDica(lance)
             setPartida((atual) => ({ ...atual, dicas: (atual.dicas ?? 0) + 1 }))
-        }, ESPERA_DICA_MS)
+        })
     }
 
     // tabuleiro que aparece: a posição vista no modo leitura, ou a atual
@@ -387,39 +497,30 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         ? xadrezNaTela.findPiece({ type: 'k', color: xadrezNaTela.turn() })[0]
         : null
 
-    // casas na ordem da tela: com as pretas, o tabuleiro vira
-    const linhas = partida.corJogador === 'w' ? [8, 7, 6, 5, 4, 3, 2, 1] : [1, 2, 3, 4, 5, 6, 7, 8]
-    const colunas = partida.corJogador === 'w' ? COLUNAS : [...COLUNAS].reverse()
-
-    // deslize das peças do último lance (só ao vivo): cada peça que andou sai da casa de origem e escorrega
-    // até a dela. --de-coluna/--de-linha = quantas casas atrás ela estava (o CSS anima até 0)
-    const andaram = lendo ? {} : pecasQueAndaram(ultimoLance)
-    const deslizeDa = (casa) => {
-        const origem = andaram[casa]
-        if (!origem) return undefined
-        const de = posicaoNaTela(origem, colunas, linhas)
-        const para = posicaoNaTela(casa, colunas, linhas)
-        return { '--de-coluna': de.coluna - para.coluna, '--de-linha': de.linha - para.linha }
-    }
+    // de que lado o tabuleiro é visto (a cor que fica embaixo): contra o computador, a da pessoa; 2 jogadores
+    // num tabuleiro só, sempre as brancas (quem quiser cada um do seu lado usa o "lado a lado")
+    const orientacaoPadrao = dois ? 'w' : partida.corJogador
 
     // material na posição que está na tela (no modo leitura, a da posição vista)
     const lancesAteAqui = xadrez.history({ verbose: true }).slice(0, lendo ? posicaoVista : undefined)
-    const corComputador = partida.corJogador === 'w' ? 'b' : 'w'
-    const materialPessoa = placarDeMaterial(xadrezNaTela, lancesAteAqui, partida.corJogador)
-    const materialComputador = placarDeMaterial(xadrezNaTela, lancesAteAqui, corComputador)
+    const materialDa = (cor) => placarDeMaterial(xadrezNaTela, lancesAteAqui, cor)
 
     const nomeDoNivel = nivelDe(partida.nivel)?.nome
     const nomeComputador = `Computador (${nomeDoNivel})`
     const quemJoga = fim ? null : xadrez.turn()
-    const estatisticas = fim ? estatisticasDaPartida(xadrez.history({ verbose: true }), partida.corJogador) : null
+    // estatísticas: "você/ele" contra o computador; com 2 jogadores, contadas pelas brancas (e mostradas pelos nomes)
+    const estatisticas = fim ? estatisticasDaPartida(xadrez.history({ verbose: true }), dois ? 'w' : partida.corJogador) : null
     const textoElo = elo.revelado ? elo.valor : '??'
     // depois do fim pode rever a partida inteira; no meio dela, só voltar lance por lance
     const podeReverTudo = Boolean(fim)
 
+    const textoDaVez = dois
+        ? `${xadrez.inCheck() ? 'Xeque! ' : ''}Vez de ${nomes[xadrez.turn()]}.`
+        : (xadrez.inCheck() ? 'Xeque! Sua vez.' : 'Sua vez.')
     const status = fim?.texto
         ?? (lendo ? `Revendo: lance ${posicaoVista} de ${posicoes.length - 1}`
             : pensando ? 'Pensando…'
-                : vezDaPessoa ? (xadrez.inCheck() ? 'Xeque! Sua vez.' : 'Sua vez.') : '')
+                : vezDaPessoa ? textoDaVez : '')
 
     // modo jogo: a janela cobre a tela inteira do tablet (sem a barra da janela nem a barra de tarefas)
     const classeJanela = `janela-xadrez${modoJogo ? ' janela-modo-jogo' : ''} ${classeAnimacao}`
@@ -429,6 +530,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
 
     // tela de início: só o cartão no meio da janela (sem tabuleiro atrás)
     if (naTelaDeInicio) {
+        const contraComputador = oponenteEscolhido !== 'dois'
         return (
             <div className={classeJanela}>
                 {barraDaJanela}
@@ -453,9 +555,18 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                                 {partidasJogadas.length ? (
                                     <ul>
                                         {partidasJogadas.map((jogada) => (
-                                            <li key={jogada.data} className={jogada.resultado}>
-                                                <b>{RESULTADO_CURTO[jogada.resultado]}</b>
-                                                <span>vs {nivelDe(jogada.nivel)?.nome} · de {nomeDaCor(jogada.cor)} · {jogada.lances} lances · {formatarDiaMes(jogada.data)}</span>
+                                            <li key={jogada.data} className={jogada.modo === 'dois' ? 'dois' : jogada.resultado}>
+                                                {jogada.modo === 'dois' ? (
+                                                    <>
+                                                        <b>{jogada.vencedor ? frase(jogada.vencedor, 'venceu', 'venceram') : 'Empate'}</b>
+                                                        <span>2 jogadores · {jogada.lances} lances · {formatarDiaMes(jogada.data)}</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <b>{RESULTADO_CURTO[jogada.resultado]}</b>
+                                                        <span>vs {nivelDe(jogada.nivel)?.nome} · de {nomeDaCor(jogada.cor)} · {jogada.lances} lances · {formatarDiaMes(jogada.data)}</span>
+                                                    </>
+                                                )}
                                             </li>
                                         ))}
                                     </ul>
@@ -469,7 +580,9 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                         ) : confirmar === 'nova' ? (
                             <>
                                 <p className='xadrez-passo'>Abandonar a partida salva?</p>
-                                <p className='xadrez-salva'>Abandonar conta como derrota.</p>
+                                <p className='xadrez-salva'>
+                                    {dois ? `Ela termina como derrota de ${nomes[xadrez.turn()]}.` : 'Abandonar conta como derrota.'}
+                                </p>
                                 <div className='xadrez-acoes'>
                                     <button type='button' className='config-botao config-botao-perigo' onClick={abandonarENova}>Abandonar e começar</button>
                                     <button type='button' className='config-botao' onClick={() => setConfirmar(null)}>Voltar</button>
@@ -477,57 +590,115 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                             </>
                         ) : (
                             <>
-                                <p className='xadrez-passo'>Escolha o nível do seu oponente</p>
-                                {/* lista suspensa: clica e abre os níveis embaixo; clicar fora fecha */}
-                                <div
-                                    className='xadrez-lista-niveis'
-                                    onBlur={(evento) => {
-                                        if (!evento.currentTarget.contains(evento.relatedTarget)) setListaNiveisAberta(false)
-                                    }}
-                                >
+                                {/* contra quem: o computador ou outra pessoa no mesmo aparelho */}
+                                <div className='xadrez-opcoes xadrez-oponente' role='group' aria-label='Oponente'>
                                     <button
                                         type='button'
-                                        className={`config-botao xadrez-lista-botao${listaNiveisAberta ? ' ativo' : ''}`}
-                                        aria-haspopup='listbox'
-                                        aria-expanded={listaNiveisAberta}
-                                        onClick={() => setListaNiveisAberta((aberta) => !aberta)}
+                                        className={`config-botao${contraComputador ? ' ativo' : ''}`}
+                                        onClick={() => escolherOponente('computador')}
                                     >
-                                        Elo {nivelDe(nivelEscolhido)?.nome}
-                                        <span className='xadrez-lista-seta' aria-hidden='true'>▾</span>
+                                        Contra o computador
                                     </button>
-                                    {listaNiveisAberta && (
-                                        <ul className='xadrez-lista-opcoes' role='listbox'>
-                                            {NIVEIS_XADREZ.map((nivel) => (
-                                                <li key={nivel.id} role='option' aria-selected={nivel.id === nivelEscolhido}>
-                                                    <button
-                                                        type='button'
-                                                        className={nivel.id === nivelEscolhido ? 'ativo' : ''}
-                                                        onClick={() => {
-                                                            setNivelEscolhido(nivel.id)
-                                                            setListaNiveisAberta(false)
-                                                        }}
-                                                    >
-                                                        Elo {nivel.nome}
-                                                    </button>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
+                                    <button
+                                        type='button'
+                                        className={`config-botao${!contraComputador ? ' ativo' : ''}`}
+                                        onClick={() => escolherOponente('dois')}
+                                    >
+                                        2 jogadores
+                                    </button>
                                 </div>
 
-                                <p className='xadrez-passo'>Escolha sua cor</p>
-                                <div className='xadrez-opcoes'>
-                                    {CORES.map((cor) => (
-                                        <button
-                                            key={cor.id}
-                                            type='button'
-                                            className={`config-botao${cor.id === corEscolhida ? ' ativo' : ''}`}
-                                            onClick={() => setCorEscolhida(cor.id)}
+                                {contraComputador ? (
+                                    <>
+                                        <p className='xadrez-passo'>Escolha o nível do seu oponente</p>
+                                        {/* lista suspensa: clica e abre os níveis embaixo; clicar fora fecha */}
+                                        <div
+                                            className='xadrez-lista-niveis'
+                                            onBlur={(evento) => {
+                                                if (!evento.currentTarget.contains(evento.relatedTarget)) setListaNiveisAberta(false)
+                                            }}
                                         >
-                                            {cor.nome}
-                                        </button>
-                                    ))}
-                                </div>
+                                            <button
+                                                type='button'
+                                                className={`config-botao xadrez-lista-botao${listaNiveisAberta ? ' ativo' : ''}`}
+                                                aria-haspopup='listbox'
+                                                aria-expanded={listaNiveisAberta}
+                                                onClick={() => setListaNiveisAberta((aberta) => !aberta)}
+                                            >
+                                                Elo {nivelDe(nivelEscolhido)?.nome}
+                                                <span className='xadrez-lista-seta' aria-hidden='true'>▾</span>
+                                            </button>
+                                            {listaNiveisAberta && (
+                                                <ul className='xadrez-lista-opcoes' role='listbox'>
+                                                    {NIVEIS_XADREZ.map((nivel) => (
+                                                        <li key={nivel.id} role='option' aria-selected={nivel.id === nivelEscolhido}>
+                                                            <button
+                                                                type='button'
+                                                                className={nivel.id === nivelEscolhido ? 'ativo' : ''}
+                                                                onClick={() => {
+                                                                    setNivelEscolhido(nivel.id)
+                                                                    setListaNiveisAberta(false)
+                                                                }}
+                                                            >
+                                                                Elo {nivel.nome}
+                                                            </button>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                        </div>
+
+                                        <p className='xadrez-passo'>Escolha sua cor</p>
+                                        <div className='xadrez-opcoes'>
+                                            {CORES.map((cor) => (
+                                                <button
+                                                    key={cor.id}
+                                                    type='button'
+                                                    className={`config-botao${cor.id === corEscolhida ? ' ativo' : ''}`}
+                                                    onClick={() => setCorEscolhida(cor.id)}
+                                                >
+                                                    {cor.nome}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* nomes (vazio = "Brancas"/"Pretas"), com o rei de cada cor do lado */}
+                                        <div className='xadrez-nomes'>
+                                            {['w', 'b'].map((cor) => (
+                                                <label key={cor}>
+                                                    <img src={imagemDaPeca(cor, 'k')} alt='' />
+                                                    <input
+                                                        type='text'
+                                                        value={nomesEscolhidos[cor]}
+                                                        placeholder={NOMES_PADRAO[cor]}
+                                                        maxLength={TAMANHO_MAXIMO_NOME}
+                                                        aria-label={`Nome de quem joga de ${nomeDaCor(cor)}`}
+                                                        onChange={(evento) => {
+                                                            const nome = evento.target.value
+                                                            setNomesEscolhidos((atuais) => ({ ...atuais, [cor]: nome }))
+                                                        }}
+                                                    />
+                                                </label>
+                                            ))}
+                                        </div>
+
+                                        <p className='xadrez-passo'>Como vocês vão jogar</p>
+                                        <div className='xadrez-opcoes'>
+                                            {VISUALIZACOES.map((visualizacao) => (
+                                                <button
+                                                    key={visualizacao.id}
+                                                    type='button'
+                                                    className={`config-botao${visualizacao.id === visualizacaoEscolhida ? ' ativo' : ''}`}
+                                                    onClick={() => setVisualizacaoEscolhida(visualizacao.id)}
+                                                >
+                                                    {visualizacao.nome}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
 
                                 <div className='xadrez-acoes'>
                                     {partidaSalvaEmAndamento ? (
@@ -542,7 +713,9 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                                 </div>
                                 {partidaSalvaEmAndamento && (
                                     <small className='xadrez-salva'>
-                                        Partida salva: {historico.length} lances · nível {nomeDoNivel} · de {nomeDaCor(partida.corJogador)}
+                                        {dois
+                                            ? `Partida salva: ${nomes.w} × ${nomes.b} · ${historico.length} lances`
+                                            : `Partida salva: ${historico.length} lances · nível ${nomeDoNivel} · de ${nomeDaCor(partida.corJogador)}`}
                                     </small>
                                 )}
                             </>
@@ -553,188 +726,286 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         )
     }
 
-    return (
-        <div className={classeJanela}>
-            {barraDaJanela}
+    // um tabuleiro visto de um lado (orientacao = cor que fica embaixo). Lado a lado tem dois; cada um só
+    // aceita clique na vez da cor dele
+    const tabuleiro = (orientacao, { aceitaClique = true, avisos = null } = {}) => {
+        const linhas = orientacao === 'w' ? [8, 7, 6, 5, 4, 3, 2, 1] : [1, 2, 3, 4, 5, 6, 7, 8]
+        const colunas = orientacao === 'w' ? COLUNAS : [...COLUNAS].reverse()
+        // deslize das peças do último lance (só ao vivo): cada peça que andou sai da casa de origem e escorrega
+        // até a dela. --de-coluna/--de-linha = quantas casas atrás ela estava (o CSS anima até 0)
+        const andaram = lendo ? {} : pecasQueAndaram(ultimoLance)
+        const deslizeDa = (casa) => {
+            const origem = andaram[casa]
+            if (!origem) return undefined
+            const de = posicaoNaTela(origem, colunas, linhas)
+            const para = posicaoNaTela(casa, colunas, linhas)
+            return { '--de-coluna': de.coluna - para.coluna, '--de-linha': de.linha - para.linha }
+        }
+        return (
+            <div className={`xadrez-tabuleiro${lendo ? ' lendo' : ''}`}>
+                {linhas.map((linha, indiceLinha) => colunas.map((coluna, indiceColuna) => {
+                    const casa = `${coluna}${linha}`
+                    const peca = xadrezNaTela.get(casa)
+                    const destino = aceitaClique && destinos.find((item) => item.to === casa)
+                    // a1 é escura (coluna 0 + linha 1 = ímpar), h1 é clara
+                    const classes = ['xadrez-casa', (COLUNAS.indexOf(coluna) + linha) % 2 === 1 ? 'escura' : 'clara']
+                    if (aceitaClique && casa === selecionada) classes.push('selecionada')
+                    if (ultimoLance && (casa === ultimoLance.from || casa === ultimoLance.to)) classes.push('ultimo-lance')
+                    if (dica && (casa === dica.from || casa === dica.to)) classes.push('dica')
+                    if (casa === reiEmXeque) classes.push('xeque')
+                    if (destino) classes.push(destino.captured ? 'pode-capturar' : 'pode-ir')
+                    return (
+                        <button
+                            key={casa}
+                            type='button'
+                            className={classes.join(' ')}
+                            onClick={() => aceitaClique && clicarNaCasa(casa)}
+                            aria-label={casa}
+                        >
+                            {peca && (
+                                <img
+                                    // key com o número do lance: a cada lance a peça que chegou "nasce" de novo
+                                    // e a animação de deslize roda
+                                    key={`${casa}-${historico.length}`}
+                                    className={deslizeDa(casa) ? 'deslizando' : ''}
+                                    style={deslizeDa(casa)}
+                                    src={imagemDaPeca(peca.color, peca.type)}
+                                    alt=''
+                                    draggable={false}
+                                />
+                            )}
+                            {/* coordenadas na borda, como num tabuleiro de verdade */}
+                            {indiceColuna === 0 && <span className='xadrez-coordenada linha'>{linha}</span>}
+                            {indiceLinha === 7 && <span className='xadrez-coordenada coluna'>{coluna}</span>}
+                        </button>
+                    )
+                }))}
+                {avisos}
+            </div>
+        )
+    }
 
-            <div className='xadrez-corpo'>
-                <div className={`xadrez-tabuleiro${lendo ? ' lendo' : ''}`}>
-                    {linhas.map((linha, indiceLinha) => colunas.map((coluna, indiceColuna) => {
-                        const casa = `${coluna}${linha}`
-                        const peca = xadrezNaTela.get(casa)
-                        const destino = destinos.find((item) => item.to === casa)
-                        // a1 é escura (coluna 0 + linha 1 = ímpar), h1 é clara
-                        const classes = ['xadrez-casa', (COLUNAS.indexOf(coluna) + linha) % 2 === 1 ? 'escura' : 'clara']
-                        if (casa === selecionada) classes.push('selecionada')
-                        if (ultimoLance && (casa === ultimoLance.from || casa === ultimoLance.to)) classes.push('ultimo-lance')
-                        if (dica && (casa === dica.from || casa === dica.to)) classes.push('dica')
-                        if (casa === reiEmXeque) classes.push('xeque')
-                        if (destino) classes.push(destino.captured ? 'pode-capturar' : 'pode-ir')
-                        return (
-                            <button key={casa} type='button' className={classes.join(' ')} onClick={() => clicarNaCasa(casa)} aria-label={casa}>
-                                {peca && (
-                                    <img
-                                        // key com o número do lance: a cada lance a peça que chegou "nasce" de novo
-                                        // e a animação de deslize roda
-                                        key={`${casa}-${historico.length}`}
-                                        className={deslizeDa(casa) ? 'deslizando' : ''}
-                                        style={deslizeDa(casa)}
-                                        src={imagemDaPeca(peca.color, peca.type)}
-                                        alt=''
-                                        draggable={false}
-                                    />
-                                )}
-                                {/* coordenadas na borda, como num tabuleiro de verdade */}
-                                {indiceColuna === 0 && <span className='xadrez-coordenada linha'>{linha}</span>}
-                                {indiceLinha === 7 && <span className='xadrez-coordenada coluna'>{coluna}</span>}
-                            </button>
-                        )
-                    }))}
+    // linha de um jogador: bolinha da vez, nome (com o nível ou o elo, contra o computador) e o material
+    const linhaDoJogador = (cor) => {
+        const ehComputador = !dois && cor !== partida.corJogador
+        return (
+            <div className={`xadrez-jogador${quemJoga === cor ? ' na-vez' : ''}${ehComputador && pensando ? ' pensando' : ''}`}>
+                <span className='xadrez-jogador-vez' aria-hidden='true' />
+                {dois ? (
+                    <span className='xadrez-jogador-nome'>{nomes[cor]}</span>
+                ) : ehComputador ? (
+                    <>
+                        <span className='xadrez-jogador-nome'>Computador</span>
+                        <span className='xadrez-jogador-rating'>({nomeDoNivel})</span>
+                    </>
+                ) : (
+                    <>
+                        {/* nome do usuário do sistema (no futuro a pessoa vai poder trocar) */}
+                        <span className='xadrez-jogador-nome'>{SISTEMA.usuario}</span>
+                        <span className='xadrez-jogador-rating'>({textoElo})</span>
+                    </>
+                )}
+                <Material placar={materialDa(cor)} corDasCapturadas={outraCor(cor)} />
+            </div>
+        )
+    }
 
-                    {avisoSorteio && (
-                        <div className='xadrez-sorteio' aria-live='polite'>
-                            <img src={imagemDaPeca(partida.corJogador, 'k')} alt='' />
-                            Você joga de {nomeDaCor(partida.corJogador)}
-                        </div>
-                    )}
+    // quadros por cima do tabuleiro (cor sorteada, fim, promoção, abandonar). Lado a lado, cobrem os dois
+    const avisos = (
+        <>
+            {avisoSorteio && (
+                <div className='xadrez-sorteio' aria-live='polite'>
+                    <img src={imagemDaPeca(partida.corJogador, 'k')} alt='' />
+                    Você joga de {nomeDaCor(partida.corJogador)}
+                </div>
+            )}
 
-                    {fim && !fimFechado && (
-                        <div className={`xadrez-aviso xadrez-fim ${fim.resultado}`}>
-                            <strong className='xadrez-fim-titulo'>
-                                {fim.resultado === 'vitoria' ? '🏆 Você venceu!' : fim.resultado === 'derrota' ? 'Você perdeu' : 'Empate'}
-                            </strong>
-                            <p>
-                                {fim.resultado === 'vitoria' && `Xeque-mate no ${nomeComputador} em ${estatisticas.lancesCompletos} lances.`}
-                                {fim.resultado === 'derrota' && (fim.motivo === 'abandono'
-                                    ? `Você abandonou no lance ${estatisticas.lancesCompletos}.`
-                                    : `O ${nomeComputador} deu xeque-mate em ${estatisticas.lancesCompletos} lances.`)}
-                                {fim.resultado === 'empate' && `Empate por ${fim.motivo}, em ${estatisticas.lancesCompletos} lances.`}
-                            </p>
-                            <dl className='xadrez-estatisticas'>
-                                {partida.inicio && partida.fimEm && (
-                                    <div><dt>Duração</dt><dd>{formatarDuracao(partida.fimEm - partida.inicio)}</dd></div>
-                                )}
+            {fim && !fimFechado && (
+                <div className={`xadrez-aviso xadrez-fim ${fim.resultado}`}>
+                    <strong className='xadrez-fim-titulo'>
+                        {dois
+                            ? (fim.vencedor ? `🏆 ${frase(nomes[fim.vencedor], 'venceu', 'venceram')}!` : 'Empate')
+                            : fim.resultado === 'vitoria' ? '🏆 Você venceu!' : fim.resultado === 'derrota' ? 'Você perdeu' : 'Empate'}
+                    </strong>
+                    <p>
+                        {dois && fim.motivo === 'xeque-mate' && `Xeque-mate em ${estatisticas.lancesCompletos} lances.`}
+                        {dois && fim.motivo === 'abandono' && `${frase(nomes[partida.abandonou], 'abandonou', 'abandonaram')} no lance ${estatisticas.lancesCompletos}.`}
+                        {!dois && fim.resultado === 'vitoria' && `Xeque-mate no ${nomeComputador} em ${estatisticas.lancesCompletos} lances.`}
+                        {!dois && fim.resultado === 'derrota' && (fim.motivo === 'abandono'
+                            ? `Você abandonou no lance ${estatisticas.lancesCompletos}.`
+                            : `O ${nomeComputador} deu xeque-mate em ${estatisticas.lancesCompletos} lances.`)}
+                        {fim.resultado === 'empate' && `Empate por ${fim.motivo}, em ${estatisticas.lancesCompletos} lances.`}
+                    </p>
+                    <dl className='xadrez-estatisticas'>
+                        {partida.inicio && partida.fimEm && (
+                            <div><dt>Duração</dt><dd>{formatarDuracao(partida.fimEm - partida.inicio)}</dd></div>
+                        )}
+                        {dois ? (
+                            <>
+                                <div><dt>Peças tomadas</dt><dd>{nomes.w} {estatisticas.capturasVoce} · {nomes.b} {estatisticas.capturasComputador}</dd></div>
+                                <div><dt>Xeques</dt><dd>{nomes.w} {estatisticas.xequesVoce} · {nomes.b} {estatisticas.xequesComputador}</dd></div>
+                            </>
+                        ) : (
+                            <>
                                 <div><dt>Peças tomadas</dt><dd>você {estatisticas.capturasVoce} · ele {estatisticas.capturasComputador}</dd></div>
                                 <div><dt>Xeques</dt><dd>você {estatisticas.xequesVoce} · ele {estatisticas.xequesComputador}</dd></div>
                                 <div>
                                     <dt>Maior vantagem</dt>
                                     <dd>{estatisticas.maiorVantagem > 0 ? `+${estatisticas.maiorVantagem} em material` : 'nenhuma'}</dd>
                                 </div>
-                                {ultimoElo && (
-                                    <div className='xadrez-estatistica-elo'>
-                                        <dt>Seu elo</dt>
-                                        <dd>
-                                            {ultimoElo.revelado
-                                                ? `${ultimoElo.antes} → ${ultimoElo.depois} (${ultimoElo.depois >= ultimoElo.antes ? '+' : ''}${ultimoElo.depois - ultimoElo.antes})`
-                                                : '?? (aparece na sua primeira vitória)'}
-                                            {ultimoElo.dicas > 0 && (
-                                                <small className='xadrez-custo-dicas'>
-                                                    {ultimoElo.dicas} {ultimoElo.dicas === 1 ? 'dica' : 'dicas'}
-                                                    {ultimoElo.revelado && ultimoElo.custoDasDicas > 0 ? `: −${ultimoElo.custoDasDicas}` : ''}
-                                                </small>
-                                            )}
-                                        </dd>
-                                    </div>
-                                )}
-                            </dl>
-                            <div className='xadrez-aviso-botoes'>
-                                <button type='button' className='config-botao' onClick={voltarAoInicio}>Nova partida</button>
-                                <button type='button' className='config-botao' onClick={() => setFimFechado(true)}>Ver a partida</button>
+                            </>
+                        )}
+                        {!dois && ultimoElo && (
+                            <div className='xadrez-estatistica-elo'>
+                                <dt>Seu elo</dt>
+                                <dd>
+                                    {ultimoElo.revelado
+                                        ? `${ultimoElo.antes} → ${ultimoElo.depois} (${ultimoElo.depois >= ultimoElo.antes ? '+' : ''}${ultimoElo.depois - ultimoElo.antes})`
+                                        : '?? (aparece na sua primeira vitória)'}
+                                    {ultimoElo.dicas > 0 && (
+                                        <small className='xadrez-custo-dicas'>
+                                            {ultimoElo.dicas} {ultimoElo.dicas === 1 ? 'dica' : 'dicas'}
+                                            {ultimoElo.revelado && ultimoElo.custoDasDicas > 0 ? `: −${ultimoElo.custoDasDicas}` : ''}
+                                        </small>
+                                    )}
+                                </dd>
                             </div>
-                        </div>
-                    )}
-
-                    {promocaoPendente && (
-                        <div className='xadrez-aviso'>
-                            <strong>Promover para:</strong>
-                            <div className='xadrez-promocao'>
-                                {PROMOCOES.map((tipo) => (
-                                    <button
-                                        key={tipo}
-                                        type='button'
-                                        onClick={() => {
-                                            jogar({ ...promocaoPendente, promotion: tipo })
-                                            setPromocaoPendente(null)
-                                        }}
-                                    >
-                                        <img src={imagemDaPeca(partida.corJogador, tipo)} alt={tipo} />
-                                    </button>
-                                ))}
-                            </div>
-                            <button type='button' className='config-botao' onClick={() => setPromocaoPendente(null)}>Cancelar</button>
-                        </div>
-                    )}
-
-                    {confirmar === 'abandonar' && (
-                        <div className='xadrez-aviso'>
-                            <strong>Abandonar a partida?</strong>
-                            <p>Abandonar conta como derrota.</p>
-                            <div className='xadrez-aviso-botoes'>
-                                <button type='button' className='config-botao config-botao-perigo' onClick={abandonar}>Abandonar</button>
-                                <button type='button' className='config-botao' onClick={() => setConfirmar(null)}>Voltar</button>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                {/* lateral da altura do tabuleiro: o computador em cima, a pessoa embaixo (a bolinha acende em quem
-                    tem a vez) e, no meio, o título, os lances e os controles */}
-                <aside className='xadrez-lateral'>
-                    <div className={`xadrez-jogador${quemJoga && quemJoga !== partida.corJogador ? ' na-vez' : ''}${pensando ? ' pensando' : ''}`}>
-                        <span className='xadrez-jogador-vez' aria-hidden='true' />
-                        <span className='xadrez-jogador-nome'>Computador</span>
-                        <span className='xadrez-jogador-rating'>({nomeDoNivel})</span>
-                        <Material placar={materialComputador} corDasCapturadas={partida.corJogador} />
+                        )}
+                    </dl>
+                    <div className='xadrez-aviso-botoes'>
+                        <button type='button' className='config-botao' onClick={voltarAoInicio}>Nova partida</button>
+                        <button type='button' className='config-botao' onClick={() => setFimFechado(true)}>Ver a partida</button>
                     </div>
+                </div>
+            )}
+
+            {promocaoPendente && (
+                <div className='xadrez-aviso'>
+                    <strong>Promover para:</strong>
+                    <div className='xadrez-promocao'>
+                        {PROMOCOES.map((tipo) => (
+                            <button
+                                key={tipo}
+                                type='button'
+                                onClick={() => {
+                                    jogar({ ...promocaoPendente, promotion: tipo })
+                                    setPromocaoPendente(null)
+                                }}
+                            >
+                                <img src={imagemDaPeca(corQueMexe, tipo)} alt={tipo} />
+                            </button>
+                        ))}
+                    </div>
+                    <button type='button' className='config-botao' onClick={() => setPromocaoPendente(null)}>Cancelar</button>
+                </div>
+            )}
+
+            {confirmar === 'abandonar' && (
+                <div className='xadrez-aviso'>
+                    <strong>{dois ? `${frase(nomes[xadrez.turn()], 'vai', 'vão')} abandonar?` : 'Abandonar a partida?'}</strong>
+                    <p>{dois ? `${frase(nomes[outraCor(xadrez.turn())], 'ganha', 'ganham')} a partida.` : 'Abandonar conta como derrota.'}</p>
+                    <div className='xadrez-aviso-botoes'>
+                        <button type='button' className='config-botao config-botao-perigo' onClick={abandonar}>Abandonar</button>
+                        <button type='button' className='config-botao' onClick={() => setConfirmar(null)}>Voltar</button>
+                    </div>
+                </div>
+            )}
+        </>
+    )
+
+    // menu ☰: voltar ao início, (no modo jogo) minimizar e fechar, abandonar
+    const menu = menuAberto && (
+        <div className='xadrez-menu' role='menu'>
+            <button type='button' role='menuitem' onClick={voltarAoInicio}>
+                {fim ? 'Nova partida' : 'Voltar ao início'}
+                {!fim && <small>a partida fica salva</small>}
+            </button>
+            {/* no modo jogo não tem a barra da janela: minimizar e fechar ficam aqui */}
+            {modoJogo && (
+                <>
+                    <button type='button' role='menuitem' onClick={() => minimizarApp('app_xadrez')}>
+                        Minimizar
+                        <small>a partida continua de onde parou</small>
+                    </button>
+                    <button type='button' role='menuitem' onClick={() => fecharApp('app_xadrez')}>
+                        Fechar o xadrez
+                        <small>a partida fica salva</small>
+                    </button>
+                </>
+            )}
+            {!fim && (
+                <button
+                    type='button'
+                    role='menuitem'
+                    className='perigo'
+                    disabled={!historico.length}
+                    onClick={() => {
+                        setMenuAberto(false)
+                        setConfirmar('abandonar')
+                    }}
+                >
+                    Abandonar partida
+                    {dois && <small>{frase(nomes[xadrez.turn()], 'perde', 'perdem')} a partida</small>}
+                </button>
+            )}
+        </div>
+    )
+    const botaoMenu = (
+        <button
+            type='button'
+            className={`config-botao xadrez-botao-menu${menuAberto ? ' ativo' : ''}`}
+            aria-label='Menu'
+            aria-expanded={menuAberto}
+            onClick={() => setMenuAberto((aberto) => !aberto)}
+        >
+            ☰
+        </button>
+    )
+
+    // 2 jogadores lado a lado: um tabuleiro para cada um (brancas na esquerda, pretas na direita), cada um com
+    // o seu nome em cima; o de quem não tem a vez fica apagado. O ☰ fica no meio
+    if (espelhado) {
+        return (
+            <div className={classeJanela}>
+                {barraDaJanela}
+
+                <div className='xadrez-corpo xadrez-corpo-espelhado'>
+                    {['w', 'b'].map((cor) => (
+                        <div key={cor} className={`xadrez-lado${!fim && xadrez.turn() !== cor ? ' apagado' : ''}`}>
+                            {linhaDoJogador(cor)}
+                            {tabuleiro(cor, { aceitaClique: !fim && xadrez.turn() === cor })}
+                        </div>
+                    ))}
+                    <div className='xadrez-centro'>
+                        {botaoMenu}
+                        <BotaoModoJogo modoJogo={modoJogo} alternar={alternarModoJogo} />
+                        {menu}
+                    </div>
+                    {/* quadros (fim, promoção, abandonar) por cima dos dois tabuleiros */}
+                    <div className='xadrez-camada-avisos'>{avisos}</div>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className={classeJanela}>
+            {barraDaJanela}
+
+            <div className='xadrez-corpo'>
+                {tabuleiro(orientacaoPadrao, { avisos })}
+
+                {/* lateral da altura do tabuleiro: quem está do outro lado em cima, quem está embaixo no pé
+                    (a bolinha acende em quem tem a vez) e, no meio, o título, os lances e os controles */}
+                <aside className='xadrez-lateral'>
+                    {linhaDoJogador(outraCor(orientacaoPadrao))}
 
                     <div className='xadrez-topo'>
                         <h2 className='xadrez-titulo'>Xadrez</h2>
                         <span className={`xadrez-status${fim ? ' fim' : ''}`}>{status}</span>
-                        <button
-                            type='button'
-                            className={`config-botao xadrez-botao-menu${menuAberto ? ' ativo' : ''}`}
-                            aria-label='Menu'
-                            aria-expanded={menuAberto}
-                            onClick={() => setMenuAberto((aberto) => !aberto)}
-                        >
-                            ☰
-                        </button>
+                        {botaoMenu}
                         <BotaoModoJogo modoJogo={modoJogo} alternar={alternarModoJogo} />
-                        {menuAberto && (
-                            <div className='xadrez-menu' role='menu'>
-                                <button type='button' role='menuitem' onClick={voltarAoInicio}>
-                                    {fim ? 'Nova partida' : 'Voltar ao início'}
-                                    {!fim && <small>a partida fica salva</small>}
-                                </button>
-                                {/* no modo jogo não tem a barra da janela: minimizar e fechar ficam aqui */}
-                                {modoJogo && (
-                                    <>
-                                        <button type='button' role='menuitem' onClick={() => minimizarApp('app_xadrez')}>
-                                            Minimizar
-                                            <small>a partida continua de onde parou</small>
-                                        </button>
-                                        <button type='button' role='menuitem' onClick={() => fecharApp('app_xadrez')}>
-                                            Fechar o xadrez
-                                            <small>a partida fica salva</small>
-                                        </button>
-                                    </>
-                                )}
-                                {!fim && (
-                                    <button
-                                        type='button'
-                                        role='menuitem'
-                                        className='perigo'
-                                        disabled={!historico.length}
-                                        onClick={() => {
-                                            setMenuAberto(false)
-                                            setConfirmar('abandonar')
-                                        }}
-                                    >
-                                        Abandonar partida
-                                    </button>
-                                )}
-                            </div>
-                        )}
+                        {menu}
                     </div>
 
                     {/* lances: depois do fim, clicar num lance mostra aquela posição */}
@@ -776,7 +1047,8 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                         {lendo && (
                             <button type='button' className='config-botao' onClick={() => setPosicaoVista(null)}>Voltar ao jogo</button>
                         )}
-                        {!fim && (
+                        {/* dica: só contra o computador (com 2 jogadores seria ajudar um dos dois) */}
+                        {!fim && !dois && (
                             <button
                                 type='button'
                                 className={`config-botao xadrez-botao-dica${acendendoDica ? ' acendendo' : ''}`}
@@ -790,13 +1062,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                         )}
                     </div>
 
-                    <div className={`xadrez-jogador${quemJoga === partida.corJogador ? ' na-vez' : ''}`}>
-                        <span className='xadrez-jogador-vez' aria-hidden='true' />
-                        {/* nome do usuário do sistema (no futuro a pessoa vai poder trocar) */}
-                        <span className='xadrez-jogador-nome'>{SISTEMA.usuario}</span>
-                        <span className='xadrez-jogador-rating'>({textoElo})</span>
-                        <Material placar={materialPessoa} corDasCapturadas={corComputador} />
-                    </div>
+                    {linhaDoJogador(orientacaoPadrao)}
                 </aside>
             </div>
         </div>
