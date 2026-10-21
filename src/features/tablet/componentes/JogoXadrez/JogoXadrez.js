@@ -5,7 +5,8 @@ import WindowBar from '../../sistema/WindowBar/WindowBar'
 import { useSistemaTablet } from '../../contexts/SistemaTablet'
 import { TEMAS } from '../../hooks/useTemaSistema'
 import { useEstadoPersistido } from '../../../../shared/hooks/useEstadoPersistido'
-import { NIVEIS_XADREZ, jogarLance, sugerirLance } from './motorXadrez'
+import { NIVEIS_XADREZ, jogarLance, sugerirLanceForte } from './motorXadrez'
+import { CATEGORIAS } from './analiseXadrez'
 import { SISTEMA } from '../../tablet.config'
 import { BotaoModoJogo, ControlesModoJogo, useModoJogo } from '../ModoJogo/ModoJogo'
 
@@ -186,6 +187,8 @@ const pecasQueAndaram = (lance) => {
 
 
 const RESULTADO_CURTO = { vitoria: 'Venceu', derrota: 'Perdeu', empate: 'Empate' }
+// categorias da análise (Brilhante, Ótimo, Melhor...) pelo id
+const CATEGORIA_POR_ID = Object.fromEntries(CATEGORIAS.map((categoria) => [categoria.id, categoria]))
 
 // xadrez.exe: contra o computador (níveis 300 a 2000) ou 2 jogadores no mesmo aparelho.
 // - Tela de início: só um cartão no meio da janela. Contra o computador: nível e cor. 2 jogadores: os nomes e
@@ -246,6 +249,8 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     const [modoJogo, alternarModoJogo] = useModoJogo('xadrez')
     // última mudança de elo (para o quadro de fim): { antes, depois, revelado, dicas, custoDasDicas }
     const [ultimoElo, setUltimoElo] = useState(null)
+    // análise rodando: progresso de 0 a 1 (null = parada)
+    const [analisando, setAnalisando] = useState(null)
     // número do último pedido de dica: muda ao jogar/sair, e aí uma resposta atrasada é ignorada
     const pedidoDicaRef = useRef(0)
     const listaRef = useRef(null)
@@ -470,21 +475,40 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         setNaTelaDeInicio(true)
     }
 
-    // cada dica conta (partida.dicas) e pesa no elo do fim; a mesma dica na tela não conta de novo.
-    // Se a pessoa sair da partida nesse meio-tempo, a resposta é ignorada
+    // dica pelo Stockfish (com força total). Cada dica conta (partida.dicas) e pesa no elo do fim; a mesma
+    // dica na tela não conta de novo. A lâmpada brilha pelo menos ESPERA_DICA_MS (e enquanto o Stockfish
+    // pensa ou baixa). Se a pessoa sair da partida nesse meio-tempo, a resposta é ignorada
     const pedirDica = () => {
         if (dois || !vezDaPessoa || lendo || acendendoDica || dica) return
         setAcendendoDica(true)
         const pedido = ++pedidoDicaRef.current
         const espera = new Promise((resolver) => setTimeout(resolver, ESPERA_DICA_MS))
-        const fen = xadrez.fen()
-        espera.then(() => {
-            const lance = sugerirLance(fen)
+        Promise.all([sugerirLanceForte(xadrez.fen()), espera]).then(([lance]) => {
             if (pedido !== pedidoDicaRef.current) return
             setAcendendoDica(false)
             setDica(lance)
             setPartida((atual) => ({ ...atual, dicas: (atual.dicas ?? 0) + 1 }))
         })
+    }
+
+    // análise da partida que acabou (Stockfish, método do Lichess): roda em segundo plano mostrando o
+    // progresso; o resultado fica na partida (e a precisão vai para o histórico). Na lateral (um tabuleiro)
+    // ou no quadro de fim (lado a lado, que não tem lateral)
+    const analisar = async () => {
+        if (analisando !== null || partida.analise) return
+        if (!espelhado) setFimFechado(true)
+        setAnalisando(0)
+        const daPartida = partida.inicio
+        try {
+            const { analisarPartida } = await import('./analiseXadrez')
+            const analise = await analisarPartida(partida.lances, setAnalisando)
+            setPartida((atual) => (atual.inicio === daPartida ? { ...atual, analise } : atual))
+            setPartidasJogadas((atuais) => atuais.map((jogada) => (jogada.inicio === daPartida ? { ...jogada, precisao: analise.precisao } : jogada)))
+        } catch (erro) {
+            console.warn('Não deu para analisar a partida.', erro)
+        } finally {
+            setAnalisando(null)
+        }
     }
 
     // tabuleiro que aparece: a posição vista no modo leitura, ou a atual
@@ -810,6 +834,52 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         )
     }
 
+    // análise (só depois do fim): botão, progresso ou o resultado — precisão de cada lado, quantos lances de
+    // cada categoria (só as que aconteceram) e, revendo a partida, a categoria do lance e qual era o melhor
+    const analise = partida.analise
+    const nomeDoLado = (cor) => (dois ? nomes[cor] : cor === partida.corJogador ? 'Você' : 'Computador')
+    const ladosDaAnalise = dois ? ['w', 'b'] : [partida.corJogador, outraCor(partida.corJogador)]
+    const lanceVisto = lendo && analise && posicaoVista > 0 ? analise.lances[posicaoVista - 1] : null
+    const categoriaVista = CATEGORIA_POR_ID[lanceVisto?.categoria]
+    const blocoAnalise = fim && (
+        <div className='xadrez-analise'>
+            {analisando !== null ? (
+                <div className='xadrez-analise-progresso' role='status'>
+                    <span>Analisando com o Stockfish… {Math.round(analisando * 100)}%</span>
+                    <div className='xadrez-analise-barra' style={{ '--progresso': analisando }} />
+                </div>
+            ) : analise ? (
+                <>
+                    <p className='xadrez-analise-titulo'>Análise (Stockfish)</p>
+                    {ladosDaAnalise.map((cor) => (
+                        <div key={cor} className='xadrez-analise-lado'>
+                            <div className='xadrez-analise-cabeca'>
+                                <b>{nomeDoLado(cor)}</b>
+                                <span className='xadrez-analise-precisao' title='Precisão'>{analise.precisao[cor] ?? '—'}%</span>
+                            </div>
+                            <div className='xadrez-analise-categorias'>
+                                {CATEGORIAS.filter(({ id }) => analise.contagem[cor][id] > 0).map((categoria) => (
+                                    <span key={categoria.id} className={`xadrez-chip ${categoria.id}`} title={categoria.nome}>
+                                        <span className='xadrez-chip-simbolo'>{categoria.simbolo}</span>
+                                        {analise.contagem[cor][categoria.id]}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                    {categoriaVista && (
+                        <p className='xadrez-analise-melhor'>
+                            Lance {posicaoVista}: <b className={`xadrez-simbolo ${categoriaVista.id}`}>{categoriaVista.simbolo} {categoriaVista.nome}</b>
+                            {lanceVisto.melhor && <> · o melhor era <b>{emPortugues(lanceVisto.melhor)}</b></>}
+                        </p>
+                    )}
+                </>
+            ) : (
+                <button type='button' className='config-botao xadrez-botao-analisar' onClick={analisar}>Analisar a partida</button>
+            )}
+        </div>
+    )
+
     // quadros por cima do tabuleiro (cor sorteada, fim, promoção, abandonar). Lado a lado, cobrem os dois
     const avisos = (
         <>
@@ -872,9 +942,14 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                             </div>
                         )}
                     </dl>
+                    {/* lado a lado não tem lateral: a análise aparece aqui mesmo */}
+                    {espelhado && blocoAnalise}
                     <div className='xadrez-aviso-botoes'>
                         <button type='button' className='config-botao' onClick={voltarAoInicio}>Nova partida</button>
                         <button type='button' className='config-botao' onClick={() => setFimFechado(true)}>Ver a partida</button>
+                        {!espelhado && !partida.analise && (
+                            <button type='button' className='config-botao xadrez-botao-principal' onClick={analisar}>Analisar</button>
+                        )}
                     </div>
                 </div>
             )}
@@ -1008,18 +1083,28 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                         {menu}
                     </div>
 
-                    {/* lances: depois do fim, clicar num lance mostra aquela posição */}
+                    {blocoAnalise}
+
+                    {/* lances: depois do fim, clicar num lance mostra aquela posição (e, analisada, o símbolo
+                        de cada lance: ?! imprecisão, ? erro, ?? capivarada) */}
                     <ol className='xadrez-historico' ref={listaRef}>
-                        {historico.map((san, indice) => (
-                            <li key={indice} className={posicaoVista === indice + 1 ? 'visto' : ''}>
-                                {indice % 2 === 0 && <span className='xadrez-numero'>{indice / 2 + 1}.</span>}
-                                {podeReverTudo ? (
-                                    <button type='button' onClick={() => setPosicaoVista(indice + 1 === posicoes.length - 1 ? null : indice + 1)}>{emPortugues(san)}</button>
-                                ) : (
-                                    <span className='xadrez-lance'>{emPortugues(san)}</span>
-                                )}
-                            </li>
-                        ))}
+                        {historico.map((san, indice) => {
+                            const categoria = CATEGORIA_POR_ID[partida.analise?.lances[indice]?.categoria]
+                            const simbolo = categoria?.destaque ? categoria : null
+                            return (
+                                <li key={indice} className={posicaoVista === indice + 1 ? 'visto' : ''}>
+                                    {indice % 2 === 0 && <span className='xadrez-numero'>{indice / 2 + 1}.</span>}
+                                    {podeReverTudo ? (
+                                        <button type='button' onClick={() => setPosicaoVista(indice + 1 === posicoes.length - 1 ? null : indice + 1)}>
+                                            {emPortugues(san)}
+                                            {simbolo && <span className={`xadrez-simbolo ${simbolo.id}`}>{simbolo.simbolo}</span>}
+                                        </button>
+                                    ) : (
+                                        <span className='xadrez-lance'>{emPortugues(san)}</span>
+                                    )}
+                                </li>
+                            )
+                        })}
                     </ol>
 
                     <div className='xadrez-navegacao'>

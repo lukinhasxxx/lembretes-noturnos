@@ -21,6 +21,21 @@ export const NIVEIS_XADREZ = [
     { id: 'sf2000', nome: '2000', stockfish: true, elo: 2000, tempoMs: 900 },
 ]
 
+// quanto o Stockfish pensa na dica
+const TEMPO_DICA_STOCKFISH_MS = 300
+
+// dica (Promise): o melhor lance pelo Stockfish com força total; sem ele (não carregou), a dica deste motor
+export const sugerirLanceForte = async (fen) => {
+    try {
+        const { avaliarPosicao } = await import('./stockfishXadrez')
+        const { melhor } = await avaliarPosicao(fen, TEMPO_DICA_STOCKFISH_MS)
+        if (melhor) return melhor
+    } catch (erro) {
+        console.warn('Stockfish não carregou; dica com o motor simples.', erro)
+    }
+    return sugerirLance(fen)
+}
+
 // lance do computador para qualquer nível (Promise): os fracos usam este motor; os fortes, o Stockfish.
 // Se o Stockfish não carregar (sem internet, navegador antigo...), joga este motor no nível mais forte dele
 export const jogarLance = async (fen, idNivel) => {
