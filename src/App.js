@@ -333,7 +333,7 @@ setLigarTabletPrimeiraVez(true)
     ? { x: (larguraTela - larguraJanela) / 2, y: (alturaTela - alturaJanela) / 2 }
     : { x: larguraTela * 0.2, y: alturaTela * 0.09 })}
   visivel={modalAberto}
-  // resolução escolhida no Config (15% menor ... 40% maior), sem passar do que cabe na tela
+  // resolução escolhida no Config (15% menor ... 54% maior), sem passar do que cabe na tela
   fatorEscala={resolucaoTablet.fator}
   // celular: com o teclado aberto o tablet encolhe e sobe, para a caixa de texto não ficar atrás dele
   // (só deitado: em pé encolher deixava o tablet pequeno demais)

@@ -26,7 +26,7 @@ const rotuloDaOpcao = (opcao) => {
 }
 
 // "Resolução da tela" do Config, igual à do Windows: o tamanho atual do tablet (em px da sua tela) e, ao abrir,
-// as outras opções (15% menor, a recomendável, 15% maior e 40% maior). As que não cabem na tela nem aparecem.
+// as outras opções (15% menor, a recomendável, 15%, 40% e 54% maior). As que não cabem na tela nem aparecem.
 const SecaoResolucao = () => {
     const { resolucaoTablet, setResolucaoTablet } = useSistemaTablet()
     const [aberta, setAberta] = useState(false)
