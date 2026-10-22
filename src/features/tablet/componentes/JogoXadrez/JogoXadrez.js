@@ -7,6 +7,7 @@ import { TEMAS } from '../../hooks/useTemaSistema'
 import { useEstadoPersistido } from '../../../../shared/hooks/useEstadoPersistido'
 import { NIVEIS_XADREZ, jogarLance, sugerirLanceForte } from './motorXadrez'
 import { CATEGORIAS } from './analiseXadrez'
+import { baixarPgn, exportarParaLichess, montarPgn } from './exportarXadrez'
 import { SISTEMA } from '../../tablet.config'
 import { BotaoModoJogo, ControlesModoJogo, useModoJogo } from '../ModoJogo/ModoJogo'
 
@@ -23,6 +24,8 @@ const PAUSA_COMPUTADOR_MS = 350
 const DURACAO_AVISO_SORTEIO_MS = 1600
 // a lâmpada "acende" um pouquinho antes de mostrar a dica
 const ESPERA_DICA_MS = 450
+// quanto tempo o "Copiado!" fica no botão Compartilhar
+const DURACAO_COPIADO_MS = 1500
 
 // 2 jogadores (no mesmo aparelho): nomes quando a pessoa não escreve nenhum, e o tamanho máximo do nome
 const NOMES_PADRAO = { w: 'Brancas', b: 'Pretas' }
@@ -251,6 +254,11 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     const [ultimoElo, setUltimoElo] = useState(null)
     // análise rodando: progresso de 0 a 1 (null = parada)
     const [analisando, setAnalisando] = useState(null)
+    // enviando a partida para o Lichess (o botão espera a resposta)
+    const [exportando, setExportando] = useState(false)
+    // "Compartilhar": avisa por um instante que o PGN foi copiado ('copiado') ou baixado ('baixado')
+    const [copiado, setCopiado] = useState(null)
+    const timerCopiadoRef = useRef(null)
     // número do último pedido de dica: muda ao jogar/sair, e aí uma resposta atrasada é ignorada
     const pedidoDicaRef = useRef(0)
     const listaRef = useRef(null)
@@ -509,6 +517,45 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         } finally {
             setAnalisando(null)
         }
+    }
+
+    // PGN da partida que acabou, com o nome de cada lado (o computador vai com o elo do nível)
+    const pgnDaPartida = () => {
+        const vencedor = dois
+            ? fim.vencedor ?? null
+            : fim.resultado === 'vitoria' ? partida.corJogador : fim.resultado === 'derrota' ? outraCor(partida.corJogador) : null
+        const lado = (cor) => (dois
+            ? { nome: nomes[cor] }
+            : cor === partida.corJogador
+                ? { nome: SISTEMA.usuario }
+                : { nome: 'Computador', elo: Number(nivelDe(partida.nivel)?.nome) || null })
+        return montarPgn({ lances: partida.lances, brancas: lado('w'), pretas: lado('b'), vencedor, inicio: partida.inicio })
+    }
+
+    // manda a partida para o Lichess e abre lá
+    const exportar = async () => {
+        if (exportando || !fim) return
+        setExportando(true)
+        try {
+            await exportarParaLichess(pgnDaPartida())
+        } finally {
+            setExportando(false)
+        }
+    }
+
+    // só o dado: copia o PGN (ou baixa o .pgn, se não der para copiar) para a pessoa usar onde quiser
+    const compartilhar = async () => {
+        if (!fim) return
+        const pgn = pgnDaPartida()
+        try {
+            await navigator.clipboard.writeText(pgn)
+            setCopiado('copiado')
+        } catch {
+            baixarPgn(pgn)
+            setCopiado('baixado')
+        }
+        clearTimeout(timerCopiadoRef.current)
+        timerCopiadoRef.current = setTimeout(() => setCopiado(null), DURACAO_COPIADO_MS)
     }
 
     // tabuleiro que aparece: a posição vista no modo leitura, ou a atual
@@ -877,6 +924,14 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
             ) : (
                 <button type='button' className='config-botao xadrez-botao-analisar' onClick={analisar}>Analisar a partida</button>
             )}
+            <div className='xadrez-exportar'>
+                <button type='button' className='config-botao' onClick={exportar} disabled={exportando}>
+                    {exportando ? 'Enviando…' : 'Exportar para o Lichess'}
+                </button>
+                <button type='button' className='config-botao' onClick={compartilhar} title='Copia a partida (PGN) para colar onde quiser'>
+                    {copiado === 'copiado' ? 'Copiado!' : copiado === 'baixado' ? 'Baixado!' : 'Compartilhar'}
+                </button>
+            </div>
         </div>
     )
 

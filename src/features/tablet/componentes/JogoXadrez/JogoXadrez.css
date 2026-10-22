@@ -789,6 +789,21 @@
     align-self: flex-start;
 }
 
+/* "Exportar para o Lichess" (abre lá) e, ao lado, "Compartilhar" (só copia o PGN) */
+.xadrez-exportar {
+    display: flex;
+    gap: 4px;
+}
+
+.xadrez-exportar .config-botao {
+    white-space: nowrap;
+}
+
+/* no quadro de fim (lado a lado) os dois dividem a largura, como o "Analisar a partida" em cima */
+.xadrez-aviso .xadrez-exportar .config-botao {
+    flex: 1;
+}
+
 .xadrez-analise-progresso {
     display: flex;
     flex-direction: column;
