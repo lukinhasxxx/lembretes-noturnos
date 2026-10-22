@@ -183,6 +183,21 @@
     pointer-events: none;
 }
 
+/* peça que dá para arrastar: mãozinha, e o dedo não rola a página */
+.xadrez-casa.pode-arrastar {
+    cursor: grab;
+    touch-action: none;
+}
+
+/* peça sendo arrastada: segue o ponteiro (transform no estilo), um pouco maior e por cima de tudo */
+.xadrez-casa img.arrastando {
+    z-index: 6;
+    animation: none;
+    scale: 1.12;
+    cursor: grabbing;
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.35));
+}
+
 /* peça do último lance escorregando da casa de origem até a dela (--de-coluna/--de-linha vêm do JS);
    por cima das outras casas enquanto passa */
 .xadrez-casa img.deslizando {

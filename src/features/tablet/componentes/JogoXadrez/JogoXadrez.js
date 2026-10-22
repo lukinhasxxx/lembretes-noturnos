@@ -26,6 +26,8 @@ const DURACAO_AVISO_SORTEIO_MS = 1600
 const ESPERA_DICA_MS = 450
 // quanto tempo o "Copiado!" fica no botão Compartilhar
 const DURACAO_COPIADO_MS = 1500
+// quanto o ponteiro anda (px na tela) antes de virar arraste da peça; menos que isso é clique
+const LIMIAR_ARRASTE_PX = 5
 
 // 2 jogadores (no mesmo aparelho): nomes quando a pessoa não escreve nenhum, e o tamanho máximo do nome
 const NOMES_PADRAO = { w: 'Brancas', b: 'Pretas' }
@@ -259,6 +261,11 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     // "Compartilhar": avisa por um instante que o PGN foi copiado ('copiado') ou baixado ('baixado')
     const [copiado, setCopiado] = useState(null)
     const timerCopiadoRef = useRef(null)
+    // peça sendo arrastada (ver comecarArraste); depois de soltar, o clique que vem junto é ignorado;
+    // e o lance feito arrastando não tem o deslize (guarda o número dele)
+    const arrasteRef = useRef(null)
+    const ignorarCliqueRef = useRef(false)
+    const semDeslizeRef = useRef(null)
     // número do último pedido de dica: muda ao jogar/sair, e aí uma resposta atrasada é ignorada
     const pedidoDicaRef = useRef(0)
     const listaRef = useRef(null)
@@ -409,6 +416,78 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         // peão chegando no fim: escolhe a peça antes de jogar
         if (lance.promotion) setPromocaoPendente({ from: selecionada, to: casa })
         else jogar({ from: selecionada, to: casa })
+    }
+
+    // arrastar a peça (mouse ou dedo), além de clicar. O arraste só começa depois de LIMIAR_ARRASTE_PX (antes
+    // disso é um clique normal). A peça segue o ponteiro mexendo direto no estilo dela (sem re-renderizar a
+    // cada movimento); ao soltar numa casa válida, joga. Soltar fora (ou na própria casa) deixa só selecionada
+    const comecarArraste = (evento, casa) => {
+        ignorarCliqueRef.current = false
+        if (evento.button !== 0 || !vezDaPessoa || lendo || promocaoPendente) return
+        const peca = xadrez.get(casa)
+        if (!peca || peca.color !== corQueMexe) return
+        const botao = evento.currentTarget
+        arrasteRef.current = {
+            casa,
+            id: evento.pointerId,
+            x: evento.clientX,
+            y: evento.clientY,
+            botao,
+            imagem: botao.querySelector('img'),
+            // o tablet é escalado: o deslocamento na tela vira deslocamento "dentro" dele
+            escala: botao.getBoundingClientRect().width / botao.offsetWidth || 1,
+            arrastando: false,
+        }
+        botao.setPointerCapture(evento.pointerId)
+    }
+
+    const moverArraste = (evento) => {
+        const arraste = arrasteRef.current
+        if (!arraste || evento.pointerId !== arraste.id) return
+        const dx = evento.clientX - arraste.x
+        const dy = evento.clientY - arraste.y
+        if (!arraste.arrastando) {
+            if (Math.hypot(dx, dy) < LIMIAR_ARRASTE_PX) return
+            arraste.arrastando = true
+            // a casa de origem fica por cima das outras, para a peça não passar por baixo delas
+            arraste.botao.style.zIndex = 5
+            arraste.imagem.classList.add('arrastando')
+            setSelecionada(arraste.casa)
+        }
+        arraste.imagem.style.transform = `translate(${dx / arraste.escala}px, ${dy / arraste.escala}px)`
+    }
+
+    const terminarArraste = (arraste) => {
+        arrasteRef.current = null
+        arraste.botao.style.zIndex = ''
+        arraste.imagem.classList.remove('arrastando')
+        arraste.imagem.style.transform = ''
+    }
+
+    const soltarArraste = (evento) => {
+        const arraste = arrasteRef.current
+        if (!arraste || evento.pointerId !== arraste.id) return
+        if (!arraste.arrastando) {
+            arrasteRef.current = null
+            return
+        }
+        terminarArraste(arraste)
+        // o clique que o navegador manda depois de soltar não conta
+        ignorarCliqueRef.current = true
+        const alvo = document.elementFromPoint(evento.clientX, evento.clientY)?.closest('.xadrez-casa')
+        if (!alvo || !arraste.botao.parentElement.contains(alvo)) return
+        const casa = alvo.getAttribute('aria-label')
+        const lance = xadrez.moves({ square: arraste.casa, verbose: true }).find((item) => item.to === casa)
+        if (!lance) return
+        // a peça já está no lugar: sem o deslize do último lance
+        semDeslizeRef.current = historico.length + 1
+        if (lance.promotion) setPromocaoPendente({ from: arraste.casa, to: casa })
+        else jogar({ from: arraste.casa, to: casa })
+    }
+
+    const cancelarArraste = (evento) => {
+        const arraste = arrasteRef.current
+        if (arraste && evento.pointerId === arraste.id) terminarArraste(arraste)
     }
 
     const limparTabuleiro = () => {
@@ -804,7 +883,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         const colunas = orientacao === 'w' ? COLUNAS : [...COLUNAS].reverse()
         // deslize das peças do último lance (só ao vivo): cada peça que andou sai da casa de origem e escorrega
         // até a dela. --de-coluna/--de-linha = quantas casas atrás ela estava (o CSS anima até 0)
-        const andaram = lendo ? {} : pecasQueAndaram(ultimoLance)
+        const andaram = lendo || semDeslizeRef.current === historico.length ? {} : pecasQueAndaram(ultimoLance)
         const deslizeDa = (casa) => {
             const origem = andaram[casa]
             if (!origem) return undefined
@@ -825,12 +904,23 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                     if (dica && (casa === dica.from || casa === dica.to)) classes.push('dica')
                     if (casa === reiEmXeque) classes.push('xeque')
                     if (destino) classes.push(destino.captured ? 'pode-capturar' : 'pode-ir')
+                    if (aceitaClique && vezDaPessoa && !lendo && peca?.color === corQueMexe) classes.push('pode-arrastar')
                     return (
                         <button
                             key={casa}
                             type='button'
                             className={classes.join(' ')}
-                            onClick={() => aceitaClique && clicarNaCasa(casa)}
+                            onClick={() => {
+                                if (ignorarCliqueRef.current) {
+                                    ignorarCliqueRef.current = false
+                                    return
+                                }
+                                if (aceitaClique) clicarNaCasa(casa)
+                            }}
+                            onPointerDown={(evento) => aceitaClique && comecarArraste(evento, casa)}
+                            onPointerMove={moverArraste}
+                            onPointerUp={soltarArraste}
+                            onPointerCancel={cancelarArraste}
                             aria-label={casa}
                         >
                             {peca && (
