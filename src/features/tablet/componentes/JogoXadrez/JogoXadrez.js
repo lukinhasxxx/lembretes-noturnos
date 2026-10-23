@@ -8,6 +8,7 @@ import { useEstadoPersistido } from '../../../../shared/hooks/useEstadoPersistid
 import { NIVEIS_XADREZ, jogarLance, sugerirLanceForte } from './motorXadrez'
 import { CATEGORIAS } from './analiseXadrez'
 import { baixarPgn, exportarParaLichess, montarPgn } from './exportarXadrez'
+import { somDoLance, tocarSomXadrez } from './somXadrez'
 import { SISTEMA } from '../../tablet.config'
 import { BotaoModoJogo, ControlesModoJogo, useModoJogo } from '../ModoJogo/ModoJogo'
 
@@ -26,6 +27,8 @@ const DURACAO_AVISO_SORTEIO_MS = 1600
 const ESPERA_DICA_MS = 450
 // quanto tempo o "Copiado!" fica no botão Compartilhar
 const DURACAO_COPIADO_MS = 1500
+// o acorde do fim espera o som do último lance (segundos)
+const ATRASO_SOM_DO_FIM_S = 0.25
 // quanto o ponteiro anda (px na tela) antes de virar arraste da peça; menos que isso é clique
 const LIMIAR_ARRASTE_PX = 5
 
@@ -205,7 +208,7 @@ const CATEGORIA_POR_ID = Object.fromEntries(CATEGORIAS.map((categoria) => [categ
 //   e o menu abre no meio da tela.
 // - Fim: quadro com as estatísticas e o elo (só contra o computador); aí libera rever a partida inteira.
 const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
-    const { tema } = useSistemaTablet()
+    const { tema, telaAtiva } = useSistemaTablet()
     // partidas salvas, uma por modo (assim "Continuar" de 2 jogadores nunca abre uma contra o computador e
     // trocar de modo não perde a outra): { lances: [{ from, to, promotion }], inicio, fimEm, abandonou, e
     //   contra o computador: nivel, corJogador, sorteada, dicas
@@ -229,6 +232,8 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     // últimas partidas, da mais nova para a mais velha. Contra o computador: { data, nivel, cor, resultado,
     // motivo, lances, eloAntes, eloDepois, dicas }; 2 jogadores: { data, modo: 'dois', nomes, vencedor, resultado, motivo, lances }
     const [partidasJogadas, setPartidasJogadas] = useEstadoPersistido('xadrez-historico', [])
+    // sons dos lances e do fim (somXadrez.js); liga/desliga no menu ☰
+    const [somLigado, setSomLigado] = useEstadoPersistido('xadrez-som', true)
 
     // abre sempre na tela de início
     const [naTelaDeInicio, setNaTelaDeInicio] = useState(true)
@@ -269,6 +274,8 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     // número do último pedido de dica: muda ao jogar/sair, e aí uma resposta atrasada é ignorada
     const pedidoDicaRef = useRef(0)
     const listaRef = useRef(null)
+    // quantos lances a partida tinha (e qual partida era) no último som: só um lance a mais faz barulho
+    const lancesDoSomRef = useRef({ inicio: null, quantos: 0 })
 
     const dois = partida.modo === 'dois'
     const nomes = partida.nomes ?? NOMES_PADRAO
@@ -280,6 +287,20 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     const lendo = posicaoVista !== null && posicaoVista < posicoes.length - 1
     const historico = xadrez.history()
     const partidaSalvaEmAndamento = emAndamento(partida)
+    // som só com o xadrez na frente (minimizado, o computador joga em silêncio)
+    const podeTocar = somLigado && !naTelaDeInicio && telaAtiva === 'xadrez.exe'
+
+    // som de cada lance novo (da pessoa, do computador ou do outro jogador). Voltar um lance, trocar de partida
+    // ou abrir uma salva não toca nada: só quando a mesma partida ganha exatamente um lance
+    useEffect(() => {
+        const antes = lancesDoSomRef.current
+        lancesDoSomRef.current = { inicio: partida.inicio, quantos: partida.lances.length }
+        if (!podeTocar || antes.inicio !== partida.inicio || partida.lances.length !== antes.quantos + 1) return
+        const ultimo = xadrez.history({ verbose: true }).at(-1)
+        if (ultimo) tocarSomXadrez(somDoLance(ultimo))
+        // só quando muda o número de lances
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [partida.lances.length, partida.inicio])
 
     // salva a cada lance (e ao começar partida nova), no lugar do modo dela
     useEffect(() => {
@@ -378,6 +399,11 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     useEffect(() => {
         if (!fim || partida.fimEm) return
         registrarFim(partida, fim)
+        // acorde do fim, logo depois do som do último lance (com 2 jogadores alguém sempre "venceu")
+        if (podeTocar) {
+            const somDoFim = fim.resultado === 'empate' ? 'empate' : fim.resultado === 'derrota' ? 'derrota' : 'vitoria'
+            tocarSomXadrez(somDoFim, ATRASO_SOM_DO_FIM_S)
+        }
         setPartida((atual) => ({ ...atual, fimEm: Date.now() }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fim, partida.fimEm])
@@ -1133,7 +1159,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         </>
     )
 
-    // menu ☰: voltar ao início, (no modo jogo) minimizar e fechar, abandonar
+    // menu ☰: voltar ao início, (no modo jogo) minimizar e fechar, som, abandonar
     const menu = menuAberto && (
         <div className='xadrez-menu' role='menu'>
             <button type='button' role='menuitem' onClick={voltarAoInicio}>
@@ -1153,6 +1179,10 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                     </button>
                 </>
             )}
+            <button type='button' role='menuitemcheckbox' aria-checked={somLigado} onClick={() => setSomLigado((ligado) => !ligado)}>
+                {somLigado ? '🔊 Som ligado' : '🔇 Som desligado'}
+                <small>{somLigado ? 'clique para silenciar' : 'clique para ouvir os lances'}</small>
+            </button>
             {!fim && (
                 <button
                     type='button'
