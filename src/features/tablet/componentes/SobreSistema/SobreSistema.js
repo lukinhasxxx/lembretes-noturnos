@@ -8,6 +8,12 @@ import { NAO_INFORMADO, useEspecificacoesAparelho } from '../../hooks/useEspecif
 import { TEMAS } from '../../hooks/useTemaSistema'
 import { NOME_SISTEMA_POR_TEMA, SISTEMA } from '../../tablet.config'
 import LogoSistema from '../../sistema/LogoSistema/LogoSistema'
+import { useEstadoPersistido } from '../../../../shared/hooks/useEstadoPersistido'
+import {
+    BASE_DA_NOTA, NOME_DO_TIPO, TESTES_DESEMPENHO, classeDaNota, medirDesempenho, notaDe, notaGeral, notaSingleThread, tipoDeAparelho,
+} from './desempenho'
+// gerado pelo scripts/gerarFeitoCom.js antes do start/build (lê o package.json, só a lista permitida)
+import feitoCom from './feitoCom.gerado.json'
 
 // quando a página abriu: o "Ligado há" conta a partir daqui
 const ABERTO_EM = Date.now()
@@ -15,6 +21,13 @@ const ABERTO_EM = Date.now()
 const ABAS = [
     { id: 'sistema', nome: 'Sistema' },
     { id: 'aparelho', nome: 'Seu aparelho' },
+    { id: 'desempenho', nome: 'Desempenho' },
+    { id: 'feito', nome: 'Tecnologias' },
+]
+
+// fora do package.json (arquivos em public/): também aparecem na aba Tecnologias
+const OUTRAS_TECNOLOGIAS = [
+    { id: 'stockfish', nome: 'Stockfish 19', papel: 'Xadrez: níveis fortes, dica e análise (WebAssembly)', versao: '19.0.1' },
 ]
 
 // choquezinho do eclipse do NightOS: dura pouco e volta de tempos em tempos (sorteado entre os dois valores)
@@ -148,16 +161,171 @@ const AbaAparelho = () => {
                 <Linha rotulo='Idioma' valor={spec.idiomaNavegador} />
                 <Linha rotulo='Fuso horário' valor={spec.fusoHorario} />
             </Grupo>
-            <p className='sobre-aviso'>Lido do seu navegador, na hora. Nada disso sai do seu aparelho.</p>
         </>
     )
 }
 
-// "Sobre" do Config em duas abas:
+// as barras dos testes vão até esta nota (ou até a nota do teste, se passar)
+const TOPO_DAS_BARRAS = 1500
+
+// teste de desempenho (desempenho.js): roda na hora, dá a nota e o que ela quer dizer para o tipo de aparelho
+// (celular/tablet tem a régua um pouco mais baixa) e guarda o último resultado no navegador
+const AbaDesempenho = () => {
+    // último resultado: { data, porSegundo: { inteiros, flutuante, memoria, multi }, threads, aparelho }
+    const [resultado, setResultado] = useEstadoPersistido('sobre-desempenho', null)
+    // rodando: { fracao, teste } (null = parado)
+    const [rodando, setRodando] = useState(null)
+    const [falhou, setFalhou] = useState(false)
+    // o "i" ao lado da nota: explica a base (1000 pontos)
+    const [infoAberta, setInfoAberta] = useState(false)
+
+    const testar = async () => {
+        if (rodando) return
+        setFalhou(false)
+        setRodando({ fracao: 0, teste: TESTES_DESEMPENHO[0].id })
+        try {
+            const porSegundo = await medirDesempenho((fracao, teste) => setRodando({ fracao, teste }))
+            setResultado({ data: new Date().toISOString(), porSegundo, threads: navigator.hardwareConcurrency || null, aparelho: tipoDeAparelho() })
+        } catch (erro) {
+            console.warn('Não deu para rodar o teste de desempenho.', erro)
+            setFalhou(true)
+        } finally {
+            setRodando(null)
+        }
+    }
+
+    const geral = resultado && notaGeral(resultado.porSegundo)
+    // o que a nota quer dizer (Muito bom, Bom...) para o tipo de aparelho em que o teste rodou
+    const aparelho = resultado?.aparelho ?? tipoDeAparelho()
+    const classe = geral !== null && geral !== undefined ? classeDaNota(geral, aparelho) : null
+    const nomeDoTeste = TESTES_DESEMPENHO.find(({ id }) => id === rodando?.teste)?.nome
+
+    // uma linha "nome | barra | nota" (as barras vão até TOPO_DAS_BARRAS, ou até a nota, se passar)
+    const linhaDoTeste = (id, nome, nota, descricao) => (
+        <div key={id} className='sobre-desempenho-teste' title={descricao}>
+            <dt>{nome}</dt>
+            <dd>
+                <div className='sobre-desempenho-trilho' style={{ '--voce': (nota ?? 0) / Math.max(TOPO_DAS_BARRAS, nota ?? 0) }} />
+                <span>{nota ?? '—'}</span>
+            </dd>
+        </div>
+    )
+    const testesDeUmNucleo = TESTES_DESEMPENHO.filter(({ id }) => id !== 'multi')
+    const multi = TESTES_DESEMPENHO.find(({ id }) => id === 'multi')
+
+    return (
+        <>
+            <div className='sobre-desempenho-topo'>
+                <div>
+                    <strong className='sobre-desempenho-nota'>{geral ?? '—'}</strong>
+                    <span className='sobre-desempenho-legenda'>
+                        {geral ? `pontos · ${NOME_DO_TIPO[aparelho]}` : 'Mede a força do seu aparelho'}
+                    </span>
+                    {classe && !rodando && <b className={`sobre-desempenho-veredito ${classe.id}`}>{classe.nome}</b>}
+                    <button
+                        type='button'
+                        className={`sobre-desempenho-info${infoAberta ? ' aberta' : ''}`}
+                        aria-expanded={infoAberta}
+                        aria-label='Como a nota é calculada'
+                        onClick={() => setInfoAberta((aberta) => !aberta)}
+                    >
+                        i
+                    </button>
+                </div>
+                <button type='button' className='config-botao' onClick={testar} disabled={Boolean(rodando)}>
+                    {rodando ? 'Testando…' : resultado ? '↻ Testar de novo' : '▶ Testar'}
+                </button>
+            </div>
+
+            {infoAberta && (
+                <p className='sobre-desempenho-explicacao'>
+                    Base da nota: <b>1000 pontos</b> = um PC com {BASE_DA_NOTA.processador}, {BASE_DA_NOTA.memoria} de RAM
+                    e {BASE_DA_NOTA.placaDeVideo}. O teste mede o processador e a memória; celular e tablet são comparados
+                    com uma régua um pouco mais baixa.
+                </p>
+            )}
+
+            {rodando && (
+                <div className='sobre-desempenho-progresso' role='status'>
+                    <span>{nomeDoTeste ? `Testando: ${nomeDoTeste}…` : 'Terminando…'}</span>
+                    <div className='sobre-desempenho-barra' style={{ '--fracao': rodando.fracao }} />
+                </div>
+            )}
+            {falhou && <p className='sobre-aviso'>Não deu para rodar o teste neste navegador.</p>}
+
+            <Grupo titulo='Resumo'>
+                {linhaDoTeste('single', 'Single-thread', resultado ? notaSingleThread(resultado.porSegundo) : null, 'Um núcleo só (média dos três testes abaixo)')}
+                {linhaDoTeste(multi.id, multi.nome, resultado ? notaDe(multi.id, resultado.porSegundo[multi.id]) : null, multi.descricao)}
+            </Grupo>
+
+            <Grupo titulo='Testes de um núcleo'>
+                {testesDeUmNucleo.map(({ id, nome, descricao }) => (
+                    linhaDoTeste(id, nome, resultado ? notaDe(id, resultado.porSegundo[id]) : null, descricao)
+                ))}
+            </Grupo>
+
+            <p className='sobre-aviso'>
+                O teste roda em tempo real, no seu aparelho.
+                {resultado?.data && ` Último teste: ${new Date(resultado.data).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}.`}
+            </p>
+        </>
+    )
+}
+
+// aba Tecnologias (o "Feito com"): as principais do package.json (só as de uma lista permitida, ver
+// scripts/gerarFeitoCom.js) e as que ficam em public/. "Técnico" mostra do jeito que veio do package.json
+const AbaFeitoCom = () => {
+    const [tecnico, setTecnico] = useState(false)
+    const tecnologias = [...feitoCom.tecnologias, ...OUTRAS_TECNOLOGIAS]
+
+    return (
+        <>
+            <div className='sobre-feito-topo'>
+                <span>{tecnologias.length} principais tecnologias</span>
+                <button type='button' className={`config-botao${tecnico ? ' ativo' : ''}`} aria-pressed={tecnico} onClick={() => setTecnico((ligado) => !ligado)}>
+                    {'</>'} Técnico
+                </button>
+            </div>
+
+            {tecnico ? (
+                <pre className='sobre-feito-codigo'>
+                    <span className='sobre-feito-comentario'>{'// package.json → só o que está na lista permitida\n'}</span>
+                    {feitoCom.tecnologias.map(({ id, pedida, versao }) => (
+                        <span key={id}>
+                            {`"${id}": "${pedida}"`}
+                            <span className='sobre-feito-comentario'>{`  // ${versao}\n`}</span>
+                        </span>
+                    ))}
+                    <span className='sobre-feito-comentario'>{'\n// public/ (fora do package.json)\n'}</span>
+                    {OUTRAS_TECNOLOGIAS.map(({ id, versao }) => `"${id}": "${versao}"\n`)}
+                    <span className='sobre-feito-comentario'>
+                        {'\n// lido do package.json do projeto na hora do build; de propósito, só o que está numa lista\n// permitida aparece aqui (scripts/gerarFeitoCom.js)'}
+                    </span>
+                </pre>
+            ) : (
+                <ul className='sobre-feito-lista'>
+                    {tecnologias.map(({ id, nome, papel, versao }) => (
+                        <li key={id}>
+                            <b>{nome}</b>
+                            <span>{papel}</span>
+                            <small>{versao}</small>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </>
+    )
+}
+
+const PAINEIS = { sistema: AbaSistema, aparelho: AbaAparelho, desempenho: AbaDesempenho, feito: AbaFeitoCom }
+
+// "Sobre" do Config em quatro abas:
 // Sistema = o tablet, no jeito do "Sobre o telefone" do Android (emblema grande + cartões);
-// Seu aparelho = o hardware de verdade de quem está visitando (useEspecificacoesAparelho), no estilo CPU-Z.
+// Seu aparelho = o hardware de verdade de quem está visitando (useEspecificacoesAparelho), no estilo CPU-Z;
+// Desempenho = teste na hora, com a nota e o que ela quer dizer; Tecnologias = as principais do projeto.
 const SobreSistema = () => {
     const [aba, setAba] = useState(ABAS[0].id)
+    const Painel = PAINEIS[aba]
 
     return (
         <div className='sobre-sistema'>
@@ -177,7 +345,7 @@ const SobreSistema = () => {
             </div>
 
             <div className='sobre-painel' role='tabpanel'>
-                {aba === 'sistema' ? <AbaSistema /> : <AbaAparelho />}
+                <Painel />
             </div>
 
             <p className='sobre-assinatura'>
