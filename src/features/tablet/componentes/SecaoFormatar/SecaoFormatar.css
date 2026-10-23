@@ -1,0 +1,152 @@
+/* Formatar (Config → Sistema): a dica ao lado do botão e o quadro de confirmação por cima da tela do tablet.
+   O quadro fica fora do Config (portal na .tablet-tela), então traz as próprias cores; cada tema troca elas */
+
+.janela-configuracao-led .config-linha .formatar-dica {
+    font-size: 12px;
+    color: var(--config-texto-suave);
+}
+
+.formatar-fundo {
+    /* as mesmas cores do Config, para o .config-botao funcionar igual */
+    --config-cartao: rgba(255, 255, 255, 0.7);
+    --config-borda: rgba(75, 47, 214, 0.25);
+    --config-destaque: #6a4cff;
+    --config-brilho: #6a4cff;
+    --config-texto-suave: #5d5778;
+    --formatar-fundo-quadro: rgb(229, 231, 248);
+    --formatar-texto: #2a1d80;
+
+    position: absolute;
+    inset: 0;
+    z-index: 25;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 8, 30, 0.55);
+    backdrop-filter: blur(2px);
+    font-family: var(--fonte-sistema);
+    animation: formatar-aparecendo 0.15s ease-out;
+}
+
+.tablet-tela[data-tema='noturno'] .formatar-fundo {
+    --config-cartao: rgba(138, 120, 255, 0.1);
+    --config-borda: rgba(185, 140, 255, 0.35);
+    --config-destaque: #b98cff;
+    --config-brilho: #b98cff;
+    --config-texto-suave: #9d97cf;
+    --formatar-fundo-quadro: #0d0b22;
+    --formatar-texto: #e6e3ff;
+}
+
+@keyframes formatar-aparecendo {
+    from { opacity: 0; }
+}
+
+.formatar-quadro {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 470px;
+    max-height: calc(100% - 20px);
+    padding: 12px 16px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    border: 1px solid var(--config-borda);
+    border-radius: 12px;
+    color: var(--formatar-texto);
+    background: var(--formatar-fundo-quadro);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.formatar-titulo {
+    font-size: 17px;
+    color: var(--config-destaque);
+}
+
+.formatar-texto {
+    margin: 0;
+    font-size: 12px;
+    color: var(--config-texto-suave);
+}
+
+/* o que vai sumir: cartõezinhos em duas colunas (nome em cima, números embaixo) */
+.formatar-lista {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+}
+
+.formatar-lista li {
+    display: flex;
+    flex-direction: column;
+    padding: 4px 8px;
+    border: 1px solid var(--config-borda);
+    border-radius: 8px;
+    background: var(--config-cartao);
+}
+
+.formatar-lista span {
+    font-size: 11px;
+    color: var(--config-texto-suave);
+}
+
+.formatar-opcao,
+.formatar-confirmacao {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.formatar-opcao {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.formatar-opcao input {
+    accent-color: #e0506a;
+}
+
+/* "Para confirmar, digite FORMATAR [campo]" numa linha só */
+.formatar-confirmacao {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.formatar-confirmacao input {
+    flex: 1;
+    min-width: 0;
+    padding: 4px 8px;
+    border: 1px solid var(--config-borda);
+    border-radius: 6px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--formatar-texto);
+    background: var(--config-cartao);
+    outline: none;
+}
+
+.formatar-confirmacao input:focus {
+    border-color: var(--config-destaque);
+}
+
+.formatar-botoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.formatar-botoes .config-botao:disabled {
+    opacity: 0.4;
+    cursor: default;
+}

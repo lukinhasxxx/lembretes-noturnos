@@ -12,6 +12,7 @@ import { useWallpaperBloqueio } from '../hooks/useWallpaperBloqueio'
 import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
 import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
+import TelaFormatando from '../sistema/TelaFormatando/TelaFormatando'
 import CarregandoApp from '../sistema/CarregandoApp/CarregandoApp'
 import { ESTADOS_SISTEMA } from '../tablet.config'
 import { APPS, appDaTela } from '../apps.config'
@@ -371,6 +372,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         {estadoSistema === ESTADOS_SISTEMA.desligando && <TelaBoasVindas wallpaper={wallpaperAtual} etapa='desligando' />}
         {estadoSistema === ESTADOS_SISTEMA.reiniciando && <TelaBoasVindas wallpaper={wallpaperAtual} etapa='reiniciando' />}
         {estadoSistema === ESTADOS_SISTEMA.apagado && <div className='tela-sistema-apagada' />}
+        {estadoSistema === ESTADOS_SISTEMA.formatando && <TelaFormatando />}
 
     </div>
             </section>
