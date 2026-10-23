@@ -30,21 +30,25 @@ const retomavel = (salvo) => {
 
 // começa um jogo do nível pedido: o tabuleiro de jogo nasce igual ao desafio.
 // contraRelogio: modo desafio (tem que resolver antes do tempo do nível acabar)
-const comecar = (nivel, contraRelogio) => {
+// semAjuda: sem nenhuma ajuda — não destaca linha/coluna/quadrado nem os números iguais, não marca os repetidos
+// de vermelho e os botões de número não somem quando os 9 já estão no tabuleiro
+const comecar = (nivel, contraRelogio, semAjuda) => {
     const { desafio, solucao } = gerarJogo(nivel)
-    return { nivel, contraRelogio, desafio, solucao, grade: [...desafio] }
+    return { nivel, contraRelogio, semAjuda, desafio, solucao, grade: [...desafio] }
 }
 
 // sudoku.exe: clicar numa casa e digitar (ou usar os botões de número). Números repetidos na mesma linha,
 // coluna ou quadrado ficam vermelhos. Melhor tempo de cada nível salvo no navegador.
 // Modo desafio: o relógio conta para trás a partir do tempo do nível (DIFICULDADES no logicaSudoku.js).
+// Modo sem ajuda: só a casa escolhida fica marcada (ver comecar).
 // Trocar de nível ou de modo no meio de um jogo pede confirmação (o progresso se perde).
 // Regras e gerador no logicaSudoku.js; aqui só a tela e a entrada.
 const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     const { tema, telaAtiva } = useSistemaTablet()
     const [ultimoNivel, setUltimoNivel] = useEstadoPersistido('nivel-sudoku', 'facil')
     const [ultimoModoDesafio, setUltimoModoDesafio] = useEstadoPersistido('sudoku-modo-desafio', false)
-    // ranking: { nivel: [{ usuario, data, segundos, desafio }] }, os melhores tempos primeiro
+    const [ultimoSemAjuda, setUltimoSemAjuda] = useEstadoPersistido('sudoku-sem-ajuda', false)
+    // ranking: { nivel: [{ usuario, data, segundos, desafio, semAjuda }] }, os melhores tempos primeiro
     const [ranking, setRanking] = useEstadoPersistido('ranking-sudoku', {})
     // recorde da versão anterior (só o melhor tempo, sem data): vira a primeira linha do ranking uma vez
     const [recordesAntigos] = useEstadoPersistido('recordes-sudoku', {})
@@ -57,11 +61,11 @@ const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     // na abertura: tem jogo salvo pela metade (com algo escrito, sem ter resolvido nem esgotado o tempo)? pergunta
     const [perguntarRetomar, setPerguntarRetomar] = useState(() => retomavel(salvo))
     const [jogo, setJogo] = useState(() => (
-        retomavel(salvo) ? salvo.jogo : comecar(DIFICULDADES[ultimoNivel] ? ultimoNivel : 'facil', ultimoModoDesafio)
+        retomavel(salvo) ? salvo.jogo : comecar(DIFICULDADES[ultimoNivel] ? ultimoNivel : 'facil', ultimoModoDesafio, ultimoSemAjuda)
     ))
     const [selecionada, setSelecionada] = useState(null)
     const [segundos, setSegundos] = useState(() => (retomavel(salvo) ? salvo.segundos : 0))
-    // troca de nível/modo esperando a pessoa confirmar: { nivel, contraRelogio } ou null
+    // troca de nível/modo esperando a pessoa confirmar: { nivel, contraRelogio, semAjuda } ou null
     const [trocaPedida, setTrocaPedida] = useState(null)
     const terminou = resolvido(jogo.grade, jogo.solucao)
     const limite = DIFICULDADES[jogo.nivel].limiteDesafio
@@ -96,7 +100,7 @@ const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     // resolveu: entra no ranking do nível (fica com os melhores TAMANHO_RANKING tempos)
     useEffect(() => {
         if (!terminou) return
-        const entrada = { usuario: SISTEMA.usuario, data: new Date().toISOString(), segundos, desafio: jogo.contraRelogio }
+        const entrada = { usuario: SISTEMA.usuario, data: new Date().toISOString(), segundos, desafio: jogo.contraRelogio, semAjuda: Boolean(jogo.semAjuda) }
         setRanking((atual) => ({
             ...atual,
             [jogo.nivel]: [...(atual[jogo.nivel] ?? []), entrada]
@@ -112,10 +116,11 @@ const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         setRankingAberto(true)
     }
 
-    const novoJogo = (nivel = jogo.nivel, contraRelogio = jogo.contraRelogio) => {
+    const novoJogo = (nivel = jogo.nivel, contraRelogio = jogo.contraRelogio, semAjuda = Boolean(jogo.semAjuda)) => {
         setUltimoNivel(nivel)
         setUltimoModoDesafio(contraRelogio)
-        setJogo(comecar(nivel, contraRelogio))
+        setUltimoSemAjuda(semAjuda)
+        setJogo(comecar(nivel, contraRelogio, semAjuda))
         setSelecionada(null)
         setSegundos(0)
         setTrocaPedida(null)
@@ -126,10 +131,10 @@ const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     const temProgresso = !acabou && jogo.grade.some((numero, indice) => numero !== jogo.desafio[indice])
 
     // botões de nível e de modo: com progresso, pergunta antes; sem, troca direto
-    const pedirTroca = (nivel, contraRelogio) => {
-        if (nivel === jogo.nivel && contraRelogio === jogo.contraRelogio) return
-        if (temProgresso) setTrocaPedida({ nivel, contraRelogio })
-        else novoJogo(nivel, contraRelogio)
+    const pedirTroca = (nivel, contraRelogio, semAjuda = Boolean(jogo.semAjuda)) => {
+        if (nivel === jogo.nivel && contraRelogio === jogo.contraRelogio && semAjuda === Boolean(jogo.semAjuda)) return
+        if (temProgresso) setTrocaPedida({ nivel, contraRelogio, semAjuda })
+        else novoJogo(nivel, contraRelogio, semAjuda)
     }
 
     // escreve (ou apaga, com 0) na casa escolhida; as casas do desafio não mudam
@@ -165,7 +170,7 @@ const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         return () => window.removeEventListener('keydown', aoTeclar)
     }, [telaAtiva])
 
-    // quantas vezes cada número já está no tabuleiro (o botão some quando os 9 estão colocados)
+    // quantas vezes cada número já está no tabuleiro (o botão some quando os 9 estão colocados; sem ajuda, não some)
     const quantos = NUMEROS.reduce((contagem, numero) => ({ ...contagem, [numero]: jogo.grade.filter((n) => n === numero).length }), {})
     const numeroSelecionado = selecionada !== null ? jogo.grade[selecionada] : 0
 
@@ -173,11 +178,12 @@ const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         const classes = ['sudoku-casa']
         if (jogo.desafio[indice]) classes.push('dada')
         if (indice === selecionada) classes.push('selecionada')
-        else if (selecionada !== null && (
+        // sem ajuda: só a casa escolhida fica marcada
+        else if (!jogo.semAjuda && selecionada !== null && (
             linhaDe(indice) === linhaDe(selecionada) || colunaDe(indice) === colunaDe(selecionada) || quadradoDe(indice) === quadradoDe(selecionada)
         )) classes.push('vizinha')
-        if (numeroSelecionado && jogo.grade[indice] === numeroSelecionado) classes.push('mesmo-numero')
-        if (temConflito(jogo.grade, indice)) classes.push('conflito')
+        if (!jogo.semAjuda && numeroSelecionado && jogo.grade[indice] === numeroSelecionado) classes.push('mesmo-numero')
+        if (!jogo.semAjuda && temConflito(jogo.grade, indice)) classes.push('conflito')
         // linhas grossas entre os quadrados 3×3
         if (colunaDe(indice) % 3 === 2 && colunaDe(indice) < LADO - 1) classes.push('borda-direita')
         if (linhaDe(indice) % 3 === 2 && linhaDe(indice) < LADO - 1) classes.push('borda-baixo')
@@ -248,6 +254,7 @@ const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                                                 {entrada.data ? new Date(entrada.data).toLocaleDateString('pt-BR') : '—'}
                                             </span>
                                             <span className='sudoku-ranking-tempo'>
+                                                {entrada.semAjuda && <span title='Sem ajuda'>sem ajuda · </span>}
                                                 {entrada.desafio && <span title='Modo desafio'>⏱ </span>}
                                                 {formatarTempo(entrada.segundos)}
                                             </span>
@@ -268,6 +275,7 @@ const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                                 {DIFICULDADES[jogo.nivel].nome} · {jogo.contraRelogio
                                     ? `restam ${formatarTempo(Math.max(0, limite - segundos))} no desafio`
                                     : `${formatarTempo(segundos)} jogados`}
+                                {jogo.semAjuda && ' · sem ajuda'}
                             </p>
                             <div className='sudoku-aviso-botoes'>
                                 <button type='button' className='config-botao' onClick={() => setPerguntarRetomar(false)}>Continuar</button>
@@ -284,7 +292,7 @@ const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                                 <button
                                     type='button'
                                     className='config-botao config-botao-perigo'
-                                    onClick={() => novoJogo(trocaPedida.nivel, trocaPedida.contraRelogio)}
+                                    onClick={() => novoJogo(trocaPedida.nivel, trocaPedida.contraRelogio, trocaPedida.semAjuda)}
                                 >
                                     Começar
                                 </button>
@@ -311,14 +319,27 @@ const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                         <button type='button' className='config-botao sudoku-botao-ranking' onClick={abrirRanking}>🏆 Ranking</button>
                     </div>
 
-                    <button
-                        type='button'
-                        className={`config-botao sudoku-modo${jogo.contraRelogio ? ' ativo' : ''}`}
-                        aria-pressed={jogo.contraRelogio}
-                        onClick={() => pedirTroca(jogo.nivel, !jogo.contraRelogio)}
-                    >
-                        ⏱ Desafio: {formatarTempo(limite)} {jogo.contraRelogio ? '(ligado)' : '(desligado)'}
-                    </button>
+                    {/* modos (cada um liga/desliga e começa um jogo novo): contra o relógio e sem ajuda */}
+                    <div className='sudoku-modos'>
+                        <button
+                            type='button'
+                            className={`config-botao${jogo.contraRelogio ? ' ativo' : ''}`}
+                            aria-pressed={jogo.contraRelogio}
+                            title='Resolver antes do tempo acabar'
+                            onClick={() => pedirTroca(jogo.nivel, !jogo.contraRelogio)}
+                        >
+                            ⏱ Desafio {formatarTempo(limite)}
+                        </button>
+                        <button
+                            type='button'
+                            className={`config-botao${jogo.semAjuda ? ' ativo' : ''}`}
+                            aria-pressed={Boolean(jogo.semAjuda)}
+                            title='Sem destaques e sem marcar os números repetidos'
+                            onClick={() => pedirTroca(jogo.nivel, jogo.contraRelogio, !jogo.semAjuda)}
+                        >
+                            Sem ajuda
+                        </button>
+                    </div>
 
                     <div className='sudoku-placar'>
                         {jogo.contraRelogio ? (
@@ -338,7 +359,7 @@ const JogoSudoku = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                                 key={numero}
                                 type='button'
                                 className='sudoku-numero'
-                                disabled={quantos[numero] >= LADO}
+                                disabled={!jogo.semAjuda && quantos[numero] >= LADO}
                                 onClick={() => escrever(numero)}
                             >
                                 {numero}

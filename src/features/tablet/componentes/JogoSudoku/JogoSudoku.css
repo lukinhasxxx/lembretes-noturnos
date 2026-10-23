@@ -153,8 +153,10 @@
 }
 
 /* botão do modo desafio: ocupa a linha toda, embaixo dos níveis */
-.sudoku-modo {
-    align-self: flex-start;
+/* os modos lado a lado: o ligado fica com o estilo .ativo */
+.sudoku-modos {
+    display: flex;
+    gap: 6px;
 }
 
 /* último minuto do desafio: o relógio fica vermelho e pulsa */
