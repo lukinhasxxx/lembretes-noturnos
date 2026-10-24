@@ -23,6 +23,8 @@
     --cor-xeque: rgba(255, 60, 90, 0.85);
     --cor-marca-lance: rgba(42, 29, 128, 0.35);
 
+    /* o quadro da análise (ModalAnalise) cobre o corpo todo */
+    position: relative;
     display: flex;
     align-items: center;
     /* tabuleiro encostado à esquerda (com folga) e a lateral logo depois */
@@ -203,6 +205,84 @@
 .xadrez-casa img.deslizando {
     z-index: 4;
     animation: xadrez-deslize 0.2s ease-out;
+}
+
+/* revendo a partida que acabou: seta do próximo lance (da casa de origem até a de destino), por cima das peças
+   e meio transparente, como nos sites de xadrez. Aparece com um fade depois do deslize */
+.xadrez-seta-proximo {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    animation: xadrez-seta-aparece 0.25s ease-out 0.15s backwards;
+}
+
+/* cor de cada seta: a da categoria do lance (as mesmas classes dos selos: .melhor, .erro...); sem análise,
+   a cor do sistema */
+.xadrez-seta {
+    opacity: 0.78;
+}
+
+.xadrez-seta.sem-analise {
+    --cor-categoria: var(--config-destaque);
+}
+
+/* o lance recomendado pelo Stockfish (quando o jogado foi "Bom" ou pior): azul claro, mais fino e tracejado,
+   para não se confundir com o jogado */
+.xadrez-seta.seta-recomendado {
+    --cor-categoria: #8fc4ff;
+    opacity: 0.9;
+}
+
+.xadrez-seta.seta-recomendado line {
+    stroke-width: 0.12;
+    stroke-dasharray: 0.22 0.16;
+    stroke-linecap: butt;
+}
+
+/* legenda das setas na lateral: um tracinho de cada seta (cheio ou tracejado) antes do texto */
+.xadrez-legenda-setas {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0 4px;
+}
+
+.xadrez-legenda-seta {
+    display: inline-block;
+    width: 14px;
+    border-top: 3px solid var(--cor-categoria);
+    vertical-align: middle;
+}
+
+.xadrez-legenda-seta.sem-analise {
+    --cor-categoria: var(--config-destaque);
+}
+
+.xadrez-legenda-seta.seta-recomendado {
+    --cor-categoria: #8fc4ff;
+    border-top-style: dashed;
+}
+
+/* no claro, o azul claro some no fundo da lateral: um pouco mais forte só na legenda */
+.tablet-tela:not([data-tema='noturno']) .xadrez-legenda-seta.seta-recomendado {
+    --cor-categoria: #5aa6f5;
+}
+
+.xadrez-seta line {
+    stroke: var(--cor-categoria);
+    stroke-width: 0.17;
+    stroke-linecap: round;
+}
+
+.xadrez-seta path {
+    fill: var(--cor-categoria);
+}
+
+@keyframes xadrez-seta-aparece {
+    from { opacity: 0; }
 }
 
 @keyframes xadrez-deslize {
@@ -844,53 +924,342 @@
     transition: width 0.2s ease;
 }
 
-/* um cartão por lado: nome e precisão em cima; embaixo, quantos lances de cada categoria */
-.xadrez-analise-lado {
+/* pronta: "Abrir análise" e, ao lado, a precisão de cada lado numa linha */
+.xadrez-analise-pronta {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 3px 8px;
-    border: 1px solid var(--config-borda);
-    border-radius: 6px;
-    background: var(--config-cartao);
-    font-size: 11px;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.xadrez-analise-pronta .config-botao {
+    flex-shrink: 0;
     white-space: nowrap;
 }
 
-.tablet-tela .xadrez-analise-titulo {
-    margin: 0;
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    color: var(--config-texto-suave);
-    text-align: left;
-}
-
-.xadrez-analise-lado b {
-    text-align: left;
+.xadrez-analise-resumo {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
-    flex: 1;
+    white-space: nowrap;
+    font-size: 11px;
+    color: var(--config-texto-suave);
 }
 
-.xadrez-analise-precisao {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--config-destaque);
+/* no quadro de fim (lado a lado) fica centralizado */
+.xadrez-aviso .xadrez-analise-pronta {
+    justify-content: center;
 }
 
-.xadrez-analise-cabeca {
+/* ---------- quadro da análise (ModalAnalise.js): por cima da janela toda ---------- */
+.xadrez-modal-analise {
+    position: absolute;
+    inset: 0;
+    /* acima dos quadros do tabuleiro (z-index 9) e do menu */
+    z-index: 12;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, rgb(215, 218, 243) 70%, transparent);
+    animation: config-categoria-entrando 0.2s ease-out;
+}
+
+.tablet-tela[data-tema='noturno'] .xadrez-modal-analise {
+    background: rgba(7, 6, 26, 0.75);
+}
+
+.xadrez-modal-analise-quadro {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 400px;
+    max-width: calc(100% - 24px);
+    max-height: calc(100% - 16px);
+    box-sizing: border-box;
+    padding: 8px 14px;
+    overflow-y: auto;
+    border: 1px solid var(--config-borda);
+    border-radius: 10px;
+    background: rgb(229, 231, 250);
+    box-shadow: 0 10px 28px rgba(20, 10, 70, 0.28);
+}
+
+.tablet-tela[data-tema='noturno'] .xadrez-modal-analise-quadro {
+    background: #120f33;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+}
+
+.xadrez-modal-analise-topo {
     display: flex;
     align-items: baseline;
     gap: 8px;
+    min-width: 0;
 }
 
-.xadrez-analise-categorias {
+.xadrez-modal-analise-topo strong {
+    flex-shrink: 0;
+    font-size: 14px;
+}
+
+.xadrez-modal-analise-topo span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    color: var(--config-texto-suave);
+}
+
+/* uma grade só para a tabela toda (as linhas não têm caixa própria): lado da esquerda | categoria | lado da
+   direita. Assim a coluna do meio tem a largura da maior categoria em todas as linhas e tudo fica alinhado */
+.xadrez-modal-analise-tabela {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    /* sem espaço entre as colunas (a linha do cabeçalho fica inteira): a folga vem da coluna do meio */
+    row-gap: 1px;
+    align-items: center;
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.xadrez-modal-analise-linha {
+    display: contents;
+}
+
+/* a linha de baixo do cabeçalho passa pelas 3 colunas */
+.xadrez-modal-analise-linha.cabeca > * {
+    align-self: stretch;
+    margin-bottom: 3px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--config-borda);
+}
+
+.xadrez-modal-analise-lado {
     display: flex;
-    flex-wrap: wrap;
-    gap: 3px 4px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 0;
+}
+
+.xadrez-modal-analise-lado b {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.xadrez-modal-analise-precisao {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--config-destaque);
+}
+
+.xadrez-modal-analise-rotulo-precisao {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 8px;
+    text-align: center;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--config-texto-suave);
+}
+
+.xadrez-modal-analise-categoria,
+.xadrez-modal-analise-rotulo-precisao {
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+/* no meio, só o selo; o nome da categoria aparece num balão em cima dele ao passar o mouse */
+.xadrez-modal-analise-categoria {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    cursor: default;
+}
+
+/* todos do mesmo tamanho, para a coluna ficar reta */
+.xadrez-modal-analise-categoria .xadrez-chip {
+    flex: 0 0 auto;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 28px;
+    padding: 0;
+}
+
+.xadrez-modal-analise-nome {
+    position: absolute;
+    bottom: calc(100% + 3px);
+    left: 50%;
+    z-index: 1;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    color: #fff;
+    background: var(--cor-categoria);
+    box-shadow: 0 3px 10px rgba(20, 10, 70, 0.3);
+    opacity: 0;
+    translate: -50% 3px;
+    pointer-events: none;
+    transition: opacity 0.15s ease, translate 0.15s ease;
+}
+
+.xadrez-modal-analise-categoria:hover .xadrez-modal-analise-nome {
+    opacity: 1;
+    translate: -50% 0;
+}
+
+.xadrez-modal-analise-numero {
+    text-align: center;
+    font-weight: 700;
+    color: var(--cor-categoria);
+}
+
+/* com o painel "Lances": o número vira botão (mouse em cima mostra os lances no painel, clicar fixa) */
+button.xadrez-modal-analise-numero {
+    all: unset;
+    justify-self: center;
+    min-width: 26px;
+    padding: 0 4px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--cor-categoria);
+    cursor: pointer;
+}
+
+button.xadrez-modal-analise-numero:hover,
+button.xadrez-modal-analise-numero:focus-visible {
+    background: color-mix(in srgb, var(--cor-categoria) 18%, transparent);
+}
+
+button.xadrez-modal-analise-numero.fixa {
+    color: #fff;
+    background: var(--cor-categoria);
+    opacity: 1;
+}
+
+/* quadro com o painel: a tabela na esquerda e os lances na direita */
+.xadrez-modal-analise-quadro.com-lances {
+    width: 580px;
+}
+
+.xadrez-modal-analise-conteudo {
+    display: flex;
+    gap: 14px;
+    min-height: 0;
+}
+
+.xadrez-modal-analise-conteudo .xadrez-modal-analise-tabela {
+    flex: 1;
+}
+
+.xadrez-modal-analise-painel {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 170px;
+    flex-shrink: 0;
+    padding-left: 12px;
+    border-left: 1px solid var(--config-borda);
+    font-size: 11px;
+}
+
+.tablet-tela .xadrez-modal-analise-painel-titulo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 2px 0 0;
+    white-space: nowrap;
+}
+
+.xadrez-modal-analise-painel-titulo b {
+    color: var(--cor-categoria);
+}
+
+.xadrez-modal-analise-painel-titulo > span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--config-texto-suave);
+}
+
+.tablet-tela .xadrez-modal-analise-painel-dica {
+    margin: 2px 0 0;
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--config-texto-suave);
+}
+
+/* os lances, em duas colunas; rola se forem muitos (ex.: 40 "Excelente") */
+.xadrez-modal-analise-painel-lances {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 4px;
+    max-height: 190px;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    list-style: none;
+}
+
+.xadrez-modal-analise-painel-lances button,
+.xadrez-modal-analise-painel-lances span {
+    all: unset;
+    display: block;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.xadrez-modal-analise-painel-lances button {
+    cursor: pointer;
+}
+
+.xadrez-modal-analise-painel-lances button:hover,
+.xadrez-modal-analise-painel-lances button:focus-visible {
+    color: #fff;
+    background: var(--config-destaque);
+}
+
+/* categoria que não aconteceu: o número apagadinho */
+.xadrez-modal-analise-numero.zero {
+    font-weight: 400;
+    color: var(--config-texto-suave);
+    opacity: 0.5;
+}
+
+.xadrez-modal-analise .xadrez-aviso-botoes {
+    justify-content: center;
+}
+
+.xadrez-modal-analise .xadrez-aviso-botoes .config-botao {
+    padding: 3px 14px;
+}
+
+/* histórico: "Análise" (partidas analisadas) e "Rever" no fim da linha */
+.xadrez-ultimas-botoes {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.xadrez-ultimas li .xadrez-ultimas-analise {
+    all: unset;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--config-destaque);
+    cursor: pointer;
+}
+
+.xadrez-ultimas li .xadrez-ultimas-analise:hover {
+    text-decoration: underline;
 }
 
 /* chip: símbolo + quantos (ex.: "!! 1"), na cor da categoria */
@@ -933,13 +1302,22 @@
     color: var(--cor-categoria);
 }
 
-.xadrez-historico .xadrez-simbolo {
-    margin-left: 1px;
-    font-size: 11px;
+/* o selo da análise ao lado do lance (lista de lances e "Lance N:"), menor que o do quadro */
+.xadrez-chip.xadrez-chip-lance {
+    padding: 0 3px;
+    border-radius: 3px;
+    font-size: 9px;
+    line-height: 1.45;
+    vertical-align: 1px;
 }
 
-.xadrez-historico li.visto .xadrez-simbolo {
-    color: #fff;
+.xadrez-historico .xadrez-chip-lance {
+    margin-left: 3px;
+}
+
+/* lance que está sendo visto (fundo roxo): um contorno claro para o selo não sumir */
+.xadrez-historico li.visto .xadrez-chip-lance {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.85);
 }
 
 /* cor sorteada: aviso rápido por cima do tabuleiro, some sozinho */
@@ -1017,22 +1395,98 @@
 }
 
 /* histórico em notação, quebrando em pares (1. e4 e5  2. Cf3 ...) */
-.xadrez-historico {
+/* caixa dos lances: a lista e, no canto, o botão de expandir/recolher */
+.xadrez-lances {
+    position: relative;
     display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    gap: 2px 4px;
-    /* ocupa o que sobra da lateral */
-    flex: 1;
+    flex: 0 0 auto;
     min-height: 0;
-    margin: 0;
-    padding: 5px 6px;
-    overflow-y: auto;
-    list-style: none;
     border: 1px solid var(--config-borda);
     border-radius: 6px;
     background: var(--config-cartao);
+}
+
+/* expandida: ocupa o que sobra da lateral, como antes */
+.xadrez-lances.expandida {
+    flex: 1;
+}
+
+.xadrez-historico {
+    /* referência do offsetLeft/offsetTop dos lances (rolar até o da vez) */
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    gap: 2px 4px;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 5px 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    /* em linha a barra de rolagem não aparece (anda sozinha; dá para arrastar com a roda/dedo) */
+    scrollbar-width: none;
+    list-style: none;
+    white-space: nowrap;
     font-size: 12px;
+}
+
+.xadrez-historico::-webkit-scrollbar {
+    display: none;
+}
+
+/* em linha, as pontas esmaecem (os lances de antes e de depois "somem" em vez de cortar seco) */
+.xadrez-lances:not(.expandida) .xadrez-historico {
+    mask-image: linear-gradient(to right, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+}
+
+/* com a lista em linha sobra espaço na lateral: o jogador de baixo continua no pé (alinhado com o tabuleiro) */
+.xadrez-lateral > .xadrez-jogador:last-child {
+    margin-top: auto;
+}
+
+.xadrez-lances.expandida .xadrez-historico {
+    flex-wrap: wrap;
+    align-content: flex-start;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.xadrez-lances.expandida .xadrez-historico::-webkit-scrollbar {
+    display: block;
+}
+
+.xadrez-historico li {
+    flex-shrink: 0;
+}
+
+/* botão sem nome (só a setinha): na direita da linha; expandida, no canto de cima */
+.xadrez-lances-expandir {
+    all: unset;
+    align-self: center;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-right: 3px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 11px;
+    line-height: 20px;
+    color: var(--config-texto-suave);
+    cursor: pointer;
+}
+
+.xadrez-lances.expandida .xadrez-lances-expandir {
+    align-self: flex-start;
+    margin-top: 3px;
+}
+
+.xadrez-lances-expandir:hover,
+.xadrez-lances-expandir:focus-visible {
+    color: #fff;
+    background: var(--config-destaque);
 }
 
 .xadrez-historico li {

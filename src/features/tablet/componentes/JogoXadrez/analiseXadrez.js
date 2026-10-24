@@ -15,12 +15,13 @@ import { avaliarPosicao } from './stockfishXadrez'
 const TEMPO_POR_POSICAO_MS = 200
 
 // categorias, da melhor para a pior. simbolo: o que aparece ao lado do lance; destaque: aparece na lista de
-// lances (as outras só no resumo e revendo o lance, para a lista não virar um mar de símbolos)
+// lances (como na revisão do Chess.com, que marca todos; só o "Bom", o lance comum, fica de fora para a lista
+// não virar um mar de símbolos — ele aparece no resumo e revendo o lance)
 export const CATEGORIAS = [
     { id: 'brilhante', nome: 'Brilhante', simbolo: '!!', destaque: true },
     { id: 'otimo', nome: 'Ótimo', simbolo: '!', destaque: true },
-    { id: 'melhor', nome: 'Melhor', simbolo: '★', destaque: false },
-    { id: 'excelente', nome: 'Excelente', simbolo: '👍', destaque: false },
+    { id: 'melhor', nome: 'Melhor', simbolo: '★', destaque: true },
+    { id: 'excelente', nome: 'Excelente', simbolo: '👍', destaque: true },
     { id: 'bom', nome: 'Bom', simbolo: '✓', destaque: false },
     { id: 'imprecisao', nome: 'Imprecisão', simbolo: '?!', destaque: true },
     { id: 'erro', nome: 'Erro', simbolo: '?', destaque: true },
