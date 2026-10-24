@@ -2,3 +2,4 @@
 export { default as ModalTablet } from './ModalTablet/ModalTablet'
 export { default as TabletMesa } from './TabletMesa/TabletMesa'
 export { SistemaTabletProvider, useSistemaTablet } from './contexts/SistemaTablet'
+export { acabouDeFormatar } from './utils/formatacao'

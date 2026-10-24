@@ -395,7 +395,7 @@ margin: 2% 4%;
   height: 53px;
   line-height: 78px;
   font-size: 13px;
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: sans-serif;
   background: linear-gradient(45deg, transparent 17%, 0%, #000000 5%);
   border-radius: 20px;
   color: #fff;
@@ -667,6 +667,9 @@ transform: scale(0.95);
     position: absolute;
     top: 0;
     left: 0;
+    /* largura cheia, igual à da janela parada: sem isso o absolute "encolhe" a janela no tamanho do conteúdo
+       durante a animação (o texto quebrava diferente e o Config virava um quadrado) */
+    right: 0;
     z-index: 3;
 }
 
@@ -688,14 +691,116 @@ transform: scale(0.95);
     to   { transform: scale(1);    opacity: 1; }
 }
 
-/* entrada leve ao abrir. A classe só existe com o modal aberto, então a animação roda de novo a cada abertura */
+/* tema noturno: a janela abre e fecha em CÍRCULO (como uma lua surgindo/sumindo), saindo do ícone dela na barra.
+   A duração acompanha ANIMACAO_JANELA_POR_TEMA (SistemaTablet.js) */
+.tablet-tela[data-tema='noturno'] .janela-minimizando,
+.tablet-tela[data-tema='noturno'] .janela-restaurando {
+    transform: none;
+    opacity: 1;
+}
+
+.tablet-tela[data-tema='noturno'] .janela-minimizando {
+    animation: janela-noturna-fechando 0.34s cubic-bezier(0.55, 0, 0.75, 0.4) forwards;
+}
+
+.tablet-tela[data-tema='noturno'] .janela-restaurando {
+    animation: janela-noturna-abrindo 0.34s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+/* enquanto anima, a janela fica num roxo um pouco mais claro (brilho/saturação a mais) e volta ao normal no fim:
+   com outra janela do mesmo tema embaixo (mesma paleta), dá para ver o círculo crescendo/fechando */
+@keyframes janela-noturna-abrindo {
+    from { clip-path: circle(0% at var(--origem-janela-x, 50%) calc(100% + 18px)); filter: brightness(1.45) saturate(1.25); }
+    to   { clip-path: circle(150% at var(--origem-janela-x, 50%) calc(100% + 18px)); filter: brightness(1) saturate(1); }
+}
+
+@keyframes janela-noturna-fechando {
+    from { clip-path: circle(150% at var(--origem-janela-x, 50%) calc(100% + 18px)); filter: brightness(1) saturate(1); }
+    to   { clip-path: circle(0% at var(--origem-janela-x, 50%) calc(100% + 18px)); filter: brightness(1.45) saturate(1.25); }
+}
+
+/* abrindo (CyberOS, o tema padrão): o tablet "se materializa". Espera a projeção que sai da mesa chegar (RastroTablet), aparece como um
+   holograma ciano piscando e com tranquinhos, e em seguida vira o tablet físico.
+   A classe só existe com o modal aberto, então a animação roda de novo a cada abertura */
 .App .secao-tablet-modal.secao-tablet-modal-aberta {
+    animation:
+        tablet-materializando-piscando 0.62s steps(1, end) both,
+        tablet-materializando-solidificando 0.62s ease-in both;
+}
+
+/* pisca em saltos (sinal pegando) e dá tranquinhos de poucos px; os primeiros 35% são a espera da projeção */
+/* tema noturno: por enquanto a entrada leve de antes (o holograma é a cara do CyberOS) */
+.App .secao-tablet-modal.secao-tablet-modal-aberta[data-tema='noturno'] {
     animation: tablet-abrindo 0.28s ease-out;
+}
+
+.App .secao-tablet-modal.secao-tablet-modal-aberta[data-tema='noturno']::after {
+    content: none;
 }
 
 @keyframes tablet-abrindo {
     from { opacity: 0; transform: translateY(12px) scale(0.97); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes tablet-materializando-piscando {
+    0%   { opacity: 0;    transform: none; }
+    35%  { opacity: 0.45; transform: translate(-5px, 1px); }
+    41%  { opacity: 0.1;  transform: translate(4px, 0); }
+    47%  { opacity: 0.6;  transform: translate(0, -1px); }
+    53%  { opacity: 0.25; transform: translate(-3px, 0); }
+    59%  { opacity: 0.85; transform: translate(2px, 1px); }
+    66%  { opacity: 1;    transform: none; }
+}
+
+/* de holograma (claro, desbotado) para o tablet de verdade */
+@keyframes tablet-materializando-solidificando {
+    0%, 35% { filter: brightness(1.7) saturate(0.35) drop-shadow(0 0 14px rgba(110, 240, 255, 0.8)); }
+    100%    { filter: none; }
+}
+
+/* a "pele" de holograma por cima do tablet: vidro ciano com linhas de varredura (as mesmas da projeção),
+   recortada no formato dele (a imagem do tablet + o retângulo da tela), que pisca em fatias e some */
+.App .secao-tablet-modal.secao-tablet-modal-aberta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* acima das janelas do sistema (que usam z-index dentro da tela) */
+    z-index: 20;
+    pointer-events: none;
+    background:
+        repeating-linear-gradient(0deg, rgba(110, 240, 255, 0.35) 0 1px, transparent 1px 4px),
+        linear-gradient(135deg, rgba(110, 240, 255, 0.4), rgba(185, 140, 255, 0.3));
+    -webkit-mask-image: var(--mascara-tablet-modal), linear-gradient(#000 0 0);
+    mask-image: var(--mascara-tablet-modal), linear-gradient(#000 0 0);
+    /* a tela: mesmo lugar e tamanho da .tablet-tela (6.35% / 9.7% de 760 × 482) */
+    -webkit-mask-size: 100% 100%, 666px 385px;
+    mask-size: 100% 100%, 666px 385px;
+    -webkit-mask-position: 0 0, 48.26px 46.75px;
+    mask-position: 0 0, 48.26px 46.75px;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    opacity: 0;
+    animation:
+        tablet-pele-holograma 0.62s ease-in both,
+        tablet-pele-fatias 0.62s steps(1, end) both;
+}
+
+@keyframes tablet-pele-holograma {
+    0%, 34% { opacity: 0; }
+    35%     { opacity: 1; }
+    60%     { opacity: 0.8; }
+    100%    { opacity: 0; }
+}
+
+/* uma faixa do holograma por vez "pulando" de lado (o glitch do botão "Wallpapers"); depois cobre tudo e some */
+@keyframes tablet-pele-fatias {
+    0%   { clip-path: none; transform: none; }
+    38%  { clip-path: inset(10% 0 70% 0); transform: translate(-12px, 0); }
+    44%  { clip-path: inset(55% 0 25% 0); transform: translate(10px, 0); }
+    50%  { clip-path: inset(30% 0 45% 0); transform: translate(-6px, 0); }
+    56%  { clip-path: inset(75% 0 5% 0);  transform: translate(8px, 0); }
+    62%  { clip-path: none;               transform: none; }
 }
 
 /* seletor de cor do LED do rádio, no app Config.exe */

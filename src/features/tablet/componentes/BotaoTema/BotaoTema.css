@@ -1,4 +1,4 @@
-/* ---------- a lua e o "↺ Original" ao lado ---------- */
+/* ---------- os botões dos temas: o logo do CyberOS e a lua ---------- */
 .botao-tema-area {
     display: flex;
     align-items: center;
@@ -26,22 +26,32 @@
     50%      { box-shadow: 0 0 16px 3px rgba(185, 140, 255, 0.85), 0 0 4px rgba(255, 255, 255, 0.6); }
 }
 
-/* "↺ Original": mesmo estilo discreto do "↺ Padrão" do wallpaper */
-.botao-tema-original {
-    padding: 3px 8px;
-    border: 1px solid transparent;
-    border-radius: 6px;
-    background: none;
-    color: #5b5f7a;
-    font-size: 12px;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: border-color 0.15s ease-out, color 0.15s ease-out;
+/* CyberOS: o logo do boot, apagadinho; aceso (tema ativo) ou no hover ganha o neon. No hover ainda dá uma
+   tremida rápida, o glitch do logo no boot */
+.botao-tema-logo {
+    width: 40px;
+    height: 40px;
+    opacity: 0.6;
+    filter: drop-shadow(0 0 2px rgba(110, 240, 255, 0.25));
+    transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
-.botao-tema-original:hover {
-    border-color: #8a00ff;
-    color: #3a1d6e;
+.botao-tema-cyber:hover .botao-tema-logo,
+.botao-tema-cyber.ligado .botao-tema-logo {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px #6ef0ff) drop-shadow(0 0 12px rgba(185, 140, 255, 0.6));
+}
+
+.botao-tema-cyber:hover .botao-tema-logo {
+    animation: botao-tema-glitch 0.45s steps(2, end) 2;
+}
+
+@keyframes botao-tema-glitch {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(-1.5px, 1px); filter: drop-shadow(-2px 0 0 #ff4fd8) drop-shadow(2px 0 0 #6ef0ff); }
+    50%  { transform: translate(1.5px, -1px); }
+    75%  { transform: translate(-1px, 0); filter: drop-shadow(2px 0 0 #ff4fd8) drop-shadow(-2px 0 0 #6ef0ff); }
+    100% { transform: translate(0, 0); }
 }
 
 /* ---------- Choquezinho na lua: raios que pulam de lugar durante os 2 s do hover ---------- */

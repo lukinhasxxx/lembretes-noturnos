@@ -3,9 +3,13 @@
    1. lua aparece (0–20%)  2. sombra cobre a lua (20–70%)  3. anel de luz acende (70%)
    4. anel pisca com glitch + texto e barrinha (78.6%) */
 
-/* preto quase puro, só um brilho mínimo no centro */
+/* preto puro e sem as listrinhas de tela antiga (essas são só do CyberOS) */
 .tela-boot.tela-boot-noturno {
-    background: radial-gradient(circle at center, #07061a 0%, #000 45%);
+    background: #000;
+}
+
+.tela-boot.tela-boot-noturno::after {
+    content: none;
 }
 
 /* órbita (anel de progresso + satélite): o arco fecha de 3% a 70% do boot; aí a órbita inteira encolhe

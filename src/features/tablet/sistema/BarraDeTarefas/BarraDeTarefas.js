@@ -10,6 +10,10 @@ import { BalaoNotificacao, CentralDeNotificacoes } from '../Notificacoes/Notific
 import { APPS } from '../../apps.config'
 import { ESTADOS_SISTEMA } from '../../tablet.config'
 import { useSistemaTablet } from '../../contexts/SistemaTablet'
+import { TEMAS } from '../../hooks/useTemaSistema'
+
+// clique em "Idioma" no pop-up da bandeja: espera antes de abrir o Config (dá tempo do pop-up fechar)
+const ATRASO_ABRIR_CONFIG_IDIOMA_MS = 500
 
 // fecha um painel da barra (menu iniciar, calendário...) ao clicar fora dele e do botão que o abre, ou com Esc
 // fechar: só troca o estado ('aberto' → 'fechando'), então pode ser recriado a cada render
@@ -63,7 +67,7 @@ const usePainelDaBarra = () => {
 // aoAbrirApp(idDoApp): abre um app pelo menu iniciar; aoBloquear / aoDesligar / aoReiniciar: ações do menu iniciar
 // aoMostrarAreaDeTrabalho: faixinha do canto direito (minimiza todos os apps)
 const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, aoDesligar, aoReiniciar, aoVoltarParaAreaDeTrabalho, aoMostrarAreaDeTrabalho }) => {
-    const { estadoSistema, notificacoes, esconderBalao, setDestacarTemas } = useSistemaTablet()
+    const { estadoSistema, notificacoes, esconderBalao, setDestacarTemas, setDestacarWallpaper, tema, idiomaTeclado, setDestacarIdioma } = useSistemaTablet()
 
     const menuIniciar = usePainelDaBarra()
     const calendario = usePainelDaBarra()
@@ -85,21 +89,44 @@ const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, ao
         central.alternar()
     }
 
+    // "Idioma" no pop-up da bandeja: fecha o pop-up e, depois de um respiro, abre o Config na parte de idioma
+    const timerConfigIdiomaRef = useRef(null)
+    useEffect(() => () => clearTimeout(timerConfigIdiomaRef.current), [])
+    const abrirConfigIdioma = () => {
+        idioma.fechar()
+        timerConfigIdiomaRef.current = setTimeout(() => {
+            setDestacarIdioma(true)
+            aoAbrirApp('app_config')
+        }, ATRASO_ABRIR_CONFIG_IDIOMA_MS)
+    }
+
     // botão de ação de uma notificação
     const agirNaNotificacao = (acao) => {
-        if (acao !== 'experimentarTema') return
+        if (acao !== 'experimentarTema' && acao !== 'personalizarWallpaper') return
         central.fechar()
         esconderBalao()
-        setDestacarTemas(true)
+        if (acao === 'experimentarTema') setDestacarTemas(true)
+        else setDestacarWallpaper(true)
         aoAbrirApp('app_config')
     }
 
     return (
         <div className='barra-de-tarefas'>
             <div ref={menuIniciar.areaRef} className='barra-de-tarefas-area-menu-iniciar'>
-                <BotaoBarraDeTarefas ativo={menuIniciar.aberto} aoClicar={menuIniciar.alternar} aria-label='Menu iniciar'>
-                    <LuaIniciar cheia={menuIniciar.aberto} />
-                </BotaoBarraDeTarefas>
+                {/* a lua é a logo do tema noturno; no original fica o ícone de sempre */}
+                {tema === TEMAS.noturno ? (
+                    <BotaoBarraDeTarefas ativo={menuIniciar.aberto} aoClicar={menuIniciar.alternar} aria-label='Menu iniciar'>
+                        <LuaIniciar cheia={menuIniciar.aberto} />
+                    </BotaoBarraDeTarefas>
+                ) : (
+                    <BotaoBarraDeTarefas
+                        icone='/imagens/windows/menuIniciar.png'
+                        alt='Menu iniciar'
+                        tamanhoIcone={18}
+                        ativo={menuIniciar.aberto}
+                        aoClicar={menuIniciar.alternar}
+                    />
+                )}
                 {menuIniciar.montado && (
                     <MenuIniciar
                         aoAbrirApp={aoAbrirApp}
@@ -152,10 +179,10 @@ const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, ao
                 </div>
                 <div ref={idioma.areaRef} className='barra-de-tarefas-area-painel'>
                     <BotaoBarraDeTarefas largura={35} ativo={idioma.aberto} aoClicar={idioma.alternar}>
-                        <span>POR</span>
-                        <span>PTB2</span>
+                        <span>{idiomaTeclado.sigla}</span>
+                        <span>{idiomaTeclado.teclado}</span>
                     </BotaoBarraDeTarefas>
-                    {idioma.montado && <PainelIdioma {...idioma.propsDoPainel} />}
+                    {idioma.montado && <PainelIdioma {...idioma.propsDoPainel} aoAbrirConfigIdioma={abrirConfigIdioma} />}
                 </div>
                 <div ref={calendario.areaRef} className='barra-de-tarefas-area-painel'>
                     <BotaoBarraDeTarefas largura={86} ativo={calendario.aberto} aoClicar={calendario.alternar}>

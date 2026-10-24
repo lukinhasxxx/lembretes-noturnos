@@ -33,7 +33,7 @@ const doisDigitos = (numero) => String(numero).padStart(2, '0')
 const Calendario = ({ fechando, aoTerminarDeFechar }) => {
     const hoje = useDataAtual()
     const { idioma, t } = useIdioma()
-    const { definirDataHora, sincronizarHorarioDeBrasilia } = useSistemaTablet()
+    const { ajusteRelogioMs, definirDataHora, sincronizarHorarioDeBrasilia } = useSistemaTablet()
     const [mesExibido, setMesExibido] = useState(() => new Date(hoje.getFullYear(), hoje.getMonth(), 1))
     // 1 = foi para o próximo mês, -1 = voltou: decide de que lado a grade nova entra
     const [direcaoDaTroca, setDirecaoDaTroca] = useState(0)
@@ -61,10 +61,13 @@ const Calendario = ({ fechando, aoTerminarDeFechar }) => {
         setHoraEditada(null)
     }
 
-    // muda o dia do tablet, mantendo a hora
-    const escolherDia = (dia) => definirDataHora(new Date(
-        dia.getFullYear(), dia.getMonth(), dia.getDate(), hoje.getHours(), hoje.getMinutes(), hoje.getSeconds()
-    ))
+    // muda o dia do tablet, mantendo a hora. Parte da hora do tablet NESTE instante (com os milissegundos), e não
+    // do "hoje" da tela: esse só anda de segundo em segundo, e cada clique jogava o relógio um pedacinho para trás
+    const escolherDia = (dia) => {
+        const agora = new Date(Date.now() + ajusteRelogioMs)
+        agora.setFullYear(dia.getFullYear(), dia.getMonth(), dia.getDate())
+        definirDataHora(agora)
+    }
 
     const sincronizar = () => {
         if (sincronizando) return

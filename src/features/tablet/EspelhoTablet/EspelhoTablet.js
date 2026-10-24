@@ -55,7 +55,7 @@ const EspelhoTablet = () => {
                     visibility: sistemaDesligado ? 'hidden' : 'visible',
                 }}
             >
-                <div ref={copiaRef} className='espelho-tablet-copia' inert='' />
+                <div ref={copiaRef} className='espelho-tablet-copia' inert />
                 {/* reflexo do vidro + leve brilho de tela acesa por cima da cópia */}
                 <div className='espelho-tela-reflexo' />
             </div>

@@ -33,3 +33,22 @@ export const lerWallpaperUpload = (chave = CHAVE_UPLOAD) =>
 
 export const apagarWallpaperUpload = (chave = CHAVE_UPLOAD) =>
     naTabela('readwrite', (tabela) => tabela.delete(chave)).catch(() => {})
+
+// Formatar: apaga um banco do IndexedDB pelo nome (só os deste site: o domínio github.io é dividido com outros
+// projetos). Nunca trava: se o navegador não responder em 1 s, segue assim mesmo
+export const apagarBanco = (nome) => Promise.race([
+    new Promise((resolver) => {
+        try {
+            const pedido = indexedDB.deleteDatabase(nome)
+            pedido.onsuccess = resolver
+            pedido.onerror = resolver
+            pedido.onblocked = resolver
+        } catch {
+            resolver()
+        }
+    }),
+    new Promise((resolver) => setTimeout(resolver, 1000)),
+])
+
+// o banco deste site (wallpaper enviado)
+export const apagarBancoDoSite = () => apagarBanco(NOME_BANCO)

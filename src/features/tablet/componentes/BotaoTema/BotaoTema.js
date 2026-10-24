@@ -1,7 +1,8 @@
 import './BotaoTema.css'
 import { useEffect, useRef, useState } from 'react'
-import { useIdioma } from '../../../../shared/i18n/Idioma'
 import { useSistemaTablet } from '../../contexts/SistemaTablet'
+import { NOME_SISTEMA_POR_TEMA, SISTEMA } from '../../tablet.config'
+import LogoSistema from '../../sistema/LogoSistema/LogoSistema'
 import { TEMAS } from '../../hooks/useTemaSistema'
 import LuaEclipse from './LuaEclipse'
 import ChoqueLua from './ChoqueLua'
@@ -11,11 +12,10 @@ import TransicaoTema from './TransicaoTema'
 const ATRASO_ANTES_DO_RAIO_MS = 400
 const DURACAO_RAIO_MS = 750
 
-// Botão do tema noturno: a lua em eclipse (ideia 1 do IDEIAS.md). Hover anima (~2 s, com o choquezinho em volta
-// e a penumbra na tela) e volta sozinho ao tirar o mouse; clique liga o tema noturno.
-// O "↺ Original" ao lado volta ao tema padrão.
+// Botões dos temas, só com o ícone de cada um: o logo do CyberOS (tema padrão) e a lua em eclipse do NightOS
+// (ideia 1 do IDEIAS.md). O do tema ativo fica aceso. Hover na lua anima (~2 s, com o choquezinho em volta e
+// a penumbra na tela) e volta sozinho ao tirar o mouse; clique liga o tema noturno.
 const BotaoTema = () => {
-    const { t } = useIdioma()
     const { tema, setTema, telaDoModal } = useSistemaTablet()
     const [mouseNaLua, setMouseNaLua] = useState(false)
     // muda a cada entrada do mouse: sorteia arcos novos para o choque
@@ -57,9 +57,9 @@ const BotaoTema = () => {
         ]
     }
 
-    // "↺ Original": por enquanto sem efeito, só o mesmo respiro de ~0.4 s antes de voltar
-    const voltarAoOriginal = () => {
-        if (aplicandoTema) return
+    // logo do CyberOS: por enquanto sem efeito, só o mesmo respiro de ~0.4 s antes de voltar
+    const voltarAoCyber = () => {
+        if (aplicandoTema || tema === TEMAS.padrao) return
         timersTransicao.current = [setTimeout(() => setTema(TEMAS.padrao), ATRASO_ANTES_DO_RAIO_MS)]
     }
 
@@ -77,9 +77,22 @@ const BotaoTema = () => {
 
     return (
         <div className='botao-tema-area'>
+            {/* CyberOS (o tema padrão): só o logo, como a lua do noturno */}
+            <button
+                type='button'
+                className={`botao-tema botao-tema-cyber ${ligada ? '' : 'ligado'}`}
+                aria-label={SISTEMA.nome}
+                title={SISTEMA.nome}
+                onClick={voltarAoCyber}
+            >
+                <LogoSistema className='botao-tema-logo' />
+            </button>
+
             <button
                 type='button'
                 className={`botao-tema ${ligada ? 'ligado' : ''}`}
+                aria-label={NOME_SISTEMA_POR_TEMA.noturno}
+                title={NOME_SISTEMA_POR_TEMA.noturno}
                 onClick={(evento) => aplicarNoturno(evento.currentTarget)}
                 onMouseEnter={entrarNaLua}
                 onMouseLeave={sairDaLua}
@@ -87,12 +100,6 @@ const BotaoTema = () => {
                 <LuaEclipse />
                 <ChoqueLua semente={mouseNaLua ? sementeChoque : 0} />
             </button>
-
-            {ligada && (
-                <button type='button' className='botao-tema-original' onClick={voltarAoOriginal}>
-                    ↺ {t('config.temaOriginal')}
-                </button>
-            )}
 
             <TransicaoTema tela={telaDoModal} fase={faseTransicao} origemRaio={origemRaio} />
         </div>

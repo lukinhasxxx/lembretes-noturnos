@@ -1,0 +1,188 @@
+/* Tela de formatação: usa a base da tela de boot (.tela-boot: cobre o tablet todo, fundo escuro, scanlines e
+   a fonte mono); por cima, cada tema tem a sua. --progresso (0 a 1) vem do TelaFormatando.js */
+
+.tela-formatando {
+    /* acima de qualquer janela (inclusive a do modo jogo) */
+    z-index: 30;
+}
+
+/* ---------- CyberOS: porcentagem, barra e log ---------- */
+
+.tela-formatando-cyber {
+    gap: 6px;
+}
+
+.tela-formatando-titulo {
+    margin: 0;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: #c9f7ff;
+    text-shadow: 0 0 6px #6ef0ff;
+}
+
+.tela-formatando-porcentagem {
+    font-size: 54px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: #6ef0ff;
+    text-shadow: 0 0 14px rgba(110, 240, 255, 0.6);
+}
+
+.tela-formatando-barra {
+    position: relative;
+    width: 280px;
+    height: 4px;
+    margin: 6px 0 14px;
+    border-radius: 2px;
+    background: rgba(110, 240, 255, 0.15);
+    overflow: hidden;
+}
+
+.tela-formatando-barra::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--progresso) * 100%);
+    border-radius: 2px;
+    background: linear-gradient(to right, #ff4fd8, #6ef0ff);
+    box-shadow: 0 0 8px #6ef0ff;
+    transition: width 0.25s linear;
+}
+
+/* log: as últimas linhas, as mais velhas apagando (--idade: 0 = a mais nova) */
+.tela-formatando-log {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 420px;
+    height: 112px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 11px;
+    color: #9fd8e6;
+}
+
+.tela-formatando-log li {
+    display: flex;
+    gap: 8px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    opacity: calc(1 - var(--idade, 0) * 0.15);
+    animation: tela-formatando-linha 0.18s ease-out;
+}
+
+.tela-formatando-log span {
+    color: #ff4fd8;
+}
+
+.tela-formatando-log b {
+    margin-left: auto;
+    color: #6ef0ff;
+    font-weight: 400;
+}
+
+.tela-formatando-log .tela-formatando-fim {
+    justify-content: center;
+    margin-top: 6px;
+    color: #c9f7ff;
+}
+
+@keyframes tela-formatando-linha {
+    from { transform: translateY(6px); opacity: 0; }
+}
+
+/* ---------- NightOS: o eclipse engolindo os arquivos ---------- */
+
+.tela-formatando-noturno {
+    background: radial-gradient(circle at center, #0d0a24 0%, #000 72%);
+}
+
+.tela-formatando-ceu {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+/* a lua coberta (o eclipse do login) com o anel de progresso em volta */
+.tela-formatando-eclipse {
+    position: absolute;
+    inset: 18px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #15122e 0%, #05040f 100%);
+    box-shadow:
+        0 0 0 1.5px #f1edff,
+        0 0 12px 2px #b98cff,
+        0 0 30px 8px rgba(138, 120, 255, 0.45);
+    transition: box-shadow 0.4s ease;
+}
+
+.tela-formatando-anel {
+    position: absolute;
+    inset: -18px;
+    width: calc(100% + 36px);
+    height: calc(100% + 36px);
+    transform: rotate(-90deg);
+}
+
+.tela-formatando-anel circle {
+    fill: none;
+    stroke-width: 2;
+}
+
+.tela-formatando-anel-trilho {
+    stroke: rgba(138, 120, 255, 0.18);
+}
+
+.tela-formatando-anel-arco {
+    stroke: #d9cfff;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: calc(100 - var(--progresso) * 100);
+    filter: drop-shadow(0 0 3px #b98cff);
+    transition: stroke-dashoffset 0.25s linear;
+}
+
+/* cada arquivo aparece em volta (ângulo/distância vêm do JS) e é puxado para dentro da lua, sumindo */
+.tela-formatando-arquivo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 11px;
+    white-space: nowrap;
+    color: #e6e3ff;
+    text-shadow: 0 0 6px #8a78ff;
+    pointer-events: none;
+    animation: tela-formatando-engolido 1.4s cubic-bezier(0.55, 0, 0.9, 0.4) forwards;
+}
+
+@keyframes tela-formatando-engolido {
+    0% {
+        transform: translate(-50%, -50%) rotate(var(--angulo)) translateX(var(--distancia)) rotate(calc(-1 * var(--angulo))) scale(1);
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(calc(var(--angulo) + 50deg)) translateX(0) rotate(calc(-1 * var(--angulo) - 50deg)) scale(0.2);
+        opacity: 0;
+    }
+}
+
+.tela-boot-noturno .tela-formatando-legenda {
+    margin-top: 30px;
+    /* a do boot nasce invisível (aparece no fim do boot): aqui aparece na hora */
+    opacity: 1;
+    animation: none;
+    font-variant-numeric: tabular-nums;
+}
+
+/* fim: o anel acende inteiro e o eclipse brilha antes de apagar */
+.tela-formatando-noturno.terminou .tela-formatando-eclipse {
+    box-shadow:
+        0 0 0 2px #fff,
+        0 0 22px 6px #d9cfff,
+        0 0 60px 20px rgba(185, 140, 255, 0.6);
+}

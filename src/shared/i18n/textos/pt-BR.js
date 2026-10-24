@@ -12,7 +12,6 @@ const ptBR = {
     'menuIniciar.apps': 'Apps',
     'menuIniciar.fixados': 'Fixados',
     'config.wallpaperPadrao': 'Padrão',
-    'config.temaOriginal': 'Original',
     'menuIniciar.configuracoes': 'Configurações',
     'menuIniciar.energia': 'Energia',
     'menuIniciar.bloquear': 'Bloquear',
@@ -53,6 +52,10 @@ const ptBR = {
     'notificacoes.temaInstalado': 'Tema noturno instalado',
     'notificacoes.temaInstaladoTexto': 'Ele muda o sistema inteiro: boot, login, janelas... Experimente!',
     'notificacoes.experimentar': 'Experimentar',
+    'notificacoes.dicaWallpaper': 'Que tal um wallpaper novo?',
+    'notificacoes.dicaWallpaperTexto': 'Tem wallpapers pré-instalados no Config, e um especial escondido no tema noturno.',
+    'notificacoes.personalizar': 'Personalizar',
+    'cena.dicaArrastar': 'Arraste para os lados',
 }
 
 export default ptBR

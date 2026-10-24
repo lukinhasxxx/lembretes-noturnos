@@ -11,9 +11,14 @@ const DURACAO_INSTALACAO_MS = 10000
 export const DURACAO_BALAO_MS = 7000
 
 export const ID_NOTIFICACAO_TEMAS = 'temas'
+export const ID_NOTIFICACAO_WALLPAPER = 'wallpaper'
+
+// dica de wallpaper: depois que os temas já estão instalados, a pessoa fica um tempo na área de trabalho e
+// recebe uma sugestão de trocar o wallpaper (só uma vez; fica salvo)
+const ESPERA_DICA_WALLPAPER_MS = 30000
 
 // Notificações do sistema do tablet (central da barra de tarefas + balão) e a instalação dos temas.
-// Cada notificação: { id, titulo, texto, progresso?: true, acao?: 'experimentarTema', rotuloAcao? }
+// Cada notificação: { id, titulo, texto, progresso?: true, acao?: 'experimentarTema' | 'personalizarWallpaper', rotuloAcao? }
 // (titulo, texto e rotuloAcao são chaves do i18n; quem trata a ação é a barra de tarefas).
 // temasDisponiveis: a seção de temas do Config só aparece depois da instalação (fica salvo no navegador;
 // quem já estava com um tema ligado antes disso conta como instalado).
@@ -25,6 +30,9 @@ export const useNotificacoesSistema = (estadoSistema, tema) => {
     const [balao, setBalao] = useState(null)
     // "Experimentar": o Config abre com a seção de temas destacada
     const [destacarTemas, setDestacarTemas] = useState(false)
+    const [dicaWallpaperMostrada, setDicaWallpaperMostrada] = useEstadoPersistido('dica-wallpaper-mostrada', false)
+    // "Personalizar": o Config abre em Personalização com a galeria de wallpapers aberta
+    const [destacarWallpaper, setDestacarWallpaper] = useState(false)
 
     // adiciona ou atualiza (mesmo id: troca o conteúdo no lugar, ex.: "instalando" → "instalado") e mostra no balão
     const notificar = (notificacao) => {
@@ -73,6 +81,25 @@ export const useNotificacoesSistema = (estadoSistema, tema) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [estadoSistema, temasDisponiveis])
 
+    // dica de wallpaper (uma vez só): sair da área de trabalho antes do tempo adia para a próxima vez
+    useEffect(() => {
+        if (!temasDisponiveis || dicaWallpaperMostrada || estadoSistema !== ESTADOS_SISTEMA.areaDeTrabalho) return
+
+        const timer = setTimeout(() => {
+            setDicaWallpaperMostrada(true)
+            notificar({
+                id: ID_NOTIFICACAO_WALLPAPER,
+                titulo: 'notificacoes.dicaWallpaper',
+                texto: 'notificacoes.dicaWallpaperTexto',
+                acao: 'personalizarWallpaper',
+                rotuloAcao: 'notificacoes.personalizar',
+            })
+        }, ESPERA_DICA_WALLPAPER_MS)
+
+        return () => clearTimeout(timer)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [estadoSistema, temasDisponiveis, dicaWallpaperMostrada])
+
     // o balão some sozinho depois de um tempo (o de "instalando" fica até virar "instalado")
     const notificacaoDoBalao = notificacoes.find(item => item.id === balao)
     useEffect(() => {
@@ -96,5 +123,7 @@ export const useNotificacoesSistema = (estadoSistema, tema) => {
         temasDisponiveis,
         destacarTemas,
         setDestacarTemas,
+        destacarWallpaper,
+        setDestacarWallpaper,
     }
 }

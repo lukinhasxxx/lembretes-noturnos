@@ -158,6 +158,60 @@
     --largura-painel: 225px;
 }
 
+/* título "Idioma ›": leva para o Config (instalar mais idiomas) */
+.painel-idioma-titulo {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    font-family: inherit;
+    text-align: left;
+    background: none;
+    cursor: pointer;
+    transition: color 0.15s, text-shadow 0.15s;
+}
+
+.painel-idioma-titulo:hover {
+    color: var(--cor-destaque-sistema);
+    text-shadow: 0 0 6px var(--cor-borda-neon-sistema);
+}
+
+.painel-idioma .painel-bandeja-item {
+    cursor: pointer;
+}
+
+/* dica que "voa" para cima do pop-up quando a pessoa fica trocando de teclado sem parar */
+.painel-idioma-dica {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(100% + 8px);
+    padding: 8px 10px;
+    border: 1px solid var(--cor-borda-neon-sistema);
+    border-radius: 8px;
+    font-size: 11.5px;
+    line-height: 1.4;
+    background: var(--cor-fundo-menu-iniciar);
+    box-shadow: 0 0 12px var(--cor-borda-neon-sistema);
+    animation: painel-idioma-dica-voando 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+.painel-idioma-dica button {
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-weight: 600;
+    color: var(--cor-destaque-sistema);
+    text-decoration: underline;
+    background: none;
+    cursor: pointer;
+}
+
+@keyframes painel-idioma-dica-voando {
+    from { opacity: 0; transform: translateY(14px) scale(0.92) rotate(-2deg); }
+    to   { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+}
+
 .painel-volume .painel-bandeja-item-detalhe {
     font-size: 9.5px;
 }

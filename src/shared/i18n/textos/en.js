@@ -11,7 +11,6 @@ const en = {
     'menuIniciar.apps': 'Apps',
     'menuIniciar.fixados': 'Pinned',
     'config.wallpaperPadrao': 'Default',
-    'config.temaOriginal': 'Original',
     'menuIniciar.configuracoes': 'Settings',
     'menuIniciar.energia': 'Power',
     'menuIniciar.bloquear': 'Lock',
@@ -52,6 +51,10 @@ const en = {
     'notificacoes.temaInstalado': 'Night theme installed',
     'notificacoes.temaInstaladoTexto': 'It changes the whole system: boot, sign-in, windows... Try it!',
     'notificacoes.experimentar': 'Try it',
+    'notificacoes.dicaWallpaper': 'How about a new wallpaper?',
+    'notificacoes.dicaWallpaperTexto': 'There are preinstalled wallpapers in Settings, and a special one hidden in the night theme.',
+    'notificacoes.personalizar': 'Personalize',
+    'cena.dicaArrastar': 'Drag sideways',
 }
 
 export default en
