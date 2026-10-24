@@ -1243,22 +1243,17 @@ button.xadrez-modal-analise-numero.fixa {
     padding: 3px 14px;
 }
 
-/* histórico: "Análise" (partidas analisadas) e "Rever" no fim da linha */
-.xadrez-ultimas-botoes {
-    display: flex;
-    gap: 8px;
-    margin-left: auto;
-}
-
-.xadrez-ultimas li .xadrez-ultimas-analise {
+/* histórico: "Rever" no fim da linha (as 10 partidas mais novas) */
+.xadrez-ultimas li .xadrez-ultimas-rever {
     all: unset;
+    margin-left: auto;
     font-size: 10px;
     font-weight: 600;
     color: var(--config-destaque);
     cursor: pointer;
 }
 
-.xadrez-ultimas li .xadrez-ultimas-analise:hover {
+.xadrez-ultimas li .xadrez-ultimas-rever:hover {
     text-decoration: underline;
 }
 

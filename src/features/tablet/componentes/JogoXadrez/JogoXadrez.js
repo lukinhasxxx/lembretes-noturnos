@@ -61,8 +61,14 @@ const calcularElo = (elo, eloAdversario, resultado, dicas = 0) => {
 }
 // últimas partidas guardadas (a tela de início mostra as mais recentes)
 const TAMANHO_HISTORICO = 20
-// quantas partidas do histórico guardam a análise (precisão e quantos lances de cada categoria, para abrir de novo)
-const ANALISES_NO_HISTORICO = 10
+// as mais novas também guardam os lances e a análise (uns 1–2 KB cada), para o "Rever"; as outras ficam só
+// com o resultado
+const PARTIDAS_PARA_REVER = 10
+const limitarRever = (partidas) => partidas.map((jogada, indice) => {
+    if (indice < PARTIDAS_PARA_REVER) return jogada
+    const { sans: _lances, analise: _analise, ...soOResultado } = jogada
+    return soOResultado
+})
 
 // notação em português: o chess.js escreve em inglês (N = knight...); aqui vira C = cavalo, T = torre,
 // D = dama, R = rei (o B de bispo é igual). Roque (O-O) e casas não mudam
@@ -278,7 +284,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
     const [ultimoElo, setUltimoElo] = useState(null)
     // análise rodando: progresso de 0 a 1 (null = parada)
     const [analisando, setAnalisando] = useState(null)
-    // quadro da análise aberto: 'partida' (a que está na tela) ou a linha do histórico; null = fechado
+    // quadro da análise aberto ('partida' = o da partida na tela); null = fechado
     const [analiseAberta, setAnaliseAberta] = useState(null)
     // a partida que está na tela agora (null na tela de início): a análise que termina depois só abre se for ela
     const partidaNaTelaRef = useRef(null)
@@ -383,7 +389,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         if (partidaQueAcabou.modo === 'dois') {
             const nomesDela = partidaQueAcabou.nomes ?? NOMES_PADRAO
             setUltimoElo(null)
-            setPartidasJogadas((atuais) => [
+            setPartidasJogadas((atuais) => limitarRever([
                 {
                     data: Date.now(),
                     inicio: partidaQueAcabou.inicio,
@@ -396,7 +402,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                     sans,
                 },
                 ...atuais,
-            ].slice(0, TAMANHO_HISTORICO))
+            ].slice(0, TAMANHO_HISTORICO)))
             return
         }
         const eloAdversario = Number(nivelDe(partidaQueAcabou.nivel)?.nome) || ELO_INICIAL
@@ -408,7 +414,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         const revelado = elo.revelado || fimDela.resultado === 'vitoria'
         setElo({ valor: depois, revelado })
         setUltimoElo({ antes, depois, revelado, dicas, custoDasDicas })
-        setPartidasJogadas((atuais) => [
+        setPartidasJogadas((atuais) => limitarRever([
             {
                 data: Date.now(),
                 inicio: partidaQueAcabou.inicio,
@@ -423,7 +429,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                 sans,
             },
             ...atuais,
-        ].slice(0, TAMANHO_HISTORICO))
+        ].slice(0, TAMANHO_HISTORICO)))
     }
 
     // acabou agora (o fimEm marca que já foi registrada): guarda a hora, o elo e o histórico
@@ -636,9 +642,10 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         }
     }
 
-    // rever uma partida do histórico: monta de novo a partida (pelos lances guardados), já acabada, e abre o
-    // tabuleiro na posição pedida (0 = começo) para ir passando com ◀ ▶. Analisada, vem com a análise
-    const abrirDoHistorico = (jogada, posicao = 0) => {
+    // rever uma partida do histórico: monta de novo a partida (pelos lances guardados), já acabada, e abre como
+    // no fim de jogo: posição final, quadro de fim e, se foi analisada, o quadro com as notas por cima. Daí é
+    // ir passando com ◀ ▶ (ou clicar num lance no quadro da análise)
+    const abrirDoHistorico = (jogada) => {
         const montada = new Chess()
         const lances = sansDaJogada(jogada).map((san) => {
             const { from, to, promotion } = montada.move(san)
@@ -665,8 +672,8 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                 }
                 : undefined,
         })
-        setFimFechado(true)
-        setPosicaoVista(posicao >= lances.length ? null : posicao)
+        setFimFechado(false)
+        setAnaliseAberta(resumo?.categorias ? 'partida' : null)
         setNaTelaDeInicio(false)
     }
 
@@ -688,7 +695,7 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
 
     // análise da partida que acabou (Stockfish, método do Lichess): roda em segundo plano mostrando o
     // progresso; o resultado fica na partida e abre no quadro da análise. No histórico vão a precisão e o
-    // resumo (só nas ANALISES_NO_HISTORICO partidas mais novas). O progresso aparece na lateral (um
+    // resumo (só nas PARTIDAS_PARA_REVER mais novas). O progresso aparece na lateral (um
     // tabuleiro) ou no quadro de fim (lado a lado, que não tem lateral)
     const analisar = async () => {
         if (analisando !== null || partida.analise) return
@@ -708,19 +715,9 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                 categorias: analise.lances.map((lance) => lance.categoria),
                 melhores: analise.lances.map((lance) => lance.melhor),
             }
-            setPartidasJogadas((atuais) => {
-                let guardadas = 0
-                return atuais.map((jogada) => {
-                    const comAnalise = jogada.inicio === daPartida
-                        ? { ...jogada, precisao: analise.precisao, analise: resumo }
-                        : jogada
-                    if (!comAnalise.analise) return comAnalise
-                    guardadas += 1
-                    if (guardadas <= ANALISES_NO_HISTORICO) return comAnalise
-                    const { analise: _antiga, ...semAnalise } = comAnalise
-                    return semAnalise
-                })
-            })
+            setPartidasJogadas((atuais) => limitarRever(atuais.map((jogada) => (jogada.inicio === daPartida
+                ? { ...jogada, precisao: analise.precisao, analise: resumo }
+                : jogada))))
             // abre o quadro se a pessoa continua vendo esta partida
             if (partidaNaTelaRef.current === daPartida) setAnaliseAberta((aberta) => aberta ?? 'partida')
         } catch (erro) {
@@ -870,27 +867,6 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
         <WindowBar fecharApp={fecharApp} minimizarApp={minimizarApp} idDoAppPraFechar='app_xadrez' escura={tema === TEMAS.noturno} />
     )
 
-    // quadro da análise de uma partida do histórico: a pessoa (ou as brancas, com 2 jogadores) na esquerda
-    const modalDaJogada = (jogada) => {
-        const cores = jogada.modo === 'dois' ? ['w', 'b'] : [jogada.cor, outraCor(jogada.cor)]
-        const nomeDaJogada = (cor) => (jogada.modo === 'dois'
-            ? (jogada.nomes ?? NOMES_PADRAO)[cor]
-            : cor === jogada.cor ? 'Você' : `Computador (${nivelDe(jogada.nivel)?.nome})`)
-        const resultado = jogada.modo === 'dois'
-            ? (jogada.vencedor ? frase(jogada.vencedor, 'venceu', 'venceram') : 'Empate')
-            : RESULTADO_CURTO[jogada.resultado]
-        return (
-            <ModalAnalise
-                lados={cores.map((cor) => ({ cor, nome: nomeDaJogada(cor), precisao: jogada.analise.precisao[cor], contagem: jogada.analise.contagem[cor] }))}
-                jogadas={jogada.analise.sans?.map((san, indice) => ({ san: emPortugues(san), categoria: jogada.analise.categorias[indice] }))}
-                subtitulo={`${resultado} · ${jogada.lances} lances · ${formatarDiaMes(jogada.data)}`}
-                aoFechar={() => setAnaliseAberta(null)}
-                // clicar num lance abre a partida para rever, já naquela posição
-                aoEscolherLance={sansDaJogada(jogada) ? (indice) => abrirDoHistorico(jogada, indice + 1) : undefined}
-            />
-        )
-    }
-
     // tela de início: só o cartão no meio da janela (sem tabuleiro atrás)
     if (naTelaDeInicio) {
         const contraComputador = oponenteEscolhido !== 'dois'
@@ -930,18 +906,12 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                                                         <span>vs {nivelDe(jogada.nivel)?.nome} · de {nomeDaCor(jogada.cor)} · {jogada.lances} lances · {formatarDiaMes(jogada.data)}</span>
                                                     </>
                                                 )}
-                                                <span className='xadrez-ultimas-botoes'>
-                                                    {jogada.analise && (
-                                                        <button type='button' className='xadrez-ultimas-analise' onClick={() => setAnaliseAberta(jogada)}>
-                                                            Análise
-                                                        </button>
-                                                    )}
-                                                    {sansDaJogada(jogada) && (
-                                                        <button type='button' className='xadrez-ultimas-analise' onClick={() => abrirDoHistorico(jogada)}>
-                                                            Rever
-                                                        </button>
-                                                    )}
-                                                </span>
+                                                {/* abre como no fim de jogo (com as notas, se foi analisada) */}
+                                                {sansDaJogada(jogada) && (
+                                                    <button type='button' className='xadrez-ultimas-rever' onClick={() => abrirDoHistorico(jogada)}>
+                                                        Rever
+                                                    </button>
+                                                )}
                                             </li>
                                         ))}
                                     </ul>
@@ -1096,7 +1066,6 @@ const JogoXadrez = ({ fecharApp, minimizarApp, classeAnimacao }) => {
                             </>
                         )}
                     </section>
-                    {verHistorico && analiseAberta?.analise && modalDaJogada(analiseAberta)}
                 </div>
             </div>
         )
