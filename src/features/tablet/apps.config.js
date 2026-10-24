@@ -44,6 +44,14 @@ export const APPS = {
         telaInicial: 'xadrez.exe',
         tamanhoIconeBarra: 26,
     },
+    app_doom: {
+        id: 'app_doom',
+        nome: 'DOOM',
+        icone: '/imagens/windows/jogos/iconeDoom.svg',
+        telas: ['doom.exe'],
+        telaInicial: 'doom.exe',
+        tamanhoIconeBarra: 26,
+    },
 }
 
 // id do app dono de uma tela ('desktop' e telas do sistema não têm dono → undefined)

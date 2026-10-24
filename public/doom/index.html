@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <title>DOOM</title>
+    <!--
+        DOOM.exe do tablet: Dwasm (PrBoom+ em WebAssembly, GPL-2, https://github.com/GMH-Code/Dwasm) com o
+        DOOM1.WAD shareware (id Software). Roda dentro de um iframe do app (componentes/JogoDoom): assim o
+        Emscripten (Module, teclado, áudio) fica isolado do site. Conversa com o app por postMessage:
+        manda { fonte: 'doom', tipo: 'progresso' | 'pronto' | 'saiu', valor } e recebe { tipo: 'pausar' | 'continuar' }.
+        Licença e código-fonte: COPYING.txt e LEIA-ME.txt nesta pasta.
+    -->
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* o jogo desenha na resolução do prboomX.cfg; aqui ela só é esticada para caber, sem distorcer */
+        #canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            outline: none;
+            border: 0;
+        }
+
+        #carregando {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #c8c8c8;
+            font: 600 13px/1.2 'Segoe UI', system-ui, sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        #carregando strong {
+            font-size: 22px;
+            letter-spacing: 3px;
+            color: #d83a2a;
+        }
+
+        #barra {
+            width: 160px;
+            height: 4px;
+            overflow: hidden;
+            border-radius: 2px;
+            background: #2a1a1a;
+        }
+
+        #barra::after {
+            content: '';
+            display: block;
+            width: calc(var(--progresso, 0) * 100%);
+            height: 100%;
+            background: #d83a2a;
+            transition: width 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="carregando" role="status">
+        <strong>DOOM</strong>
+        <span id="texto">Carregando…</span>
+        <div id="barra"></div>
+    </div>
+    <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+
+    <script>
+        var carregando = document.getElementById('carregando');
+        var texto = document.getElementById('texto');
+        var barra = document.getElementById('barra');
+        var canvas = document.getElementById('canvas');
+
+        var avisarApp = function (tipo, valor) {
+            if (window.parent !== window) window.parent.postMessage({ fonte: 'doom', tipo: tipo, valor: valor }, '*');
+        };
+
+        var Module = {
+            canvas: canvas,
+            print: function () { console.log(Array.prototype.join.call(arguments, ' ')); },
+            printErr: function () { console.warn(Array.prototype.join.call(arguments, ' ')); },
+            // o Emscripten avisa o download e a preparação como "Texto (feito/total)"
+            setStatus: function (status) {
+                var partes = status && status.match(/\((\d+(?:\.\d+)?)\/(\d+)\)/);
+                if (partes) {
+                    var progresso = Number(partes[1]) / Number(partes[2]);
+                    barra.style.setProperty('--progresso', progresso);
+                    texto.textContent = 'Carregando… ' + Math.round(progresso * 100) + '%';
+                    avisarApp('progresso', progresso);
+                }
+            },
+            hideConsole: function () {
+                carregando.style.display = 'none';
+                canvas.focus();
+                avisarApp('pronto');
+            },
+            showConsole: function () {},
+            winResized: function () {},
+            // sem trava do mouse: dentro do tablet ela atrapalha (o jogo é no teclado)
+            captureMouse: function () {},
+            softExit: function () { avisarApp('saiu'); },
+            arguments: [],
+        };
+
+        // clicar no jogo devolve o foco do teclado para ele
+        document.addEventListener('mousedown', function () { canvas.focus(); });
+
+        // o app pausa o jogo quando a janela é minimizada (e continua quando ela volta)
+        window.addEventListener('message', function (evento) {
+            var mensagem = evento.data || {};
+            try {
+                var audio = Module.SDL2 && Module.SDL2.audioContext;
+                if (mensagem.tipo === 'pausar') {
+                    if (Module.pauseMainLoop) Module.pauseMainLoop();
+                    if (audio) audio.suspend();
+                } else if (mensagem.tipo === 'continuar') {
+                    if (Module.resumeMainLoop) Module.resumeMainLoop();
+                    if (audio) audio.resume();
+                    canvas.focus();
+                }
+            } catch (erro) {
+                console.warn('DOOM: não deu para pausar/continuar', erro);
+            }
+        });
+
+        window.onerror = function () {
+            texto.textContent = 'Não deu para abrir o DOOM.';
+        };
+    </script>
+    <script async src="index.js"></script>
+</body>
+</html>
