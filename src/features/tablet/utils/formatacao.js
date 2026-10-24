@@ -1,9 +1,14 @@
 import { PREFIXO_CHAVE } from '../../../shared/hooks/useEstadoPersistido'
-import { apagarBancoDoSite } from './wallpaperSalvo'
+import { apagarBanco, apagarBancoDoSite } from './wallpaperSalvo'
 
 // Formatar (Config → Sistema): o que este site guardou no navegador, resumido com números para a confirmação,
-// e a formatação de verdade. Só mexe no que é deste site (chaves com o PREFIXO_CHAVE e o banco de wallpapers):
+// e a formatação de verdade. Só mexe no que é deste site (chaves com o PREFIXO_CHAVE, o banco de wallpapers e o
+// dos saves do DOOM):
 // o domínio do GitHub Pages é dividido com outros projetos.
+
+// saves e configuração do DOOM: o Dwasm guarda no IndexedDB com o nome do ponto de montagem (/dwasm, ver
+// src/WASM/wasm_io.c dele). Vão sempre na formatação, sem perguntar
+const BANCO_DO_DOOM = '/dwasm'
 
 // marca, na sessão, que a página recarregou por causa do Formatar: aí o tablet abre e dá o boot sozinho
 const MARCA_FORMATOU = `${PREFIXO_CHAVE}acabou-de-formatar`
@@ -95,10 +100,10 @@ export const arquivosParaApagar = (apagarLembretes) => [
 
 // apaga tudo deste site (os lembretes só se pedir), marca na sessão e recarrega a página: a página nova
 // abre o tablet e dá o boot como no primeiro acesso (ver acabouDeFormatar)
-// (o banco primeiro, porque é assíncrono: as chaves saem logo antes do recarregar, sem dar tempo de algum
+// (os bancos primeiro, porque é assíncrono: as chaves saem logo antes do recarregar, sem dar tempo de algum
 // componente gravar de novo)
 export const formatarDeVerdade = async ({ apagarLembretes }) => {
-    await apagarBancoDoSite()
+    await Promise.all([apagarBancoDoSite(), apagarBanco(BANCO_DO_DOOM)])
     chavesSalvas()
         .filter((chave) => apagarLembretes || chave !== CHAVE_LEMBRETES)
         .forEach((chave) => {
