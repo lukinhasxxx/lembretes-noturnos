@@ -293,3 +293,31 @@
 .tablet-tela[data-tema='noturno'] .menu-iniciar .menu-iniciar-bloco:hover {
     box-shadow: 0 0 8px rgba(138, 120, 255, 0.55);
 }
+
+/* rolagem da lista: barrinha fina de uma cor só (roxo quase preto), sem trilho, no lugar da barra neon */
+.tablet-tela[data-tema='noturno'] .menu-iniciar-lista::-webkit-scrollbar {
+    width: 4px;
+}
+
+.tablet-tela[data-tema='noturno'] .menu-iniciar-lista::-webkit-scrollbar-track {
+    background: transparent;
+    box-shadow: none;
+}
+
+.tablet-tela[data-tema='noturno'] .menu-iniciar-lista::-webkit-scrollbar-thumb {
+    background: #1f1739;
+    border: 0;
+    border-radius: 2px;
+}
+
+/* hover levinho: só clareia um pouco */
+.tablet-tela[data-tema='noturno'] .menu-iniciar-lista::-webkit-scrollbar-thumb:hover {
+    background: #362a62;
+    border: 0;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    .tablet-tela[data-tema='noturno'] .menu-iniciar-lista {
+        scrollbar-color: #1f1739 transparent;
+    }
+}

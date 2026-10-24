@@ -8,7 +8,10 @@
     align-items: center;
     justify-content: center;
     width: var(--largura-padrao-botao-barra-de-tarefas);
-    height: var(--altura-barra-de-tarefas);
+    /* a barra passa uns px do fim da tela (--sobra-barra-de-tarefas): o botão (e o hover) fica só na parte que
+       aparece, e o padding de cima mantém o ícone/texto exatamente onde ficava com o botão inteiro */
+    height: calc(var(--altura-barra-de-tarefas) - var(--sobra-barra-de-tarefas, 0px));
+    padding-top: var(--sobra-barra-de-tarefas, 0px);
     color: var(--cor-texto-sistema);
     font-size: var(--tamanho-fonte-sistema);
     line-height: 1.25;

@@ -13,6 +13,7 @@ const MARGEM_TOPO_TECLADO = 6
 // largura/altura: tamanho base (escala 1) do conteúdo.
 // posicaoInicial: ({ larguraTela, alturaTela, larguraJanela, alturaJanela }) => ({ x, y }), em px da janela
 // do navegador (larguraJanela/alturaJanela: o tamanho dela já escalado, para dar para centralizar).
+// fatorEscala: multiplica o tamanho normal (resolução do tablet escolhida no Config), sem passar da tela.
 // subirComTeclado: enquanto o teclado do celular está aberto, a janela encolhe e vai para o topo (para o que
 // se digita não ficar atrás do teclado); ao fechar, volta para onde estava.
 const JanelaArrastavel = ({
@@ -21,13 +22,14 @@ const JanelaArrastavel = ({
     posicaoInicial,
     visivel = true,
     subirComTeclado = false,
+    fatorEscala = 1,
     handle,
     cancel,
     zIndex,
     children,
 }) => {
     const nodeRef = useRef(null)
-    const escala = useEscalaHud()
+    const escala = useEscalaHud({ fator: fatorEscala, largura, altura })
     const teclado = useTecladoAberto()
     const desviarDoTeclado = subirComTeclado && visivel && teclado.aberto
     const larguraNaTela = largura * escala

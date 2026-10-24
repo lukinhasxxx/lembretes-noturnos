@@ -3,6 +3,8 @@ import { useRef } from 'react'
 import { CENA } from '../cena.config'
 import { usePontoFocal } from '../hooks/usePontoFocal'
 import { useArrastoCena } from '../hooks/useArrastoCena'
+import { useEstadoPersistido } from '../../../shared/hooks/useEstadoPersistido'
+import { useIdioma } from '../../../shared/i18n/Idioma'
 
 // O palco tem sempre a proporção do vídeo e cobre a tela inteira (mesma lógica do object-fit: cover).
 // Tudo que for renderizado como children fica no mesmo sistema de coordenadas da arte:
@@ -14,8 +16,12 @@ import { useArrastoCena } from '../hooks/useArrastoCena'
 // foco: { parada, vez } — no modo arrastável, leva a cena sozinha até essa parada (ver useArrastoCena)
 const Palco = ({ videoSrc, posterSrc, arrastavel = false, foco, children }) => {
     const palcoRef = useRef(null)
+    const { t } = useIdioma()
+    // primeira visita no celular em pé: a cena cutuca sozinha até a pessoa arrastar (ou tocar numa luzinha da borda)
+    const [jaArrastou, setJaArrastou] = useEstadoPersistido('dica-arrastar-vista', false)
+    const descobriu = () => setJaArrastou(true)
     usePontoFocal(palcoRef, !arrastavel)
-    const { lados, irPara } = useArrastoCena(palcoRef, arrastavel, foco)
+    const { lados, irPara, cutucadas } = useArrastoCena(palcoRef, arrastavel, foco, { dica: !jaArrastou, aoArrastar: descobriu })
 
     return (
         <>
@@ -46,14 +52,21 @@ const Palco = ({ videoSrc, posterSrc, arrastavel = false, foco, children }) => {
                         type='button'
                         className={`palco-borda palco-borda-esquerda ${lados.esquerda ? 'visivel' : ''}`}
                         aria-label='Ver o que tem à esquerda'
-                        onClick={() => irPara(-1)}
+                        onClick={() => { descobriu(); irPara(-1) }}
                     />
                     <button
                         type='button'
                         className={`palco-borda palco-borda-direita ${lados.direita ? 'visivel' : ''}`}
                         aria-label='Ver o que tem à direita'
-                        onClick={() => irPara(1)}
+                        onClick={() => { descobriu(); irPara(1) }}
                     />
+                    {/* dedinho deslizando junto com cada cutucada (o key reinicia a animação a cada uma) */}
+                    {!jaArrastou && cutucadas > 0 && (
+                        <div key={cutucadas} className='palco-dica-arrastar' aria-hidden='true'>
+                            <span className='palco-dica-dedo' />
+                            <span className='palco-dica-texto'>{t('cena.dicaArrastar')}</span>
+                        </div>
+                    )}
                 </>
             )}
         </>

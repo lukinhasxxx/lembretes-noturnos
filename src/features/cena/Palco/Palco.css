@@ -79,6 +79,63 @@
     50%      { opacity: 1; }
 }
 
+/* dica da primeira visita (celular em pé): a cada cutucada da cena, um "dedo" (bolinha de toque) aparece
+   embaixo, desliza para o lado junto com a cena e some; o texto fica junto */
+.palco-dica-arrastar {
+    position: fixed;
+    left: 50%;
+    /* no meio da tela (céu/cidade): embaixo ficaria em cima da mesa e do toque fantasma do tablet */
+    top: 42%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    translate: -50% 0;
+    pointer-events: none;
+    animation: palco-dica-aparecendo 1.6s ease-out both;
+}
+
+/* com o tablet aberto (no meio da tela), a dica sobe para a parte de cima, para não ficar em cima dele */
+body:has(.secao-tablet-modal-aberta) .palco-dica-arrastar {
+    top: 20%;
+}
+
+.palco-dica-dedo {
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 12px rgba(255, 210, 150, 0.6);
+    animation: palco-dica-dedo-deslizando 1.6s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+.palco-dica-texto {
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes palco-dica-aparecendo {
+    0%   { opacity: 0; }
+    12%  { opacity: 1; }
+    75%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* encosta (aperta), arrasta para a esquerda junto com a cena (ela desliza em 0,5 s) e volta quando ela volta
+   (VOLTA_DA_CUTUCADA_MS = 550 no useArrastoCena) */
+@keyframes palco-dica-dedo-deslizando {
+    0%   { transform: translateX(28px) scale(1.2); }
+    5%   { transform: translateX(28px) scale(1); }
+    30%  { transform: translateX(-28px) scale(1); }
+    35%  { transform: translateX(-28px) scale(1); }
+    65%  { transform: translateX(28px) scale(1); }
+    100% { transform: translateX(28px) scale(1.2); }
+}
+
 .palco-video {
     position: absolute;
     inset: 0;

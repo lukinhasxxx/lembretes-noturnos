@@ -17,7 +17,9 @@ export const DURACAO_ANIMACAO_JANELA_MS = 150
 // em que tela cada app parou e o "minimizar" da barra de tarefas.
 // Fica no contexto do tablet (e não dentro do modal) para o espelho do tablet da mesa ler a mesma coisa.
 // estadoSistema: vem do useEstadoSistema; ao ligar/reiniciar, tudo volta ao começo
-export const useAreaDeTrabalho = (estadoSistema) => {
+// opcoes (vêm do tema): duracaoAnimacaoMs — tempo de minimizar/restaurar; animarAoAbrir — abrir um app
+// também anima, saindo do ícone dele na barra (o noturno faz isso, em círculo)
+export const useAreaDeTrabalho = (estadoSistema, { duracaoAnimacaoMs = DURACAO_ANIMACAO_JANELA_MS, animarAoAbrir = false } = {}) => {
     const [telaAtiva, setTelaAtiva] = useState('desktop')
     const [appsAbertos, setAppsAbertos] = useState([])
     const [ultimaTela, setUltimaTela] = useState(ULTIMA_TELA_INICIAL)
@@ -58,6 +60,10 @@ export const useAreaDeTrabalho = (estadoSistema) => {
 
     const abrirApp = (idDoApp, telaParaAbrir) => {
         setTimeout(() => {
+            if (animarAoAbrir && !animacaoJanela && telaAtiva !== telaParaAbrir) {
+                setAnimacaoJanela({ idDoApp, tipo: 'restaurando', tela: telaAtiva })
+                setTimeout(() => setAnimacaoJanela(null), duracaoAnimacaoMs)
+            }
             setTelaAtiva(telaParaAbrir)
             setUltimaTela({ ...ultimaTela, [idDoApp]: telaParaAbrir })
             if (!appsAbertos.includes(idDoApp)) {
@@ -94,7 +100,7 @@ export const useAreaDeTrabalho = (estadoSistema) => {
         if (appDaTela(telaAtiva) !== idDoApp) {
             setTelaAtiva(ultimaTela[idDoApp])
             setAnimacaoJanela({ idDoApp, tipo: 'restaurando', tela: telaAtiva })
-            setTimeout(() => setAnimacaoJanela(null), DURACAO_ANIMACAO_JANELA_MS)
+            setTimeout(() => setAnimacaoJanela(null), duracaoAnimacaoMs)
             return
         }
 
@@ -108,7 +114,7 @@ export const useAreaDeTrabalho = (estadoSistema) => {
 
         setAnimacaoJanela({ idDoApp, tipo: 'minimizando', tela: telaAtiva })
         sairDaFrente(idDoApp)
-        setTimeout(() => setAnimacaoJanela(null), DURACAO_ANIMACAO_JANELA_MS)
+        setTimeout(() => setAnimacaoJanela(null), duracaoAnimacaoMs)
     }
 
     // "mostrar área de trabalho" (canto direito da barra, como no Windows): minimiza todos os apps abertos;
@@ -120,7 +126,7 @@ export const useAreaDeTrabalho = (estadoSistema) => {
         const donoDaFrente = appDaTela(telaAtiva)
         if (donoDaFrente) {
             setAnimacaoJanela({ idDoApp: donoDaFrente, tipo: 'minimizando', tela: telaAtiva })
-            setTimeout(() => setAnimacaoJanela(null), DURACAO_ANIMACAO_JANELA_MS)
+            setTimeout(() => setAnimacaoJanela(null), duracaoAnimacaoMs)
         }
         setTelaAtiva('desktop')
     }

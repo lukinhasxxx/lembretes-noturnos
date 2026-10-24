@@ -8,6 +8,53 @@
     user-select: none;
 }
 
+/* "toque fantasma" da primeira visita: um dedo (bolinha) que aperta a telinha e solta uma onda, em loop.
+   Só aparece em tela de toque (no PC o cursor de mãozinha já mostra que dá para clicar) */
+.tablet-dica-toque {
+    display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .tablet-dica-toque {
+        display: block;
+        position: absolute;
+        z-index: 3;
+        left: 50%;
+        top: 42%;
+        width: calc(26 * var(--px-arte));
+        height: calc(26 * var(--px-arte));
+        translate: -50% -50%;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.6);
+        box-shadow: 0 0 calc(8 * var(--px-arte)) rgba(150, 245, 255, 0.9);
+        pointer-events: none;
+        animation: tablet-dica-apertando 1.8s ease-in-out infinite;
+    }
+
+    /* a onda que sai do toque */
+    .tablet-dica-toque::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border: calc(2 * var(--px-arte)) solid rgba(150, 245, 255, 0.95);
+        border-radius: 50%;
+        animation: tablet-dica-onda 1.8s ease-out infinite;
+    }
+}
+
+@keyframes tablet-dica-apertando {
+    0%, 100% { transform: scale(1);    opacity: 0.35; }
+    25%      { transform: scale(0.75); opacity: 1; }
+    45%      { transform: scale(1);    opacity: 0.7; }
+}
+
+@keyframes tablet-dica-onda {
+    0%, 25% { transform: scale(1);   opacity: 0; }
+    30%     { transform: scale(1);   opacity: 1; }
+    90%     { transform: scale(2.6); opacity: 0; }
+    100%    { transform: scale(2.6); opacity: 0; }
+}
+
 .zona-interacao-tablet .tablet-img {
     display: block;
     width: 100%;

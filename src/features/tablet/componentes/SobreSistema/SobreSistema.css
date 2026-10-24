@@ -1,0 +1,207 @@
+/* "Sobre" no estilo dos programas de especificação (CPU-Z/GPU-Z). As cores vêm do Config
+   (--config-borda, --config-cartao, --config-destaque...), então ele já muda junto com o tema */
+
+.sobre-sistema {
+    margin: 10px 3% 0;
+}
+
+/* abas coladas no painel, como as do CPU-Z */
+.sobre-abas {
+    display: flex;
+    gap: 2px;
+}
+
+.sobre-abas button {
+    padding: 4px 12px;
+    border: 1px solid var(--config-borda);
+    border-bottom: 0;
+    border-radius: 6px 6px 0 0;
+    font-family: var(--fonte-sistema);
+    font-size: 12px;
+    color: var(--config-texto-suave);
+    background: transparent;
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.sobre-abas button:hover {
+    color: var(--config-icone-ativo);
+}
+
+.sobre-abas button.ativa {
+    color: var(--config-icone-ativo);
+    background: var(--config-cartao);
+    box-shadow: inset 0 2px 0 var(--config-destaque);
+}
+
+.sobre-painel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid var(--config-borda);
+    border-radius: 0 8px 8px 8px;
+    background: var(--config-cartao);
+    animation: config-categoria-entrando 0.22s ease-out;
+}
+
+/* grupo com o título "cortando" a borda (fieldset + legend) */
+.sobre-grupo {
+    margin: 0;
+    padding: 4px 10px 8px;
+    border: 1px solid var(--config-borda);
+    border-radius: 6px;
+}
+
+.sobre-grupo legend {
+    padding: 0 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--config-destaque);
+}
+
+.sobre-grupo dl {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+}
+
+.sobre-linha {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    align-items: center;
+    gap: 8px;
+}
+
+.sobre-linha dt {
+    font-size: 11px;
+    text-align: right;
+    color: var(--config-texto-suave);
+}
+
+/* a caixinha "afundada" do valor */
+.sobre-linha dd {
+    margin: 0;
+    padding: 2px 8px;
+    min-height: 18px;
+    border: 1px solid var(--config-borda);
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    background: rgba(0, 0, 0, 0.06);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+    overflow-wrap: anywhere;
+}
+
+.tablet-tela[data-tema='noturno'] .sobre-linha dd {
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* o navegador não contou: NULL, apagadinho (não é erro, é privacidade) */
+.sobre-linha dd.sobre-sem-valor {
+    font-weight: 400;
+    letter-spacing: 1px;
+    opacity: 0.5;
+}
+
+/* ---------- aba Sistema: "Sobre o telefone" do Android ---------- */
+
+.sobre-heroi {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 6px 4px 14px;
+}
+
+.sobre-emblema {
+    flex: 0 0 auto;
+    width: 64px;
+    height: 64px;
+    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--config-brilho) 60%, transparent));
+}
+
+/* noturno: o mini eclipse do login (disco escuro com o anel de luz lilás) */
+.sobre-emblema-eclipse {
+    width: 54px;
+    height: 54px;
+    margin: 5px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #15122e 0%, #05040f 100%);
+    box-shadow:
+        0 0 0 1.5px #f1edff,
+        0 0 10px 2px #b98cff,
+        0 0 26px 7px rgba(138, 120, 255, 0.45);
+    filter: none;
+    position: relative;
+}
+
+/* os raios do choque: caixa um pouco maior que o disco, para eles passarem por cima do anel de luz */
+.sobre-emblema-eclipse .choque-lua {
+    inset: -10px;
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+}
+
+/* seletor comprido de propósito: precisa ganhar da regra do noturno que pinta todo <strong> do Config de rosa
+   (.tablet-tela[data-tema='noturno'] .janela-configuracao-led strong) */
+.tablet-tela .janela-configuracao-led .sobre-heroi .sobre-heroi-nome {
+    display: block;
+    font-size: 26px;
+    line-height: 1.1;
+    color: var(--config-icone-ativo);
+    text-shadow: 0 0 10px color-mix(in srgb, var(--config-brilho) 45%, transparent);
+}
+
+/* o Config antigo tem "span = 26px": aqui volta ao tamanho de legenda */
+.janela-configuracao-led .sobre-heroi .sobre-heroi-versao {
+    font-size: 12px;
+    color: var(--config-texto-suave);
+}
+
+/* cartões arredondados, dois por linha */
+.sobre-cartoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 0;
+}
+
+.sobre-cartoes div {
+    padding: 9px 12px;
+    border: 1px solid var(--config-borda);
+    border-radius: 14px;
+    background: var(--config-cartao);
+}
+
+.sobre-cartoes dt {
+    font-size: 11px;
+    color: var(--config-texto-suave);
+}
+
+.sobre-cartoes dd {
+    margin: 2px 0 0;
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.janela-configuracao-led .wrapper-configuracao .sobre-aviso,
+.janela-configuracao-led .wrapper-configuracao .sobre-assinatura {
+    margin: 0;
+    font-size: 11px;
+    color: var(--config-texto-suave);
+}
+
+.janela-configuracao-led .wrapper-configuracao .sobre-assinatura {
+    margin-top: 12px;
+    font-size: 12px;
+}
+
+.sobre-assinatura a {
+    color: var(--config-destaque);
+}

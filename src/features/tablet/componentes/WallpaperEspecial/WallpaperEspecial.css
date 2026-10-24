@@ -77,6 +77,26 @@
     animation: wallpaper-especial-reflexo 0.7s ease-out;
 }
 
+/* "acendidinha": de tempos em tempos o vidro brilha bem de leve sozinho, só para chamar o olho
+   ("opa, algo se mexeu ali"). Parado o resto do tempo; no hover/aberto o brilho de verdade assume */
+.wallpaper-especial-botao:not(:hover):not(.aberto) {
+    animation: wallpaper-especial-acendidinha 6s ease-in-out 1.5s infinite;
+}
+
+.wallpaper-especial-botao:not(:hover):not(.aberto) .wallpaper-especial-espiada {
+    animation: wallpaper-especial-espiada-acendendo 6s ease-in-out 1.5s infinite;
+}
+
+@keyframes wallpaper-especial-acendidinha {
+    0%, 78%, 100% { border-color: rgba(255, 255, 255, 0.1); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08); }
+    88%           { border-color: rgba(255, 255, 255, 0.24); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 0 7px rgba(185, 140, 255, 0.3); }
+}
+
+@keyframes wallpaper-especial-espiada-acendendo {
+    0%, 78%, 100% { opacity: 0.22; }
+    88%           { opacity: 0.42; }
+}
+
 @keyframes wallpaper-especial-reflexo {
     from { left: -60%; }
     to   { left: 120%; }

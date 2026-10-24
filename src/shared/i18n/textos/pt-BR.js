@@ -53,6 +53,10 @@ const ptBR = {
     'notificacoes.temaInstalado': 'Tema noturno instalado',
     'notificacoes.temaInstaladoTexto': 'Ele muda o sistema inteiro: boot, login, janelas... Experimente!',
     'notificacoes.experimentar': 'Experimentar',
+    'notificacoes.dicaWallpaper': 'Que tal um wallpaper novo?',
+    'notificacoes.dicaWallpaperTexto': 'Tem wallpapers pré-instalados no Config, e um especial escondido no tema noturno.',
+    'notificacoes.personalizar': 'Personalizar',
+    'cena.dicaArrastar': 'Arraste para os lados',
 }
 
 export default ptBR

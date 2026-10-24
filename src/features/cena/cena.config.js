@@ -13,7 +13,9 @@ export const MARGEM_FOCAL = 24
 // Para adicionar um elemento novo: meça no frame do vídeo e use <Ancora ponto="nome">.
 export const PONTOS = {
     radio: { x: 390, y: 780, largura: 170, altura: 130 },
-    tablet: { x: 1174, y: 875, largura: 110, altura: 50 },
+    // ~23% maior que o original (110 × 50), crescendo a partir do meio de baixo (continua apoiado na mesa)
+    // e 5px para a direita, para ficar no meio da mesa
+    tablet: { x: 1166.5, y: 863.5, largura: 135, altura: 61 },
     mural: { x: 1139, y: 234, largura: 522, altura: 510 },
 }
 

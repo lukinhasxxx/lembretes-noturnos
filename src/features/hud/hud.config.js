@@ -23,6 +23,23 @@ export const MODAL_TABLET = {
     altura: 482,
 }
 
+// Resolução do tablet (escolhida no Config): multiplica a escala normal do modal do tablet.
+// Nunca passa do que cabe na tela (FRACAO_MAXIMA_TELA); opção que não cabe aparece desativada.
+export const RESOLUCOES_TABLET = [
+    { id: 'menor', fator: 0.85, rotulo: '15% menor' },
+    { id: 'padrao', fator: 1, rotulo: 'Recomendado' },
+    { id: 'maior', fator: 1.15, rotulo: '15% maior' },
+    { id: 'muitoMaior', fator: 1.4, rotulo: '40% maior' },
+]
+
+export const RESOLUCAO_PADRAO = 'padrao'
+
+// fração máxima da tela que uma janela do HUD pode ocupar quando a pessoa aumenta o tamanho dela
+export const FRACAO_MAXIMA_TELA = {
+    largura: 0.98,
+    altura: 0.96,
+}
+
 // Tamanho base (escala 1) do mini player com a área de pegar (.draggable-wrapper):
 // player 347x183 + 16px de padding em cada lado.
 export const MINI_PLAYER = {

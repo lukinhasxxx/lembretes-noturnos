@@ -36,6 +36,12 @@ const [ligarTabletPrimeiraVez, setLigarTabletPrimeiraVez] = useState(false)
 const [notasVisiveisNoMural, setNotasVisiveisNoMural] = useState(true)
 // glitch das notas sumindo no mural enquanto o "limpar tudo" acontece
 const [apagandoNotas, setApagandoNotas] = useState(false)
+// o mural ligado já mostrou algum lembrete nesta sessão: mesmo se todos forem apagados, o botão
+// mostrar/esconder painel continua no tablet
+const [muralJaTeveLembretes, setMuralJaTeveLembretes] = useState(false)
+useEffect(() => {
+  if (painelLigadoPermanente && lembretes.length > 0) setMuralJaTeveLembretes(true)
+}, [painelLigadoPermanente, lembretes.length])
 
 
 
@@ -211,7 +217,7 @@ const [ligarTablet,setLigarTablet] = useState(false)
 const [modalAberto,setModalAberto] = useState(false)
 // sistema do tablet (vem do SistemaTabletProvider, no index.js): desligado até o primeiro clique;
 // aí roda boot → boas-vindas → área de trabalho. O resto (bloquear, desligar...) o modal pega direto do contexto.
-const { sistemaDesligado, ligarSistema, tema } = useSistemaTablet()
+const { sistemaDesligado, ligarSistema, tema, resolucaoTablet } = useSistemaTablet()
 // celular (toque, sem mouse) e se está em pé: o celular ganha tamanhos e posições próprios
 const { celular, emPe } = useDispositivo()
 // celular em pé: pedido para a cena deslizar até uma parada (ex.: o painel ao mandar um lembrete)
@@ -294,7 +300,10 @@ setLigarTabletPrimeiraVez(true)
    <JanelaArrastavel
    largura={MINI_PLAYER.largura}
    altura={MINI_PLAYER.altura}
-   posicaoInicial={({ larguraTela, alturaTela }) => ({ x: larguraTela * 0.09, y: alturaTela * 0.57 })}
+   // celular: embaixo e centralizado, no alcance do dedo; PC: no lugar de sempre
+   posicaoInicial={({ larguraTela, alturaTela, larguraJanela, alturaJanela }) => (celular
+     ? { x: (larguraTela - larguraJanela) / 2, y: alturaTela - alturaJanela - 16 }
+     : { x: larguraTela * 0.09, y: alturaTela * 0.57 })}
    cancel="button, input, textarea, select, option, a, img"
    zIndex={1}
    >
@@ -324,6 +333,8 @@ setLigarTabletPrimeiraVez(true)
     ? { x: (larguraTela - larguraJanela) / 2, y: (alturaTela - alturaJanela) / 2 }
     : { x: larguraTela * 0.2, y: alturaTela * 0.09 })}
   visivel={modalAberto}
+  // resolução escolhida no Config (15% menor ... 40% maior), sem passar do que cabe na tela
+  fatorEscala={resolucaoTablet.fator}
   // celular: com o teclado aberto o tablet encolhe e sobe, para a caixa de texto não ficar atrás dele
   // (só deitado: em pé encolher deixava o tablet pequeno demais)
   subirComTeclado={!emPe}
@@ -335,10 +346,15 @@ setLigarTabletPrimeiraVez(true)
       validarLigadoDesligado={ligarTablet}
       painelLigadoPermanente={painelLigadoPermanente}
       haLembretesSalvos={lembretes.length > 0}
+      muralJaTeveLembretes={muralJaTeveLembretes}
       aoLigarMural={ligarMuralComAnimacao}
       aoMostrarPainel={focarNoPainel}
       corNeon={setLuzRadio}
       radioLigado={radioLigado}
+      volume={volume}
+      aoMudarVolume={setVolume}
+      musicaTocando={estaTocando}
+      aoDesligarRadio={gerenciarDesligamentoRadio}
     />
 </JanelaArrastavel>
  }

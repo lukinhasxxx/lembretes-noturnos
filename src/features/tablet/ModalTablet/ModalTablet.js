@@ -1,13 +1,11 @@
 import { VisibilidadePainelContext } from '../../mural'
 import './ModalTablet.css'
 import Botao from '../componentes/Botao/Botao'
-import { useState, useContext, useLayoutEffect } from 'react'
+import { useState, useContext, useLayoutEffect, useRef, Suspense } from 'react'
 import '../sistema/temaSistema.css'
 import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
-import BotaoUpload from '../componentes/BotaoUpload/BotaoUpload'
-import SecaoTemas from '../componentes/BotaoTema/SecaoTemas'
-import WallpaperEspecial from '../componentes/WallpaperEspecial/WallpaperEspecial'
+import Config from '../componentes/Config/Config'
 import IconeAreaDeTrabalho from '../sistema/IconeAreaDeTrabalho/IconeAreaDeTrabalho'
 import { TEMAS } from '../hooks/useTemaSistema'
 import { useWallpaperBloqueio } from '../hooks/useWallpaperBloqueio'
@@ -15,27 +13,47 @@ import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
 import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
 import { ESTADOS_SISTEMA } from '../tablet.config'
-import { APPS } from '../apps.config'
+import { APPS, appDaTela } from '../apps.config'
 import { useSistemaTablet } from '../contexts/SistemaTablet'
 
 // Modal do tablet: desenha o sistema (área de trabalho, apps, barra, telas do sistema).
 // O estado do sistema (ligado/bloqueado..., tela na frente, apps abertos, wallpaper) vem do SistemaTabletProvider,
-// o mesmo que o tablet da mesa lê; aqui fica só o que é da interface do modal (texto digitado, galeria aberta).
-const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, haLembretesSalvos, aoLigarMural, aoMostrarPainel, corNeon, radioLigado}) => {
+// o mesmo que o tablet da mesa lê; aqui fica só o que é da interface do modal (texto digitado). O Config.exe fica no componente Config.
+const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente, haLembretesSalvos, muralJaTeveLembretes, aoLigarMural, aoMostrarPainel, corNeon, radioLigado, volume, aoMudarVolume, musicaTocando, aoDesligarRadio}) => {
 
     const {alterarVisibilidadePainel, textoBotao, mostrarPainel} = useContext(VisibilidadePainelContext)
     const {
         estadoSistema, bloquearSistema, desbloquearSistema, entrarSistema, desligarSistema, reiniciarSistema,
-        telaAtiva, appsAbertos, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, minimizarApp, minimizarTudo, voltarParaAreaDeTrabalho,
-        wallpaperAtual, previa, selecionarPreset, lidarComMudancas, voltarParaWallpaperPadrao,
-        registrarTelaDoModal, telaDoModal, tema, temasDisponiveis, destacarTemas, setDestacarTemas, animacaoJanela,
+        telaAtiva, appsAbertos, ultimaTela, abrirApp, fecharApp, mostrarTelaDoApp, alternarAppPelaBarra, minimizarApp, minimizarTudo, voltarParaAreaDeTrabalho,
+        wallpaperAtual, registrarTelaDoModal, telaDoModal, tema, animacaoJanela,
     } = useSistemaTablet()
     const [nome, setNome] = useState('')
-    const [wrapperPreviaWallpaper, setWrapperPreviaWallpaper] = useState(false)
     // bloqueio e o login embaixo dele: imagem sorteada do tema (ou o wallpaper da área de trabalho)
     const wallpaperBloqueio = useWallpaperBloqueio(tema, estadoSistema, wallpaperAtual)
     // centro do ícone do app na barra (em px da tela): a janela minimiza "para dentro" dele e restaura "saindo" dele
     const [origemJanelaX, setOrigemJanelaX] = useState(null)
+    // tema do momento em que o tablet abriu: a animação de abrir é escolhida por ele. Se seguisse o tema atual,
+    // ir para o noturno com o tablet aberto trocaria a animação e o navegador rodaria ela de novo (o tablet "piscava")
+    const [abertura, setAbertura] = useState({ aberto: validarLigadoDesligado, tema })
+    if (abertura.aberto !== validarLigadoDesligado) setAbertura({ aberto: validarLigadoDesligado, tema })
+    const secaoRef = useRef(null)
+    const temaAnteriorRef = useRef(tema)
+
+    // voltando para o Original com o tablet aberto: aí sim ele se materializa de novo (o holograma do CyberOS)
+    useLayoutEffect(() => {
+        const temaAnterior = temaAnteriorRef.current
+        temaAnteriorRef.current = tema
+        if (!validarLigadoDesligado || temaAnterior === tema || tema !== TEMAS.padrao) return
+        setAbertura({ aberto: true, tema })
+        // reinicia as animações da caixa do tablet (e da "pele" ::after), mesmo se o data-tema já era o do Original
+        const quadro = requestAnimationFrame(() => {
+            const secao = secaoRef.current
+            secao?.getAnimations({ subtree: true })
+                .filter((animacao) => animacao.effect?.target === secao)
+                .forEach((animacao) => { animacao.cancel(); animacao.play() })
+        })
+        return () => cancelAnimationFrame(quadro)
+    }, [tema, validarLigadoDesligado])
 
     useLayoutEffect(() => {
         if (!animacaoJanela || !telaDoModal) return
@@ -55,14 +73,19 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
     // tela desenhada: a da frente e, durante a animação, também a outra (ver animacaoJanela no useAreaDeTrabalho)
     const telaVisivel = (tela) => telaAtiva === tela || animacaoJanela?.tela === tela
 
-    // miniatura: versão pequena (400×250) só para o quadradinho da galeria; ao clicar, aplica a imagem cheia (src).
-    // O GIF não tem miniatura: continua animado na galeria
-    const wallpapersProntos = [
-    { id: 1, src: "/imagens/windows/previasWallpaper/previa1.png", miniatura: "/imagens/windows/previasWallpaper/miniaturas/previa1.webp", alt: "Previa 1" },
-    { id: 2, src: "/imagens/windows/previasWallpaper/previa2.png", miniatura: "/imagens/windows/previasWallpaper/miniaturas/previa2.webp", alt: "Previa 2" },
-    { id: 3, src: "/imagens/windows/previasWallpaper/previa3.gif", alt: "Previa 3" },
-    { id: 4, src: "/imagens/windows/previasWallpaper/previa4.png", miniatura: "/imagens/windows/previasWallpaper/miniaturas/previa4.webp", alt: "Previa 4" }
-];
+    // janela de app aberto que não está na frente (minimizada ou atrás de outra): continua montada, só escondida.
+    // Assim ela volta como estava — rolagem, texto digitado, partida dos jogos. Fechar o app desmonta (começa do zero)
+    const telaGuardada = (tela) => {
+        const dono = appDaTela(tela)
+        return Boolean(dono) && appsAbertos.includes(dono) && ultimaTela[dono] === tela
+    }
+    // Suspense: enquanto o arquivo de um jogo ainda está baixando (só na 1ª vez), não mostra nada no lugar
+    const guardar = (tela, janela) => (telaVisivel(tela) || telaGuardada(tela)) && (
+        // "contents": a caixa em volta não existe para o layout; escondida, sai da tela sem desmontar
+        <div key={tela} style={{ display: telaVisivel(tela) ? 'contents' : 'none' }}>
+            <Suspense fallback={null}>{janela}</Suspense>
+        </div>
+    )
 
     const aoSalvar = (evento) => {
         evento.preventDefault()
@@ -70,11 +93,6 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         setNome('')
 };
 
-        const abrirWrapperWallpaper = () => {
-            setWrapperPreviaWallpaper( 
-                wrapperPreviaWallpaper => !wrapperPreviaWallpaper
-            )
-        } 
 
 
 
@@ -82,7 +100,14 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
 
     return (
         <div>
-            <section className={`secao-tablet-modal${validarLigadoDesligado ? ' secao-tablet-modal-aberta' : ''}`}>
+            <section
+                ref={secaoRef}
+                className={`secao-tablet-modal${validarLigadoDesligado ? ' secao-tablet-modal-aberta' : ''}`}
+                // cada tema abre o tablet do seu jeito (ModalTablet.css → secao-tablet-modal-aberta)
+                data-tema={abertura.tema}
+                // formato do holograma ao se materializar (ModalTablet.css → secao-tablet-modal-aberta::after)
+                style={{ '--mascara-tablet-modal': `url(${process.env.PUBLIC_URL}/imagens/tabletModal.png)` }}
+            >
 
             <div className="handle"></div>
 
@@ -124,101 +149,24 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     </div>
                 )}
 
+                {/* janelas dos apps: guardar() deixa a janela montada (escondida) enquanto o app está aberto */}
                 {/* app de fato */}
-                {telaVisivel('config.exe') && (
-                   
-
-<div className={`janela-config ${classeAnimacaoJanela('app_config')}`}>
-    <WindowBar
-        fecharApp = {fecharApp}
-        minimizarApp = {minimizarApp}
-        idDoAppPraFechar='app_config'
-        escura={tema === TEMAS.noturno}
-    />
-        <div className='janela-configuracao-led' >
-            <div className='wrapper-configuracao' >
-
-
-                        <span className='texto-configuracao' >Configurações</span>
-                        <p className='texto-explicacao' >Aqui você pode configurar algumas coisas do sistema e/ou cenário </p>
-                        <h3 className='luz-radio' >Luz do rádio</h3>
-
-                {radioLigado ?  
-                    <p className='texto-alterar-luz-radio' > Clique no botão ao lado para mudar a luz do rádio</p> : 
-                        
-                    <div> 
-                        <p className='aviso-radio-desligado' >O led do rádio está <strong>desligado</strong> no momento. 
-                            <br></br>
-                            Para ligar, clique no rádio na escada.
-                        </p> 
-                    </div>
-                }
-
-                    <input 
-                        className='input-cor' 
-                        type='color' 
-                        style={{display: radioLigado? "block":"none"}}
-                        onChange={(evento)=>{corNeon(evento.target.value)}}
+                {guardar('config.exe', (
+                    <Config
+                        fecharApp={fecharApp}
+                        minimizarApp={minimizarApp}
+                        classeAnimacao={classeAnimacaoJanela('app_config')}
+                        radioLigado={radioLigado}
+                        corNeon={corNeon}
+                        volume={volume}
+                        aoMudarVolume={aoMudarVolume}
+                        musicaTocando={musicaTocando}
+                        aoDesligarRadio={aoDesligarRadio}
                     />
+                ))}
 
-                <h3 className='texto-wallpaper' >Mudar wallpaper do sistema</h3>
-
-                    <BotaoUpload 
-                    previa={previa}
-                    lidarComMudancas={lidarComMudancas}
-                    aoVoltarParaPadrao={voltarParaWallpaperPadrao}
-                    />
-
-                <h3>Wallpapers de exemplo</h3>
-
-                <button 
-                    className='botao-abrir-previa'
-                    onClick={()=> abrirWrapperWallpaper()}
-                    style={{boxShadow: wrapperPreviaWallpaper?"1px 1px 11px #0015ffff":"none"}}
-                 
-                 >Wallpapers</button>
-
-                {
-                    wrapperPreviaWallpaper === true && (
-                    // área da galeria: no noturno, o wallpaper especial aparece no espaço vazio à esquerda dela
-                    <div className='area-galeria-presets'>
-                    <div className='container-galeria-presets'>
-                        {
-                            wallpapersProntos.map((wallpaper)=>(
-                                <img
-                                    onDragStart={(e) => e.preventDefault()}
-                                    key={wallpaper.id}
-                                    className='miniatura-preset'
-                                    src={process.env.PUBLIC_URL + (wallpaper.miniatura ?? wallpaper.src)}
-                                    alt={wallpaper.alt}
-                                    onClick={()=> selecionarPreset(wallpaper.src)}
-                                />
-                            ))
-                        }
-
-                    </div>
-                    {tema === TEMAS.noturno && <WallpaperEspecial aoEscolher={selecionarPreset} />}
-                    </div>
-                    )
-                }
-
-                {/* só aparece depois da "instalação" dos temas (notificação na barra de tarefas) */}
-                {temasDisponiveis && (
-                    <SecaoTemas destacada={destacarTemas} aoTerminarDestaque={() => setDestacarTemas(false)} />
-                )}
-
-
-
-                    
-           </div>
-
-        </div>
-    </div>
-
-                 )}
-                
                 {/* APP de fato */}
-                { telaVisivel('lembretes.exe') && (
+                { guardar('lembretes.exe', (
 
         <div className={`janela-lembretes ${classeAnimacaoJanela('app_lembretes')}`} >
 
@@ -253,9 +201,10 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             >
                         </textarea>
                         
-                    { // mural ligado: mostrar/esconder o painel — só quando existe algum lembrete
-                      // (sem nenhum, ex.: depois de reiniciar o tablet com o mural vazio, o botão não aparece)
-                        painelLigadoPermanente === true && haLembretesSalvos && (
+                    { // mural ligado: mostrar/esconder o painel — quando existe algum lembrete ou quando o mural já teve
+                      // lembretes nesta sessão e eles foram apagados (sem nunca ter tido, ex.: depois de reiniciar o
+                      // tablet com o mural vazio, o botão não aparece)
+                        painelLigadoPermanente === true && (haLembretesSalvos || muralJaTeveLembretes) && (
                         <div className='mostrar-e-esconder'
                             onClick={()=>{
                                 // reexibindo o painel escondido: no celular em pé a cena vai até ele
@@ -283,8 +232,8 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                 </form>
         </div>
 
-            )}
-            {telaVisivel('about.exe') && (
+            ))}
+            {guardar('about.exe', (
                  <div className={`about ${classeAnimacaoJanela('app_lembretes')}`} >
 
                 {/* Janela superior */}
@@ -334,7 +283,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                     </div>
                  </div>
             </div>
-        </div>)}
+        </div>))}
     </div>
 
     <BarraDeTarefas
