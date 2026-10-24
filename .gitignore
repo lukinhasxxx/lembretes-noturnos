@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# gerado pelo scripts/gerarFeitoCom.js (antes do start e do build)
+/src/features/tablet/componentes/SobreSistema/feitoCom.gerado.json

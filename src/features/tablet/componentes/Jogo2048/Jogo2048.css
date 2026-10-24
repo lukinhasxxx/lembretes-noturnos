@@ -1,0 +1,265 @@
+/* 2048.exe: tabuleiro na esquerda, placar na direita. Usa as mesmas cores do Config (--config-*) para os
+   botões e o texto, e cores próprias para as peças (cada tema tem a sua escala) */
+
+.tablet-tela[data-tema='noturno'] .janela-jogo2048 {
+    background: #07061a;
+    box-shadow: 0 0 0 1px #07061a;
+}
+
+.jogo2048-corpo {
+    /* as mesmas do Config, para o .config-botao funcionar aqui igual */
+    --config-cartao: rgba(255, 255, 255, 0.55);
+    --config-borda: rgba(75, 47, 214, 0.25);
+    --config-destaque: #6a4cff;
+    --config-brilho: #6a4cff;
+    --config-texto-suave: #5d5778;
+
+    /* tabuleiro: 4 casas de 62px com 8px entre elas */
+    --casa: 62px;
+    --vao: 8px;
+    --fundo-tabuleiro: rgba(75, 47, 214, 0.18);
+    --fundo-casa: rgba(255, 255, 255, 0.45);
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 34px;
+    width: 665px;
+    height: 319px;
+    background-color: rgb(215, 218, 243);
+    color: #2a1d80;
+    font-family: var(--fonte-sistema);
+    user-select: none;
+}
+
+/* modo jogo (ver ModoJogo.css): casas de 76px (tabuleiro de 349px) e números maiores */
+.janela-modo-jogo .jogo2048-corpo {
+    --casa: 76px;
+    --vao: 9px;
+    gap: 44px;
+}
+
+.janela-modo-jogo .jogo2048-peca { font-size: 30px; }
+.janela-modo-jogo .jogo2048-peca[data-valor='128'],
+.janela-modo-jogo .jogo2048-peca[data-valor='256'],
+.janela-modo-jogo .jogo2048-peca[data-valor='512'] { font-size: 26px; }
+.janela-modo-jogo .jogo2048-peca[data-valor='1024'],
+.janela-modo-jogo .jogo2048-peca[data-valor='2048'],
+.janela-modo-jogo .jogo2048-peca[data-valor='maior'] { font-size: 21px; }
+
+.tablet-tela[data-tema='noturno'] .jogo2048-corpo {
+    --config-cartao: rgba(138, 120, 255, 0.1);
+    --config-borda: rgba(185, 140, 255, 0.35);
+    --config-destaque: #b98cff;
+    --config-brilho: #b98cff;
+    --config-texto-suave: #9d97cf;
+    --fundo-tabuleiro: rgba(138, 120, 255, 0.12);
+    --fundo-casa: rgba(255, 255, 255, 0.05);
+
+    background: linear-gradient(160deg, #07061a 0%, #120f33 55%, #1d1652 100%);
+    color: #e6e3ff;
+}
+
+.jogo2048-tabuleiro {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, var(--casa));
+    gap: var(--vao);
+    padding: var(--vao);
+    border-radius: 10px;
+    background: var(--fundo-tabuleiro);
+    box-shadow: 0 0 0 1px var(--config-borda);
+    /* o arraste no tabuleiro é o jogo: o navegador não rola nem faz gesto próprio aqui */
+    touch-action: none;
+    cursor: grab;
+}
+
+.jogo2048-casa {
+    width: var(--casa);
+    height: var(--casa);
+    border-radius: 6px;
+    background: var(--fundo-casa);
+}
+
+/* a peça fica por cima da casa dela: a posição vem de --linha/--coluna (no JS) e o transform desliza */
+.jogo2048-peca {
+    position: absolute;
+    top: var(--vao);
+    left: var(--vao);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--casa);
+    height: var(--casa);
+    border-radius: 6px;
+    font-size: 24px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--peca-texto, #2a1d80);
+    background: var(--peca-fundo, #fff);
+    box-shadow: 0 0 var(--peca-brilho, 0) color-mix(in srgb, var(--peca-fundo, #fff) 70%, transparent);
+    transform: translate(
+        calc(var(--coluna) * (var(--casa) + var(--vao))),
+        calc(var(--linha) * (var(--casa) + var(--vao)))
+    );
+    /* mesma duração do DURACAO_DESLIZE_MS (Jogo2048.js) */
+    transition: transform 0.11s ease-in-out;
+    pointer-events: none;
+}
+
+/* engolida numa junção: desliza por baixo da que ficou e some quando a animação acaba */
+.jogo2048-peca.removida {
+    z-index: 0;
+}
+
+.jogo2048-peca:not(.removida) {
+    z-index: 1;
+}
+
+/* nasce "crescendo" (depois do deslize) e pulsa quando junta */
+.jogo2048-peca.nova {
+    animation: jogo2048-nascendo 0.16s ease-out both;
+}
+
+.jogo2048-peca.juntou {
+    animation: jogo2048-juntando 0.18s ease-out 0.08s both;
+}
+
+/* jogada ímpar: mesma animação com outro nome, para ela rodar de novo (ver "jogadas" no Jogo2048.js) */
+.jogo2048-peca.juntou[data-vez='1'] {
+    animation-name: jogo2048-juntando-de-novo;
+}
+
+@keyframes jogo2048-nascendo {
+    from { scale: 0; }
+    to   { scale: 1; }
+}
+
+@keyframes jogo2048-juntando {
+    0%   { scale: 1; }
+    50%  { scale: 1.16; }
+    100% { scale: 1; }
+}
+
+@keyframes jogo2048-juntando-de-novo {
+    0%   { scale: 1; }
+    50%  { scale: 1.16; }
+    100% { scale: 1; }
+}
+
+/* número grande demais para a peça: letra menor */
+.jogo2048-peca[data-valor='128'],
+.jogo2048-peca[data-valor='256'],
+.jogo2048-peca[data-valor='512'] { font-size: 21px; }
+.jogo2048-peca[data-valor='1024'],
+.jogo2048-peca[data-valor='2048'],
+.jogo2048-peca[data-valor='maior'] { font-size: 17px; }
+
+/* ---------- escala de cores: CyberOS (ciano → roxo neon, as cores do logo) ---------- */
+.jogo2048-peca[data-valor='2']    { --peca-fundo: #eef7ff; }
+.jogo2048-peca[data-valor='4']    { --peca-fundo: #d6f3ff; }
+.jogo2048-peca[data-valor='8']    { --peca-fundo: #9eeaff; }
+.jogo2048-peca[data-valor='16']   { --peca-fundo: #6ef0ff; }
+.jogo2048-peca[data-valor='32']   { --peca-fundo: #5fc8ff; --peca-texto: #fff; }
+.jogo2048-peca[data-valor='64']   { --peca-fundo: #5b8cff; --peca-texto: #fff; }
+.jogo2048-peca[data-valor='128']  { --peca-fundo: #7b6cff; --peca-texto: #fff; --peca-brilho: 8px; }
+.jogo2048-peca[data-valor='256']  { --peca-fundo: #9a6bff; --peca-texto: #fff; --peca-brilho: 10px; }
+.jogo2048-peca[data-valor='512']  { --peca-fundo: #b98cff; --peca-texto: #fff; --peca-brilho: 12px; }
+.jogo2048-peca[data-valor='1024'] { --peca-fundo: #d26bff; --peca-texto: #fff; --peca-brilho: 14px; }
+.jogo2048-peca[data-valor='2048'] { --peca-fundo: #ff5ce1; --peca-texto: #fff; --peca-brilho: 18px; }
+.jogo2048-peca[data-valor='maior'] { --peca-fundo: #2a1d80; --peca-texto: #6ef0ff; --peca-brilho: 18px; }
+
+/* ---------- escala de cores: NightOS (roxo-noite → lilás brilhante) ---------- */
+.tablet-tela[data-tema='noturno'] .jogo2048-peca { --peca-texto: #e6e3ff; }
+.tablet-tela[data-tema='noturno'] .jogo2048-peca[data-valor='2']    { --peca-fundo: #1f1a4a; }
+.tablet-tela[data-tema='noturno'] .jogo2048-peca[data-valor='4']    { --peca-fundo: #2a2262; }
+.tablet-tela[data-tema='noturno'] .jogo2048-peca[data-valor='8']    { --peca-fundo: #36297e; }
+.tablet-tela[data-tema='noturno'] .jogo2048-peca[data-valor='16']   { --peca-fundo: #45339b; }
+.tablet-tela[data-tema='noturno'] .jogo2048-peca[data-valor='32']   { --peca-fundo: #5a3fb8; }
+.tablet-tela[data-tema='noturno'] .jogo2048-peca[data-valor='64']   { --peca-fundo: #7050d0; }
+.tablet-tela[data-tema='noturno'] .jogo2048-peca[data-valor='128']  { --peca-fundo: #8a66e6; --peca-brilho: 8px; }
+.tablet-tela[data-tema='noturno'] .jogo2048-peca[data-valor='256']  { --peca-fundo: #a07cf5; --peca-brilho: 10px; }
+.tablet-tela[data-tema='noturno'] .jogo2048-peca[data-valor='512']  { --peca-fundo: #b98cff; --peca-brilho: 12px; --peca-texto: #120f33; }
+.tablet-tela[data-tema='noturno'] .jogo2048-peca[data-valor='1024'] { --peca-fundo: #d4b8ff; --peca-brilho: 14px; --peca-texto: #120f33; }
+.tablet-tela[data-tema='noturno'] .jogo2048-peca[data-valor='2048'] { --peca-fundo: #f1edff; --peca-brilho: 20px; --peca-texto: #120f33; }
+.tablet-tela[data-tema='noturno'] .jogo2048-peca[data-valor='maior'] { --peca-fundo: #05040f; --peca-brilho: 20px; --peca-texto: #b98cff; }
+
+/* fim de jogo / vitória: véu por cima do tabuleiro */
+.jogo2048-aviso {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border-radius: 10px;
+    background: color-mix(in srgb, rgb(215, 218, 243) 80%, transparent);
+    animation: config-categoria-entrando 0.25s ease-out;
+    cursor: default;
+}
+
+.tablet-tela[data-tema='noturno'] .jogo2048-aviso {
+    background: rgba(7, 6, 26, 0.82);
+}
+
+.jogo2048-aviso strong {
+    font-size: 20px;
+}
+
+.jogo2048-aviso-botoes {
+    display: flex;
+    gap: 8px;
+}
+
+/* ---------- lateral: título, placar e botões ---------- */
+.jogo2048-lateral {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    width: 190px;
+}
+
+.tablet-tela .jogo2048-lateral .jogo2048-titulo {
+    margin: 0;
+    font-size: 40px;
+    line-height: 1;
+    color: var(--config-destaque);
+    text-shadow: 0 0 12px color-mix(in srgb, var(--config-brilho) 45%, transparent);
+}
+
+.tablet-tela .jogo2048-lateral p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--config-texto-suave);
+}
+
+.jogo2048-placar {
+    display: flex;
+    gap: 8px;
+}
+
+.jogo2048-placar div {
+    display: flex;
+    flex-direction: column;
+    min-width: 72px;
+    padding: 5px 10px;
+    border: 1px solid var(--config-borda);
+    border-radius: 8px;
+    background: var(--config-cartao);
+}
+
+.jogo2048-placar small {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--config-texto-suave);
+}
+
+.jogo2048-placar b {
+    font-size: 18px;
+    font-variant-numeric: tabular-nums;
+}

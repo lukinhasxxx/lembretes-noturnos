@@ -1,7 +1,7 @@
 import { VisibilidadePainelContext } from '../../mural'
 import './ModalTablet.css'
 import Botao from '../componentes/Botao/Botao'
-import { useState, useContext, useLayoutEffect, useRef, Suspense } from 'react'
+import { useState, useContext, useLayoutEffect, useRef, lazy, Suspense } from 'react'
 import '../sistema/temaSistema.css'
 import BarraDeTarefas from '../sistema/BarraDeTarefas/BarraDeTarefas'
 import WindowBar from '../sistema/WindowBar/WindowBar'
@@ -12,9 +12,23 @@ import { useWallpaperBloqueio } from '../hooks/useWallpaperBloqueio'
 import TelaBoot from '../sistema/TelaBoot/TelaBoot'
 import TelaBoasVindas from '../sistema/TelaBoasVindas/TelaBoasVindas'
 import TelaBloqueio from '../sistema/TelaBloqueio/TelaBloqueio'
+import TelaFormatando from '../sistema/TelaFormatando/TelaFormatando'
+import CarregandoApp from '../sistema/CarregandoApp/CarregandoApp'
 import { ESTADOS_SISTEMA } from '../tablet.config'
 import { APPS, appDaTela } from '../apps.config'
 import { useSistemaTablet } from '../contexts/SistemaTablet'
+
+// jogos: cada um vira um arquivo à parte, baixado só quando a pessoa abre o jogo pela primeira vez
+// (o código deles e o chess.js não pesam na abertura do site). Na 1ª abertura o "Abrindo..." (CarregandoApp)
+// fica pelo menos ESPERA_MINIMA_CARREGANDO_MS na tela, mesmo se o arquivo chegar antes: assim ele não vira um pisco
+const ESPERA_MINIMA_CARREGANDO_MS = 450
+const comEsperaMinima = (importar) => () => Promise.all([
+    importar(),
+    new Promise((resolver) => setTimeout(resolver, ESPERA_MINIMA_CARREGANDO_MS)),
+]).then(([modulo]) => modulo)
+const Jogo2048 = lazy(comEsperaMinima(() => import('../componentes/Jogo2048/Jogo2048')))
+const JogoSudoku = lazy(comEsperaMinima(() => import('../componentes/JogoSudoku/JogoSudoku')))
+const JogoXadrez = lazy(comEsperaMinima(() => import('../componentes/JogoXadrez/JogoXadrez')))
 
 // Modal do tablet: desenha o sistema (área de trabalho, apps, barra, telas do sistema).
 // O estado do sistema (ligado/bloqueado..., tela na frente, apps abertos, wallpaper) vem do SistemaTabletProvider,
@@ -79,11 +93,11 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         const dono = appDaTela(tela)
         return Boolean(dono) && appsAbertos.includes(dono) && ultimaTela[dono] === tela
     }
-    // Suspense: enquanto o arquivo de um jogo ainda está baixando (só na 1ª vez), não mostra nada no lugar
+    // Suspense: enquanto o arquivo de um jogo ainda está baixando (só na 1ª vez), mostra o "Abrindo..." no lugar
     const guardar = (tela, janela) => (telaVisivel(tela) || telaGuardada(tela)) && (
         // "contents": a caixa em volta não existe para o layout; escondida, sai da tela sem desmontar
         <div key={tela} style={{ display: telaVisivel(tela) ? 'contents' : 'none' }}>
-            <Suspense fallback={null}>{janela}</Suspense>
+            <Suspense fallback={<CarregandoApp app={APPS[appDaTela(tela)]} />}>{janela}</Suspense>
         </div>
     )
 
@@ -146,10 +160,52 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             alt='abrir configurações'
                             aoAbrir={() => abrirApp('app_config', 'config.exe')}
                         />
+                        <IconeAreaDeTrabalho
+                            icone='/imagens/windows/jogos/icone2048.svg'
+                            nome='2048.exe'
+                            alt='abrir o jogo 2048'
+                            aoAbrir={() => abrirApp('app_2048', '2048.exe')}
+                        />
+                        <IconeAreaDeTrabalho
+                            icone='/imagens/windows/jogos/iconeSudoku.svg'
+                            nome='Sudoku.exe'
+                            alt='abrir o Sudoku'
+                            aoAbrir={() => abrirApp('app_sudoku', 'sudoku.exe')}
+                        />
+                        <IconeAreaDeTrabalho
+                            icone='/imagens/windows/jogos/iconeXadrez.svg'
+                            nome='Xadrez.exe'
+                            alt='abrir o xadrez'
+                            aoAbrir={() => abrirApp('app_xadrez', 'xadrez.exe')}
+                        />
                     </div>
                 )}
 
                 {/* janelas dos apps: guardar() deixa a janela montada (escondida) enquanto o app está aberto */}
+                {guardar('xadrez.exe', (
+                    <JogoXadrez
+                        fecharApp={fecharApp}
+                        minimizarApp={minimizarApp}
+                        classeAnimacao={classeAnimacaoJanela('app_xadrez')}
+                    />
+                ))}
+
+                {guardar('sudoku.exe', (
+                    <JogoSudoku
+                        fecharApp={fecharApp}
+                        minimizarApp={minimizarApp}
+                        classeAnimacao={classeAnimacaoJanela('app_sudoku')}
+                    />
+                ))}
+
+                {guardar('2048.exe', (
+                    <Jogo2048
+                        fecharApp={fecharApp}
+                        minimizarApp={minimizarApp}
+                        classeAnimacao={classeAnimacaoJanela('app_2048')}
+                    />
+                ))}
+
                 {/* app de fato */}
                 {guardar('config.exe', (
                     <Config
@@ -316,6 +372,7 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
         {estadoSistema === ESTADOS_SISTEMA.desligando && <TelaBoasVindas wallpaper={wallpaperAtual} etapa='desligando' />}
         {estadoSistema === ESTADOS_SISTEMA.reiniciando && <TelaBoasVindas wallpaper={wallpaperAtual} etapa='reiniciando' />}
         {estadoSistema === ESTADOS_SISTEMA.apagado && <div className='tela-sistema-apagada' />}
+        {estadoSistema === ESTADOS_SISTEMA.formatando && <TelaFormatando />}
 
     </div>
             </section>

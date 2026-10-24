@@ -30,6 +30,8 @@ export const RESOLUCOES_TABLET = [
     { id: 'padrao', fator: 1, rotulo: 'Recomendado' },
     { id: 'maior', fator: 1.15, rotulo: '15% maior' },
     { id: 'muitoMaior', fator: 1.4, rotulo: '40% maior' },
+    // 10% acima da "40% maior" (1,4 × 1,1)
+    { id: 'enorme', fator: 1.54, rotulo: '54% maior' },
 ]
 
 export const RESOLUCAO_PADRAO = 'padrao'

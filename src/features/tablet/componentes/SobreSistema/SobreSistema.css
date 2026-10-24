@@ -205,3 +205,208 @@
 .sobre-assinatura a {
     color: var(--config-destaque);
 }
+
+/* o Config antigo tem "span = 26px" (.janela-configuracao-led span): no Sobre os spans seguem o tamanho do pai
+   (as regras mais específicas abaixo e acima continuam valendo) */
+.janela-configuracao-led .sobre-sistema span {
+    font-size: inherit;
+}
+
+/* ---------- aba Desempenho: nota geral com a classificação, resumo e um trilho por teste ---------- */
+
+.sobre-desempenho-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 2px 4px 4px;
+}
+
+.sobre-desempenho-topo > div {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.tablet-tela .janela-configuracao-led .sobre-desempenho-topo .sobre-desempenho-nota {
+    font-size: 30px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--config-icone-ativo);
+    text-shadow: 0 0 10px color-mix(in srgb, var(--config-brilho) 45%, transparent);
+}
+
+.janela-configuracao-led .sobre-desempenho-topo .sobre-desempenho-legenda {
+    font-size: 12px;
+    color: var(--config-texto-suave);
+}
+
+/* o que a nota quer dizer: selinho colorido ao lado da nota (do verde ao vermelho) */
+.sobre-desempenho-veredito {
+    align-self: center;
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    color: #fff;
+    background: var(--cor-veredito, var(--config-destaque));
+}
+
+.sobre-desempenho-veredito.muito-bom { --cor-veredito: #2f9e5a; }
+.sobre-desempenho-veredito.bom { --cor-veredito: #5a9a32; }
+.sobre-desempenho-veredito.ok { --cor-veredito: #8a9a2a; }
+.sobre-desempenho-veredito.razoavel { --cor-veredito: #b8901a; }
+.sobre-desempenho-veredito.basico { --cor-veredito: #c9701a; }
+.sobre-desempenho-veredito.lento { --cor-veredito: #c8423a; }
+
+/* o "i" redondo: abre a explicação da base da nota */
+.sobre-desempenho-info {
+    align-self: center;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    border: 1px solid var(--config-borda);
+    border-radius: 50%;
+    font: italic 700 10px/14px Georgia, serif;
+    color: var(--config-texto-suave);
+    background: transparent;
+    cursor: pointer;
+}
+
+.sobre-desempenho-info:hover,
+.sobre-desempenho-info.aberta {
+    color: var(--config-destaque);
+    border-color: var(--config-destaque);
+}
+
+.janela-configuracao-led .wrapper-configuracao .sobre-desempenho-explicacao {
+    margin: 0 4px;
+    padding: 6px 10px;
+    border-left: 2px solid var(--config-destaque);
+    font-size: 11px;
+    color: var(--config-texto-suave);
+    animation: config-categoria-entrando 0.15s ease-out;
+}
+
+.sobre-desempenho-progresso {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--config-texto-suave);
+}
+
+.sobre-desempenho-barra,
+.sobre-desempenho-trilho {
+    position: relative;
+    height: 6px;
+    overflow: hidden;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--config-destaque) 15%, transparent);
+}
+
+.sobre-desempenho-barra::after,
+.sobre-desempenho-trilho::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: 3px;
+    background: var(--config-destaque);
+    transition: width 0.4s ease;
+}
+
+.sobre-desempenho-barra::after { width: calc(var(--fracao) * 100%); }
+.sobre-desempenho-trilho::before { width: calc(var(--voce) * 100%); }
+
+.sobre-desempenho-teste {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    align-items: center;
+    gap: 8px;
+}
+
+.sobre-desempenho-teste dt {
+    font-size: 11px;
+    text-align: right;
+    color: var(--config-texto-suave);
+}
+
+.sobre-desempenho-teste dd {
+    display: grid;
+    grid-template-columns: 1fr 40px;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+/* ---------- aba Feito com ---------- */
+
+.sobre-feito-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--config-texto-suave);
+}
+
+.sobre-feito-lista {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sobre-feito-lista li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0 8px;
+    padding: 6px 10px;
+    border: 1px solid var(--config-borda);
+    border-radius: 10px;
+    background: var(--config-cartao);
+}
+
+.sobre-feito-lista b {
+    font-size: 13px;
+}
+
+.janela-configuracao-led .sobre-feito-lista span {
+    grid-column: 1 / -1;
+    font-size: 11px;
+    color: var(--config-texto-suave);
+}
+
+.sobre-feito-lista small {
+    grid-row: 1;
+    grid-column: 2;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--config-destaque);
+}
+
+.sobre-feito-codigo {
+    margin: 0;
+    padding: 8px 10px;
+    border: 1px solid var(--config-borda);
+    border-radius: 6px;
+    font-family: 'Share Tech Mono', Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    background: rgba(0, 0, 0, 0.06);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.tablet-tela[data-tema='noturno'] .sobre-feito-codigo {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.janela-configuracao-led .sobre-feito-codigo .sobre-feito-comentario {
+    font-size: inherit;
+    color: var(--config-texto-suave);
+}

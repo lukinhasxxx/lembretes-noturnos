@@ -1,0 +1,7 @@
+Peças de xadrez (wk.svg, bq.svg ...): conjunto "cburnett", de Colin M.L. Burnett.
+Origem: Wikimedia Commons (Chess_klt45.svg, Chess_qdt45.svg ...).
+Licença tripla do autor: GFDL / BSD / GPL — usadas aqui sob a licença BSD.
+É o mesmo conjunto usado por padrão no Lichess.
+
+Nome dos arquivos: primeira letra = cor (w = brancas, b = pretas), segunda = peça
+(k rei, q dama, r torre, b bispo, n cavalo, p peão), igual à notação do chess.js.

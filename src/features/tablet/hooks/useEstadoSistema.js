@@ -25,7 +25,7 @@ const passosDoBoot = () => {
 }
 
 // Controla em que ponto o sistema do tablet está (desligado, ligando, boas-vindas, área de trabalho, bloqueado,
-// login, desligando, reiniciando...). Não é salvo no navegador: depois do F5 o tablet volta desligado.
+// login, desligando, reiniciando, formatando...). Não é salvo no navegador: depois do F5 o tablet volta desligado.
 // Usado pelo SistemaTabletProvider; de fora, use o useSistemaTablet (contexts/SistemaTablet.js).
 export const useEstadoSistema = () => {
     const [estadoSistema, setEstadoSistema] = useState(ESTADOS_SISTEMA.desligado)
@@ -101,6 +101,16 @@ export const useEstadoSistema = () => {
         ])
     }, [estadoSistema, iniciarSequencia])
 
+    // formatar (Config → Sistema): a tela de formatação do tema toma conta (ela apaga e recarrega a página).
+    // opcoes: { apagarLembretes } — fica guardado em "formatacao" para a tela saber o que apagar
+    const [formatacao, setFormatacao] = useState(null)
+    const formatarSistema = useCallback((opcoes) => {
+        if (estadoSistema !== ESTADOS_SISTEMA.areaDeTrabalho) return
+
+        setFormatacao(opcoes)
+        iniciarSequencia(ESTADOS_SISTEMA.formatando, [])
+    }, [estadoSistema, iniciarSequencia])
+
     // cancela a sequência se o App sair da tela
     useEffect(() => limparTimers, [limparTimers])
 
@@ -114,5 +124,7 @@ export const useEstadoSistema = () => {
         entrarSistema,
         desligarSistema,
         reiniciarSistema,
+        formatarSistema,
+        formatacao,
     }
 }

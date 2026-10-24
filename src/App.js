@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { ModalTablet, TabletMesa, useSistemaTablet } from './features/tablet';
+import { ModalTablet, TabletMesa, acabouDeFormatar, useSistemaTablet } from './features/tablet';
 import { MuralDeNotas, VisibilidadePainelProvider } from './features/mural';
 import { PlayerRadio, MiniPlayer } from './features/radio';
 import { Palco, Ancora } from './features/cena';
@@ -17,6 +17,9 @@ const MOMENTO_BORDA_FINAL_MURAL_MS = 6000
 
 // duração do glitch das notas sumindo ao limpar o mural (igual à animação notas-apagando no MuralDeNotas.css)
 const DURACAO_APAGANDO_NOTAS_MS = 450
+
+// depois do "Formatar" a página recarrega: a cena aparece e, passado este tempo, o tablet abre sozinho
+const ABRIR_TABLET_DEPOIS_DE_FORMATAR_MS = 700
 
 
 function App() {
@@ -241,6 +244,16 @@ setLigarTablet(ligado =>!ligado);
 setLigarTabletPrimeiraVez(true)
 }
 
+// a página recarregou por causa do "Formatar" (Config → Sistema): depois de um instante (a cena aparece
+// primeiro) o tablet abre sozinho e dá o boot, como no primeiro acesso
+useEffect(() => {
+  if (!acabouDeFormatar()) return
+  const timer = setTimeout(gerenciarTablet, ABRIR_TABLET_DEPOIS_DE_FORMATAR_MS)
+  return () => clearTimeout(timer)
+  // só na abertura da página
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [])
+
   return (
     <VisibilidadePainelProvider>
     
@@ -333,7 +346,7 @@ setLigarTabletPrimeiraVez(true)
     ? { x: (larguraTela - larguraJanela) / 2, y: (alturaTela - alturaJanela) / 2 }
     : { x: larguraTela * 0.2, y: alturaTela * 0.09 })}
   visivel={modalAberto}
-  // resolução escolhida no Config (15% menor ... 40% maior), sem passar do que cabe na tela
+  // resolução escolhida no Config (15% menor ... 54% maior), sem passar do que cabe na tela
   fatorEscala={resolucaoTablet.fator}
   // celular: com o teclado aberto o tablet encolhe e sobe, para a caixa de texto não ficar atrás dele
   // (só deitado: em pé encolher deixava o tablet pequeno demais)

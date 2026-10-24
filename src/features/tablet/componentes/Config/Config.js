@@ -14,12 +14,12 @@ import { useDataAtual } from '../../hooks/useDataAtual'
 import { useSistemaTablet } from '../../contexts/SistemaTablet'
 import { useIdioma } from '../../../../shared/i18n/Idioma'
 import { aleatorioEntre } from '../../../../shared/utils/aleatorio'
-import { PREFIXO_CHAVE } from '../../../../shared/hooks/useEstadoPersistido'
+import SecaoFormatar from '../SecaoFormatar/SecaoFormatar'
 
 const CATEGORIAS = [
     { id: 'personalizacao', nome: 'Personalização', frase: 'Deixe o tablet com a sua cara.', Icone: IconePersonalizacao },
     { id: 'cena', nome: 'Cena', frase: 'Ajuste o que está à sua volta na varanda.', Icone: IconeCena },
-    { id: 'sistema', nome: 'Sistema', frase: 'Tela, data e hora e idioma.', Icone: IconeSistema },
+    { id: 'sistema', nome: 'Sistema', frase: 'Tela, data e hora, idioma e formatar.', Icone: IconeSistema },
     { id: 'sobre', nome: 'Sobre', frase: 'O que roda neste tablet.', Icone: IconeSobre },
 ]
 
@@ -163,44 +163,6 @@ const Cena = ({ radioLigado, musicaTocando, corNeon, volume, aoMudarVolume, aoDe
 const SINCRONIZAR_MIN_MS = 500
 const SINCRONIZAR_MAX_MS = 1500
 
-// Botão de teste: apaga tudo que o site salvou (lembretes, tema, wallpaper, idiomas, notificações vistas...)
-// e recarrega, como se fosse a primeira visita. Pede confirmação com um segundo clique.
-// Mais para frente vira um "Formatar" mais caprichado.
-const ResetGeral = () => {
-    const [confirmando, setConfirmando] = useState(false)
-
-    const resetar = () => {
-        if (!confirmando) {
-            setConfirmando(true)
-            return
-        }
-        try {
-            Object.keys(localStorage)
-                .filter(chave => chave.startsWith(PREFIXO_CHAVE))
-                .forEach(chave => localStorage.removeItem(chave))
-        } catch {
-            // navegador bloqueando o armazenamento: não há nada salvo para apagar
-        }
-        window.location.reload()
-    }
-
-    return (
-        <>
-            <h3>Restaurar padrões (teste)</h3>
-            <div className='config-linha'>
-                <button type='button' className={`config-botao ${confirmando ? 'config-botao-perigo' : ''}`} onClick={resetar}>
-                    {confirmando ? 'Tem certeza? Clique de novo' : 'Apagar tudo e recomeçar'}
-                </button>
-                {confirmando && (
-                    <button type='button' className='config-botao config-botao-discreto' onClick={() => setConfirmando(false)}>
-                        Cancelar
-                    </button>
-                )}
-            </div>
-        </>
-    )
-}
-
 const Sistema = () => {
     const { sincronizarHorarioDeBrasilia } = useSistemaTablet()
     const { idioma } = useIdioma()
@@ -270,7 +232,7 @@ const Sistema = () => {
 
             <SecaoIdioma />
 
-            <ResetGeral />
+            <SecaoFormatar />
         </>
     )
 }

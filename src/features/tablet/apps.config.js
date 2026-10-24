@@ -20,6 +20,30 @@ export const APPS = {
         telaInicial: 'config.exe',
         tamanhoIconeBarra: 30,
     },
+    app_2048: {
+        id: 'app_2048',
+        nome: '2048',
+        icone: '/imagens/windows/jogos/icone2048.svg',
+        telas: ['2048.exe'],
+        telaInicial: '2048.exe',
+        tamanhoIconeBarra: 26,
+    },
+    app_sudoku: {
+        id: 'app_sudoku',
+        nome: 'Sudoku',
+        icone: '/imagens/windows/jogos/iconeSudoku.svg',
+        telas: ['sudoku.exe'],
+        telaInicial: 'sudoku.exe',
+        tamanhoIconeBarra: 26,
+    },
+    app_xadrez: {
+        id: 'app_xadrez',
+        nome: 'Xadrez',
+        icone: '/imagens/windows/jogos/iconeXadrez.svg',
+        telas: ['xadrez.exe'],
+        telaInicial: 'xadrez.exe',
+        tamanhoIconeBarra: 26,
+    },
 }
 
 // id do app dono de uma tela ('desktop' e telas do sistema não têm dono → undefined)

@@ -16,6 +16,8 @@ export const NOME_SISTEMA_POR_TEMA = {
 // bloquear (menu iniciar): areaDeTrabalho → bloqueado → (arrastar/clicar) login → (Entrar) entrando → areaDeTrabalho
 // desligar (menu iniciar): areaDeTrabalho → desligando → apagado → desligado (o modal fecha)
 // reiniciar (menu iniciar): areaDeTrabalho → reiniciando → apagado → ligando → (segue como o boot)
+// formatar (Config → Sistema): areaDeTrabalho → formatando (a tela do tema apaga tudo e recarrega a página;
+// depois o tablet abre sozinho e dá o boot, como no primeiro acesso)
 export const ESTADOS_SISTEMA = {
     desligado: 'desligado',
     ligando: 'ligando',
@@ -27,7 +29,11 @@ export const ESTADOS_SISTEMA = {
     desligando: 'desligando',
     reiniciando: 'reiniciando',
     apagado: 'apagado',
+    formatando: 'formatando',
 }
+
+// quanto tempo a tela de formatação de cada tema fica apagando os "arquivos" (antes do "pronto" e do recarregar)
+export const DURACAO_FORMATANDO_MS = 5200
 
 // tempos de cada tela (as animações do CSS acompanham esses valores)
 export const DURACAO_BOOT_MS = 3500
