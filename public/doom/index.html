@@ -56,6 +56,99 @@
             background: #2a1a1a;
         }
 
+        /* avisos por cima do jogo (nunca pegam clique): "Aperte ESC" na demo e o cartão dos comandos */
+        .aviso {
+            position: absolute;
+            pointer-events: none;
+            color: #e8e2d6;
+            font: 600 13px/1.35 'Segoe UI', system-ui, sans-serif;
+            background: rgba(10, 4, 4, 0.78);
+            border: 1px solid rgba(216, 58, 42, 0.55);
+            border-radius: 6px;
+            box-shadow: 0 0 14px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .aviso.visivel {
+            opacity: 1;
+        }
+
+        .aviso kbd {
+            display: inline-block;
+            min-width: 14px;
+            padding: 0 5px;
+            border: 1px solid rgba(232, 226, 214, 0.5);
+            border-bottom-width: 2px;
+            border-radius: 3px;
+            font: 700 11px/1.5 'Segoe UI', system-ui, sans-serif;
+            text-align: center;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* "Aperte ESC": embaixo, no meio, piscando devagar (como o "press start" dos jogos) */
+        #aviso-esc {
+            left: 50%;
+            bottom: 22%;
+            translate: -50% 0;
+            padding: 8px 16px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        #aviso-esc.visivel {
+            animation: aviso-piscando 1.6s ease-in-out infinite;
+        }
+
+        #aviso-esc small {
+            display: block;
+            font-weight: 400;
+            font-size: 11px;
+            color: #b9b0a2;
+        }
+
+        #aviso-esc {
+            background: rgba(10, 4, 4, 0.9);
+        }
+
+        @keyframes aviso-piscando {
+            50% { opacity: 0.75; }
+        }
+
+        /* comandos: no canto de cima à direita, abaixo do botão de tela cheia do app (a barra de status do
+           jogo fica embaixo) */
+        #aviso-comandos {
+            top: 42px;
+            right: 8px;
+            padding: 7px 10px;
+        }
+
+        #aviso-comandos strong {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            color: #d83a2a;
+        }
+
+        #aviso-comandos dl {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 2px 8px;
+            margin: 0;
+            font-size: 11px;
+            font-weight: 400;
+        }
+
+        #aviso-comandos dt {
+            text-align: right;
+        }
+
+        #aviso-comandos dd {
+            margin: 0;
+        }
+
         #barra::after {
             content: '';
             display: block;
@@ -73,6 +166,25 @@
         <div id="barra"></div>
     </div>
     <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+
+    <div id="aviso-esc" class="aviso" aria-live="polite">
+        Aperte <kbd>Esc</kbd> para jogar
+        <small>no menu: New Game e <kbd>Enter</kbd></small>
+    </div>
+
+    <div id="aviso-comandos" class="aviso" aria-live="polite">
+        <strong>COMANDOS</strong>
+        <dl>
+            <dt><kbd>↑</kbd> <kbd>↓</kbd></dt><dd>andar</dd>
+            <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>virar (mirar)</dd>
+            <dt><kbd>Ctrl</kbd></dt><dd>atirar</dd>
+            <dt><kbd>Espaço</kbd></dt><dd>abrir portas, apertar botões</dd>
+            <dt><kbd>Shift</kbd></dt><dd>correr (segurando)</dd>
+            <dt><kbd>Alt</kbd> + <kbd>←</kbd> <kbd>→</kbd></dt><dd>andar de lado</dd>
+            <dt><kbd>1</kbd>–<kbd>7</kbd></dt><dd>trocar de arma</dd>
+            <dt><kbd>Tab</kbd></dt><dd>mapa</dd>
+        </dl>
+    </div>
 
     <script>
         var carregando = document.getElementById('carregando');
@@ -110,6 +222,8 @@
                 carregando.style.display = 'none';
                 canvas.focus();
                 avisarApp('pronto');
+                // o jogo abre na demo (ele jogando sozinho): depois de um instante, avisa que é o Esc que abre o menu
+                timerAvisoEsc = setTimeout(function () { avisoEsc.classList.add('visivel'); }, ESPERA_AVISO_ESC_MS);
             },
             showConsole: function () {},
             winResized: function () {},
@@ -118,6 +232,31 @@
             softExit: function () { avisarApp('saiu'); },
             arguments: [],
         };
+
+        // Avisos para quem nunca jogou. "Aperte Esc" aparece um pouco depois da demo começar e some no primeiro Esc.
+        // Aí entra o cartão dos comandos: fica enquanto a pessoa escolhe no menu e some COMANDOS_DEPOIS_DO_ENTER_MS
+        // depois do último Enter (o que começa o jogo: New Game → episódio → dificuldade). Uma vez por abertura
+        var ESPERA_AVISO_ESC_MS = 2000;
+        var COMANDOS_DEPOIS_DO_ENTER_MS = 12000;
+        var avisoEsc = document.getElementById('aviso-esc');
+        var avisoComandos = document.getElementById('aviso-comandos');
+        var timerAvisoEsc = null;
+        var timerComandos = null;
+        var etapaDosAvisos = 'esc';
+        window.addEventListener('keydown', function (evento) {
+            if (etapaDosAvisos === 'esc' && evento.key === 'Escape') {
+                clearTimeout(timerAvisoEsc);
+                avisoEsc.classList.remove('visivel');
+                avisoComandos.classList.add('visivel');
+                etapaDosAvisos = 'comandos';
+            } else if (etapaDosAvisos === 'comandos' && evento.key === 'Enter') {
+                clearTimeout(timerComandos);
+                timerComandos = setTimeout(function () {
+                    avisoComandos.classList.remove('visivel');
+                    etapaDosAvisos = 'fim';
+                }, COMANDOS_DEPOIS_DO_ENTER_MS);
+            }
+        }, true);
 
         // clicar no jogo devolve o foco do teclado para ele
         document.addEventListener('mousedown', function () { canvas.focus(); });
