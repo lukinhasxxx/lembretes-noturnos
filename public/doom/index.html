@@ -80,6 +80,14 @@
         var barra = document.getElementById('barra');
         var canvas = document.getElementById('canvas');
 
+        // o jogo desenha com WebGL, que por padrão apaga a imagem depois de cada quadro: sem guardar, o espelho do
+        // tablet da mesa (que copia esta tela algumas vezes por segundo) só veria preto
+        var pegarContextoOriginal = canvas.getContext;
+        canvas.getContext = function (tipo, opcoes) {
+            if (/webgl/.test(tipo)) opcoes = Object.assign({}, opcoes, { preserveDrawingBuffer: true });
+            return pegarContextoOriginal.call(this, tipo, opcoes);
+        };
+
         var avisarApp = function (tipo, valor) {
             if (window.parent !== window) window.parent.postMessage({ fonte: 'doom', tipo: tipo, valor: valor }, '*');
         };
