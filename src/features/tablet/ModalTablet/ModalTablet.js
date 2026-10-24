@@ -29,6 +29,7 @@ const comEsperaMinima = (importar) => () => Promise.all([
 const Jogo2048 = lazy(comEsperaMinima(() => import('../componentes/Jogo2048/Jogo2048')))
 const JogoSudoku = lazy(comEsperaMinima(() => import('../componentes/JogoSudoku/JogoSudoku')))
 const JogoXadrez = lazy(comEsperaMinima(() => import('../componentes/JogoXadrez/JogoXadrez')))
+const JogoDoom = lazy(comEsperaMinima(() => import('../componentes/JogoDoom/JogoDoom')))
 
 // Modal do tablet: desenha o sistema (área de trabalho, apps, barra, telas do sistema).
 // O estado do sistema (ligado/bloqueado..., tela na frente, apps abertos, wallpaper) vem do SistemaTabletProvider,
@@ -178,10 +179,24 @@ const ModalTablet = ({aoSubmeter, validarLigadoDesligado, painelLigadoPermanente
                             alt='abrir o xadrez'
                             aoAbrir={() => abrirApp('app_xadrez', 'xadrez.exe')}
                         />
+                        <IconeAreaDeTrabalho
+                            icone='/imagens/windows/jogos/iconeDoom.svg'
+                            nome='DOOM.exe'
+                            alt='abrir o DOOM'
+                            aoAbrir={() => abrirApp('app_doom', 'doom.exe')}
+                        />
                     </div>
                 )}
 
                 {/* janelas dos apps: guardar() deixa a janela montada (escondida) enquanto o app está aberto */}
+                {guardar('doom.exe', (
+                    <JogoDoom
+                        fecharApp={fecharApp}
+                        minimizarApp={minimizarApp}
+                        classeAnimacao={classeAnimacaoJanela('app_doom')}
+                    />
+                ))}
+
                 {guardar('xadrez.exe', (
                     <JogoXadrez
                         fecharApp={fecharApp}

@@ -28,6 +28,7 @@ const ABAS = [
 // fora do package.json (arquivos em public/): também aparecem na aba Tecnologias
 const OUTRAS_TECNOLOGIAS = [
     { id: 'stockfish', nome: 'Stockfish 19', papel: 'Xadrez: níveis fortes, dica e análise (WebAssembly)', versao: '19.0.1' },
+    { id: 'dwasm', nome: 'Dwasm', papel: 'DOOM: o motor PrBoom+ em WebAssembly', versao: '2.2.0' },
 ]
 
 // choquezinho do eclipse do NightOS: dura pouco e volta de tempos em tempos (sorteado entre os dois valores)

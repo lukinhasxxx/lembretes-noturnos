@@ -1,0 +1,17 @@
+DOOM.exe (tablet do Lembretes Noturnos)
+
+Motor: Dwasm 2.2.0 — PrBoom+ / PrBoomX em WebAssembly
+  Código-fonte: https://github.com/GMH-Code/Dwasm (commit ddf0347)
+  Licença: GNU GPL versão 2 (ver COPYING.txt)
+  Compilado com Emscripten (imagem Docker emscripten/emsdk), sem alterações no código.
+  Única mudança na configuração padrão (wasm/fs/defaults/prboomX.cfg): screen_resolution "854x480".
+
+Arquivos:
+  index.js, index.wasm  — o motor compilado
+  index.data            — sistema de arquivos do jogo: prboomx.wad (dados do PrBoom+, GPL),
+                          defaults/prboomX.cfg e doom1.wad
+  index.html            — página feita para o tablet (carregando, pausa, aviso de saída)
+
+doom1.wad: DOOM versão shareware 1.9 (episódio 1), © id Software.
+  Extraído do pacote original doom19s.zip (SHA-256 cacf0142...e486e6; DOOM1.WAD SHA-1 5b2e249b...6bc1d).
+  Uso não comercial. DOOM é marca da id Software / ZeniMax; este projeto não tem relação com elas.

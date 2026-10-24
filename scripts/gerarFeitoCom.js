@@ -19,7 +19,7 @@ const PERMITIDOS = {
     'react-icons': { nome: 'React Icons', papel: 'Ícones' },
     '@emotion/react': { nome: 'Emotion', papel: 'Estilos em JS' },
     'chess.js': { nome: 'chess.js', papel: 'Regras do xadrez' },
-    uuid: { nome: 'uuid', papel: 'Identificador dos lembretes' },
+    // o uuid (identificador dos lembretes) saiu da vitrine para dar lugar ao Dwasm (DOOM, no SobreSistema.js)
 }
 
 const pacote = JSON.parse(fs.readFileSync(path.join(RAIZ, 'package.json'), 'utf8'))
