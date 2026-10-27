@@ -1,9 +1,11 @@
 .tablet-tela .barra-de-tarefas {
-    /* a barra começa a 91,7% da tela e tem 36px, então passa 4px do fim da tela (é o lugar original dela,
-       com os ícones na altura certa). Os botões só pintam o hover na parte que aparece (ver BotaoBarraDeTarefas.css) */
+    /* a barra tem 36px e passa 4px do fim da tela (é o lugar original dela, com os ícones na altura certa). Presa
+       pelo fim da tela, e não por uma % de cima: com "top: 91.7%" ela só fechava certinho numa tela de ~385px de
+       altura; assim fica certa em qualquer altura.
+       Os botões só pintam o hover na parte que aparece (ver BotaoBarraDeTarefas.css) */
     --sobra-barra-de-tarefas: 4px;
     position: absolute;
-    top: 91.7%;
+    bottom: calc(-1 * var(--sobra-barra-de-tarefas));
     left: 0;
     width: 100%;
     height: var(--altura-barra-de-tarefas);
