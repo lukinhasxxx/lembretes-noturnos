@@ -42,6 +42,10 @@ export const DURACAO_BOOT_MS = 3500
 // A barrinha já aparece ~0,75s antes do fim da animação, então ela fica na tela entre ~1,25s e ~2s.
 export const DURACAO_BOOT_EXTRA_MINIMA_MS = 500
 export const DURACAO_BOOT_EXTRA_MAXIMA_MS = 1250
+// o boot do PixelOS é um desenho só, mais longo (a janela carrega, desce e vira o "O" do nome); depois dele o nome
+// fica um pouco parado na tela antes das boas-vindas
+export const DURACAO_BOOT_PIXEL_MS = 5200
+export const DURACAO_BOOT_PIXEL_PARADO_MS = 700
 export const DURACAO_BOAS_VINDAS_MS = 2500
 // depois do "Entrar" na tela de login: spinner com "Aguarde..." até voltar para a área de trabalho
 export const DURACAO_ENTRANDO_MS = 1500
