@@ -24,7 +24,7 @@ const ANIMACAO_JANELA_POR_TEMA = {
 
 export const SistemaTabletProvider = ({ children }) => {
     const tema = useTemaSistema()
-    const estado = useEstadoSistema(tema.tema)
+    const estado = useEstadoSistema(tema.tema, tema.passagemPixel, tema.consumirPassagem)
     // o jeito de abrir/minimizar as janelas muda com o tema (no noturno: em círculo, como uma lua)
     const areaDeTrabalho = useAreaDeTrabalho(estado.estadoSistema, ANIMACAO_JANELA_POR_TEMA[tema.tema])
     const wallpaper = useWallpaperSistema(tema.tema)

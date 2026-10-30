@@ -54,7 +54,7 @@ export const levantarDados = () => {
         tema && tema !== 'padrao' ? `tema ${NOME_SISTEMA_POR_TEMA[tema] ?? tema}` : null,
         ler('temas-instalados') ? 'temas instalados' : null,
         wallpapers.length ? plural(wallpapers.length, 'wallpaper escolhido', 'wallpapers escolhidos') : null,
-    ], ['tema-sistema', 'temas-instalados', ...chaves.filter((chave) => chave.startsWith('wallpaper-preset'))])
+    ], ['tema-sistema', 'passagem-pixel', 'temas-instalados', ...chaves.filter((chave) => chave.startsWith('wallpaper-preset'))])
 
     const idiomas = ler('idiomas-instalados') ?? []
     adicionar('idiomas', 'Idiomas', [

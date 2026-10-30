@@ -12,16 +12,25 @@ import {
     ESTADOS_SISTEMA,
 } from '../tablet.config'
 import { TEMAS } from './useTemaSistema'
+import { duracaoDaPassagem } from '../sistema/TelaBoot/sequenciasPixel'
 
 const sortearEntre = (minimo, maximo) => minimo + Math.random() * (maximo - minimo)
 
+// quanto o boot fica na tela antes das boas-vindas
+const duracaoDoBoot = (tema, passagem) => {
+    // 1º boot depois de entrar no PixelOS: a passagem inteira (o boot de antes pixelando + o do PixelOS) e o nome
+    // um pouco parado no fim
+    if (passagem?.tipo === 'entrada') return duracaoDaPassagem('entrada') + DURACAO_BOOT_PIXEL_PARADO_MS
+    // PixelOS: o desenho tem a duração dele e o nome fica um pouco parado no fim
+    if (tema === TEMAS.pixel) return DURACAO_BOOT_PIXEL_MS + DURACAO_BOOT_PIXEL_PARADO_MS
+    // CyberOS/NightOS (também no 1º boot depois de sair do PixelOS, que é o boot deles começando pixelado): as
+    // animações usam só o DURACAO_BOOT_MS; o extra sorteado é a barrinha rodando com o logo já pronto
+    return DURACAO_BOOT_MS + sortearEntre(DURACAO_BOOT_EXTRA_MINIMA_MS, DURACAO_BOOT_EXTRA_MAXIMA_MS)
+}
+
 // passos do boot depois do "ligando": [estado, espera em ms antes de entrar nele]
-const passosDoBoot = (tema) => {
-    // CyberOS/NightOS: as animações usam só o DURACAO_BOOT_MS; o extra sorteado é a barrinha rodando com o logo já
-    // pronto. PixelOS: o desenho tem a duração dele e o nome fica um pouco parado no fim
-    const duracaoBootComCarregamento = tema === TEMAS.pixel
-        ? DURACAO_BOOT_PIXEL_MS + DURACAO_BOOT_PIXEL_PARADO_MS
-        : DURACAO_BOOT_MS + sortearEntre(DURACAO_BOOT_EXTRA_MINIMA_MS, DURACAO_BOOT_EXTRA_MAXIMA_MS)
+const passosDoBoot = (tema, passagem) => {
+    const duracaoBootComCarregamento = duracaoDoBoot(tema, passagem)
 
     return [
         [ESTADOS_SISTEMA.boasVindas, duracaoBootComCarregamento],
@@ -32,9 +41,12 @@ const passosDoBoot = (tema) => {
 // Controla em que ponto o sistema do tablet está (desligado, ligando, boas-vindas, área de trabalho, bloqueado,
 // login, desligando, reiniciando, formatando...). Não é salvo no navegador: depois do F5 o tablet volta desligado.
 // Usado pelo SistemaTabletProvider; de fora, use o useSistemaTablet (contexts/SistemaTablet.js).
-// tema: o tema do sistema (o boot de cada um tem a sua duração)
-export const useEstadoSistema = (tema) => {
+// tema: o tema do sistema (o boot de cada um tem a sua duração); passagemPixel/consumirPassagem: a passagem pendente
+// de/para o PixelOS (useTemaSistema), que o próximo boot mostra uma vez
+export const useEstadoSistema = (tema, passagemPixel, consumirPassagem) => {
     const [estadoSistema, setEstadoSistema] = useState(ESTADOS_SISTEMA.desligado)
+    // a passagem que este boot mostra no lugar da tela de boot normal (null = boot normal); a TelaBoot lê daqui
+    const [bootDaVez, setBootDaVez] = useState(null)
     // guarda os timers da sequência atual para dar para cancelar quando outra ação começa
     const timersRef = useRef([])
 
@@ -56,12 +68,19 @@ export const useEstadoSistema = (tema) => {
         })
     }, [limparTimers])
 
+    // um boot vai começar: ele pega a passagem pendente (se tiver) e ela deixa de estar pendente
+    const prepararBoot = useCallback(() => {
+        setBootDaVez(passagemPixel)
+        if (passagemPixel) consumirPassagem()
+        return passosDoBoot(tema, passagemPixel)
+    }, [tema, passagemPixel, consumirPassagem])
+
     // boot → boas-vindas → área de trabalho. Só faz algo se o tablet estiver desligado.
     const ligarSistema = useCallback(() => {
         if (estadoSistema !== ESTADOS_SISTEMA.desligado) return
 
-        iniciarSequencia(ESTADOS_SISTEMA.ligando, passosDoBoot(tema))
-    }, [estadoSistema, iniciarSequencia, tema])
+        iniciarSequencia(ESTADOS_SISTEMA.ligando, prepararBoot())
+    }, [estadoSistema, iniciarSequencia, prepararBoot])
 
     // bloquear (menu iniciar → usuário): só a partir da área de trabalho
     const bloquearSistema = useCallback(() => {
@@ -103,9 +122,9 @@ export const useEstadoSistema = (tema) => {
         iniciarSequencia(ESTADOS_SISTEMA.reiniciando, [
             [ESTADOS_SISTEMA.apagado, DURACAO_ENCERRANDO_MS],
             [ESTADOS_SISTEMA.ligando, DURACAO_TELA_APAGADA_MS],
-            ...passosDoBoot(tema),
+            ...prepararBoot(),
         ])
-    }, [estadoSistema, iniciarSequencia, tema])
+    }, [estadoSistema, iniciarSequencia, prepararBoot])
 
     // formatar (Config → Sistema): a tela de formatação do tema toma conta (ela apaga e recarrega a página).
     // opcoes: { apagarLembretes } — fica guardado em "formatacao" para a tela saber o que apagar
@@ -132,5 +151,6 @@ export const useEstadoSistema = (tema) => {
         reiniciarSistema,
         formatarSistema,
         formatacao,
+        bootDaVez,
     }
 }
