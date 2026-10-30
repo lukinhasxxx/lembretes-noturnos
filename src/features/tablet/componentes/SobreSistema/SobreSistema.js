@@ -1,6 +1,7 @@
 import './SobreSistema.css'
 import { useEffect, useState } from 'react'
 import ChoqueLua from '../BotaoTema/ChoqueLua'
+import IconePixel from '../BotaoTema/IconePixel'
 import { aleatorioEntre } from '../../../../shared/utils/aleatorio'
 import { useSistemaTablet } from '../../contexts/SistemaTablet'
 import { useDataAtual } from '../../hooks/useDataAtual'
@@ -35,7 +36,10 @@ const OUTRAS_TECNOLOGIAS = [
 const DURACAO_CHOQUE_MS = 500
 const INTERVALO_CHOQUE_MS = [2800, 5600]
 
-const NOME_DO_TEMA = { [TEMAS.padrao]: 'CyberOS', [TEMAS.noturno]: 'NightOS' }
+// PixelOS: o Sobre fica à noite (a mata do Config), então o emblema mostra a janela ainda escura, com estrelas
+const DIA_DO_EMBLEMA_PIXEL = 0.12
+
+const NOME_DO_TEMA = { [TEMAS.padrao]: 'CyberOS', [TEMAS.noturno]: 'NightOS', [TEMAS.pixel]: 'PixelOS' }
 
 const doisDigitos = (numero) => String(numero).padStart(2, '0')
 
@@ -104,7 +108,9 @@ const AbaSistema = () => {
         <>
             {/* topo do "Sobre o telefone" do Android: o emblema do sistema grande, com nome e versão */}
             <div className='sobre-heroi'>
-                {tema === TEMAS.noturno ? <EmblemaEclipse /> : <LogoSistema className='sobre-emblema' />}
+                {tema === TEMAS.noturno ? <EmblemaEclipse />
+                    : tema === TEMAS.pixel ? <span className='sobre-emblema sobre-emblema-pixel'><IconePixel aceso anelCheio dia={DIA_DO_EMBLEMA_PIXEL} /></span>
+                        : <LogoSistema className='sobre-emblema' />}
                 <div>
                     <strong className='sobre-heroi-nome'>{NOME_SISTEMA_POR_TEMA[tema] ?? SISTEMA.nome}</strong>
                     <span className='sobre-heroi-versao'>Versão 1.0</span>

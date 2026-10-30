@@ -6,6 +6,8 @@ import { apagarWallpaperUpload, lerWallpaperUpload, salvarWallpaperUpload } from
 const WALLPAPER_PADRAO_POR_TEMA = {
     padrao: `${process.env.PUBLIC_URL}/imagens/windows/windowsWallpaper.jpg`,
     noturno: `${process.env.PUBLIC_URL}/imagens/windows/temas/wallpaperNoturno.jpg`,
+    // a paisagem do boot do PixelOS de dia (desenhada pixel a pixel e ampliada sem suavizar)
+    pixel: `${process.env.PUBLIC_URL}/imagens/windows/temas/wallpaperPixel.png`,
 }
 
 // onde cada tema guarda a sua escolha: no localStorage (preset ou a marca de upload) e no IndexedDB (o arquivo do upload).
@@ -13,6 +15,7 @@ const WALLPAPER_PADRAO_POR_TEMA = {
 const CHAVES_POR_TEMA = {
     padrao: { navegador: 'wallpaper-preset', upload: 'upload' },
     noturno: { navegador: 'wallpaper-preset-noturno', upload: 'upload-noturno' },
+    pixel: { navegador: 'wallpaper-preset-pixel', upload: 'upload-pixel' },
 }
 
 // marca, no lugar do caminho do preset, que o wallpaper salvo é a imagem enviada (guardada no IndexedDB)
@@ -23,7 +26,8 @@ const enderecoDoPreset = (salvo) => (salvo && salvo !== MARCA_UPLOAD ? process.e
 
 // Wallpaper do sistema do tablet (área de trabalho, telas de boas-vindas/login/bloqueio e o espelho na mesa).
 // Cada tema vem com o seu wallpaper, e a escolha da pessoa (exemplo ou upload) vale só no tema em que foi feita:
-// ligar o noturno mostra o do noturno; voltar ao padrão volta o que estava escolhido lá. As duas escolhas ficam salvas.
+// ligar o noturno mostra o do noturno; voltar ao padrão volta o que estava escolhido lá. As escolhas de cada tema
+// ficam salvas.
 // O que fica salvo no localStorage, por tema:
 // - null: wallpaper do tema
 // - caminho de um wallpaper de exemplo (sem o PUBLIC_URL, para funcionar no localhost e no GitHub Pages)
@@ -31,13 +35,15 @@ const enderecoDoPreset = (salvo) => (salvo && salvo !== MARCA_UPLOAD ? process.e
 export const useWallpaperSistema = (tema) => {
     const [salvoPadrao, setSalvoPadrao] = useEstadoPersistido(CHAVES_POR_TEMA.padrao.navegador, null)
     const [salvoNoturno, setSalvoNoturno] = useEstadoPersistido(CHAVES_POR_TEMA.noturno.navegador, null)
-    const salvoPorTema = { padrao: salvoPadrao, noturno: salvoNoturno }
-    const salvarPorTema = { padrao: setSalvoPadrao, noturno: setSalvoNoturno }
+    const [salvoPixel, setSalvoPixel] = useEstadoPersistido(CHAVES_POR_TEMA.pixel.navegador, null)
+    const salvoPorTema = { padrao: salvoPadrao, noturno: salvoNoturno, pixel: salvoPixel }
+    const salvarPorTema = { padrao: setSalvoPadrao, noturno: setSalvoNoturno, pixel: setSalvoPixel }
 
     // escolha da pessoa em cada tema (null = usa o wallpaper que vem com o tema)
     const [escolhaPorTema, setEscolhaPorTema] = useState(() => ({
         padrao: enderecoDoPreset(salvoPadrao),
         noturno: enderecoDoPreset(salvoNoturno),
+        pixel: enderecoDoPreset(salvoPixel),
     }))
 
     const temaComChaves = CHAVES_POR_TEMA[tema] ? tema : 'padrao'

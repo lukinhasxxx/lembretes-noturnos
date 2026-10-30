@@ -158,3 +158,51 @@
 .tablet-tela[data-tema='noturno'] .tela-bloqueio-relogio {
     text-shadow: 0 0 12px rgba(0, 0, 0, 0.4), 0 0 18px rgba(185, 140, 255, 0.35);
 }
+
+/* ---------- PixelOS: a mata viva no fundo (na hora do relógio), hora na fonte pixel com sombra de pixel ---------- */
+.tablet-tela[data-tema='pixel'] .tela-bloqueio {
+    --cor-destaque-sistema: #fff3b0;
+}
+
+/* desfoque menor que nos outros temas (pixel art borrada demais vira mancha); o login usa o mesmo */
+.tablet-tela[data-tema='pixel'] .tela-bloqueio-fundo {
+    filter: blur(calc(var(--progresso) * 3px)) brightness(calc(1 - var(--progresso) * 0.3));
+}
+
+.tablet-tela[data-tema='pixel'] .tela-bloqueio::before {
+    background: linear-gradient(to top, rgba(4, 14, 10, 0.6), rgba(4, 14, 10, 0) 50%);
+}
+
+.tablet-tela[data-tema='pixel'] .tela-bloqueio-relogio {
+    text-shadow: 3px 3px 0 rgba(4, 14, 10, 0.7);
+}
+
+.tablet-tela[data-tema='pixel'] .tela-bloqueio-hora {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 40px;
+    font-weight: 400;
+    color: #fffaf0;
+}
+
+.tablet-tela[data-tema='pixel'] .tela-bloqueio-data {
+    margin-top: 12px;
+    font-size: 17px;
+    font-weight: 400;
+    text-shadow: 2px 2px 0 rgba(4, 14, 10, 0.7);
+}
+
+/* a dica pisca em passos, como o "PRESS START" de um jogo antigo; cadeado com cantos retos */
+.tablet-tela[data-tema='pixel'] .tela-bloqueio-dica {
+    text-shadow: 1px 1px 0 rgba(4, 14, 10, 0.8);
+    animation: tela-bloqueio-dica-pixel 1.6s steps(1) infinite;
+}
+
+.tablet-tela[data-tema='pixel'] .tela-bloqueio-dica svg {
+    stroke-linecap: square;
+    shape-rendering: crispEdges;
+}
+
+@keyframes tela-bloqueio-dica-pixel {
+    0%, 100% { opacity: 0.9; }
+    50%      { opacity: 0.35; }
+}

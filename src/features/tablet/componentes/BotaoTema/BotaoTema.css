@@ -54,6 +54,22 @@
     100% { transform: translate(0, 0); }
 }
 
+/* PixelOS: a janela do boot em miniatura (canvas de 52 px desenhado pixel a pixel, ver IconePixel.js). Apagada fica
+   um pouco transparente, como o logo; acesa (hover ou tema ativo) ganha um brilho de sol */
+.icone-pixel {
+    width: 52px;
+    height: 52px;
+    image-rendering: pixelated;
+    opacity: 0.75;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.botao-tema-pixel:hover .icone-pixel,
+.botao-tema-pixel.ligado .icone-pixel {
+    opacity: 1;
+    filter: drop-shadow(0 0 5px rgba(255, 209, 102, 0.55));
+}
+
 /* ---------- Choquezinho na lua: raios que pulam de lugar durante os 2 s do hover ---------- */
 
 .choque-lua {

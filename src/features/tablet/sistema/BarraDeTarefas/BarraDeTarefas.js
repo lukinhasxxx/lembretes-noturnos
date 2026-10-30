@@ -5,6 +5,7 @@ import MenuIniciar from '../MenuIniciar/MenuIniciar'
 import Relogio from '../Relogio/Relogio'
 import Calendario from '../Calendario/Calendario'
 import LuaIniciar from '../LuaIniciar/LuaIniciar'
+import SolIniciar from '../SolIniciar/SolIniciar'
 import { PainelBateria, PainelIdioma, PainelVolume, PainelWifi, sortearNomeDeWifi } from '../PainelBandeja/PaineisDaBandeja'
 import { BalaoNotificacao, CentralDeNotificacoes } from '../Notificacoes/Notificacoes'
 import { APPS } from '../../apps.config'
@@ -113,10 +114,14 @@ const BarraDeTarefas = ({ appsAbertos, aoClicarNoApp, aoAbrirApp, aoBloquear, ao
     return (
         <div className='barra-de-tarefas'>
             <div ref={menuIniciar.areaRef} className='barra-de-tarefas-area-menu-iniciar'>
-                {/* a lua é a logo do tema noturno; no original fica o ícone de sempre */}
+                {/* a lua é a logo do tema noturno, o sol a do PixelOS; no original fica o ícone de sempre */}
                 {tema === TEMAS.noturno ? (
                     <BotaoBarraDeTarefas ativo={menuIniciar.aberto} aoClicar={menuIniciar.alternar} aria-label='Menu iniciar'>
                         <LuaIniciar cheia={menuIniciar.aberto} />
+                    </BotaoBarraDeTarefas>
+                ) : tema === TEMAS.pixel ? (
+                    <BotaoBarraDeTarefas ativo={menuIniciar.aberto} aoClicar={menuIniciar.alternar} aria-label='Menu iniciar'>
+                        <SolIniciar aberto={menuIniciar.aberto} />
                     </BotaoBarraDeTarefas>
                 ) : (
                     <BotaoBarraDeTarefas

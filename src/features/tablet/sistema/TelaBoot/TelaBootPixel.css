@@ -1,0 +1,43 @@
+/* PROTÓTIPO do boot do PixelOS: o canvas cobre a tela toda e cada pixel do desenho vira um quadradinho */
+.tela-boot.tela-boot-pixel {
+    background: #000;
+}
+
+.tela-boot-pixel-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
+
+/* não é tela de tubo: sem as listrinhas do boot do CyberOS */
+.tela-boot.tela-boot-pixel::after {
+    display: none;
+}
+
+/* PassagemPixel.js: o 1º boot depois de entrar no PixelOS ou sair dele, no lugar da tela de boot */
+.passagem-pixel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    /* no mesmo lugar e camada da .tela-boot (TelaBoot.css) */
+    height: 101%;
+    z-index: 10;
+}
+
+/* PixelarTela.js: a camada pixelada cobre a tela como as telas de boot; o <svg> só guarda o filtro */
+.pixelar-tela {
+    position: absolute;
+    inset: 0;
+}
+
+.pixelar-tela-fundo {
+    background: #000;
+}
+
+.pixelar-tela-filtro {
+    position: absolute;
+    width: 0;
+    height: 0;
+}

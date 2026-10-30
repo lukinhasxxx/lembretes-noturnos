@@ -1,0 +1,7 @@
+/* a cena de mata do PixelOS (CenaMata.js): cada pixel do desenho vira um quadradinho na tela */
+.cena-mata {
+    display: block;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
