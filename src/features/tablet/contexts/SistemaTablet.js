@@ -15,14 +15,16 @@ const SistemaTabletContext = createContext(null)
 
 // animação das janelas por tema (o CSS de cada uma fica no ModalTablet.css):
 // original — encolhe até o ícone (minimizar/restaurar); noturno — abre e fecha em círculo, inclusive ao abrir um app
+// (o PixelOS, por enquanto, usa a do original)
 const ANIMACAO_JANELA_POR_TEMA = {
     [TEMAS.padrao]: {},
     [TEMAS.noturno]: { duracaoAnimacaoMs: 340, animarAoAbrir: true },
+    [TEMAS.pixel]: {},
 }
 
 export const SistemaTabletProvider = ({ children }) => {
-    const estado = useEstadoSistema()
     const tema = useTemaSistema()
+    const estado = useEstadoSistema(tema.tema)
     // o jeito de abrir/minimizar as janelas muda com o tema (no noturno: em círculo, como uma lua)
     const areaDeTrabalho = useAreaDeTrabalho(estado.estadoSistema, ANIMACAO_JANELA_POR_TEMA[tema.tema])
     const wallpaper = useWallpaperSistema(tema.tema)

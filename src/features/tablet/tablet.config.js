@@ -6,10 +6,11 @@ export const SISTEMA = {
     usuario: 'Visitor',
 }
 
-// nome do sistema em cada tema: o padrão é o CyberOS; com o tema noturno ele vira NightOS
+// nome do sistema em cada tema: o padrão é o CyberOS; com o tema noturno ele vira NightOS, com o pixel, PixelOS
 export const NOME_SISTEMA_POR_TEMA = {
     padrao: SISTEMA.nome,
     noturno: 'NightOS',
+    pixel: 'PixelOS',
 }
 
 // por onde o tablet passa: desligado → ligando (boot) → boasVindas → areaDeTrabalho

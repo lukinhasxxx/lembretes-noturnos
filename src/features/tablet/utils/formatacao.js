@@ -1,4 +1,5 @@
 import { PREFIXO_CHAVE } from '../../../shared/hooks/useEstadoPersistido'
+import { NOME_SISTEMA_POR_TEMA } from '../tablet.config'
 import { apagarBanco, apagarBancoDoSite } from './wallpaperSalvo'
 
 // Formatar (Config → Sistema): o que este site guardou no navegador, resumido com números para a confirmação,
@@ -50,7 +51,7 @@ export const levantarDados = () => {
     const tema = ler('tema-sistema')
     const wallpapers = chaves.filter((chave) => chave.startsWith('wallpaper-preset') && ler(chave))
     adicionar('aparencia', 'Aparência', [
-        tema && tema !== 'padrao' ? `tema ${tema === 'noturno' ? 'NightOS' : tema}` : null,
+        tema && tema !== 'padrao' ? `tema ${NOME_SISTEMA_POR_TEMA[tema] ?? tema}` : null,
         ler('temas-instalados') ? 'temas instalados' : null,
         wallpapers.length ? plural(wallpapers.length, 'wallpaper escolhido', 'wallpapers escolhidos') : null,
     ], ['tema-sistema', 'temas-instalados', ...chaves.filter((chave) => chave.startsWith('wallpaper-preset'))])

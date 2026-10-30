@@ -4,19 +4,24 @@ import {
     DURACAO_BOOT_EXTRA_MAXIMA_MS,
     DURACAO_BOOT_EXTRA_MINIMA_MS,
     DURACAO_BOOT_MS,
+    DURACAO_BOOT_PIXEL_MS,
+    DURACAO_BOOT_PIXEL_PARADO_MS,
     DURACAO_ENCERRANDO_MS,
     DURACAO_ENTRANDO_MS,
     DURACAO_TELA_APAGADA_MS,
     ESTADOS_SISTEMA,
 } from '../tablet.config'
+import { TEMAS } from './useTemaSistema'
 
 const sortearEntre = (minimo, maximo) => minimo + Math.random() * (maximo - minimo)
 
 // passos do boot depois do "ligando": [estado, espera em ms antes de entrar nele]
-const passosDoBoot = () => {
-    // as animações usam só o DURACAO_BOOT_MS; o extra sorteado é a barrinha rodando com o logo já pronto
-    const duracaoBootComCarregamento =
-        DURACAO_BOOT_MS + sortearEntre(DURACAO_BOOT_EXTRA_MINIMA_MS, DURACAO_BOOT_EXTRA_MAXIMA_MS)
+const passosDoBoot = (tema) => {
+    // CyberOS/NightOS: as animações usam só o DURACAO_BOOT_MS; o extra sorteado é a barrinha rodando com o logo já
+    // pronto. PixelOS: o desenho tem a duração dele e o nome fica um pouco parado no fim
+    const duracaoBootComCarregamento = tema === TEMAS.pixel
+        ? DURACAO_BOOT_PIXEL_MS + DURACAO_BOOT_PIXEL_PARADO_MS
+        : DURACAO_BOOT_MS + sortearEntre(DURACAO_BOOT_EXTRA_MINIMA_MS, DURACAO_BOOT_EXTRA_MAXIMA_MS)
 
     return [
         [ESTADOS_SISTEMA.boasVindas, duracaoBootComCarregamento],
@@ -27,7 +32,8 @@ const passosDoBoot = () => {
 // Controla em que ponto o sistema do tablet está (desligado, ligando, boas-vindas, área de trabalho, bloqueado,
 // login, desligando, reiniciando, formatando...). Não é salvo no navegador: depois do F5 o tablet volta desligado.
 // Usado pelo SistemaTabletProvider; de fora, use o useSistemaTablet (contexts/SistemaTablet.js).
-export const useEstadoSistema = () => {
+// tema: o tema do sistema (o boot de cada um tem a sua duração)
+export const useEstadoSistema = (tema) => {
     const [estadoSistema, setEstadoSistema] = useState(ESTADOS_SISTEMA.desligado)
     // guarda os timers da sequência atual para dar para cancelar quando outra ação começa
     const timersRef = useRef([])
@@ -54,8 +60,8 @@ export const useEstadoSistema = () => {
     const ligarSistema = useCallback(() => {
         if (estadoSistema !== ESTADOS_SISTEMA.desligado) return
 
-        iniciarSequencia(ESTADOS_SISTEMA.ligando, passosDoBoot())
-    }, [estadoSistema, iniciarSequencia])
+        iniciarSequencia(ESTADOS_SISTEMA.ligando, passosDoBoot(tema))
+    }, [estadoSistema, iniciarSequencia, tema])
 
     // bloquear (menu iniciar → usuário): só a partir da área de trabalho
     const bloquearSistema = useCallback(() => {
@@ -97,9 +103,9 @@ export const useEstadoSistema = () => {
         iniciarSequencia(ESTADOS_SISTEMA.reiniciando, [
             [ESTADOS_SISTEMA.apagado, DURACAO_ENCERRANDO_MS],
             [ESTADOS_SISTEMA.ligando, DURACAO_TELA_APAGADA_MS],
-            ...passosDoBoot(),
+            ...passosDoBoot(tema),
         ])
-    }, [estadoSistema, iniciarSequencia])
+    }, [estadoSistema, iniciarSequencia, tema])
 
     // formatar (Config → Sistema): a tela de formatação do tema toma conta (ela apaga e recarrega a página).
     // opcoes: { apagarLembretes } — fica guardado em "formatacao" para a tela saber o que apagar

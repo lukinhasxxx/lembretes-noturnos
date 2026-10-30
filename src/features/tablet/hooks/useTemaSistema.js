@@ -3,6 +3,7 @@ import { useEstadoPersistido } from '../../../shared/hooks/useEstadoPersistido'
 export const TEMAS = {
     padrao: 'padrao',
     noturno: 'noturno',
+    pixel: 'pixel',
 }
 
 // Tema do sistema do tablet, salvo no navegador (F5 mantém o tema, e o boot já sai no tema escolhido).

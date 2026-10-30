@@ -35,7 +35,7 @@ const OUTRAS_TECNOLOGIAS = [
 const DURACAO_CHOQUE_MS = 500
 const INTERVALO_CHOQUE_MS = [2800, 5600]
 
-const NOME_DO_TEMA = { [TEMAS.padrao]: 'CyberOS', [TEMAS.noturno]: 'NightOS' }
+const NOME_DO_TEMA = { [TEMAS.padrao]: 'CyberOS', [TEMAS.noturno]: 'NightOS', [TEMAS.pixel]: 'PixelOS' }
 
 const doisDigitos = (numero) => String(numero).padStart(2, '0')
 
