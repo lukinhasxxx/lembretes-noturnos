@@ -12,23 +12,23 @@ import { DURACAO_BOOT_PIXEL_MS } from '../../tablet.config'
 const ALTURA = 90
 
 // ---------- utilidades ----------
-const limitar = (valor, min = 0, max = 1) => Math.min(max, Math.max(min, valor))
-const suave = (valor) => valor * valor * (3 - 2 * valor)
-const entre = (a, b, quanto) => a + (b - a) * quanto
-const misturar = (cor1, cor2, quanto) => [0, 1, 2].map((canal) => entre(cor1[canal], cor2[canal], quanto))
-const rgb = (hex) => [1, 3, 5].map((inicio) => parseInt(hex.slice(inicio, inicio + 2), 16))
+export const limitar = (valor, min = 0, max = 1) => Math.min(max, Math.max(min, valor))
+export const suave = (valor) => valor * valor * (3 - 2 * valor)
+export const entre = (a, b, quanto) => a + (b - a) * quanto
+export const misturar = (cor1, cor2, quanto) => [0, 1, 2].map((canal) => entre(cor1[canal], cor2[canal], quanto))
+export const rgb = (hex) => [1, 3, 5].map((inicio) => parseInt(hex.slice(inicio, inicio + 2), 16))
 
 // pontilhado ordenado (Bayer 4×4): o degradê vira faixas com pontinhos na divisa, o jeito clássico de pixel art
 const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((valor) => (valor + 0.5) / 16)
-const limiarDe = (x, y) => BAYER[(y % 4) * 4 + (x % 4)]
+export const limiarDe = (x, y) => BAYER[(y % 4) * 4 + (x % 4)]
 const PASSO_DA_COR = 28
-const pontilhar = (cor, x, y) => {
+export const pontilhar = (cor, x, y) => {
     const limiar = limiarDe(x, y) - 0.5
     return cor.map((canal) => limitar(Math.round(canal / PASSO_DA_COR + limiar) * PASSO_DA_COR, 0, 255))
 }
 
 // número "aleatório" fixo por posição (estrelas e árvores não mudam de lugar a cada quadro)
-const sorteioFixo = (semente) => {
+export const sorteioFixo = (semente) => {
     const valor = Math.sin(semente * 127.1) * 43758.5453
     return valor - Math.floor(valor)
 }
@@ -383,12 +383,18 @@ const desenharBoot = desenharJanela(desenharSolNascendo)
 
 // ---------- o ícone do tema (o botão do PixelOS no Config): a janela do boot em miniatura ----------
 // canvas de TAMANHO_DO_ICONE × TAMANHO_DO_ICONE, mostrado em 1:1. dia: quanto o sol já subiu (0 a 1, como o
-// progresso do boot); bloco: o pixelado da paisagem (1 = nítida); anel: quanto do anel em volta está cheio (0 = sem anel)
+// progresso do boot); bloco: o pixelado da paisagem (1 = nítida); anel: quanto do anel em volta está cheio (0 = sem anel);
+// noite: borda e anel nas cores da noite (verde-água até o verde dos vagalumes) em vez das do sol
 export const TAMANHO_DO_ICONE = 52
 // a janela do tamanho da lua do NightOS (44 px), com o anel por fora
 const RAIO_DO_ICONE = 20
+const CORES_DO_ICONE = {
+    dia: { borda: COR_CREME, anelInicio: rgb('#ff8a3d'), anelFim: rgb('#ffe066'), anelVazio: rgb('#231d47') },
+    noite: { borda: rgb('#cfe8d8'), anelInicio: rgb('#2f8f86'), anelFim: rgb('#c8ff6a'), anelVazio: rgb('#0c2230') },
+}
 const telasDoIcone = new WeakMap()
-export const pintarIconePixel = (canvas, { dia, bloco, anel, quadro }) => {
+export const pintarIconePixel = (canvas, { dia, bloco, anel, quadro, noite = false }) => {
+    const cores = CORES_DO_ICONE[noite ? 'noite' : 'dia']
     if (!telasDoIcone.has(canvas)) {
         canvas.width = TAMANHO_DO_ICONE
         canvas.height = TAMANHO_DO_ICONE
@@ -405,7 +411,7 @@ export const pintarIconePixel = (canvas, { dia, bloco, anel, quadro }) => {
         for (let x = -RAIO_DO_ICONE; x <= RAIO_DO_ICONE; x += 1) {
             const distancia = Math.hypot(x, y)
             if (distancia <= RAIO_DO_ICONE - 1) tela.pixel(centro + x, centro + y, janela.ler(x + RAIO_DO_ICONE, y + RAIO_DO_ICONE))
-            else if (distancia <= RAIO_DO_ICONE + 0.4) tela.pixel(centro + x, centro + y, COR_CREME)
+            else if (distancia <= RAIO_DO_ICONE + 0.4) tela.pixel(centro + x, centro + y, cores.borda)
         }
     }
 
@@ -416,7 +422,7 @@ export const pintarIconePixel = (canvas, { dia, bloco, anel, quadro }) => {
                 const distancia = Math.hypot(x, y)
                 if (distancia < RAIO_DO_ICONE + 2.6 || distancia > RAIO_DO_ICONE + 5.4) continue
                 const fracao = ((Math.atan2(x, -y) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI * 2)
-                tela.pixel(centro + x, centro + y, fracao < anel ? misturar(rgb('#ff8a3d'), rgb('#ffe066'), fracao) : rgb('#231d47'))
+                tela.pixel(centro + x, centro + y, fracao < anel ? misturar(cores.anelInicio, cores.anelFim, fracao) : cores.anelVazio)
             }
         }
     }

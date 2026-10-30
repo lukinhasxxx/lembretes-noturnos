@@ -15,12 +15,16 @@ import { useSistemaTablet } from '../../contexts/SistemaTablet'
 import { useIdioma } from '../../../../shared/i18n/Idioma'
 import { aleatorioEntre } from '../../../../shared/utils/aleatorio'
 import SecaoFormatar from '../SecaoFormatar/SecaoFormatar'
+import CenaMata from '../../sistema/CenaMata/CenaMata'
 
+// horaNaMata: no PixelOS, o fundo de cada categoria é a mata numa hora do dia (0 manhã → 1 noite): o Config
+// vai anoitecendo de uma categoria para a outra. luz: o nome dessa hora, que o CSS usa para as cores da página
+// (papel, letras, botões, menu e barra de cima)
 const CATEGORIAS = [
-    { id: 'personalizacao', nome: 'Personalização', frase: 'Deixe o tablet com a sua cara.', Icone: IconePersonalizacao },
-    { id: 'cena', nome: 'Cena', frase: 'Ajuste o que está à sua volta na varanda.', Icone: IconeCena },
-    { id: 'sistema', nome: 'Sistema', frase: 'Tela, data e hora, idioma e formatar.', Icone: IconeSistema },
-    { id: 'sobre', nome: 'Sobre', frase: 'O que roda neste tablet.', Icone: IconeSobre },
+    { id: 'personalizacao', nome: 'Personalização', frase: 'Deixe o tablet com a sua cara.', Icone: IconePersonalizacao, horaNaMata: 0, luz: 'manha' },
+    { id: 'cena', nome: 'Cena', frase: 'Ajuste o que está à sua volta na varanda.', Icone: IconeCena, horaNaMata: 0.35, luz: 'tarde' },
+    { id: 'sistema', nome: 'Sistema', frase: 'Tela, data e hora, idioma e formatar.', Icone: IconeSistema, horaNaMata: 0.65, luz: 'anoitecer' },
+    { id: 'sobre', nome: 'Sobre', frase: 'O que roda neste tablet.', Icone: IconeSobre, horaNaMata: 1, luz: 'noite' },
 ]
 
 // miniatura: versão pequena (400×250) só para o quadradinho da galeria; ao clicar, aplica a imagem cheia (src).
@@ -260,7 +264,7 @@ const Config = ({ fecharApp, minimizarApp, classeAnimacao, radioLigado, musicaTo
     }
 
     return (
-        <div className={`janela-config ${classeAnimacao}`}>
+        <div className={`janela-config ${classeAnimacao}`} data-luz={categoria.luz}>
             <WindowBar fecharApp={fecharApp} minimizarApp={minimizarApp} idDoAppPraFechar='app_config' escura={tema === TEMAS.noturno} />
 
             <div className='config-corpo'>
@@ -278,6 +282,8 @@ const Config = ({ fecharApp, minimizarApp, classeAnimacao, radioLigado, musicaTo
                         </button>
                     ))}
                 </nav>
+
+                {tema === TEMAS.pixel && <CenaMata className='config-cena' hora={categoria.horaNaMata} />}
 
                 <div ref={conteudoRef} className='janela-configuracao-led'>
                     <div className='wrapper-configuracao' key={idCategoria}>
