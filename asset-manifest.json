@@ -1,13 +1,33 @@
 {
   "files": {
-    "main.css": "/lembretes-noturnos/static/css/main.fb42b4ed.css",
-    "main.js": "/lembretes-noturnos/static/js/main.7edeec27.js",
+    "main.css": "/lembretes-noturnos/static/css/main.391705d8.css",
+    "main.js": "/lembretes-noturnos/static/js/main.c9175bc0.js",
+    "static/css/484.55c302d8.chunk.css": "/lembretes-noturnos/static/css/484.55c302d8.chunk.css",
+    "static/js/484.f2e92ccf.chunk.js": "/lembretes-noturnos/static/js/484.f2e92ccf.chunk.js",
+    "static/css/752.f844415d.chunk.css": "/lembretes-noturnos/static/css/752.f844415d.chunk.css",
+    "static/js/752.01b0464f.chunk.js": "/lembretes-noturnos/static/js/752.01b0464f.chunk.js",
+    "static/css/708.27e3bff7.chunk.css": "/lembretes-noturnos/static/css/708.27e3bff7.chunk.css",
+    "static/js/708.5de95a40.chunk.js": "/lembretes-noturnos/static/js/708.5de95a40.chunk.js",
+    "static/css/851.dd575f94.chunk.css": "/lembretes-noturnos/static/css/851.dd575f94.chunk.css",
+    "static/js/851.638dc410.chunk.js": "/lembretes-noturnos/static/js/851.638dc410.chunk.js",
+    "static/js/47.c9bb7022.chunk.js": "/lembretes-noturnos/static/js/47.c9bb7022.chunk.js",
+    "static/js/314.06bf61c1.chunk.js": "/lembretes-noturnos/static/js/314.06bf61c1.chunk.js",
     "index.html": "/lembretes-noturnos/index.html",
-    "main.fb42b4ed.css.map": "/lembretes-noturnos/static/css/main.fb42b4ed.css.map",
-    "main.7edeec27.js.map": "/lembretes-noturnos/static/js/main.7edeec27.js.map"
+    "main.391705d8.css.map": "/lembretes-noturnos/static/css/main.391705d8.css.map",
+    "main.c9175bc0.js.map": "/lembretes-noturnos/static/js/main.c9175bc0.js.map",
+    "484.55c302d8.chunk.css.map": "/lembretes-noturnos/static/css/484.55c302d8.chunk.css.map",
+    "484.f2e92ccf.chunk.js.map": "/lembretes-noturnos/static/js/484.f2e92ccf.chunk.js.map",
+    "752.f844415d.chunk.css.map": "/lembretes-noturnos/static/css/752.f844415d.chunk.css.map",
+    "752.01b0464f.chunk.js.map": "/lembretes-noturnos/static/js/752.01b0464f.chunk.js.map",
+    "708.27e3bff7.chunk.css.map": "/lembretes-noturnos/static/css/708.27e3bff7.chunk.css.map",
+    "708.5de95a40.chunk.js.map": "/lembretes-noturnos/static/js/708.5de95a40.chunk.js.map",
+    "851.dd575f94.chunk.css.map": "/lembretes-noturnos/static/css/851.dd575f94.chunk.css.map",
+    "851.638dc410.chunk.js.map": "/lembretes-noturnos/static/js/851.638dc410.chunk.js.map",
+    "47.c9bb7022.chunk.js.map": "/lembretes-noturnos/static/js/47.c9bb7022.chunk.js.map",
+    "314.06bf61c1.chunk.js.map": "/lembretes-noturnos/static/js/314.06bf61c1.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.fb42b4ed.css",
-    "static/js/main.7edeec27.js"
+    "static/css/main.391705d8.css",
+    "static/js/main.c9175bc0.js"
   ]
 }
