@@ -354,6 +354,125 @@ margin-top: 0px;
     box-shadow: 0 0 8px rgba(138, 120, 255, 0.6);
 }
 
+/* ---------- PixelOS (1ª passada, até as referências): janelas como caixa de diálogo de RPG ----------
+   corpo creme, texto marrom-escuro, títulos na fonte pixel (Press Start 2P, já carregada no index.html) e a
+   moldura escura grossa; botões com "sombra de pixel" (deslocada, sem desfoque) */
+.tablet-tela[data-tema='pixel'] .janela-config,
+.tablet-tela[data-tema='pixel'] .janela-lembretes,
+.tablet-tela[data-tema='pixel'] .about {
+    background: #fbf1d0;
+    /* moldura por dentro (outline com offset negativo, desenhado por cima do conteúdo): a sombra de 3px que ficava
+       por fora deixava a janela 6px mais larga que nos outros temas e entrava na barra de tarefas */
+    box-shadow: none;
+    outline: 3px solid #2b2340;
+    outline-offset: -3px;
+}
+
+.tablet-tela[data-tema='pixel'] .janela-configuracao-led,
+.tablet-tela[data-tema='pixel'] form,
+.tablet-tela[data-tema='pixel'] .area-de-trabalho .about .tela-about {
+    background: #fbf1d0;
+    color: #3b2a1a;
+}
+
+/* títulos: fonte pixel, menor (ela é larga) e sem brilho */
+.tablet-tela[data-tema='pixel'] .janela-configuracao-led .texto-configuracao,
+.tablet-tela[data-tema='pixel'] .janela-configuracao-led h3,
+.tablet-tela[data-tema='pixel'] form h2,
+.tablet-tela[data-tema='pixel'] .area-de-trabalho .about .tela-about h2 {
+    font-family: 'Press Start 2P', monospace;
+    color: #2b3d7a;
+    text-shadow: 2px 2px 0 #e9d9a6;
+    letter-spacing: 0;
+}
+
+.tablet-tela[data-tema='pixel'] .janela-configuracao-led h3 {
+    font-size: 12px;
+}
+
+.tablet-tela[data-tema='pixel'] .janela-configuracao-led p {
+    color: #5a4630;
+}
+
+/* "Lembretes Noturnos" no texto do Sobre o projeto: verde-mata com sombra de pixel no lugar do brilho ciano */
+.tablet-tela[data-tema='pixel'] .about .tela-about .strong-about {
+    color: #3f9a45;
+    text-shadow: 2px 2px 0 #e9d9a6;
+}
+
+.tablet-tela[data-tema='pixel'] .janela-configuracao-led strong {
+    color: #c0552b;
+}
+
+/* caixa de texto do lembrete: papel claro com borda escura */
+.tablet-tela[data-tema='pixel'] .area-texto {
+    background: #fffaf0;
+    border: 2px solid #2b2340;
+    color: #3b2a1a;
+}
+
+.tablet-tela[data-tema='pixel'] .area-texto::placeholder {
+    color: #a08c6a;
+}
+
+/* botões: verde-mata com sombra de pixel; no hover sobem um pouco */
+.tablet-tela[data-tema='pixel'] form .botao-lembrete,
+.tablet-tela[data-tema='pixel'] .botao-mostrar-esconder-painel {
+    background: #3f9a45;
+    color: #fffaf0;
+    border: 2px solid #2b2340;
+    box-shadow: 3px 3px 0 #2b2340;
+    text-shadow: none;
+}
+
+.tablet-tela[data-tema='pixel'] form .botao-lembrete:hover,
+.tablet-tela[data-tema='pixel'] .botao-mostrar-esconder-painel:hover {
+    background: #55b83a;
+    color: #fffaf0;
+    box-shadow: 4px 4px 0 #2b2340;
+    transform: translate(-1px, -1px);
+}
+
+/* abas (About ↔ Lembretes) na barra de céu */
+.tablet-tela[data-tema='pixel'] .area-de-trabalho .about .window-bar .janela-pro-lembrete,
+.tablet-tela[data-tema='pixel'] .janela-lembretes .janela-pro-about {
+    background-color: #fbf1d0;
+    border-color: #2b2340;
+    box-shadow: 2px 2px 0 #2b2340;
+    opacity: 1;
+}
+
+.tablet-tela[data-tema='pixel'] .area-de-trabalho .about .window-bar .janela-pro-lembrete p,
+.tablet-tela[data-tema='pixel'] .janela-lembretes .janela-pro-about p {
+    color: #2b3d7a;
+    text-shadow: none;
+}
+
+/* barras de rolagem: trilho creme e "tronco" marrom, quadradas */
+.tablet-tela[data-tema='pixel'] .janela-configuracao-led::-webkit-scrollbar-track,
+.tablet-tela[data-tema='pixel'] form::-webkit-scrollbar-track,
+.tablet-tela[data-tema='pixel'] .tela-about::-webkit-scrollbar-track {
+    background: #efe2b8;
+    box-shadow: inset 2px 0 0 #2b2340;
+}
+
+.tablet-tela[data-tema='pixel'] .janela-configuracao-led::-webkit-scrollbar-thumb,
+.tablet-tela[data-tema='pixel'] form::-webkit-scrollbar-thumb,
+.tablet-tela[data-tema='pixel'] .tela-about::-webkit-scrollbar-thumb {
+    background: #8a5a3b;
+    border-radius: 0;
+    background-clip: content-box;
+    border: solid 3px rgba(0, 0, 0, 0);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    .tablet-tela[data-tema='pixel'] .janela-configuracao-led,
+    .tablet-tela[data-tema='pixel'] form,
+    .tablet-tela[data-tema='pixel'] .tela-about {
+        scrollbar-color: #8a5a3b #efe2b8;
+    }
+}
+
 
 .janela-configuracao-led .wrapper-configuracao {
 margin: 2% 4%;

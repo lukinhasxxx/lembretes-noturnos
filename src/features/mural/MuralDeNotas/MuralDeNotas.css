@@ -629,3 +629,109 @@
         scrollbar-color: #8a78ff transparent;
     }
 }
+/* ---------------------------------------------------------------- */
+/* TEMA PIXELOS (escolhido no tablet): leve, como o noturno — creme e verde-mata, sombras de pixel (sem desfoque) */
+/* ---------------------------------------------------------------- */
+.painel[data-tema='pixel'] {
+    --cor-neon-mural: #f6e7a1;
+}
+
+.painel[data-tema='pixel'] p {
+    color: #fffaf0;
+    text-shadow: calc(4 * var(--px-arte)) calc(4 * var(--px-arte)) 0px #1f4d26;
+}
+
+.painel[data-tema='pixel'] .lembrete-vazio {
+    color: #fff3b0;
+    text-shadow: calc(3 * var(--px-arte)) calc(3 * var(--px-arte)) 0px #1f4d26;
+}
+
+/* quadro em volta das notas */
+.painel[data-tema='pixel'] .zona-dos-cards {
+    box-shadow: calc(4 * var(--px-arte)) calc(4 * var(--px-arte)) 0px rgba(15, 42, 20, 0.6);
+}
+
+.painel[data-tema='pixel'] .zona-dos-cards .card {
+    background-color: rgba(63, 154, 69, 0.16);
+    box-shadow: calc(3 * var(--px-arte)) calc(3 * var(--px-arte)) 0px rgba(15, 42, 20, 0.7);
+}
+
+/* cantos das notas */
+.painel[data-tema='pixel'] .zona-dos-cards .card::before,
+.painel[data-tema='pixel'] .zona-dos-cards .card::after {
+    border-color: #f6e7a1;
+}
+
+.painel[data-tema='pixel'] .cards .card h4 {
+    color: #fff3b0;
+    text-shadow: calc(2 * var(--px-arte)) calc(2 * var(--px-arte)) 0px #1f4d26;
+}
+
+/* faixa do "Deletar tudo" (esquerda): brilho creme */
+.painel[data-tema='pixel'] .zona-hover-limpar {
+    background: linear-gradient(to right, rgba(246, 231, 161, 0.35), rgba(246, 231, 161, 0.12) 55%, transparent);
+}
+
+.painel[data-tema='pixel'] .zona-hover-limpar:hover,
+.painel[data-tema='pixel'] .zona-hover-limpar.ativa {
+    background: linear-gradient(to right, rgba(255, 243, 176, 0.5), rgba(255, 209, 102, 0.18) 55%, transparent);
+}
+
+/* glitch da borda ("Deletar tudo"/"Sim"): creme + amarelo do sol, com sombra verde-escura */
+.painel[data-tema='pixel'].borda-em-glitch::before {
+    border-color: #fff3b0;
+    box-shadow: calc(-3 * var(--px-arte)) calc(-3 * var(--px-arte)) 0 #0f2a14;
+}
+
+.painel[data-tema='pixel'].borda-em-glitch::after {
+    border-color: #ffd166;
+}
+
+.painel[data-tema='pixel'] .zona-hover-limpar::after {
+    background: linear-gradient(to bottom, transparent, #fffaf0 30%, #ffd166 50%, #fffaf0 70%, transparent);
+}
+
+.painel[data-tema='pixel'] .botao-aba-limpar {
+    color: #fffaf0;
+    background: rgba(26, 67, 33, 0.92);
+    border-color: #f6e7a1;
+    border-radius: 0;
+}
+
+.painel[data-tema='pixel'] .botao-aba-limpar-sim:hover {
+    border-color: #ffd166;
+    box-shadow: calc(3 * var(--px-arte)) calc(3 * var(--px-arte)) 0 #0f2a14;
+}
+
+.painel[data-tema='pixel'] .pergunta-aba-limpar {
+    color: #fff3b0;
+    text-shadow: calc(2 * var(--px-arte)) calc(2 * var(--px-arte)) 0 #1f4d26;
+}
+
+/* barras de rolagem do painel: quadradas, creme */
+.painel[data-tema='pixel'] .zona-dos-cards::-webkit-scrollbar-track,
+.painel[data-tema='pixel'] .card::-webkit-scrollbar-track {
+    box-shadow: none;
+}
+
+.painel[data-tema='pixel'] .zona-dos-cards::-webkit-scrollbar-thumb,
+.painel[data-tema='pixel'] .card::-webkit-scrollbar-thumb {
+    background: #f6e7a1;
+    background-clip: content-box;
+    border: solid 4px rgba(0, 0, 0, 0);
+    border-radius: 0;
+}
+
+.painel[data-tema='pixel'] .zona-dos-cards::-webkit-scrollbar-thumb:hover,
+.painel[data-tema='pixel'] .card::-webkit-scrollbar-thumb:hover {
+    background: #fff3b0;
+    background-clip: content-box;
+    border: solid 4px rgba(0, 0, 0, 0);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    .painel[data-tema='pixel'] .zona-dos-cards,
+    .painel[data-tema='pixel'] .card {
+        scrollbar-color: #f6e7a1 transparent;
+    }
+}

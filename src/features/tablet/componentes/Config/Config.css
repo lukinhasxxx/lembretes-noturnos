@@ -34,6 +34,221 @@
     --config-borda: rgba(185, 140, 255, 0.35);
 }
 
+/* ---------- PixelOS: o Config na mata, cada categoria numa hora do dia (data-luz, ver Config.js) ----------
+   As cores de cada hora ficam em variáveis --pixel-*: papel, letras, botões, rolagem, menu e barra de cima. O menu
+   e a barra (que não são refeitos ao trocar de categoria) passam de uma cor para a outra devagar, junto com a luz */
+.tablet-tela[data-tema='pixel'] .janela-config[data-luz='manha'] {
+    --pixel-menu: #3f9a45;
+    --pixel-barra: #5aa8e8;
+    --pixel-papel: rgba(253, 249, 232, 0.8);
+    --pixel-borda: #6f9a54;
+    --pixel-texto: #34311f;
+    --pixel-texto-suave: #556640;
+    --pixel-titulo: #2b5a8a;
+    --pixel-sombra-titulo: rgba(255, 255, 255, 0.75);
+    --pixel-sombra-letra: #1f5a3a;
+    --pixel-destaque: #e0782a;
+    --pixel-cartao: rgba(255, 255, 255, 0.6);
+    --pixel-rolagem: #7a9a4a;
+}
+
+.tablet-tela[data-tema='pixel'] .janela-config[data-luz='tarde'] {
+    --pixel-menu: #4a8a40;
+    --pixel-barra: #d9965a;
+    --pixel-papel: rgba(255, 238, 210, 0.76);
+    --pixel-borda: #b8804a;
+    --pixel-texto: #43281a;
+    --pixel-texto-suave: #7a5232;
+    --pixel-titulo: #9a4316;
+    --pixel-sombra-titulo: rgba(255, 222, 168, 0.85);
+    --pixel-sombra-letra: #7a3a14;
+    --pixel-destaque: #c94a1a;
+    --pixel-cartao: rgba(255, 248, 232, 0.6);
+    --pixel-rolagem: #b8703a;
+}
+
+/* anoitecer: penumbra lilás, letras claras */
+.tablet-tela[data-tema='pixel'] .janela-config[data-luz='anoitecer'] {
+    --pixel-menu: #367a66;
+    --pixel-barra: #5a4f8a;
+    --pixel-papel: rgba(52, 42, 80, 0.7);
+    --pixel-borda: #8a78b8;
+    --pixel-texto: #ece4ff;
+    --pixel-texto-suave: #c4b6e4;
+    --pixel-titulo: #ffd2a8;
+    --pixel-sombra-titulo: rgba(28, 18, 48, 0.9);
+    --pixel-sombra-letra: #2a1f45;
+    --pixel-destaque: #ffa982;
+    --pixel-cartao: rgba(255, 255, 255, 0.08);
+    --pixel-rolagem: #a88ad8;
+}
+
+/* noite: vidro azul-escuro, e os cartões (tema, idioma...) mais sólidos */
+.tablet-tela[data-tema='pixel'] .janela-config[data-luz='noite'] {
+    --pixel-menu: #275e58;
+    --pixel-barra: #16324a;
+    --pixel-papel: rgba(6, 18, 32, 0.66);
+    --pixel-borda: #2f7272;
+    --pixel-texto: #dcf3ec;
+    --pixel-texto-suave: #8fbcb0;
+    --pixel-titulo: #b6f4cc;
+    --pixel-sombra-titulo: rgba(0, 10, 20, 0.9);
+    --pixel-sombra-letra: #04121c;
+    --pixel-destaque: #c8ff6a;
+    --pixel-cartao: rgba(8, 26, 40, 0.88);
+    --pixel-rolagem: #4ab894;
+}
+
+.tablet-tela[data-tema='pixel'] .config-corpo {
+    --config-icone: #e9f5d0;
+    --config-icone-ativo: #fff3b0;
+    --config-brilho: #ffd166;
+    --config-destaque: var(--pixel-destaque);
+    --config-texto-suave: var(--pixel-texto-suave);
+    --config-cartao: var(--pixel-cartao);
+    --config-borda: var(--pixel-borda);
+}
+
+/* menu e barra de cima: cor da hora (passando devagar) com faixas claras por cima, como em pixel art */
+.tablet-tela[data-tema='pixel'] .janela-config .config-menu {
+    background-color: var(--pixel-menu);
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 0 50%, transparent 50%);
+    transition: background-color 1.2s ease;
+}
+
+.tablet-tela[data-tema='pixel'] .janela-config .window-bar {
+    background-color: var(--pixel-barra);
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.16) 0 34%, rgba(255, 255, 255, 0.08) 34% 67%, transparent 67%);
+    transition: background-color 1.2s ease;
+}
+
+/* a mata (CenaMata) atrás do conteúdo, ao lado do menu */
+.tablet-tela[data-tema='pixel'] .config-cena {
+    position: absolute;
+    top: 0;
+    left: var(--config-menu-largura);
+    width: calc(100% - var(--config-menu-largura));
+    height: 100%;
+}
+
+/* no conteúdo, a cor "ativa" é a dos títulos da hora (no menu ela continua clara) */
+.tablet-tela[data-tema='pixel'] .config-corpo .janela-configuracao-led {
+    --config-icone-ativo: var(--pixel-titulo);
+    --config-brilho: var(--pixel-sombra-titulo);
+    position: relative;
+    z-index: 1;
+    background: transparent;
+    color: var(--pixel-texto);
+}
+
+.tablet-tela[data-tema='pixel'] .janela-config .janela-configuracao-led p {
+    color: var(--pixel-texto-suave);
+}
+
+.tablet-tela[data-tema='pixel'] .janela-config .janela-configuracao-led h3 {
+    color: var(--pixel-titulo);
+    text-shadow: 2px 2px 0 var(--pixel-sombra-titulo);
+}
+
+.tablet-tela[data-tema='pixel'] .janela-config .janela-configuracao-led strong {
+    color: var(--pixel-destaque);
+}
+
+/* o cabeçalho fica direto na cena: letra creme com sombra de pixel na cor da hora */
+.tablet-tela[data-tema='pixel'] .config-corpo .config-cabecalho {
+    box-sizing: border-box;
+    height: var(--altura-cabecalho-pixel);
+    margin-bottom: 0;
+    padding-top: 6px;
+}
+
+.tablet-tela[data-tema='pixel'] .config-corpo .config-cabecalho h2 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px;
+    color: #fffaf0;
+    text-shadow: 2px 2px 0 var(--pixel-sombra-letra), -1px 0 0 var(--pixel-sombra-letra), 0 -1px 0 var(--pixel-sombra-letra);
+}
+
+.tablet-tela[data-tema='pixel'] .janela-configuracao-led .wrapper-configuracao .config-cabecalho p {
+    margin-top: 8px;
+    color: #fffaf0;
+    text-shadow: 1px 1px 0 var(--pixel-sombra-letra), -1px 0 0 var(--pixel-sombra-letra);
+}
+
+/* o resto num papel meio transparente na cor da hora, com borda fina e cantos em degraus de pixel (nem quadradão
+   nem arredondado liso), rolando por cima da mata */
+.tablet-tela[data-tema='pixel'] .config-corpo .wrapper-configuracao {
+    --altura-cabecalho-pixel: 96px;
+    position: relative;
+    isolation: isolate;
+    padding: 0 14px 14px;
+    /* sem a margem de baixo: o papel vai até o fim da janela, senão a mata (cachoeira, espuma) aparecia numa
+       faixa embaixo dele, parecendo coisa vazando */
+    margin-bottom: 0;
+}
+
+.tablet-tela[data-tema='pixel'] .config-corpo .wrapper-configuracao::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: var(--altura-cabecalho-pixel);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: var(--pixel-papel);
+    box-shadow: inset 0 0 0 2px var(--pixel-borda);
+    clip-path: polygon(
+        0 6px, 2px 6px, 2px 4px, 4px 4px, 4px 2px, 6px 2px, 6px 0,
+        calc(100% - 6px) 0, calc(100% - 6px) 2px, calc(100% - 4px) 2px, calc(100% - 4px) 4px, calc(100% - 2px) 4px, calc(100% - 2px) 6px, 100% 6px,
+        100% calc(100% - 6px), calc(100% - 2px) calc(100% - 6px), calc(100% - 2px) calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) calc(100% - 2px), calc(100% - 6px) calc(100% - 2px), calc(100% - 6px) 100%,
+        6px 100%, 6px calc(100% - 2px), 4px calc(100% - 2px), 4px calc(100% - 4px), 2px calc(100% - 4px), 2px calc(100% - 6px), 0 calc(100% - 6px)
+    );
+}
+
+/* botões: quadrados, borda de 2 px e sombra de pixel, nas cores da hora */
+.tablet-tela[data-tema='pixel'] .janela-config .config-botao {
+    border-width: 2px;
+    border-radius: 0;
+    box-shadow: 2px 2px 0 var(--pixel-borda);
+}
+
+.tablet-tela[data-tema='pixel'] .janela-config .config-botao:hover {
+    box-shadow: 2px 2px 0 var(--pixel-destaque);
+}
+
+/* rolagem: sem trilho, barrinha quadrada na cor da hora */
+.tablet-tela[data-tema='pixel'] .janela-config .janela-configuracao-led::-webkit-scrollbar-track {
+    background: transparent;
+    box-shadow: none;
+}
+
+.tablet-tela[data-tema='pixel'] .janela-config .janela-configuracao-led::-webkit-scrollbar-thumb {
+    background: var(--pixel-rolagem);
+    border-radius: 0;
+    background-clip: content-box;
+    border: solid 3px rgba(0, 0, 0, 0);
+}
+
+/* hover: a barrinha só clareia um pouco */
+.tablet-tela[data-tema='pixel'] .janela-config .janela-configuracao-led::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--pixel-rolagem) 78%, #ffffff);
+    background-clip: content-box;
+    border: solid 3px rgba(0, 0, 0, 0);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    .tablet-tela[data-tema='pixel'] .janela-config .janela-configuracao-led {
+        scrollbar-color: var(--pixel-rolagem) transparent;
+    }
+}
+
+/* o nome do sistema no Sobre na fonte pixel, como os títulos */
+.tablet-tela[data-tema='pixel'] .janela-configuracao-led .sobre-heroi .sobre-heroi-nome {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 18px;
+    text-shadow: 2px 2px 0 var(--pixel-sombra-titulo);
+}
+
 /* o conteúdo agora divide a largura com o menu */
 .config-corpo .janela-configuracao-led {
     flex: 1;

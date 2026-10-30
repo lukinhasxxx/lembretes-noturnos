@@ -210,3 +210,39 @@
     0%, 100% { box-shadow: 0 0 2px rgba(110, 240, 255, 0.3); }
     50%      { box-shadow: 0 0 8px rgba(110, 240, 255, 0.7); }
 }
+
+/* ---------- PixelOS: hora na fonte pixel com sombra de pixel (no lugar do brilho), "hoje" num bloquinho de sol ---------- */
+.tablet-tela[data-tema='pixel'] .calendario-hora {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 15px;
+    letter-spacing: 0;
+    text-shadow: 2px 2px 0 #0f2a14;
+}
+
+.tablet-tela[data-tema='pixel'] .calendario-hora:hover {
+    text-shadow: 2px 2px 0 #3f9a45;
+}
+
+.tablet-tela[data-tema='pixel'] .calendario-hora.calendario-hora-editando {
+    width: 96px;
+}
+
+.tablet-tela[data-tema='pixel'] .calendario-data-por-extenso {
+    border-bottom: 2px dashed rgba(246, 231, 161, 0.25);
+}
+
+/* hoje: sem o brilho respirando; o sol "pisca" em passos, como num jogo antigo */
+.tablet-tela[data-tema='pixel'] .calendario-dia.hoje {
+    border-width: 2px;
+    background-color: rgba(255, 209, 102, 0.16);
+    animation: calendario-hoje-pixel 1.6s steps(1) infinite;
+}
+
+@keyframes calendario-hoje-pixel {
+    0%, 100% { box-shadow: none; }
+    50%      { box-shadow: 2px 2px 0 #0f2a14; }
+}
+
+.tablet-tela[data-tema='pixel'] .calendario-dia:active {
+    color: #1f4d26;
+}

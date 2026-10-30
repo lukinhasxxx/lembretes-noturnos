@@ -150,3 +150,43 @@
     from { opacity: 0; transform: translateX(30px); }
     to   { opacity: 1; transform: translateX(0); }
 }
+
+/* ---------- PixelOS: cartões como blocos de papel creme translúcido, barrinha de progresso andando em passos ---------- */
+.tablet-tela[data-tema='pixel'] .cartao-notificacao {
+    background: rgba(255, 243, 176, 0.07);
+    border: 2px solid rgba(246, 231, 161, 0.22);
+}
+
+.tablet-tela[data-tema='pixel'] .balao-notificacao .cartao-notificacao {
+    background: none;
+    border: none;
+}
+
+.tablet-tela[data-tema='pixel'] .cartao-notificacao-progresso {
+    height: 4px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.tablet-tela[data-tema='pixel'] .cartao-notificacao-progresso::before {
+    box-shadow: none;
+    animation-timing-function: steps(10);
+}
+
+.tablet-tela[data-tema='pixel'] .cartao-notificacao-acao {
+    border-width: 2px;
+    box-shadow: 2px 2px 0 #0f2a14;
+}
+
+.tablet-tela[data-tema='pixel'] .cartao-notificacao-acao:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 #0f2a14;
+}
+
+.tablet-tela[data-tema='pixel'] .central-notificacoes-lista::-webkit-scrollbar {
+    width: 4px;
+}
+
+.tablet-tela[data-tema='pixel'] .central-notificacoes-lista::-webkit-scrollbar-thumb {
+    background: var(--cor-borda-neon-sistema);
+    border-radius: 0;
+}

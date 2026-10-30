@@ -38,6 +38,61 @@
     --formatar-texto: #e6e3ff;
 }
 
+/* PixelOS: nas cores do Sistema (anoitecer, ver Config.css), com borda de pixel e cantos em degraus */
+.tablet-tela[data-tema='pixel'] .formatar-fundo {
+    --config-cartao: rgba(255, 255, 255, 0.08);
+    --config-borda: #8a78b8;
+    --config-destaque: #ffa982;
+    --config-brilho: #ffa982;
+    --config-texto-suave: #c4b6e4;
+    --formatar-fundo-quadro: rgba(40, 32, 64, 0.97);
+    --formatar-texto: #ece4ff;
+    background: rgba(16, 10, 30, 0.55);
+    backdrop-filter: none;
+}
+
+.tablet-tela[data-tema='pixel'] .formatar-quadro {
+    border: 2px solid var(--config-borda);
+    border-radius: 0;
+    box-shadow: none;
+    clip-path: polygon(
+        0 6px, 2px 6px, 2px 4px, 4px 4px, 4px 2px, 6px 2px, 6px 0,
+        calc(100% - 6px) 0, calc(100% - 6px) 2px, calc(100% - 4px) 2px, calc(100% - 4px) 4px, calc(100% - 2px) 4px, calc(100% - 2px) 6px, 100% 6px,
+        100% calc(100% - 6px), calc(100% - 2px) calc(100% - 6px), calc(100% - 2px) calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) calc(100% - 2px), calc(100% - 6px) calc(100% - 2px), calc(100% - 6px) 100%,
+        6px 100%, 6px calc(100% - 2px), 4px calc(100% - 2px), 4px calc(100% - 4px), 2px calc(100% - 4px), 2px calc(100% - 6px), 0 calc(100% - 6px)
+    );
+}
+
+.tablet-tela[data-tema='pixel'] .formatar-titulo {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #ffd2a8;
+    text-shadow: 2px 2px 0 #1c1230;
+}
+
+.tablet-tela[data-tema='pixel'] .formatar-lista li,
+.tablet-tela[data-tema='pixel'] .formatar-confirmacao input {
+    border-width: 2px;
+    border-radius: 0;
+}
+
+.tablet-tela[data-tema='pixel'] .formatar-confirmacao input {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.tablet-tela[data-tema='pixel'] .formatar-botoes .config-botao {
+    border-width: 2px;
+    border-radius: 0;
+    box-shadow: 2px 2px 0 #1c1230;
+}
+
+.tablet-tela[data-tema='pixel'] .formatar-botoes .config-botao:not(:disabled):hover {
+    box-shadow: 2px 2px 0 var(--config-destaque);
+}
+
 @keyframes formatar-aparecendo {
     from { opacity: 0; }
 }

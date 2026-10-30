@@ -179,6 +179,119 @@
     font-variant-numeric: tabular-nums;
 }
 
+/* ---------- "Reiniciar agora" (todos os temas): aparece no "Pronto"; só ele apaga tudo e recarrega ---------- */
+
+.tela-formatando-reiniciar {
+    all: unset;
+    position: relative;
+    z-index: 1;
+    margin-top: 18px;
+    padding: 6px 20px;
+    border: 1px solid #6ef0ff;
+    background: rgba(110, 240, 255, 0.08);
+    color: #c9f7ff;
+    font-size: 13px;
+    letter-spacing: 1px;
+    cursor: default;
+    animation: tela-formatando-reiniciar-aparecendo 0.4s ease-out 0.3s backwards;
+    transition: background-color 0.15s, box-shadow 0.15s, transform 0.08s;
+}
+
+.tela-formatando-reiniciar:hover {
+    background: rgba(110, 240, 255, 0.18);
+    box-shadow: 0 0 12px rgba(110, 240, 255, 0.5);
+}
+
+.tela-formatando-reiniciar:active {
+    transform: scale(0.96);
+}
+
+.tela-formatando-reiniciar:disabled {
+    opacity: 0.6;
+}
+
+@keyframes tela-formatando-reiniciar-aparecendo {
+    from { opacity: 0; transform: translateY(6px); }
+}
+
+.tela-formatando-noturno .tela-formatando-reiniciar {
+    border-color: rgba(185, 140, 255, 0.7);
+    background: rgba(138, 120, 255, 0.14);
+    color: #e6e3ff;
+}
+
+.tela-formatando-noturno .tela-formatando-reiniciar:hover {
+    background: rgba(138, 120, 255, 0.28);
+    box-shadow: 0 0 14px rgba(185, 140, 255, 0.55);
+}
+
+/* ---------- PixelOS: a janelinha se desmontando em blocos que caem ---------- */
+
+.tela-formatando-pixel {
+    background: #0c1a24;
+}
+
+/* o desenho (76 × 116) em pixels grandes, solto atrás do texto: a janela fica logo acima do meio da tela e os
+   blocos caem passando pelo texto. Assim o texto fica sempre no meio, e no "Pronto" (já sem a janela) não sobra
+   um buraco em cima */
+.tela-formatando-queda {
+    position: absolute;
+    top: calc(50% - 178px);
+    left: 50%;
+    width: 190px;
+    height: 290px;
+    margin-left: -95px;
+    image-rendering: pixelated;
+}
+
+.tela-formatando-pixel-titulo {
+    position: relative;
+    margin: 0;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px;
+    color: #fff3b0;
+    text-shadow: 3px 3px 0 #1f4d26;
+}
+
+.tela-formatando-pixel-arquivo {
+    position: relative;
+    height: 14px;
+    margin: 12px 0 0;
+    font-size: 11px;
+    color: #8fbcb0;
+}
+
+/* fim: o título pisca em passos, como "STAGE CLEAR" */
+.tela-formatando-pixel.terminou .tela-formatando-pixel-titulo {
+    animation: tela-formatando-pixel-piscando 1s steps(1) infinite;
+}
+
+@keyframes tela-formatando-pixel-piscando {
+    50% { opacity: 0.4; }
+}
+
+.tela-formatando-pixel .tela-formatando-reiniciar {
+    padding: 8px 16px;
+    border: 2px solid #f6e7a1;
+    background: #3f9a45;
+    color: #fffaf0;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    letter-spacing: 0;
+    box-shadow: 3px 3px 0 #04120a;
+}
+
+.tela-formatando-pixel .tela-formatando-reiniciar:hover {
+    background: #55b83a;
+    box-shadow: 4px 4px 0 #04120a;
+    transform: translate(-1px, -1px);
+}
+
+.tela-formatando-pixel .tela-formatando-reiniciar:active {
+    box-shadow: 0 0 0 #04120a;
+    transform: translate(3px, 3px);
+}
+
 /* fim: o anel acende inteiro e o eclipse brilha antes de apagar */
 .tela-formatando-noturno.terminou .tela-formatando-eclipse {
     box-shadow:
