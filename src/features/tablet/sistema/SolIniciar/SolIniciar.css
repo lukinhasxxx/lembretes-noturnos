@@ -1,0 +1,25 @@
+/* o solzinho do botão iniciar do PixelOS (SolIniciar.js): 16 × 16 pixels mostrados em 20 px */
+.sol-iniciar {
+    width: 20px;
+    height: 20px;
+    filter: drop-shadow(0 0 2px rgba(255, 209, 102, 0.35));
+    transition: filter 0.3s ease;
+}
+
+.botao-barra-de-tarefas:hover .sol-iniciar,
+.sol-iniciar.aberto {
+    filter: drop-shadow(0 0 4px rgba(255, 209, 102, 0.8));
+}
+
+/* menu aberto: os raios giram 1/8 de volta por vez, em passos (pixel não gira liso) */
+.sol-iniciar-raios {
+    transform-origin: 8px 8px;
+}
+
+.sol-iniciar.aberto .sol-iniciar-raios {
+    animation: sol-iniciar-girando 1.6s steps(8) infinite;
+}
+
+@keyframes sol-iniciar-girando {
+    to { transform: rotate(360deg); }
+}

@@ -26,6 +26,13 @@
     background: linear-gradient(to top, rgba(7, 6, 26, 0.55), rgba(18, 15, 51, 0.32));
 }
 
+/* PixelOS (provisório, até o visual dele): o wallpaper é claro, então a barra ganha um véu verde-mata para os
+   ícones brancos aparecerem, e o hover vira um claro translúcido (o cinza escuro do padrão virava um bloco) */
+.tablet-tela[data-tema='pixel'] .barra-de-tarefas {
+    --cor-hover-sistema: rgba(255, 255, 255, 0.2);
+    background: linear-gradient(to top, rgba(10, 32, 16, 0.6), rgba(10, 32, 16, 0.35));
+}
+
 /* ícones brancos da barra (voltar e bandeja) pintados de lilás, com um brilho leve.
    Os ícones dos apps abertos ficam com as cores deles */
 .tablet-tela[data-tema='noturno'] .barra-de-tarefas > .botao-barra-de-tarefas img,

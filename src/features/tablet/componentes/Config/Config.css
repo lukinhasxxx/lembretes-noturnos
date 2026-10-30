@@ -34,6 +34,32 @@
     --config-borda: rgba(185, 140, 255, 0.35);
 }
 
+/* PixelOS: menu em verde-mata (como a grama do wallpaper), ícones creme, destaque no amarelo do sol; cartões em
+   papel claro com borda escura de pixel */
+.tablet-tela[data-tema='pixel'] .config-corpo {
+    --config-menu-fundo: linear-gradient(180deg, #3f9a45 0 50%, #357f3b 50% 100%);
+    --config-icone: #e9f5d0;
+    --config-icone-ativo: #fff3b0;
+    --config-brilho: #ffd166;
+    --config-destaque: #e89a2c;
+    --config-texto-suave: #6b5638;
+    --config-cartao: #fffaf0;
+    --config-borda: #2b2340;
+}
+
+/* no conteúdo (papel creme) a cor "ativa" precisa ser escura: o azul-noite dos títulos, com brilho creme */
+.tablet-tela[data-tema='pixel'] .config-corpo .janela-configuracao-led {
+    --config-icone-ativo: #2b3d7a;
+    --config-brilho: #e9d9a6;
+}
+
+/* o nome do sistema no Sobre na fonte pixel, como os títulos */
+.tablet-tela[data-tema='pixel'] .janela-configuracao-led .sobre-heroi .sobre-heroi-nome {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 18px;
+    text-shadow: 2px 2px 0 #e9d9a6;
+}
+
 /* o conteúdo agora divide a largura com o menu */
 .config-corpo .janela-configuracao-led {
     flex: 1;
