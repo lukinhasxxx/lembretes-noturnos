@@ -329,6 +329,19 @@ const desenharMovimento = (tela, hora, passo) => {
     }
 }
 
+// a hora da mata pelo relógio do tablet (bloqueio e login do PixelOS): manhã das 6h às 11h, tarde até as 16h,
+// anoitecer até as 19h e noite no resto
+export const horaDaMataPeloRelogio = (data) => {
+    const horas = data.getHours()
+    if (horas >= 6 && horas < 11) return 0
+    if (horas >= 11 && horas < 16) return 0.35
+    if (horas >= 16 && horas < 19) return 0.65
+    return 1
+}
+
+// o sol do ícone do PixelOS (IconePixel) na mesma hora da mata: dia alto de manhã, janela escura à noite
+export const diaDoIconePelaHoraDaMata = (hora) => 1 - hora * 0.88
+
 const CenaMata = ({ hora, className = '' }) => {
     const canvasRef = useRef(null)
     const alvoRef = useRef(hora)

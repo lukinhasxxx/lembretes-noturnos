@@ -32,6 +32,9 @@ const IconePixel = ({ aceso, anelCheio, dia: diaFixo }) => {
         let quadro = 0
         let pedido = null
         const passo = (agora) => {
+            // a tela que tem o ícone saiu (ex.: o login, ao entrar): o React solta o canvas um pouco antes de
+            // cancelar o loop, e um quadro pode cair nesse meio
+            if (!canvasRef.current) return
             const tempo = agora - anterior
             anterior = agora
             const alvos = alvosRef.current

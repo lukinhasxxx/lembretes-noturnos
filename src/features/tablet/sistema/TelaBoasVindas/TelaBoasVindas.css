@@ -211,3 +211,63 @@
     border-color: #b9a8ff;
     background-color: rgba(138, 120, 255, 0.12);
 }
+
+/* ---------- PixelOS: avatar = a janelinha do ícone do tema, nome na fonte pixel, "Entrar" como botão de jogo ---------- */
+/* desfoque menor (pixel art borrada demais vira mancha): o mesmo do fim do arraste do bloqueio */
+.tablet-tela[data-tema='pixel'] .tela-boas-vindas-fundo {
+    filter: blur(3px) brightness(0.7);
+}
+
+.tablet-tela[data-tema='pixel'] .tela-boas-vindas-avatar {
+    width: 104px;
+    height: 104px;
+    border-radius: 0;
+    background: none;
+}
+
+.tablet-tela[data-tema='pixel'] .tela-boas-vindas-avatar .icone-pixel {
+    width: 104px;
+    height: 104px;
+    opacity: 1;
+    filter: drop-shadow(3px 3px 0 rgba(4, 14, 10, 0.6));
+}
+
+.tablet-tela[data-tema='pixel'] .tela-boas-vindas-usuario {
+    margin: 18px 0 20px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 18px;
+    color: #fffaf0;
+    text-shadow: 3px 3px 0 rgba(4, 14, 10, 0.7);
+}
+
+.tablet-tela[data-tema='pixel'] .tela-boas-vindas-status {
+    text-shadow: 2px 2px 0 rgba(4, 14, 10, 0.7);
+}
+
+.tablet-tela[data-tema='pixel'] .spinner-pontos span::before {
+    border-radius: 0;
+    background: #fff3b0;
+}
+
+.tablet-tela[data-tema='pixel'] .tela-boas-vindas-entrar {
+    border-color: #f6e7a1;
+    background-color: #3f9a45;
+    color: #fffaf0;
+    box-shadow: 3px 3px 0 rgba(4, 14, 10, 0.75);
+    text-shadow: 1px 1px 0 #1f4d26;
+}
+
+.tablet-tela[data-tema='pixel'] .tela-boas-vindas-entrar:hover {
+    border-color: #fff3b0;
+    background-color: #55b83a;
+    box-shadow: 4px 4px 0 rgba(4, 14, 10, 0.75);
+    transform: translate(-1px, -1px);
+}
+
+/* pressionado: o botão "desce" até a sombra, como uma tecla */
+.tablet-tela[data-tema='pixel'] .tela-boas-vindas-entrar:active {
+    border-color: #ffd166;
+    background-color: #357f3b;
+    box-shadow: 0 0 0 rgba(4, 14, 10, 0.75);
+    transform: translate(3px, 3px);
+}

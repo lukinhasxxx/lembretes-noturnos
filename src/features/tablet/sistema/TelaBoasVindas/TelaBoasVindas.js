@@ -1,6 +1,11 @@
 import './TelaBoasVindas.css'
 import { useIdioma } from '../../../../shared/i18n/Idioma'
 import { DURACAO_ENCERRANDO_MS, DURACAO_SUMINDO_MS, SISTEMA } from '../../tablet.config'
+import { useSistemaTablet } from '../../contexts/SistemaTablet'
+import { TEMAS } from '../../hooks/useTemaSistema'
+import { useDataAtual } from '../../hooks/useDataAtual'
+import CenaMata, { diaDoIconePelaHoraDaMata, horaDaMataPeloRelogio } from '../CenaMata/CenaMata'
+import IconePixel from '../../componentes/BotaoTema/IconePixel'
 
 // texto ao lado do spinner em cada etapa que tem spinner
 const TEXTO_DA_ETAPA = {
@@ -15,10 +20,17 @@ const TEXTO_DA_ETAPA = {
 // - 'login': avatar, nome e botão "Entrar" (depois de tirar a tela de bloqueio)
 // - 'aguarde': avatar, nome, spinner + "Aguarde..." (depois do "Entrar")
 // - 'desligando' / 'reiniciando': só spinner + texto; no fim o conteúdo apaga até sobrar o preto
-// wallpaper: url da imagem de fundo (a mesma da área de trabalho); aoEntrar: clique no "Entrar"
+// wallpaper: url da imagem de fundo (a mesma da área de trabalho); aoEntrar: clique no "Entrar".
+// PixelOS: o avatar é a janelinha do ícone do tema, e no login (que fica por baixo do bloqueio) o fundo é a mesma
+// mata do bloqueio, na hora do relógio do tablet
 const TelaBoasVindas = ({ wallpaper, etapa = 'boasVindas', aoEntrar }) => {
     const { t } = useIdioma()
+    const { tema } = useSistemaTablet()
+    const dataAtual = useDataAtual()
     const encerrando = etapa === 'desligando' || etapa === 'reiniciando'
+    const pixel = tema === TEMAS.pixel
+    const horaDaMata = horaDaMataPeloRelogio(dataAtual)
+    const naMata = pixel && (etapa === 'login' || etapa === 'aguarde')
 
     return (
         <div
@@ -29,16 +41,27 @@ const TelaBoasVindas = ({ wallpaper, etapa = 'boasVindas', aoEntrar }) => {
                 '--duracao-sumindo': `${DURACAO_SUMINDO_MS}ms`,
             } : undefined}
         >
-            <div className='tela-boas-vindas-fundo' style={{ backgroundImage: `url(${wallpaper})` }} />
+            {naMata ? (
+                <div className='tela-boas-vindas-fundo'>
+                    <CenaMata hora={horaDaMata} />
+                </div>
+            ) : (
+                <div className='tela-boas-vindas-fundo' style={{ backgroundImage: `url(${wallpaper})` }} />
+            )}
 
             {!encerrando && (
                 <>
                     <div className='tela-boas-vindas-avatar'>
-                        {/* ícone de pessoa: cabeça + ombros */}
-                        <svg viewBox='0 0 64 64' aria-hidden='true'>
-                            <circle cx='32' cy='22' r='12' />
-                            <path d='M10 56c2-12 11-18 22-18s20 6 22 18' />
-                        </svg>
+                        {pixel ? (
+                            // no login, na hora da mata; no "Bem-vindo" (wallpaper de dia), de dia
+                            <IconePixel aceso anelCheio dia={naMata ? diaDoIconePelaHoraDaMata(horaDaMata) : 1} />
+                        ) : (
+                            // ícone de pessoa: cabeça + ombros
+                            <svg viewBox='0 0 64 64' aria-hidden='true'>
+                                <circle cx='32' cy='22' r='12' />
+                                <path d='M10 56c2-12 11-18 22-18s20 6 22 18' />
+                            </svg>
+                        )}
                     </div>
 
                     <p className='tela-boas-vindas-usuario'>{SISTEMA.usuario}</p>

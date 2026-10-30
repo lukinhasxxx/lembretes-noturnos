@@ -2,6 +2,9 @@ import './TelaBloqueio.css'
 import { useRef, useState } from 'react'
 import { useIdioma } from '../../../../shared/i18n/Idioma'
 import { useDataAtual } from '../../hooks/useDataAtual'
+import { useSistemaTablet } from '../../contexts/SistemaTablet'
+import { TEMAS } from '../../hooks/useTemaSistema'
+import CenaMata, { horaDaMataPeloRelogio } from '../CenaMata/CenaMata'
 
 // quanto arrastar para cima (fração da altura da tela) para o progresso chegar a 100%
 const DISTANCIA_PROGRESSO_COMPLETO = 0.5
@@ -15,10 +18,13 @@ const TOLERANCIA_CLIQUE_PX = 5
 // ficar igual ao fundo do login, enquanto relógio e dica sobem e apagam. Tudo sai de um número só,
 // --progresso (0 = bloqueada, 1 = login), que o arraste controla. Clicar faz uma saída mais leve.
 // Quando termina, chama aoDesbloquear (o sistema mostra a tela de login, que já está por baixo).
-// wallpaper: url da imagem de fundo (a mesma da área de trabalho)
+// wallpaper: url da imagem de fundo (a mesma da área de trabalho). No PixelOS o fundo é a mata (CenaMata) na hora
+// do relógio do tablet
 const TelaBloqueio = ({ wallpaper, aoDesbloquear }) => {
     const { idioma, t } = useIdioma()
     const dataAtual = useDataAtual()
+    const { tema } = useSistemaTablet()
+    const naMata = tema === TEMAS.pixel
 
     // parado → arrastando → (completando | voltando); ou parado → saindoClique
     const [fase, setFase] = useState('parado')
@@ -102,7 +108,13 @@ const TelaBloqueio = ({ wallpaper, aoDesbloquear }) => {
                 onTransitionEnd={aoTerminarTransicao}
                 onAnimationEnd={aoTerminarAnimacao}
             >
-                <div className='tela-bloqueio-fundo' style={{ backgroundImage: `url(${wallpaper})` }} />
+                {naMata ? (
+                    <div className='tela-bloqueio-fundo'>
+                        <CenaMata hora={horaDaMataPeloRelogio(dataAtual)} />
+                    </div>
+                ) : (
+                    <div className='tela-bloqueio-fundo' style={{ backgroundImage: `url(${wallpaper})` }} />
+                )}
 
                 <div ref={conteudoRef} className='tela-bloqueio-conteudo'>
                     <div className='tela-bloqueio-relogio'>
