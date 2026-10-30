@@ -292,7 +292,38 @@
     --cor-borda-neon-sistema: #f6e7a1;
     --cor-hover-sistema: rgba(255, 243, 176, 0.16);
     background: linear-gradient(to bottom, #24572a 0 34%, #1f4d26 34% 67%, #1a4321 67% 100%);
-    box-shadow: 3px 3px 0 #2b2340;
+    box-shadow: none;
+    border-width: 2px;
+    /* cantos de cima em degraus de pixel (como o papel do Config): o recorte tira a quina e os degraus da borda
+       são desenhados no ::before/::after */
+    clip-path: polygon(
+        0 6px, 2px 6px, 2px 4px, 4px 4px, 4px 2px, 6px 2px, 6px 0,
+        calc(100% - 6px) 0, calc(100% - 6px) 2px, calc(100% - 4px) 2px, calc(100% - 4px) 4px, calc(100% - 2px) 4px, calc(100% - 2px) 6px, 100% 6px,
+        100% 100%, 0 100%
+    );
+}
+
+/* os degraus da borda: um quadradinho de 2px e a sombra dele um degrau abaixo, para dentro */
+.tablet-tela[data-tema='pixel'] .menu-iniciar::before,
+.tablet-tela[data-tema='pixel'] .menu-iniciar::after {
+    content: '';
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    width: 2px;
+    height: 2px;
+    background: var(--cor-borda-neon-sistema);
+    pointer-events: none;
+}
+
+.tablet-tela[data-tema='pixel'] .menu-iniciar::before {
+    left: 2px;
+    box-shadow: -2px 2px 0 var(--cor-borda-neon-sistema);
+}
+
+.tablet-tela[data-tema='pixel'] .menu-iniciar::after {
+    right: 2px;
+    box-shadow: 2px 2px 0 var(--cor-borda-neon-sistema);
 }
 
 .tablet-tela[data-tema='pixel'] .menu-iniciar-coluna-painel.expandida,

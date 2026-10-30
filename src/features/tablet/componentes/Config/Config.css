@@ -182,6 +182,9 @@
     position: relative;
     isolation: isolate;
     padding: 0 14px 14px;
+    /* sem a margem de baixo: o papel vai até o fim da janela, senão a mata (cachoeira, espuma) aparecia numa
+       faixa embaixo dele, parecendo coisa vazando */
+    margin-bottom: 0;
 }
 
 .tablet-tela[data-tema='pixel'] .config-corpo .wrapper-configuracao::before {

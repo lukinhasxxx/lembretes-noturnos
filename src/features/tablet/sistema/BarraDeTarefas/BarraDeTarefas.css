@@ -30,7 +30,75 @@
    ícones brancos aparecerem, e o hover vira um claro translúcido (o cinza escuro do padrão virava um bloco) */
 .tablet-tela[data-tema='pixel'] .barra-de-tarefas {
     --cor-hover-sistema: rgba(255, 255, 255, 0.2);
+    /* pop-ups da bandeja nas cores do menu iniciar: mata escura, borda creme, destaque no amarelo do sol */
+    --cor-destaque-sistema: #ffd166;
+    --cor-destaque-secundaria-sistema: #fff3b0;
+    --cor-borda-neon-sistema: #f6e7a1;
+    --cor-fundo-menu-iniciar: #1f4d26;
     background: linear-gradient(to top, rgba(10, 32, 16, 0.6), rgba(10, 32, 16, 0.35));
+}
+
+/* PixelOS: pop-ups da bandeja (bateria, wi-fi, som, idioma, calendário, notificações) com a mesma moldura do menu
+   iniciar: mata em faixas e borda creme com os cantos de cima em degraus. O fundo e a borda vão num ::before
+   recortado (e não no pop-up), porque o recorte no próprio pop-up cortaria a dica do idioma, que fica acima dele */
+.tablet-tela[data-tema='pixel'] .barra-de-tarefas .painel-bandeja,
+.tablet-tela[data-tema='pixel'] .barra-de-tarefas .calendario,
+.tablet-tela[data-tema='pixel'] .barra-de-tarefas .balao-notificacao {
+    background: none;
+    border-color: transparent;
+    border-width: 2px;
+    box-shadow: none;
+}
+
+.tablet-tela[data-tema='pixel'] .barra-de-tarefas .painel-bandeja::before,
+.tablet-tela[data-tema='pixel'] .barra-de-tarefas .calendario::before,
+.tablet-tela[data-tema='pixel'] .barra-de-tarefas .balao-notificacao::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: -2px -2px 0;
+    background: linear-gradient(to bottom, #24572a 0 34%, #1f4d26 34% 67%, #1a4321 67% 100%);
+    border: 2px solid var(--cor-borda-neon-sistema);
+    border-bottom: none;
+    clip-path: polygon(
+        0 6px, 2px 6px, 2px 4px, 4px 4px, 4px 2px, 6px 2px, 6px 0,
+        calc(100% - 6px) 0, calc(100% - 6px) 2px, calc(100% - 4px) 2px, calc(100% - 4px) 4px, calc(100% - 2px) 4px, calc(100% - 2px) 6px, 100% 6px,
+        100% 100%, 0 100%
+    );
+    pointer-events: none;
+}
+
+/* o balão flutua acima da barra: tem borda embaixo também */
+.tablet-tela[data-tema='pixel'] .barra-de-tarefas .balao-notificacao::before {
+    inset: -2px;
+    border-bottom: 2px solid var(--cor-borda-neon-sistema);
+}
+
+/* os degraus da borda: 4 quadradinhos de 2px, dois em cada canto de cima */
+.tablet-tela[data-tema='pixel'] .barra-de-tarefas .painel-bandeja::after,
+.tablet-tela[data-tema='pixel'] .barra-de-tarefas .calendario::after,
+.tablet-tela[data-tema='pixel'] .barra-de-tarefas .balao-notificacao::after {
+    --degrau: linear-gradient(var(--cor-borda-neon-sistema), var(--cor-borda-neon-sistema));
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    left: -2px;
+    height: 6px;
+    background:
+        var(--degrau) 4px 2px / 2px 2px no-repeat,
+        var(--degrau) 2px 4px / 2px 2px no-repeat,
+        var(--degrau) right 4px top 2px / 2px 2px no-repeat,
+        var(--degrau) right 2px top 4px / 2px 2px no-repeat;
+    pointer-events: none;
+}
+
+/* PixelOS: o véu deixa à mostra os 4px que a barra passa do fim da tela, então o hover vai até lá embaixo também
+   (os ícones ficam no mesmo lugar: a altura cresce 4px e o padding de cima sai) */
+.tablet-tela[data-tema='pixel'] .barra-de-tarefas .botao-barra-de-tarefas,
+.tablet-tela[data-tema='pixel'] .barra-de-tarefas .botao-mostrar-area-de-trabalho {
+    height: var(--altura-barra-de-tarefas);
+    padding-top: 0;
 }
 
 /* ícones brancos da barra (voltar e bandeja) pintados de lilás, com um brilho leve.
